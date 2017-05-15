@@ -7,18 +7,16 @@ Kaetram To-Do List:
 - Get proper button interfaces for "Login," "New Character" and "Back."
 - Directly download map data from the server.
 
-- When game is in a fully playable state, separate client packets from server packets.
-- Add 'extra' to parsing of tiles
-
-- Use underscore for the forEachCanvas and forEachContext in the renderer.
 - Make animations use every 3rd gridX and gridY whilst panning to delay animation reset.
 - Double animation speed of water and other tiles with more than two frames.
+
+- Fix the third scale
 
 
 Finished:
 
-- Convert the getPlayerData(player) method from MySQL to be directly inputted into
-  query(``, {}); ✓
+- Convert the getPlayerData(player) method from MySQL to be directly inputted into query(``, {}); ✓
 - Automate the MySQL database selection and creation process. ✓
 - Music areas will be handled server sided - we must take as much load off the client as possible. ✓
 - Move ornament to Vars.css ✓
+- Add 'extra' to parsing of tiles ✓

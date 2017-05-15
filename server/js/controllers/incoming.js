@@ -1,6 +1,8 @@
 var cls = require('../lib/class'),
     Packets = require('../network/packets'),
-    Request = require('request');
+    Request = require('request'),
+    config = require('../../config.json'),
+    Creator = require('../database/creator');
 
 module.exports = Incoming = cls.Class.extend({
 
@@ -40,6 +42,17 @@ module.exports = Incoming = cls.Class.extend({
         self.player.username = formattedUsername.substr(0, 32).trim();
         self.player.password = password.substr(0, 32);
         self.player.email = email.substr(0, 128);
+
+        if (config.offlineMode) {
+            var creator = new Creator(null);
+
+            self.player.isNew = true;
+            self.player.load(creator.getPlayerData(self.player));
+            self.player.isNew = false;
+            self.player.intro();
+
+            return;
+        }
 
         if (isRegistering) {
             var registerOptions = {

@@ -61,6 +61,10 @@ define(['../entity'], function(Entity) {
             }
         },
 
+        hasShadow: function() {
+            return true;
+        },
+
         setGridPosition: function(x, y) {
             this._super(x, y);
         },

@@ -74,8 +74,6 @@ define(['./packets', './messages'], function(Packets, Messages) {
             var self = this,
                 json = JSON.stringify([packet, data]);
 
-            log.info('Sending...');
-
             if (self.connection && self.connection.connected)
                 self.connection.send(json);
         }

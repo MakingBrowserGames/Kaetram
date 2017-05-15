@@ -69,6 +69,9 @@ module.exports = Player = Character.extend({
             self.connection.close('Player: ' + self.player.username + ' is banned.');
         }
 
+        if (self.x === 0 || self.y === 0)
+            self.sendToSpawn();
+
         var info = [
                 self.id,
                 self.username,
@@ -92,13 +95,9 @@ module.exports = Player = Character.extend({
         self.send(new Messages.Welcome(info));
     },
 
-    sendEquipment: function() {
-        var self = this,
-            info = [self.armour.getData(), self.weapon.getData(),
-                    self.pendant.getData(), self.ring.getData(), self.boots.getData];
-
-        self.send(new Messages.Equipment(info));
-    },
+    /**
+     * Setters
+     */
 
     setArmour: function(id, count, skill, skillLevel) {
         var self = this;
@@ -145,6 +144,10 @@ module.exports = Player = Character.extend({
         self.boots = new Boots(Items.idToString(id), id, count, skill, skillLevel);
     },
 
+    /**
+     * Getters
+     */
+
     getArmour: function() {
         return this.armour;
     },
@@ -165,8 +168,27 @@ module.exports = Player = Character.extend({
         return this.boots;
     },
 
+    /**
+     * Miscellaneous
+     */
+
     send: function(message) {
         this.world.pushToPlayer(this, message);
+    },
+
+    sendEquipment: function() {
+        var self = this,
+            info = [self.armour.getData(), self.weapon.getData(),
+                self.pendant.getData(), self.ring.getData(), self.boots.getData];
+
+        self.send(new Messages.Equipment(info));
+    },
+
+    sendToSpawn: function() {
+        var self = this;
+
+        self.x = 17;
+        self.y = 19;
     }
 
 });

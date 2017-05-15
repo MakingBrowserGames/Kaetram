@@ -17,6 +17,9 @@ function Main() {
 
     var worlds = [],
         webSocket = new WebSocket.Server(config.host, config.port, config.gver),
+        database;
+
+    if (!config.offlineMode)
         database = new MySQL(config.mysqlHost, config.mysqlPort, config.mysqlUser, config.mysqlPassword, config.mysqlDatabase);
 
     webSocket.onConnect(function(connection) {

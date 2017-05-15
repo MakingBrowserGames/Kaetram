@@ -3,6 +3,8 @@
   "host": "0.0.0.0",
   "port": 1800,
 
+  "offlineMode": true,
+
   "mysqlHost": "144.217.92.76",
   "mysqlPort": 3306,
   "mysqlUser": "flavius",

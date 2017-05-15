@@ -68,7 +68,7 @@ define(['jquery'], function($) {
 
                 var key = e.which;
 
-                self.game.input(Modules.InputType.Key, key);
+                self.game.onInput(Modules.InputType.Key, key);
             });
 
         },
@@ -221,6 +221,9 @@ define(['jquery'], function($) {
                 'class': 'validation-error blink',
                 text: error
             }).appendTo('.validation-summary');
+
+            if (!field)
+                return;
 
             field.addClass('field-error').select();
             field.bind('keypress', function(event) {

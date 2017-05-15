@@ -69,9 +69,9 @@ define(function() {
         loadCallbacks: function() {
             var self = this;
 
-            self.player.onMove(function(x, y) {
+            self.player.onMove(function() {
                 if (!self.panning)
-                    self.setPosition(x, y);
+                    self.centreOn(self.player);
             });
         },
 
@@ -80,7 +80,7 @@ define(function() {
 
             self.player = player;
 
-            self.setPosition(self.player.x, self.player.y);
+            self.centreOn(self.player);
 
             self.loadCallbacks();
         },
@@ -105,6 +105,16 @@ define(function() {
                     self.setPosition(self.x + 1, self.y);
                     break;
             }
+        },
+
+        centreOn: function(entity) {
+            var self = this,
+                width = self.gridWidth - 2,
+                height = self.gridHeight - 2,
+                x = Math.floor((entity.gridX - 1) / width) * width,
+                y = Math.floor((entity.gridY - 1) / height) * height;
+
+            self.setGridPosition(x, y);
         },
 
         forEachVisiblePosition: function(callback) {

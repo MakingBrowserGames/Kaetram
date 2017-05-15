@@ -1,6 +1,6 @@
 /* global _, log */
 
-define(['./camera', './tile'], function(Camera, Tile) {
+define(['./camera', './tile', '../entity/character/player/player'], function(Camera, Tile, Player) {
 
     return Class.extend({
 
@@ -22,6 +22,8 @@ define(['./camera', './tile'], function(Camera, Tile) {
 
             self.game = game;
             self.camera = null;
+            self.entities = null;
+            self.input = null;
 
             self.checkDevice();
 
@@ -39,6 +41,11 @@ define(['./camera', './tile'], function(Camera, Tile) {
             self.renderedFrame = [0, 0];
 
             self.animatedTiles = [];
+
+            self.resizeTimeout = null;
+
+            self.drawTarget = false;
+            self.selectedCellVisible = false;
 
             self.load();
         },
@@ -105,16 +112,22 @@ define(['./camera', './tile'], function(Camera, Tile) {
 
             self.checkDevice();
 
-            self.loadSizes();
-
             if (self.camera)
                 self.camera.update();
 
             self.loadFont();
+            self.updateAnimatedTiles();
 
-            setTimeout(function() {
-                self.renderedFrame[0] = -1;
-            }, 400);
+            if (!self.resizeTimeout)
+                self.resizeTimeout = setTimeout(function() {
+                    self.loadSizes();
+                    self.renderedFrame[0] = -1;
+                    self.resizeTimeout = null;
+
+                    if (self.entities)
+                        self.entities.update();
+
+                }, 500);
         },
 
         render: function() {
@@ -131,6 +144,7 @@ define(['./camera', './tile'], function(Camera, Tile) {
 
             self.draw();
             self.drawAnimatedTiles();
+            self.drawEntities(false);
 
             /**
              * Text related draws
@@ -175,6 +189,73 @@ define(['./camera', './tile'], function(Camera, Tile) {
                 self.drawTile(self.context, tile.id, self.tileset, self.tileset.width / self.tileSize, self.map.width, tile.index);
                 tile.loaded = true;
             });
+        },
+
+        drawEntities: function(dirty) {
+            var self = this;
+
+            self.forEachVisibleEntity(function(entity) {
+
+                log.info(entity.sprite);
+
+                if (entity.spriteLoaded) {
+
+                    self.drawEntity(entity);
+
+                    if (dirty && entity.dirty) {
+                        entity.dirty = false;
+                        entity.oldDirtyRect = entity.dirtyRect;
+                        entity.dirtyRect = null;
+                    }
+                }
+            });
+        },
+
+        drawEntity: function(entity) {
+            var self = this,
+                sprite = entity.sprite,
+                shadow = self.entities.getSprite('shadow16'),
+                animation = entity.currentAnimation;
+
+            if (!animation || !sprite || !entity.isVisible())
+                return;
+
+            var frame = animation.currentFrame,
+                x = frame.x * self.scale,
+                y = frame.y * self.scale,
+                width = sprite.width * self.scale,
+                height = sprite.height * self.scale,
+                ox = sprite.offsetX * self.drawingScale,
+                oy = sprite.offsetY * self.drawingScale,
+                dx = entity.x * self.drawingScale,
+                dy = entity.y * self.drawingScale,
+                dw = width * self.scale,
+                dh = height * self.scale;
+
+            if (entity.fading) {
+                self.context.save();
+                self.context.globalAlpha = entity.fadingAlpha;
+            }
+
+            self.context.save();
+
+            if (entity.spriteFlipX) {
+                self.context.translate(dx + self.tileSize * self.drawingScale, dy);
+                self.context.scale(-1, 1);
+            } else if (entity.spriteFlipY) {
+                self.context.translate(dx, dy + dh);
+                self.context.scale(1, -1);
+            } else
+                self.context.translate(dx, dy);
+
+            if (entity.hasShadow()) {
+                if (!shadow.loaded)
+                    shadow.load();
+
+                self.context.drawImage(shadow.image, 0, 0, shadow.width * self.drawingScale, shadow.height * self.drawingScale,
+                                        0, entity.shadowOffsetY * self.scale, shadow.width * self.scale * self.drawingScale,
+                                        shadow.height * self.drawingScale * self.scale);
+            }
         },
 
         redrawTile: function(tile) {
@@ -268,6 +349,72 @@ define(['./camera', './tile'], function(Camera, Tile) {
                 height * self.drawingScale);
         },
 
+        updateAnimatedTiles: function() {
+            var self = this,
+                newTiles = [];
+
+            self.forEachVisibleTile(function(id, index) {
+                /**
+                 * We don't want to reinitialize animated tiles that already exist
+                 * and are within the visible camera proportions. This way we can parse
+                 * it every time the tile moves slightly.
+                 */
+
+                if (!self.map.isAnimatedTile(id))
+                    return;
+
+                /**
+                 * Push the pre-existing tiles.
+                 */
+
+                var tileIndex = self.animatedTiles.indexOf(id);
+
+                if (tileIndex > -1) {
+                    newTiles.push(self.animatedTiles[tileIndex]);
+                    return;
+                }
+
+                var tile = new Tile(id, index, self.map.getTileAnimationLength(id), self.map.getTileAnimationDelay(id)),
+                    position = self.map.indexToGridPosition(tile.index);
+
+                tile.setPosition(position);
+
+                newTiles.push(tile);
+            });
+
+            self.animatedTiles = newTiles;
+        },
+
+        checkDirty: function(rectOne, source, x, y) {
+            var self = this;
+
+            self.entities.forEachEntityAround(x, y, 2, function(entityTwo) {
+                if (source && source.id && entityTwo.id === source.id)
+                    return;
+
+                if (!entityTwo.isDirty)
+                    if (self.isIntersecting(rectOne, self.getEntityBounds(entityTwo)))
+                        entityTwo.loadDirty();
+            });
+
+            if (source && !(source.hasOwnProperty('index')))
+                self.forEachAnimatedTile(function(tile) {
+                    if (!tile.isDirty)
+                        if (self.isIntersecting(rectOne, self.getTileBounds(tile)))
+                            tile.dirty = true;
+                });
+
+
+            if (!self.drawTarget && self.input.selectedCellVisible) {
+                var targetRect = self.getTargetBounds();
+
+                if (self.isIntersecting(rectOne, targetRect)) {
+                    self.drawTarget = true;
+                    self.targetRect = targetRect;
+                }
+            }
+        },
+
         /**
          * Primordial Rendering functions
          */
@@ -284,7 +431,7 @@ define(['./camera', './tile'], function(Camera, Tile) {
         forEachVisibleTile: function(callback) {
             var self = this;
 
-            if (!self.map.mapLoaded)
+            if (!self.map || !self.map.mapLoaded)
                 return;
 
             self.forEachVisibleIndex(function(index) {
@@ -298,6 +445,16 @@ define(['./camera', './tile'], function(Camera, Tile) {
         forEachAnimatedTile: function(callback) {
             _.each(this.animatedTiles, function(tile) {
                 callback(tile);
+            });
+        },
+
+        forEachVisibleEntity: function(callback) {
+            var self = this,
+                grids = self.entities.grids;
+
+            self.camera.forEachVisiblePosition(function(x, y) {
+                if (!self.map.isOutOfBounds(x, y) && grids.renderingGrid[y][x])
+                    _.each(grids.renderingGrid[y][x], function(entity) { callback(entity); });
             });
         },
 
@@ -356,6 +513,10 @@ define(['./camera', './tile'], function(Camera, Tile) {
             self.forEachContext(function(context) {
                 context.restore();
             });
+        },
+
+        isIntersecting: function(rectOne, rectTwo) {
+            return (rectTwo.left > rectOne.right || rectTwo.right < rectOne.left || rectTwo.top > rectOne.bottom || rectTwo.bottom < rectOne.top);
         },
 
         /**
@@ -425,6 +586,10 @@ define(['./camera', './tile'], function(Camera, Tile) {
             self.tablet = self.game.app.isTablet();
         },
 
+        isPortableDevice: function() {
+            return this.mobile || this.tablet;
+        },
+
         /**
          * Setters
          */
@@ -437,40 +602,12 @@ define(['./camera', './tile'], function(Camera, Tile) {
             this.map = map;
         },
 
-        updateAnimatedTiles: function() {
-            var self = this,
-                newTiles = [];
+        setEntities: function(entities) {
+            this.entities = entities;
+        },
 
-            self.forEachVisibleTile(function(id, index) {
-                /**
-                 * We don't want to reinitialize animated tiles that already exist
-                 * and are within the visible camera proportions. This way we can parse
-                 * it every time the tile moves slightly.
-                 */
-
-                if (!self.map.isAnimatedTile(id))
-                    return;
-
-                /**
-                 * Push the pre-existing tiles.
-                 */
-
-                var tileIndex = self.animatedTiles.indexOf(id);
-
-                if (tileIndex > -1) {
-                    newTiles.push(self.animatedTiles[tileIndex]);
-                    return;
-                }
-
-                var tile = new Tile(id, index, self.map.getTileAnimationLength(id), self.map.getTileAnimationDelay(id)),
-                    position = self.map.indexToGridPosition(tile.index);
-
-                tile.setPosition(position);
-
-                newTiles.push(tile);
-            });
-
-            self.animatedTiles = newTiles;
+        setInput: function(input) {
+            this.input = input;
         },
 
         /**
@@ -488,6 +625,47 @@ define(['./camera', './tile'], function(Camera, Tile) {
 
             bounds.x = (self.getX(cellId + 1, self.map.width) * self.tileSize - self.camera.x) * self.drawingScale;
             bounds.y = ((Math.floor(cellId / self.map.width) * self.tileSize) - self.camera.y) * self.drawingScale;
+            bounds.width = self.tileSize * self.drawingScale;
+            bounds.height = self.tileSize * self.drawingScale;
+            bounds.left = bounds.x;
+            bounds.right = bounds.x + bounds.width;
+            bounds.top = bounds.y;
+            bounds.bottom = bounds.y + bounds.height;
+
+            return bounds;
+        },
+
+        getEntityBounds: function(entity) {
+            var self = this,
+                bounds = {},
+                sprite = entity.sprite;
+
+            //TODO - Ensure that the sprite over there has the correct bounds
+
+            if (!sprite)
+                log.error('Sprite malformation for: ' + entity.name);
+            else {
+                bounds.x = (entity.x + sprite.offsetX - self.camera.x) * self.drawingScale;
+                bounds.y = (entity.y + sprite.offsetY - self.camera.y) * self.drawingScale;
+                bounds.width = sprite.width * self.drawingScale;
+                bounds.height = sprite.height * self.drawingScale;
+                bounds.left = bounds.x;
+                bounds.right = bounds.x + bounds.width;
+                bounds.top = bounds.y;
+                bounds.bottom = bounds.y + bounds.height;
+            }
+
+            return bounds;
+        },
+
+        getTargetBounds: function(x, y) {
+            var self = this,
+                bounds = {},
+                tx = x || self.input.selectedX,
+                ty = y || self.input.selectedY;
+
+            bounds.x = ((tx * self.tileSize) - self.camera.x) * self.drawingScale;
+            bounds.y = ((ty * self.tileSize) - self.camera.y) * self.drawingScale;
             bounds.width = self.tileSize * self.drawingScale;
             bounds.height = self.tileSize * self.drawingScale;
             bounds.left = bounds.x;

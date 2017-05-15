@@ -1,4 +1,4 @@
-/* global Modules */
+/* global Modules, log, _ */
 
 define(function() {
 
@@ -27,6 +27,70 @@ define(function() {
             self.shadowOffsetY = 0;
 
             self.spriteLoaded = false;
+            self.visible = true;
+            self.fading = false;
+
+            self.loadDirty();
+        },
+
+        /**
+         * This is important for when the client is
+         * on a mobile screen. So the sprite has to be
+         * handled differently.
+         */
+
+        loadDirty: function() {
+            var self = this;
+
+            self.dirty = true;
+
+            if (self.dirtyCallback)
+                self.dirtyCallback();
+        },
+
+        fadeIn: function(time) {
+            var self = this;
+
+            self.fading = true;
+            self.fadingTime = time;
+        },
+
+        blink: function(speed) {
+            var self = this;
+
+            self.blinking = setInterval(function() {
+                self.toggleVisibility();
+            }, speed);
+        },
+
+        stopBlinking: function() {
+            var self = this;
+
+            if (self.blinking)
+                clearInterval(self.blinking);
+
+            self.setVisible(true);
+        },
+
+        setSprite: function(sprite) {
+            var self = this;
+
+            if (!sprite || (self.sprite && self.sprite.name === sprite.name))
+                return;
+
+            if (!sprite.loaded)
+                sprite.load();
+
+            self.sprite = sprite;
+
+            self.normalSprite = self.sprite;
+            self.hurtSprite = sprite.getHurtSprite();
+            self.animations = sprite.createAnimations();
+
+            self.spriteLoaded = true;
+
+            if (self.readyCallback)
+                self.readyCallback();
         },
 
         setPosition: function(x, y) {
@@ -64,6 +128,10 @@ define(function() {
             });
         },
 
+        setVisible: function(visible) {
+            this.visible = visible
+        },
+
         getAnimationByName: function(name) {
             if (name in this.animations)
                 return this.animations[name];
@@ -71,8 +139,32 @@ define(function() {
             return null;
         },
 
+        getSprite: function() {
+            return this.sprite.name;
+        },
+
+        toggleVisibility: function() {
+            this.setVisible(!this.visible);
+        },
+
         isPlayer: function() {
             return this.kind === Modules.Types.Player;
+        },
+
+        isVisible: function() {
+            return this.visible;
+        },
+
+        hasShadow: function() {
+            return false;
+        },
+
+        onReady: function(callback) {
+            this.readyCallback = callback;
+        },
+
+        onDirty: function(callback) {
+            this.dirtyCallback = callback;
         }
 
     });

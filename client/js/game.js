@@ -2,9 +2,9 @@
 
 define(['./renderer/renderer', './utils/storage',
         './map/map', './network/socket', './entity/character/player/player',
-        './renderer/updater', './controllers/entities',
+        './renderer/updater', './controllers/entities', './controllers/input',
         './utils/modules', './network/packets'],
-        function(Renderer, LocalStorage, Map, Socket, Player, Updater, Entities) {
+        function(Renderer, LocalStorage, Map, Socket, Player, Updater, Entities, Input) {
 
     return Class.extend({
 
@@ -21,6 +21,7 @@ define(['./renderer/renderer', './utils/storage',
             self.updater = null;
             self.storage = null;
             self.entities = null;
+            self.input = null;
             self.map = null;
 
             self.player = null;
@@ -89,6 +90,7 @@ define(['./renderer/renderer', './utils/storage',
             self.setSocket(new Socket(self));
             self.setMessages(self.socket.messages);
             self.setEntityController(new Entities(self));
+            self.setInput(new Input(self));
         },
 
         loadMisc: function() {
@@ -105,10 +107,15 @@ define(['./renderer/renderer', './utils/storage',
 
             self.map.onReady(function() {
                 log.info('The map has been loaded!');
+
                 self.renderer.setMap(self.map);
                 self.renderer.loadCamera();
+
                 self.setUpdater(new Updater(self));
+
                 self.entities.load();
+                self.renderer.setEntities(self.entities);
+
             });
         },
 
@@ -184,6 +191,8 @@ define(['./renderer/renderer', './utils/storage',
                 self.socket.send(Packets.Ready, [true]);
 
                 self.start();
+
+                self.entities.addEntity(self.player);
             });
 
             self.messages.onSpawn(function() {
@@ -191,38 +200,8 @@ define(['./renderer/renderer', './utils/storage',
             });
         },
 
-        input: function(inputType, data) {
-            var self = this;
-
-            switch (inputType) {
-                case Modules.InputType.Key:
-
-                    switch(data) {
-                        case Modules.Keys.Up:
-                        case Modules.Keys.Down:
-                        case Modules.Keys.Left:
-                        case Modules.Keys.Right:
-                            self.getCamera().handlePanning(data);
-                            break;
-
-                        case Modules.Keys.J:
-                            log.info('Animated Tiles: ' + self.renderer.animatedTiles);
-                            self.renderer.forEachAnimatedTile(function(tile) {
-                                log.info('Tile: ' + tile.getPosition());
-                            });
-                            break;
-                    }
-
-                    break;
-
-                case Modules.InputType.LeftClick:
-
-                    break;
-
-                case Modules.InputType.RightClick:
-
-                    break;
-            }
+        onInput: function(inputType, data) {
+            this.input.handle(inputType, data);
         },
 
         handleDisconnection: function() {
@@ -293,6 +272,15 @@ define(['./renderer/renderer', './utils/storage',
         setEntityController: function(entities) {
             if (!this.entities)
                 this.entities = entities;
+        },
+
+        setInput: function(input) {
+            var self = this;
+
+            if (!self.input) {
+                self.input = input;
+                self.renderer.setInput(self.input);
+            }
         }
 
     });
