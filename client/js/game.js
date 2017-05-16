@@ -193,6 +193,11 @@ define(['./renderer/renderer', './utils/storage',
                 self.start();
 
                 self.entities.addEntity(self.player);
+
+                var defaultSprite = self.player.getSpriteName();
+
+                self.player.setSprite(self.getSprite(defaultSprite));
+                self.player.performAction(Modules.Orientation.Down, Modules.Actions.Idle);
             });
 
             self.messages.onSpawn(function() {
@@ -242,6 +247,10 @@ define(['./renderer/renderer', './utils/storage',
 
         getCamera: function() {
             return this.renderer.camera;
+        },
+
+        getSprite: function(spriteName) {
+            return this.entities.getSprite(spriteName);
         },
 
         setRenderer: function(renderer) {

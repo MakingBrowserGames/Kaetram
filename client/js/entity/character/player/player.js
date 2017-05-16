@@ -36,6 +36,18 @@ define(['../character'], function(Character) {
             self.boots = null;
         },
 
+        performAction: function(orientation, action) {
+            this._super(orientation, action);
+        },
+
+        setSprite: function(sprite) {
+            this._super(sprite);
+        },
+
+        getSpriteName: function() {
+            return this.sprite ? this.sprite : 'clotharmor';
+        },
+
         setGridPosition: function(x, y) {
             this._super(x, y);
         }

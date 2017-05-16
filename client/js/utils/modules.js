@@ -16,6 +16,12 @@ Modules = {
         RightClick: 2
     },
 
+    Actions: {
+        Idle: 0,
+        Attack: 1,
+        Walk: 2
+    },
+
     Keys: {
         One: 49,
         Two: 50,
@@ -33,6 +39,7 @@ Modules = {
         Esc: 27,
         V: 86,
         U: 85,
-        J: 74
+        J: 74,
+        Enter: 13
     }
 };

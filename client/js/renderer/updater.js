@@ -35,6 +35,11 @@ define(function() {
             self.game.entities.forEachEntity(function(entity) {
                 if (entity.spriteLoaded)
                     self.updateFading(entity);
+
+                var animation = entity.currentAnimation;
+
+                if (animation && animation.update(self.game.time))
+                    entity.loadDirty();
             });
         },
 

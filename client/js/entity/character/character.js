@@ -1,4 +1,4 @@
-/* global _ */
+/* global _, Modules */
 
 define(['../entity'], function(Entity) {
 
@@ -22,6 +22,14 @@ define(['../entity'], function(Entity) {
             self.maxMana = -1;
 
             self.moving = false;
+
+            /**
+             * Non-game-breaking speeds
+             */
+
+            self.idleSpeed = 450;
+            self.attackAnimationSpeed = 50;
+            self.walkAnimationSpeed = 100;
         },
 
         animate: function(animation, speed, count, onEndCount) {
@@ -41,6 +49,24 @@ define(['../entity'], function(Entity) {
             }
 
             self.setAnimation(animation, speed, count, onEndCount);
+        },
+
+        performAction: function(orientation, action) {
+            var self = this;
+
+            switch(action) {
+                case Modules.Actions.Idle:
+                    self.animate('idle', self.idleSpeed);
+                    break;
+
+                case Modules.Actions.Attack:
+                    self.animate('atk', self.attackAnimationSpeed, 1);
+                    break;
+
+                case Modules.Actions.Walk:
+                    self.animate('walk', self.walkAnimationSpeed);
+                    break;
+            }
         },
 
         orientationToString: function(o) {
@@ -63,6 +89,14 @@ define(['../entity'], function(Entity) {
 
         hasShadow: function() {
             return true;
+        },
+
+        setSprite: function(sprite) {
+            this._super(sprite);
+        },
+
+        setOrientation: function(orientation) {
+            this.orientation = orientation;
         },
 
         setGridPosition: function(x, y) {

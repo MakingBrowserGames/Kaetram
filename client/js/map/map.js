@@ -1,4 +1,4 @@
-/* global log */
+/* global log, _ */
 
 define(['jquery'], function($) {
 
@@ -84,6 +84,21 @@ define(['jquery'], function($) {
             self.renderer.setTileset(self.tilesets[isBigScale ? 1 : 0]);
 
             self.tilesetsLoaded = true;
+
+            log.info(self.tilesets[0].loaded + ' ' + self.tilesets[0].scale);
+        },
+
+        updateTileset: function() {
+            var self = this,
+                scale = self.renderer.getDrawingScale();
+
+            if (!self.tilesets[1] && scale !== self.renderer.getTileset().scale)
+                self.tilesets.push(self.loadTileset('img/3/tilesheet.png'));
+
+            _.each(self.tilesets, function(tileset) {
+                if (tileset.scale === self.renderer.getDrawingScale())
+                    self.renderer.setTileset(tileset);
+            });
         },
 
         loadTileset: function(path) {
@@ -92,6 +107,8 @@ define(['jquery'], function($) {
 
             tileset.crossOrigin = 'Anonymous';
             tileset.src = path;
+            tileset.loaded = true;
+            tileset.scale = self.renderer.getDrawingScale();
 
             tileset.onload = function() {
                 if (tileset.width % self.tileSize > 0)

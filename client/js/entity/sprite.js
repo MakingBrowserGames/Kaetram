@@ -61,9 +61,7 @@ define(['./animation'], function(Animation) {
             self.scale = newScale;
 
             self.loadSprite();
-
-            if (self.loaded)
-                self.loaded = false;
+            self.load();
         },
 
         createAnimations: function() {

@@ -187,8 +187,8 @@ module.exports = Player = Character.extend({
     sendToSpawn: function() {
         var self = this;
 
-        self.x = 17;
-        self.y = 19;
+        self.x = 20;
+        self.y = 18;
     }
 
 });

@@ -47,7 +47,9 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
             self.drawTarget = false;
             self.selectedCellVisible = false;
 
-            self.load();
+            self.stopRendering  = false;
+
+            self.load()
         },
 
         load: function() {
@@ -107,6 +109,10 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
         resize: function() {
             var self = this;
 
+            self.stopRendering = true;
+
+            self.clearAll();
+
             self.scale = self.getScale();
             self.drawingScale = self.getDrawingScale();
 
@@ -115,18 +121,22 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
             if (self.camera)
                 self.camera.update();
 
+            if (self.map)
+                self.map.updateTileset();
+
             self.loadFont();
             self.updateAnimatedTiles();
 
             if (!self.resizeTimeout)
                 self.resizeTimeout = setTimeout(function() {
                     self.loadSizes();
-                    self.renderedFrame[0] = -1;
-                    self.resizeTimeout = null;
 
                     if (self.entities)
                         self.entities.update();
 
+                    self.renderedFrame[0] = -1;
+                    self.stopRendering = false;
+                    self.resizeTimeout = null;
                 }, 500);
         },
 
@@ -142,9 +152,11 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
              * Rendering related draws
              */
 
-            self.draw();
-            self.drawAnimatedTiles();
-            self.drawEntities(false);
+            if (!self.stopRendering) {
+                self.draw();
+                self.drawAnimatedTiles();
+                self.drawEntities(false);
+            }
 
             /**
              * Text related draws
@@ -196,8 +208,6 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
 
             self.forEachVisibleEntity(function(entity) {
 
-                log.info(entity.sprite);
-
                 if (entity.spriteLoaded) {
 
                     self.drawEntity(entity);
@@ -217,27 +227,24 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
                 shadow = self.entities.getSprite('shadow16'),
                 animation = entity.currentAnimation;
 
+
             if (!animation || !sprite || !entity.isVisible())
                 return;
 
             var frame = animation.currentFrame,
-                x = frame.x * self.scale,
-                y = frame.y * self.scale,
-                width = sprite.width * self.scale,
-                height = sprite.height * self.scale,
+                x = frame.x * self.drawingScale,
+                y = frame.y * self.drawingScale,
+                width = sprite.width * self.drawingScale,
+                height = sprite.height * self.drawingScale,
                 ox = sprite.offsetX * self.drawingScale,
                 oy = sprite.offsetY * self.drawingScale,
                 dx = entity.x * self.drawingScale,
                 dy = entity.y * self.drawingScale,
-                dw = width * self.scale,
-                dh = height * self.scale;
+                dw = width,
+                dh = height;
 
-            if (entity.fading) {
-                self.context.save();
+            if (entity.fading)
                 self.context.globalAlpha = entity.fadingAlpha;
-            }
-
-            self.context.save();
 
             if (entity.spriteFlipX) {
                 self.context.translate(dx + self.tileSize * self.drawingScale, dy);
@@ -253,9 +260,11 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
                     shadow.load();
 
                 self.context.drawImage(shadow.image, 0, 0, shadow.width * self.drawingScale, shadow.height * self.drawingScale,
-                                        0, entity.shadowOffsetY * self.scale, shadow.width * self.scale * self.drawingScale,
-                                        shadow.height * self.drawingScale * self.scale);
+                                        0, entity.shadowOffsetY * self.drawingScale, shadow.width * self.drawingScale,
+                                        shadow.height * self.drawingScale);
             }
+
+            self.context.drawImage(sprite.image, x, y, width, height, ox, oy, dw, dh);
         },
 
         redrawTile: function(tile) {
@@ -674,6 +683,10 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
             bounds.bottom = bounds.y + bounds.height;
 
             return bounds;
+        },
+
+        getTileset: function() {
+            return this.tileset;
         }
 
     });

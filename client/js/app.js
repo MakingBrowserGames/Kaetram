@@ -39,10 +39,7 @@ define(['jquery'], function($) {
             var self = this;
 
             self.loginButton.click(function() {
-                if (self.verifyForm()) {
-                    self.toggleLogin(true);
-                    self.game.connect();
-                }
+                self.login();
             });
 
             self.registerButton.click(function() {
@@ -63,14 +60,29 @@ define(['jquery'], function($) {
             });
 
             $(document).keydown(function(e) {
+                var key = e.which;
+
+                if (key === Modules.Keys.Enter) {
+                    self.login();
+                    return;
+                }
+
                 if (!self.game || !self.game.started)
                     return;
-
-                var key = e.which;
 
                 self.game.onInput(Modules.InputType.Key, key);
             });
 
+        },
+
+        login: function() {
+            var self = this;
+
+            if (!self.verifyForm())
+                return;
+
+            self.toggleLogin(true);
+            self.game.connect();
         },
 
         zoom: function() {

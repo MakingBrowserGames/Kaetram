@@ -354,17 +354,6 @@
     "offset_y": -12
   },
   {
-    "id": "arrow",
-    "width": 14,
-    "height": 14,
-    "animations": {
-      "idle_down": {
-        "length": 1,
-        "row": 0
-      }
-    }
-  },
-  {
     "id": "axe",
     "width": 48,
     "height": 48,
@@ -18368,19 +18357,6 @@
     "offset_x": -32,
     "offset_y": -32,
     "offset_angle": 180
-  },
-  {
-    "id": "explosion",
-    "width": 24,
-    "height": 24,
-    "animations": {
-      "explosion": {
-        "length": 6,
-        "row": 0
-      }
-    },
-    "offset_x": -4,
-    "offset_y": -4
   },
   {
     "id": "explosion-fireball",

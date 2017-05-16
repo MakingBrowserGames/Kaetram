@@ -81,11 +81,16 @@ define(function() {
             if (!sprite.loaded)
                 sprite.load();
 
+            sprite.name = sprite.id;
+
             self.sprite = sprite;
 
             self.normalSprite = self.sprite;
             self.hurtSprite = sprite.getHurtSprite();
             self.animations = sprite.createAnimations();
+
+            log.info(sprite);
+            log.info(sprite.name);
 
             self.spriteLoaded = true;
 
@@ -117,6 +122,8 @@ define(function() {
 
             if (!anim)
                 return;
+
+            self.currentAnimation = anim;
 
             if (name.substr(0, 3) === 'atk')
                 self.currentAnimation.reset();
