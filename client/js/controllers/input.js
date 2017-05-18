@@ -43,6 +43,12 @@ define(function() {
                         case Modules.Keys.Down:
                             self.game.getCamera().handlePanning(data);
                             break;
+
+                        case Modules.Keys.One:
+                            self.renderer.forEachDrawingContext(function(context) {
+                                log.info(context.canvas.id);
+                            });
+                            break;
                     }
 
                     break;

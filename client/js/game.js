@@ -81,10 +81,9 @@ define(['./renderer/renderer', './utils/storage',
                 textCanvas = document.getElementById('textCanvas'),
                 entities = document.getElementById('entities'),
                 chatInput = document.getElementById('chatInput'),
-                cursor = document.getElementById('cursor'),
-                target = document.getElementById('target');
+                cursor = document.getElementById('cursor');
 
-            self.setRenderer(new Renderer(background, entities, foreground, textCanvas, cursor, target, self));
+            self.setRenderer(new Renderer(background, entities, foreground, textCanvas, cursor, self));
         },
 
         loadControllers: function() {

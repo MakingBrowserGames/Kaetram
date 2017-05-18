@@ -4,7 +4,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
 
     return Class.extend({
 
-        init: function(background, entities, foreground, textCanvas, cursor, target, game) {
+        init: function(background, entities, foreground, textCanvas, cursor, game) {
             var self = this;
 
             self.background = background;
@@ -12,17 +12,15 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.foreground = foreground;
             self.textCanvas = textCanvas;
             self.cursor = cursor;
-            self.target = target;
 
             self.context = entities.getContext('2d');
             self.backContext = background.getContext('2d');
             self.foreContext = foreground.getContext('2d');
             self.textContext = textCanvas.getContext('2d');
             self.cursorContext = cursor.getContext('2d');
-            self.targetContext = target.getContext('2d');
 
-            self.contexts = [self.backContext, self.foreContext];
-            self.canvases = [self.background, self.entities, self.foreground, self.textCanvas, self.cursor, self.target];
+            self.contexts = [self.backContext, self.foreContext, self.context];
+            self.canvases = [self.background, self.entities, self.foreground, self.textCanvas, self.cursor];
 
             self.game = game;
             self.camera = null;
@@ -148,7 +146,6 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             var self = this;
 
             self.clearScreen(self.context);
-            self.context.save();
 
             self.saveAll();
 
@@ -159,11 +156,12 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             if (!self.stopRendering) {
                 self.draw();
                 self.drawAnimatedTiles();
+
+                if (!self.mobile && self.input.targetVisible)
+                    self.drawTargetCell();
+
                 self.drawEntities(false);
             }
-
-            if (!self.mobile && self.input.targetVisible)
-                self.drawTargetCell();
 
             /**
              * Text related draws
@@ -171,7 +169,6 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.drawFPS();
 
             self.restoreAll();
-            self.context.restore();
 
             self.drawCursor();
         },
@@ -186,8 +183,8 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             if (self.hasRenderedFrame())
                 return;
 
-            self.clearAll();
-            self.updateView();
+            self.clearDrawing();
+            self.updateDrawingView();
 
             self.forEachVisibleTile(function(id, index) {
                 var isHighTile = self.map.isHighTile(id),
@@ -470,20 +467,18 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             var self = this,
                 multiplier = self.tileSize * self.drawingScale;
 
-            self.setCameraView(self.targetContext);
+            self.context.save();
 
-            self.targetContext.save();
-
-            self.targetContext.lineWidth = 2 * self.drawingScale;
-            self.targetContext.translate(x + 2, y + 2);
+            self.context.lineWidth = 2 * self.drawingScale;
+            self.context.translate(x + 2, y + 2);
 
             if (self.mobile)
-                self.targetContext.clearRect(-8, -8, multiplier + 16, multiplier + 16);
+                self.context.clearRect(-8, -8, multiplier + 16, multiplier + 16);
 
-            self.targetContext.strokeStyle = colour;
-            self.targetContext.strokeRect(0, 0, multiplier - 4, multiplier - 4);
+            self.context.strokeStyle = colour;
+            self.context.strokeRect(0, 0, multiplier - 4, multiplier - 4);
 
-            self.targetContext.restore();
+            self.context.restore();
         },
 
         drawCellHighlight: function(x, y, colour) {
@@ -584,10 +579,26 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             });
         },
 
+        clearDrawing: function() {
+            var self = this;
+
+            self.forEachDrawingContext(function(context) {
+                context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+            });
+        },
+
         saveAll: function() {
             var self = this;
 
             self.forEachContext(function(context) {
+                context.save();
+            });
+        },
+
+        saveDrawing: function() {
+            var self = this;
+
+            self.forEachDrawingContext(function(context) {
                 context.save();
             });
         },
@@ -612,6 +623,14 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             var self = this;
 
             self.forEachContext(function(context) {
+                self.setCameraView(context);
+            });
+        },
+
+        updateDrawingView: function() {
+            var self = this;
+
+            self.forEachDrawingContext(function(context) {
                 self.setCameraView(context);
             });
         },
@@ -642,19 +661,22 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
          */
 
         forEachContext: function(callback) {
-            var self = this;
+            _.each(this.contexts, function(context) {
+                callback(context);
+            });
+        },
 
-            for (var index in self.contexts)
-                if (self.contexts.hasOwnProperty(index))
-                    callback(self.contexts[index]);
+        forEachDrawingContext: function(callback) {
+            _.each(this.contexts, function(context) {
+                if (context.canvas.id !== 'entities')
+                    callback(context);
+            });
         },
 
         forEachCanvas: function(callback) {
-            var self = this;
-
-            for (var index in self.canvases)
-                if (self.canvases.hasOwnProperty(index))
-                    callback(self.canvases[index]);
+            _.each(this.canvases, function(canvas) {
+                callback(canvas);
+            });
         },
 
         getX: function(index, width) {

@@ -20,3 +20,4 @@ Finished:
 - Music areas will be handled server sided - we must take as much load off the client as possible. ✓
 - Move ornament to Vars.css ✓
 - Add 'extra' to parsing of tiles ✓
+- Use underscore for rendering ✓
