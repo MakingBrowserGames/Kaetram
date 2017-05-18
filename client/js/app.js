@@ -15,6 +15,7 @@ define(['jquery'], function($) {
             self.parchment = $('#parchment');
             self.container = $('#container');
             self.window = $(window);
+            self.canvas = $('#canvas');
 
             self.intro = $('#intro');
 
@@ -71,6 +72,22 @@ define(['jquery'], function($) {
                     return;
 
                 self.game.onInput(Modules.InputType.Key, key);
+            });
+
+            $(document).mousemove(function(event) {
+                if (!self.game || !self.game.input)
+                    return;
+
+                self.game.input.setCoords(event);
+
+            });
+
+            self.canvas.click(function(event) {
+                if (!self.game || !self.game.started || event.button !== 0)
+                    return;
+
+                window.scrollTo(0, 1);
+                self.game.input.handle(Modules.InputType.LeftClick, event);
             });
 
         },
@@ -332,6 +349,10 @@ define(['jquery'], function($) {
 
         getOrientation: function() {
             return window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+        },
+
+        getZoom: function() {
+            return this.zoomFactor;
         },
 
         onReady: function(callback) {

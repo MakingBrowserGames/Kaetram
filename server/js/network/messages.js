@@ -37,12 +37,13 @@ Messages.Spawn = Message.extend({
 
 Messages.Equipment = Message.extend({
 
-    init: function(equipmentData) {
+    init: function(opcode, equipmentData) {
+        this.opcode = opcode;
         this.equipmentData = equipmentData;
     },
 
     serialize: function() {
-        return [Packets.Equipment, this.equipmentData];
+        return [Packets.Equipment, this.opcode, this.equipmentData];
     }
 
 });

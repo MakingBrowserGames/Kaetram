@@ -25,6 +25,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleIntro(message);
                     break;
 
+                case Packets.Ready:
+                    self.handleReady(message);
+                    break;
+
             }
 
         });
@@ -99,6 +103,17 @@ module.exports = Incoming = cls.Class.extend({
                 }
             });
         }
+    },
+
+    handleReady: function(message) {
+        var self = this,
+            isReady = message.shift();
+
+        if (isReady) {
+            self.player.ready = true;
+            self.player.sendEquipment();
+        }
     }
+
 
 });

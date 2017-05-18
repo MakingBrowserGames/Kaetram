@@ -11,7 +11,8 @@ var Character = require('../character'),
     Messages = require('../../../../network/messages'),
     Formulas = require('../../../formulas'),
     Hitpoints = require('./points/hitpoints'),
-    Mana = require('./points/mana');
+    Mana = require('./points/mana'),
+    Packets = require('../../../../network/packets');
 
 module.exports = Player = Character.extend({
 
@@ -178,10 +179,10 @@ module.exports = Player = Character.extend({
 
     sendEquipment: function() {
         var self = this,
-            info = [self.armour.getData(), self.weapon.getData(),
-                self.pendant.getData(), self.ring.getData(), self.boots.getData];
+            info = [self.armour.getData(), self.weapon.getData(), self.pendant.getData(),
+                self.ring.getData(), self.boots.getData()];
 
-        self.send(new Messages.Equipment(info));
+        self.send(new Messages.Equipment(Packets.EquipmentOpcode.Batch, info));
     },
 
     sendToSpawn: function() {

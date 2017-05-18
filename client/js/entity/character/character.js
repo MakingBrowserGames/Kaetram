@@ -21,6 +21,7 @@ define(['../entity'], function(Entity) {
             self.mana = -1;
             self.maxMana = -1;
 
+            self.dead = false;
             self.moving = false;
 
             /**
@@ -54,6 +55,8 @@ define(['../entity'], function(Entity) {
         performAction: function(orientation, action) {
             var self = this;
 
+            self.setOrientation(orientation);
+
             switch(action) {
                 case Modules.Actions.Idle:
                     self.animate('idle', self.idleSpeed);
@@ -85,6 +88,10 @@ define(['../entity'], function(Entity) {
                 case oM.Down:
                     return 'down';
             }
+        },
+
+        hasWeapon: function() {
+            return false;
         },
 
         hasShadow: function() {

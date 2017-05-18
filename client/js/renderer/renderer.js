@@ -1,24 +1,28 @@
 /* global _, log */
 
-define(['./camera', './tile', '../entity/character/player/player'], function(Camera, Tile, Player) {
+define(['./camera', './tile', '../entity/character/player/player', '../entity/character/character'], function(Camera, Tile, Player, Character) {
 
     return Class.extend({
 
-        init: function(background, entities, foreground, textCanvas, game) {
+        init: function(background, entities, foreground, textCanvas, cursor, target, game) {
             var self = this;
 
             self.background = background;
             self.entities = entities;
             self.foreground = foreground;
             self.textCanvas = textCanvas;
+            self.cursor = cursor;
+            self.target = target;
 
             self.context = entities.getContext('2d');
             self.backContext = background.getContext('2d');
             self.foreContext = foreground.getContext('2d');
             self.textContext = textCanvas.getContext('2d');
+            self.cursorContext = cursor.getContext('2d');
+            self.targetContext = target.getContext('2d');
 
             self.contexts = [self.backContext, self.foreContext];
-            self.canvases = [self.background, self.entities, self.foreground, self.textCanvas];
+            self.canvases = [self.background, self.entities, self.foreground, self.textCanvas, self.cursor, self.target];
 
             self.game = game;
             self.camera = null;
@@ -158,6 +162,9 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
                 self.drawEntities(false);
             }
 
+            if (!self.mobile && self.input.targetVisible)
+                self.drawTargetCell();
+
             /**
              * Text related draws
              */
@@ -165,6 +172,8 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
 
             self.restoreAll();
             self.context.restore();
+
+            self.drawCursor();
         },
 
         /**
@@ -227,7 +236,6 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
                 shadow = self.entities.getSprite('shadow16'),
                 animation = entity.currentAnimation;
 
-
             if (!animation || !sprite || !entity.isVisible())
                 return;
 
@@ -265,13 +273,47 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
             }
 
             self.context.drawImage(sprite.image, x, y, width, height, ox, oy, dw, dh);
+
+            if (entity instanceof Character && !entity.dead && entity.hasWeapon()) {
+                var weapon = self.entities.getSprite(entity.weapon.getString());
+
+                if (!weapon)
+                    return;
+
+                if (!weapon.loaded)
+                    weapon.load();
+
+                var weaponAnimationData = weapon.animationData[animation.name],
+                    index = frame.index < weaponAnimationData.length ? frame.index : frame.index % weaponAnimationData.length,
+                    weaponX = weapon.width * index * self.drawingScale,
+                    weaponY = weapon.height * animation.row * self.drawingScale,
+                    weaponWidth = weapon.width * self.drawingScale,
+                    weaponHeight = weapon.height * self.drawingScale;
+
+                self.context.drawImage(weapon.image, weaponX, weaponY, weaponWidth, weaponHeight,
+                                    weapon.offsetX * self.drawingScale, weapon.offsetY * self.drawingScale,
+                                    weaponWidth, weaponHeight);
+            }
         },
 
-        redrawTile: function(tile) {
-            var self = this;
+        drawCursor: function() {
+            var self = this,
+                cursor = self.input.cursor;
 
-            self.clearTile(self.context, self.map.width, tile.index);
-            self.drawTile(self.context, tile.id, self.tileset, self.tileset.width / self.tileSize, self.map.width, tile.index);
+            self.clearScreen(self.cursorContext);
+            self.cursorContext.save();
+
+            if (cursor && self.scale > 1) {
+                if (!cursor.loaded)
+                    cursor.load();
+
+                if (cursor.loaded)
+                    self.cursorContext.drawImage(cursor.image, 0, 0, 14 * self.drawingScale, 14 * self.drawingScale,
+                                            self.input.mouse.x, self.input.mouse.y,
+                                            14 * self.drawingScale, 14 * self.drawingScale);
+            }
+
+            self.cursorContext.restore();
         },
 
         drawFPS: function() {
@@ -422,6 +464,40 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
                     self.targetRect = targetRect;
                 }
             }
+        },
+
+        drawCellRect: function(x, y, colour) {
+            var self = this,
+                multiplier = self.tileSize * self.drawingScale;
+
+            self.setCameraView(self.targetContext);
+
+            self.targetContext.save();
+
+            self.targetContext.lineWidth = 2 * self.drawingScale;
+            self.targetContext.translate(x + 2, y + 2);
+
+            if (self.mobile)
+                self.targetContext.clearRect(-8, -8, multiplier + 16, multiplier + 16);
+
+            self.targetContext.strokeStyle = colour;
+            self.targetContext.strokeRect(0, 0, multiplier - 4, multiplier - 4);
+
+            self.targetContext.restore();
+        },
+
+        drawCellHighlight: function(x, y, colour) {
+            var self = this;
+
+            self.drawCellRect(x * self.drawingScale * self.tileSize, y * self.drawingScale * self.tileSize, colour);
+        },
+
+        drawTargetCell: function() {
+            var self = this,
+                location = self.input.getCoords();
+
+            if (self.input.targetVisible && location.x !== self.input.selectedX && location.y !== self.input.selectedY)
+                self.drawCellHighlight(location.x, location.y, self.input.targetColour);
         },
 
         /**
@@ -622,10 +698,6 @@ define(['./camera', './tile', '../entity/character/player/player'], function(Cam
         /**
          * Getters
          */
-
-        getZoom: function() {
-            return this.game.app.zoomFactor;
-        },
 
         getTileBounds: function(tile) {
             var self = this,

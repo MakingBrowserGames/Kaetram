@@ -107,10 +107,11 @@ define(function() {
 
         receiveEquipment: function(data) {
             var self = this,
+                equipType = data.shift(),
                 equipInfo = data.shift();
 
             if (self.equipmentCallback)
-                self.equipmentCallback(equipInfo);
+                self.equipmentCallback(equipType, equipInfo);
         },
 
         /**

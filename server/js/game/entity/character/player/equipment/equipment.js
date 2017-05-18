@@ -39,7 +39,7 @@ module.exports = Equipment = cls.Class.extend({
     },
 
     getData: function() {
-        return [Items.idToName(id), this.count, this.skill, this.skillLevel];
+        return [Items.idToString(this.id), Items.idToName(this.id), this.count, this.skill, this.skillLevel];
     }
 
 });

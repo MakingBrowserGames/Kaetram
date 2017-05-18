@@ -10,11 +10,13 @@ define(function() {
             self.game = game;
             self.camera = game.getCamera();
             self.renderer = game.renderer;
+            self.input = game.input;
         },
 
         update: function() {
             this.animateTiles();
             this.updateCharacters();
+            this.input.updateCursor();
         },
 
         animateTiles: function() {

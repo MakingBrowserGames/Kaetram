@@ -12,14 +12,21 @@ Modules = {
 
     InputType: {
         Key: 0,
-        LeftClick: 1,
-        RightClick: 2
+        LeftClick: 1
     },
 
     Actions: {
         Idle: 0,
         Attack: 1,
         Walk: 2
+    },
+
+    Equipment: {
+        Armour: 0,
+        Weapon: 1,
+        Pendant: 2,
+        Ring: 3,
+        Boots: 4
     },
 
     Keys: {

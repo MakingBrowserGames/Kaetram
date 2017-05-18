@@ -47,6 +47,8 @@ define(['./renderer/renderer', './utils/storage',
             self.tick();
 
             self.renderer.renderedFrame[0] = -1;
+            self.input.newCursor = self.getSprite('hand');
+            self.input.targetColour = 'rgba(255, 255, 255, 0.5)';
         },
 
         stop: function() {
@@ -78,9 +80,11 @@ define(['./renderer/renderer', './utils/storage',
                 foreground = document.getElementById('foreground'),
                 textCanvas = document.getElementById('textCanvas'),
                 entities = document.getElementById('entities'),
-                chatInput = document.getElementById('chatInput');
+                chatInput = document.getElementById('chatInput'),
+                cursor = document.getElementById('cursor'),
+                target = document.getElementById('target');
 
-            self.setRenderer(new Renderer(background, entities, foreground, textCanvas, self));
+            self.setRenderer(new Renderer(background, entities, foreground, textCanvas, cursor, target, self));
         },
 
         loadControllers: function() {
@@ -187,9 +191,6 @@ define(['./renderer/renderer', './utils/storage',
                 self.player.pvpKills = data.shift();
                 self.player.pvpDeaths = data.shift();
 
-
-                self.socket.send(Packets.Ready, [true]);
-
                 self.start();
 
                 self.entities.addEntity(self.player);
@@ -198,6 +199,32 @@ define(['./renderer/renderer', './utils/storage',
 
                 self.player.setSprite(self.getSprite(defaultSprite));
                 self.player.performAction(Modules.Orientation.Down, Modules.Actions.Idle);
+
+                self.socket.send(Packets.Ready, [true]);
+            });
+
+            self.messages.onEquipment(function(equipType, info) {
+
+                switch (equipType) {
+                    case Packets.EquipmentOpcode.Batch:
+
+                        for (var i = 0; i < info.length; i++)
+                            self.player.setEquipment(i, info);
+
+                        break;
+
+                    case Packets.EquipmentOpcode.Equip:
+                        var equipmentType = info.shift(),
+                            data = info.shift();
+
+                        self.player.setEquipment(equipmentType, data);
+                        break;
+
+                    case Packets.EquipmentOpcode.Unequip:
+                        self.player.unequip(info.shift());
+                        break;
+                }
+
             });
 
             self.messages.onSpawn(function() {
