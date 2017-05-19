@@ -41,23 +41,33 @@ define(function() {
                         case Modules.Keys.Left:
                         case Modules.Keys.Up:
                         case Modules.Keys.Down:
-                            self.game.getCamera().handlePanning(data);
+
+                            if (self.game.development)
+                                self.game.getCamera().handlePanning(data);
+
                             break;
 
                         case Modules.Keys.One:
-                            self.renderer.forEachDrawingContext(function(context) {
-                                log.info(context.canvas.id);
-                            });
+                            if (self.game.development)
+                                self.renderer.forEachDrawingContext(function(context) {
+                                    log.info(context.canvas.id);
+                                });
+
+
                             break;
                     }
 
                     break;
 
-                case Modules.InputType.LeftClick:
+                    case Modules.InputType.LeftClick:
 
-                    self.setCoords(data);
+                        self.setCoords(data);
 
-                    break;
+                        var coordinates = self.getCoords();
+
+                        self.game.player.go(coordinates.x, coordinates.y);
+
+                        break;
             }
         },
 
@@ -71,12 +81,12 @@ define(function() {
             self.mouse.y = Math.round((event.pageY - offset.top) / self.app.getZoom());
 
             if (self.mouse.x >= width)
-                self.mouse.x = width - 5;
+                self.mouse.x = width - 1;
             else if (self.mouse.x <= 0)
                 self.mouse.x = 0;
 
             if (self.mouse.y >= height)
-                self.mouse.y = height - 5;
+                self.mouse.y = height - 1;
             else if (self.mouse.y <= 0)
                 self.mouse.y = 0;
         },
@@ -106,10 +116,6 @@ define(function() {
 
             if (self.newTargetColour !== self.targetColour)
                 self.targetColour = self.newTargetColour;
-        },
-
-        moveCursor: function() {
-
         },
 
         setCursor: function(cursor) {

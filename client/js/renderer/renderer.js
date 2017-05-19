@@ -139,6 +139,8 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
                     self.renderedFrame[0] = -1;
                     self.stopRendering = false;
                     self.resizeTimeout = null;
+
+                    self.camera.centreOn(self.game.player);
                 }, 500);
         },
 
@@ -470,6 +472,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.context.save();
 
             self.context.lineWidth = 2 * self.drawingScale;
+
             self.context.translate(x + 2, y + 2);
 
             if (self.mobile)

@@ -88,6 +88,9 @@ define(function() {
         handlePanning: function(direction) {
             var self = this;
 
+            if (!self.panning)
+                return;
+
             switch (direction) {
                 case Modules.Keys.Up:
                     self.setPosition(self.x, self.y - 1);
@@ -108,13 +111,19 @@ define(function() {
         },
 
         centreOn: function(entity) {
-            var self = this,
-                width = self.gridWidth - 2,
-                height = self.gridHeight - 2,
-                x = Math.floor((entity.gridX - 1) / width) * width,
-                y = Math.floor((entity.gridY - 1) / height) * height;
+            var self = this;
 
-            self.setGridPosition(x, y);
+            if (!entity)
+                return;
+
+            var width = Math.floor(self.gridWidth / 2),
+                height = Math.floor(self.gridHeight / 2);
+
+            self.x = entity.x - (width * self.renderer.tileSize);
+            self.y = entity.y - (height * self.renderer.tileSize);
+
+            self.gridX = Math.round(entity.x / 16) - width;
+            self.gridY = Math.round(entity.y / 16) - height;
         },
 
         forEachVisiblePosition: function(callback) {

@@ -6,8 +6,7 @@ var cls = require('../lib/class'),
     Map = require('../map/map'),
     _ = require('underscore'),
     Messages = require('../network/messages'),
-    Utils = require('../util/utils'),
-    Packets = require('../network/packets');
+    Utils = require('../util/utils');
 
 module.exports = World = cls.Class.extend({
 
@@ -40,7 +39,7 @@ module.exports = World = cls.Class.extend({
 
             self.addPlayer(player);
 
-            self.pushToPlayer(player, new Messages.Handshake(clientId));
+            self.pushToPlayer(player, new Messages.Handshake(clientId, config.devClient));
         });
     },
 

@@ -3,8 +3,9 @@
 define(['./renderer/renderer', './utils/storage',
         './map/map', './network/socket', './entity/character/player/player',
         './renderer/updater', './controllers/entities', './controllers/input',
-        './utils/modules', './network/packets'],
-        function(Renderer, LocalStorage, Map, Socket, Player, Updater, Entities, Input) {
+        './entity/character/player/playerhandler', './entity/entityhandler',
+        './utils/pathfinder', './utils/modules', './network/packets'],
+        function(Renderer, LocalStorage, Map, Socket, Player, Updater, Entities, Input, PlayerHandler, Pathfinder) {
 
     return Class.extend({
 
@@ -23,6 +24,8 @@ define(['./renderer/renderer', './utils/storage',
             self.entities = null;
             self.input = null;
             self.map = null;
+            self.playerHandler = null;
+            self.pathfinder = null;
 
             self.player = null;
 
@@ -131,9 +134,10 @@ define(['./renderer/renderer', './utils/storage',
                 self.socket.connect();
             }, 1000);
 
-            self.messages.onHandshake(function(clientId) {
+            self.messages.onHandshake(function(data) {
 
-                self.id = clientId;
+                self.id = data.shift();
+                self.development = data.shift();
 
                 self.ready = true;
 
@@ -170,7 +174,7 @@ define(['./renderer/renderer', './utils/storage',
                     y = data.shift();
 
                 self.player.setGridPosition(x, y);
-                
+
                 self.player.kind = data.shift();
                 self.player.rights = data.shift();
 
@@ -200,6 +204,8 @@ define(['./renderer/renderer', './utils/storage',
                 self.player.performAction(Modules.Orientation.Down, Modules.Actions.Idle);
 
                 self.socket.send(Packets.Ready, [true]);
+
+                self.playerHandler = new PlayerHandler(self, self.player);
             });
 
             self.messages.onEquipment(function(equipType, info) {
@@ -227,8 +233,30 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onSpawn(function() {
+                var entity;
 
+                entity.handler.setGame(self);
+                entity.handler.load();
             });
+        },
+
+        findPath: function(character, x, y, ignores) {
+            var self = this,
+                grid = self.entities.grids.pathingGrid,
+                path = [], isPlayer = character === self.player;
+
+            if (self.map.isColliding(x, y) || !self.pathfinder || !character)
+                return path;
+
+            if (ignores)
+                _.each(ignores, function(entity) { self.pathfinder.ignoreEntity(entity); });
+
+            path = self.pathfinder.find(grid, character, x, y, false);
+
+            if (ignores)
+                self.pathfinder.clearIgnores();
+
+            return path;
         },
 
         onInput: function(inputType, data) {

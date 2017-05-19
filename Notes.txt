@@ -1,16 +1,14 @@
 Kaetram To-Do List:
 
-- Finish basic tile-map rendering
 - Begin moving all CSS to Sass
-- Begin entity-rendering and distribution of sprites (scales accordingly)
 
 - Get proper button interfaces for "Login," "New Character" and "Back."
 - Directly download map data from the server.
 
 - Make animations use every 3rd gridX and gridY whilst panning to delay animation reset.
-- Double animation speed of water and other tiles with more than two frames.
 
-- Fix the third scale
+- Don't let target cell redraw when not necessary
+- Fix the offset of
 
 
 Finished:
@@ -21,3 +19,12 @@ Finished:
 - Move ornament to Vars.css ✓
 - Add 'extra' to parsing of tiles ✓
 - Use underscore for rendering ✓
+- Fix the third scale ✓
+- Finish basic tile-map rendering ✓
+- Begin entity-rendering and distribution of sprites (scales accordingly) ✓
+
+
+Reasoning:
+
+- Have the pathfinding and movement client sided because the server is capable of verifying whether the player position is valid.
+    The movement should be sent to the server when animation is done and calculated (in the future) for accuracy.

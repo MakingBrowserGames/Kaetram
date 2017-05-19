@@ -4,6 +4,7 @@
   "port": 1800,
 
   "offlineMode": true,
+  "devClient": true,
 
   "mysqlHost": "144.217.92.76",
   "mysqlPort": 3306,

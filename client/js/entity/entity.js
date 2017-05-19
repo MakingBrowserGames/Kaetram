@@ -1,6 +1,6 @@
 /* global Modules, log, _ */
 
-define(function() {
+define(['./entityhandler'], function(EntityHandler) {
 
     return Class.extend({
 
@@ -29,6 +29,7 @@ define(function() {
             self.spriteLoaded = false;
             self.visible = true;
             self.fading = false;
+            self.handler = new EntityHandler(self);
 
             self.loadDirty();
         },

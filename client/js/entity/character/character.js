@@ -22,7 +22,12 @@ define(['../entity'], function(Entity) {
             self.maxMana = -1;
 
             self.dead = false;
-            self.moving = false;
+            self.following = false;
+            self.attacking = false;
+            self.interrupted = false;
+
+            self.path = null;
+            self.target = null;
 
             /**
              * Non-game-breaking speeds
@@ -90,12 +95,160 @@ define(['../entity'], function(Entity) {
             }
         },
 
+        go: function(x, y) {
+            var self = this;
+
+            if (self.following) {
+                self.following = false;
+                self.target = null;
+            }
+
+            self.move(x, y);
+        },
+
+        proceed: function(x, y) {
+            this.newDestination = {
+                x: x,
+                y: y
+            }
+        },
+
+        nextStep: function() {
+            var self = this,
+                stop = false,
+                x, y, path;
+
+            self.prevGridX = self.gridX;
+            self.prevGridY = self.gridY;
+
+            if (!self.hasPath())
+                return;
+
+            if (self.beforeStepCallback)
+                self.beforeStepCallback();
+
+            if (!self.interrupted) {
+                if (self.hasNextStep()) {
+                    self.nextGridX = self.path[self.step + 1][0];
+                    self.nextGridY = self.path[self.step + 1][1];
+                }
+
+                if (self.stepCallback)
+                    self.stepCallback();
+
+                if (self.changedPath()) {
+                    x = self.newDestination.x;
+                    y = self.newDestination.y;
+
+                    path = self.requestPathfinding(x, y);
+
+                    self.newDestination = null;
+
+                    if (path.length < 2)
+                        stop = true;
+                    else
+                        self.followPath(path);
+                } else if (self.hasNextStep()) {
+                    self.step++;
+                    self.updateMovement();
+                } else
+                    stop = true;
+
+            } else {
+                stop = true;
+                self.interrupted = false;
+            }
+        },
+
+        updateMovement: function() {
+            var self = this,
+                step = self.step;
+
+            if (self.path[step][0] < self.path[step - 1][0])
+                self.performAction(Modules.Orientation.Left, Modules.Actions.Walk);
+
+            if (self.path[step][0] > self.path[step - 1][0])
+                self.performAction(Modules.Orientation.Right, Modules.Actions.Walk);
+
+            if (self.path[step][1] < self.path[step - 1][0])
+                self.performAction(Modules.Orientation.Up, Modules.Actions.Walk);
+
+            if (self.path[step][1] > self.path[step - 1][1])
+                self.performAction(Modules.Orientation.Down, Modules.Actions.Walk);
+        },
+
+        followPath: function(path) {
+            var self = this;
+
+            /**
+             * Taken from TTA - this is to ensure the player
+             * does not click on himself or somehow into another
+             * dimension
+             */
+            if (path.length < 2)
+                return;
+
+            self.path = path;
+            self.step = 0;
+
+            if (self.following)
+                path.pop();
+
+            if (self.startPathingCallback)
+                self.startPathingCallback(path);
+
+            self.nextStep();
+        },
+
+        move: function(x, y) {
+            var self = this;
+
+            self.destination = {
+                gridX: x,
+                gridY: y
+            };
+
+            self.adjacentTiles = {};
+
+            if (self.hasPath())
+                self.proceed(x, y);
+            else
+                self.followPath(self.requestPathfinding(x, y));
+        },
+
+        requestPathfinding: function(x, y) {
+            var self = this;
+
+            if (self.requestPathCallback)
+                return self.requestPathCallback(x, y);
+        },
+
         hasWeapon: function() {
             return false;
         },
 
         hasShadow: function() {
             return true;
+        },
+
+        hasTarget: function() {
+            return !!this.target;
+        },
+
+        hasPath: function() {
+            return this.path !== null;
+        },
+
+        hasNextStep: function() {
+            return (this.path.length - 1 > this.step);
+        },
+
+        changedPath: function() {
+            return this.newDestination !== null;
+        },
+
+        isAttacking: function() {
+            return this.attacking;
         },
 
         setSprite: function(sprite) {
@@ -108,6 +261,22 @@ define(['../entity'], function(Entity) {
 
         setGridPosition: function(x, y) {
             this._super(x, y);
+        },
+
+        onRequestPath: function(callback) {
+            this.requestPathCallback = callback;
+        },
+
+        onStartPathing: function(callback) {
+            this.startPathingCallback = callback;
+        },
+
+        onBeforeStep: function(callback) {
+            this.beforeStepCallback = callback;
+        },
+
+        onStep: function(callback) {
+            this.stepCallback = callback;
         },
 
         onMove: function(callback) {

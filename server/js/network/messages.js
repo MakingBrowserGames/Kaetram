@@ -6,12 +6,13 @@ var cls = require('../lib/class'),
 module.exports = Messages;
 
 Messages.Handshake = Message.extend({
-    init: function(clientId, proceed) {
+    init: function(clientId, devClient) {
         this.clientId = clientId;
+        this.devClient = devClient;
     },
 
     serialize: function() {
-        return [Packets.Handshake, this.clientId];
+        return [Packets.Handshake, [this.clientId, this.devClient]];
     }
 });
 
