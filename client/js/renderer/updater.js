@@ -46,6 +46,9 @@ define(['../entity/character/character'], function(Character) {
                 if (entity.movement && entity.movement.inProgress)
                     entity.movement.step(self.game.time);
 
+                if (entity.id === self.game.player.id && entity.hasPath())
+                    self.camera.centreOn(entity);
+
                 if (entity instanceof Character && entity.hasPath() && !entity.movement.inProgress) {
                     var tick = Math.round(16 / Math.round((entity.movementSpeed / (1000 / 60))));
 
