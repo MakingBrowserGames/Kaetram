@@ -84,8 +84,6 @@ define(['jquery'], function($) {
             self.renderer.setTileset(self.tilesets[isBigScale ? 1 : 0]);
 
             self.tilesetsLoaded = true;
-
-            log.info(self.tilesets[0].loaded + ' ' + self.tilesets[0].scale);
         },
 
         updateTileset: function() {

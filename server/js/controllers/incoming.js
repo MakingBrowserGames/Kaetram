@@ -29,6 +29,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleReady(message);
                     break;
 
+                case Packets.Step:
+                    self.handleStep(message);
+                    break;
+
             }
 
         });
@@ -60,11 +64,29 @@ module.exports = Incoming = cls.Class.extend({
 
         if (isRegistering) {
             var registerOptions = {
+                method: 'POST',
+                uri: 'https://forum.taptapadventure.com/api/v1/users',
+                form: {
+                    'username': self.player.username.toLowerCase(),
+                    'password': self.player.password,
+                    'email': self.player.email,
+                    '_uid': '9a4c5ddb-5ce6-4a01-a14f-3ae49d8c6507'
+                }
+            };
+
+            Request(registerOptions, function(error, reponse, body) {
+                log.info(body);
+                //TODO - Redo registration API on the website
+            });
+
+            /*var registerOptions = {
                 method: 'GET',
-                uri: 'https://taptapadventure.com/api/register/index.php?a=9a4c5ddb-5ce6-4a01-a14f-3ae49d8c6507&u=' + self.player.username.toLowerCase() + '&p=' + self.player.password + '&e=' + self.player.email
+                uri: 'https://taptapadventure.com/api/register.php?a=9a4c5ddb-5ce6-4a01-a14f-3ae49d8c6507&u=' + self.player.username.toLowerCase() + '&p=' + self.player.password + '&e=' + self.player.email
             };
 
             Request(registerOptions, function(error, response, body) {
+                log.info(body);
+                
                 switch(JSON.parse(JSON.parse(body).data).code) {
                     case 'ok':
                         self.mysql.register(self.player);
@@ -75,7 +97,7 @@ module.exports = Incoming = cls.Class.extend({
                         self.connection.close('Username: ' + username + ' not available.');
                         break;
                 }
-            });
+            });*/
         } else {
             var loginOptions = {
                 method: 'POST',
@@ -87,14 +109,30 @@ module.exports = Incoming = cls.Class.extend({
             };
 
             Request(loginOptions, function(error, response, body) {
-                var data = JSON.parse(body);
+                var data;
 
-                if (data.message) {
+                /**
+                 * The website may respond with HTML message if
+                 * the forums are down. In this case we catch any
+                 * exception and ensure it does not proceed any
+                 * further. We tell players that the server doesn't
+                 * allow connections.
+                 */
+
+                try {
+                    data = JSON.parse(body);
+                } catch (e) {
+                    log.info('Could not decipher API message');
+                    self.connection.sendUTF8('disallowed');
+                    self.connection.close('API response is malformed!')
+                }
+
+                if (data && data.message) {
                     self.connection.sendUTF8('invalidlogin');
                     self.connection.close('Wrong password entered for: ' + self.player.username);
                 } else {
                     if (self.world.playerInWorld(self.player.username)) {
-                        self.connection.sendUTF8('loggedin');
+                        self.connection.sendUTF8('disallowed');
                         self.connection.close('Player already logged in..');
                         return;
                     }
@@ -113,7 +151,14 @@ module.exports = Incoming = cls.Class.extend({
             self.player.ready = true;
             self.player.sendEquipment();
         }
-    }
+    },
 
+    handleStep: function(message) {
+        var self = this,
+            x = message.shift(),
+            y = message.shift();
+
+        log.info('[Incoming] Position: ' + x + ' ' + y);
+    }
 
 });

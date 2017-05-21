@@ -1,6 +1,6 @@
-/* global log */
+/* global log, Modules */
 
-define(function() {
+define(['../entity/character/character'], function(Character) {
 
     return Class.extend({
 
@@ -42,6 +42,88 @@ define(function() {
 
                 if (animation && animation.update(self.game.time))
                     entity.loadDirty();
+
+                if (entity.movement && entity.movement.inProgress)
+                    entity.movement.step(self.game.time);
+
+                if (entity instanceof Character && entity.hasPath() && !entity.movement.inProgress) {
+                    var tick = Math.round(16 / Math.round((entity.movementSpeed / (1000 / 60))));
+
+                    switch (entity.orientation) {
+                        case Modules.Orientation.Left:
+
+                            entity.movement.start(self.game.time,
+                                function(x) {
+                                    entity.x = x;
+                                    entity.moved();
+                                },
+                                function() {
+                                    entity.x = entity.movement.endValue;
+                                    entity.moved();
+                                    entity.nextStep();
+                                },
+                                entity.x - tick,
+                                entity.x - 16,
+                                entity.movementSpeed);
+
+                            break;
+
+                        case Modules.Orientation.Right:
+
+                            entity.movement.start(self.game.time,
+                                function(x) {
+                                    entity.x = x;
+                                    entity.moved();
+                                },
+                                function() {
+                                    entity.x = entity.movement.endValue;
+                                    entity.moved();
+                                    entity.nextStep();
+                                },
+                                entity.x + tick,
+                                entity.x + 16,
+                                entity.movementSpeed);
+
+                            break;
+
+                        case Modules.Orientation.Up:
+
+                            entity.movement.start(self.game.time,
+                                function(y) {
+                                    entity.y = y;
+                                    entity.moved();
+                                },
+                                function() {
+                                    entity.y = entity.movement.endValue;
+                                    entity.moved();
+                                    entity.nextStep();
+                                },
+                                entity.y - tick,
+                                entity.y - 16,
+                                entity.movementSpeed);
+
+                            break;
+
+                        case Modules.Orientation.Down:
+
+                            entity.movement.start(self.game.time,
+                                function(y) {
+                                    entity.y = y;
+                                    entity.moved();
+                                },
+                                function() {
+                                    entity.y = entity.movement.endValue;
+                                    entity.moved();
+                                    entity.nextStep();
+                                },
+                                entity.y + tick,
+                                entity.y + 16,
+                                entity.movementSpeed);
+
+                            break;
+                    }
+                }
+
             });
         },
 

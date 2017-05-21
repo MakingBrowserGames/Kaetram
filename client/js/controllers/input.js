@@ -55,6 +55,13 @@ define(function() {
 
 
                             break;
+
+                        case Modules.Keys.Two:
+
+                            if (self.game.development)
+                                log.info(self.game.player.gridX + ' ' + self.game.player.gridY);
+
+                            break;
                     }
 
                     break;

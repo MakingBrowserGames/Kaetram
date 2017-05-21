@@ -9,6 +9,13 @@ module.exports = Character = Entity.extend({
 
         self.name = name;
         self.level = -1;
+
+        self.movementSpeed = 150;
+        self.attackRange = 1;
+        self.attackRate = 1000;
+
+        self.previousX = -1;
+        self.previousY = -1;
     }
 
 });

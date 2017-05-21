@@ -8,7 +8,7 @@ Kaetram To-Do List:
 - Make animations use every 3rd gridX and gridY whilst panning to delay animation reset.
 
 - Don't let target cell redraw when not necessary
-- Fix the offset of
+- Save player orientation upon logout.
 
 
 Finished:

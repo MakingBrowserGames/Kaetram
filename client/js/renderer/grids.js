@@ -77,7 +77,7 @@ define(function() {
         removeFromEntityGrid: function(entity, x, y) {
             var self = this;
 
-            if (entity && self.entityGrid[y][x] && entity.id in self.entityGrid[y][x][entity.id])
+            if (entity && self.entityGrid[y][x] && entity.id in self.entityGrid[y][x])
                 delete self.entityGrid[y][x][entity.id];
         },
 

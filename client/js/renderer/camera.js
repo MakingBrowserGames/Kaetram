@@ -66,23 +66,12 @@ define(function() {
                 self.gridCallback();
         },
 
-        loadCallbacks: function() {
-            var self = this;
-
-            self.player.onMove(function() {
-                if (!self.panning)
-                    self.centreOn(self.player);
-            });
-        },
-
         setPlayer: function(player) {
             var self = this;
 
             self.player = player;
 
             self.centreOn(self.player);
-
-            self.loadCallbacks();
         },
 
         handlePanning: function(direction) {

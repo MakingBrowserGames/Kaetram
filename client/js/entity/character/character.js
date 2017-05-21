@@ -1,6 +1,6 @@
-/* global _, Modules */
+/* global _, Modules, log */
 
-define(['../entity'], function(Entity) {
+define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
     return Entity.extend({
 
@@ -29,13 +29,13 @@ define(['../entity'], function(Entity) {
             self.path = null;
             self.target = null;
 
-            /**
-             * Non-game-breaking speeds
-             */
+            self.movement = new Transition();
+
 
             self.idleSpeed = 450;
             self.attackAnimationSpeed = 50;
             self.walkAnimationSpeed = 100;
+            self.movementSpeed = 150;
         },
 
         animate: function(animation, speed, count, onEndCount) {
@@ -113,6 +113,15 @@ define(['../entity'], function(Entity) {
             }
         },
 
+        /**
+         * We can have the movement remain client sided because
+         * the server side will be responsible for determining
+         * whether or not the player should have reached the
+         * location and ban all hackers. That and the fact
+         * the movement speed is constantly updated to avoid
+         * hacks previously present in BQ.
+         */
+
         nextStep: function() {
             var self = this,
                 stop = false,
@@ -126,6 +135,8 @@ define(['../entity'], function(Entity) {
 
             if (self.beforeStepCallback)
                 self.beforeStepCallback();
+
+            self.updateGridPosition();
 
             if (!self.interrupted) {
                 if (self.hasNextStep()) {
@@ -148,6 +159,7 @@ define(['../entity'], function(Entity) {
                         stop = true;
                     else
                         self.followPath(path);
+
                 } else if (self.hasNextStep()) {
                     self.step++;
                     self.updateMovement();
@@ -157,6 +169,17 @@ define(['../entity'], function(Entity) {
             } else {
                 stop = true;
                 self.interrupted = false;
+            }
+
+            if (stop) {
+                self.path = null;
+                self.performAction(Modules.Orientation.Down, Modules.Actions.Idle);
+
+                if (self.stopPathingCallback)
+                    self.stopPathingCallback(self.gridX, self.gridY, self.forced);
+
+                if (self.forced)
+                    self.forced = false;
             }
         },
 
@@ -170,7 +193,7 @@ define(['../entity'], function(Entity) {
             if (self.path[step][0] > self.path[step - 1][0])
                 self.performAction(Modules.Orientation.Right, Modules.Actions.Walk);
 
-            if (self.path[step][1] < self.path[step - 1][0])
+            if (self.path[step][1] < self.path[step - 1][1])
                 self.performAction(Modules.Orientation.Up, Modules.Actions.Walk);
 
             if (self.path[step][1] > self.path[step - 1][1])
@@ -185,6 +208,7 @@ define(['../entity'], function(Entity) {
              * does not click on himself or somehow into another
              * dimension
              */
+
             if (path.length < 2)
                 return;
 
@@ -223,6 +247,14 @@ define(['../entity'], function(Entity) {
                 return self.requestPathCallback(x, y);
         },
 
+        updateGridPosition: function() {
+            var self = this;
+
+            log.info('Updating position: ' + self.path[self.step][0] + ' ' + self.path[self.step][1]);
+
+            self.setGridPosition(self.path[self.step][0], self.path[self.step][1]);
+        },
+
         hasWeapon: function() {
             return false;
         },
@@ -244,11 +276,18 @@ define(['../entity'], function(Entity) {
         },
 
         changedPath: function() {
-            return this.newDestination !== null;
+            return !!this.newDestination;
         },
 
         isAttacking: function() {
             return this.attacking;
+        },
+
+        moved: function() {
+            var self = this;
+
+            self.loadDirty();
+            self.moveCallback();
         },
 
         setSprite: function(sprite) {
@@ -269,6 +308,10 @@ define(['../entity'], function(Entity) {
 
         onStartPathing: function(callback) {
             this.startPathingCallback = callback;
+        },
+
+        onStopPathing: function(callback) {
+            this.stopPathingCallback = callback;
         },
 
         onBeforeStep: function(callback) {

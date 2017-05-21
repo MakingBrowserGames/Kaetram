@@ -4,7 +4,8 @@ Packets = {
     Welcome: 2,
     Spawn: 3,
     Equipment: 4,
-    Ready: 5
+    Ready: 5,
+    Step: 6
 };
 
 Packets.IntroOpcode = {

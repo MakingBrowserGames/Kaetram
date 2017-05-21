@@ -1,3 +1,5 @@
+/* global log, Packets */
+
 define(function() {
 
     /**
@@ -13,6 +15,8 @@ define(function() {
             self.game = game;
             self.input = game.input;
             self.player = player;
+            self.entities = game.entities;
+            self.socket = game.socket;
 
             self.load();
         },
@@ -26,8 +30,6 @@ define(function() {
                 if (self.player.hasTarget())
                     ignores.push(self.player.target);
 
-                log.info('Requested path to: ' + x + ' ' + y);
-
                 return self.game.findPath(self.player, x, y, ignores);
             });
 
@@ -38,9 +40,29 @@ define(function() {
                 self.input.selectedY = path[i][1];
                 self.input.selectedCellVisible = true;
 
-                log.info('Starting pathing to: ' + x + ' ' + y);
-
                 //TODO - Fix dirty on mobile for target? May not be necessary if done in the renderer.
+            });
+
+            self.player.onStopPathing(function(x, y, forced) {
+                self.entities.unregisterPosition(self.player);
+                self.entities.registerPosition(self.player);
+            });
+
+            self.player.onBeforeStep(function() {
+                self.entities.unregisterPosition(self.player);
+            });
+
+            self.player.onStep(function() {
+                if (self.player.hasNextStep())
+                    self.entities.registerDuality(self.player);
+
+                log.info('step..');
+
+                self.socket.send(Packets.Step, [self.player.gridX, self.player.gridY]);
+            });
+
+            self.player.onMove(function() {
+                log.info('Player moved!');
             });
         }
 

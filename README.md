@@ -33,7 +33,7 @@ Step 1 - Installing the Dependencies
 
 `sudo npm install -d`
 
-The sudo is just in case; Note - You do not need http-server like in TTA, though you can use it if you want
+You do not need `http-server` like in TTA, though you can use it if you want.
 
 Step 2 - Run the server
 

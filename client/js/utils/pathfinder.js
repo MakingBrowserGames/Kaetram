@@ -1,4 +1,4 @@
-/* global _ */
+/* global _, log */
 
 define(['../lib/astar'], function(AStar) {
 
@@ -26,6 +26,8 @@ define(['../lib/astar'], function(AStar) {
                 for (var j = 0; j < self.width; j++)
                     self.blankGrid[i][j] = 0;
             }
+
+            log.info('Sucessfully loaded the pathfinder!');
         },
 
         find: function(grid, entity, x, y, incomplete) {
@@ -72,7 +74,7 @@ define(['../lib/astar'], function(AStar) {
                 x = entity.hasPath() ? entity.nextGridX : entity.gridX;
                 y = entity.hasPath() ? entity.nextGridY : entity.gridY;
 
-                if (x > -1 && y > -1)
+                if (x >= 0 && y >= 0)
                     self.grid[y][x] = ignored ? 0 : 1
             });
         },

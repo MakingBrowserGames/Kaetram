@@ -3,7 +3,7 @@
 define(['./renderer/renderer', './utils/storage',
         './map/map', './network/socket', './entity/character/player/player',
         './renderer/updater', './controllers/entities', './controllers/input',
-        './entity/character/player/playerhandler', './entity/entityhandler',
+        './entity/character/player/playerhandler',
         './utils/pathfinder', './utils/modules', './network/packets'],
         function(Renderer, LocalStorage, Map, Socket, Player, Updater, Entities, Input, PlayerHandler, Pathfinder) {
 
@@ -114,6 +114,8 @@ define(['./renderer/renderer', './utils/storage',
             self.map.onReady(function() {
                 log.info('The map has been loaded!');
 
+                self.setPathfinder(new Pathfinder(self.map.width, self.map.height));
+
                 self.renderer.setMap(self.map);
                 self.renderer.loadCamera();
 
@@ -121,7 +123,6 @@ define(['./renderer/renderer', './utils/storage',
 
                 self.entities.load();
                 self.renderer.setEntities(self.entities);
-
             });
         },
 
@@ -243,7 +244,7 @@ define(['./renderer/renderer', './utils/storage',
         findPath: function(character, x, y, ignores) {
             var self = this,
                 grid = self.entities.grids.pathingGrid,
-                path = [], isPlayer = character === self.player;
+                path = [];
 
             if (self.map.isColliding(x, y) || !self.pathfinder || !character)
                 return path;
@@ -344,6 +345,11 @@ define(['./renderer/renderer', './utils/storage',
                 self.input = input;
                 self.renderer.setInput(self.input);
             }
+        },
+
+        setPathfinder: function(pathfinder) {
+            if (!this.pathfinder)
+                this.pathfinder = pathfinder;
         }
 
     });

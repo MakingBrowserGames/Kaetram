@@ -89,10 +89,6 @@ define(['./entityhandler'], function(EntityHandler) {
             self.normalSprite = self.sprite;
             self.hurtSprite = sprite.getHurtSprite();
             self.animations = sprite.createAnimations();
-
-            log.info(sprite);
-            log.info(sprite.name);
-
             self.spriteLoaded = true;
 
             if (self.readyCallback)

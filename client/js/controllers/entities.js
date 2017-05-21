@@ -102,6 +102,25 @@ define(['../renderer/grids', '../entity/objects/chest',
             self.grids.addToRenderingGrid(entity, entity.gridX, entity.gridY);
         },
 
+        registerDuality: function(entity) {
+            var self = this;
+
+            if (!entity)
+                return;
+
+            self.grids.entityGrid[entity.gridY][entity.gridY][entity.id] = entity;
+
+            self.grids.addToRenderingGrid(entity, entity.gridX, entity.gridY);
+
+            if (entity.nextGridX >= 0 && entity.nextGridY) {
+                self.grids.entityGrid[entity.nextGridY][entity.nextGridY][entity.id] = entity;
+
+                //TODO - Remove this after all pathing is done
+                if (!(entity instanceof Player))
+                    self.grids.pathingGrid[entity.nextGridY][entity.nextGridX] = 1;
+            }
+        },
+
         unregisterPosition: function(entity) {
             var self = this;
 
