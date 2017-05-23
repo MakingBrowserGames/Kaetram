@@ -24,6 +24,7 @@ define(function() {
             self.messages[Packets.Welcome] = self.receiveWelcome;
             self.messages[Packets.Spawn] = self.receiveSpawn;
             self.messages[Packets.Equipment] = self.receiveEquipment;
+            self.messages[Packets.List] = self.receiveEntityList;
         },
 
         handleData: function(data) {
@@ -32,6 +33,14 @@ define(function() {
 
             if (self.messages[packet] && _.isFunction(self.messages[packet]))
                 self.messages[packet].call(self, data);
+        },
+
+        handleBulkData: function(data) {
+            var self = this;
+
+            _.each(data, function(message) {
+                self.handleData(message);
+            });
         },
 
         handleUTF8: function(message) {
@@ -94,15 +103,10 @@ define(function() {
         },
 
         receiveSpawn: function(data) {
-            var self = this,
-                id = data.shift(),
-                kind = data.shift(),
-                x = data.shift(),
-                y = data.shift(),
-                count = data.shift(); //For items
+            var self = this;
 
             if (self.spawnCallback)
-                self.spawnCallback(id, kind, x, y, count);
+                self.spawnCallback(data);
         },
 
         receiveEquipment: function(data) {
@@ -112,6 +116,13 @@ define(function() {
 
             if (self.equipmentCallback)
                 self.equipmentCallback(equipType, equipInfo);
+        },
+
+        receiveEntityList: function(data) {
+            var self = this;
+
+            if (self.entityListCallback)
+                self.entityListCallback(data);
         },
 
         /**
@@ -132,6 +143,10 @@ define(function() {
 
         onEquipment: function(callback) {
             this.equipmentCallback = callback;
+        },
+
+        onEntityList: function(callback) {
+            this.entityListCallback = callback;
         }
 
     });

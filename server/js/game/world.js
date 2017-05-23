@@ -6,7 +6,12 @@ var cls = require('../lib/class'),
     Map = require('../map/map'),
     _ = require('underscore'),
     Messages = require('../network/messages'),
-    Utils = require('../util/utils');
+    Utils = require('../util/utils'),
+    Mobs = require('../util/mobs'),
+    Mob = require('./entity/character/mob/mob'),
+    NPCs = require('../util/npcs'),
+    NPC = require('./entity/npc/npc');
+    Items = require('../util/items');
 
 module.exports = World = cls.Class.extend({
 
@@ -20,6 +25,7 @@ module.exports = World = cls.Class.extend({
         self.playerCount = 0;
         self.maxPlayers = config.maxPlayers;
         self.updateTime = config.updateTime;
+        self.debug = false;
 
         self.players = {};
         self.entities = {};
@@ -58,7 +64,7 @@ module.exports = World = cls.Class.extend({
         self.map = new Map(self);
         self.map.isReady(function() {
             self.loadGroups();
-
+            self.spawnEntities();
         });
         /**
          * Similar to TTA engine here, but it's loaded upon initialization
@@ -98,7 +104,6 @@ module.exports = World = cls.Class.extend({
 
                 if (conn) {
                     connection = conn;
-
                     connection.send(self.packets[id]);
                     self.packets[id] = [];
                 } else
@@ -120,23 +125,23 @@ module.exports = World = cls.Class.extend({
             if (self.groups[groupId].incoming.length < 1)
                 return;
 
-            spawns = self.getSpawns(groupId);
+            self.sendSpawns(groupId);
 
             self.groups[groupId].incoming = [];
         });
     },
 
-    getSpawns: function(groupId) {
+    sendSpawns: function(groupId) {
         var self = this;
 
         if (!groupId)
             return;
 
         return _.each(self.groups[groupId].incoming, function(entity) {
-            if (entity.kind === null)
+            if (entity.instance === null)
                 return;
 
-            self.pushToGroup(groupId, new Messages.Spawn(entity), entity instanceof Player ? entity.id : null);
+            self.pushToGroup(groupId, new Messages.Spawn(entity), entity instanceof Player ? entity.instance : null);
         });
     },
 
@@ -174,8 +179,8 @@ module.exports = World = cls.Class.extend({
     },
 
     pushToPlayer: function(player, message) {
-        if (player && player.id in this.packets)
-            this.packets[player.id].push(message.serialize());
+        if (player && player.instance in this.packets)
+            this.packets[player.instance].push(message.serialize());
     },
 
     pushToGroup: function(id, message, ignore) {
@@ -218,7 +223,7 @@ module.exports = World = cls.Class.extend({
                 var group = self.groups[id];
 
                 if (group && group.entities) {
-                    group.entities[entity.id] = entity;
+                    group.entities[entity.instance] = entity;
                     newGroups.push(id);
                 }
             });
@@ -226,7 +231,7 @@ module.exports = World = cls.Class.extend({
             entity.group = groupId;
 
             if (entity instanceof Player)
-                self.groups[groupId].players.push(entity.id);
+                self.groups[groupId].players.push(entity.instance);
         }
 
         return newGroups;
@@ -240,11 +245,11 @@ module.exports = World = cls.Class.extend({
             var group = self.groups[entity.group];
 
             if (entity instanceof Player)
-                group.players = _.reject(group.players, function(id) { return id === entity.id; });
+                group.players = _.reject(group.players, function(id) { return id === entity.instance; });
 
             self.map.groups.forEachAdjacentGroup(entity.group, function(id) {
-                if (self.groups[id] && entity.id in self.groups[id].entities) {
-                    delete self.groups[id].entities[entity.id];
+                if (self.groups[id] && entity.instance in self.groups[id].entities) {
+                    delete self.groups[id].entities[entity.instance];
                     oldGroups.push(id);
                 }
             });
@@ -264,7 +269,7 @@ module.exports = World = cls.Class.extend({
         self.map.groups.forEachAdjacentGroup(groupId, function(id) {
             var group = self.groups[id];
 
-            if (group && !_.include(group.entities, entity.id))
+            if (group && !_.include(group.entities, entity.instance))
                 group.incoming.push(entity);
         });
     },
@@ -289,21 +294,96 @@ module.exports = World = cls.Class.extend({
             if (_.size(oldGroups) > 0)
                 entity.recentGroups = _.difference(oldGroups, newGroups);
         }
+
+        return groupsChanged;
+    },
+
+    spawnEntities: function() {
+        var self = this,
+            entities = 0;
+
+        _.each(self.map.staticEntities, function(key, tileIndex) {
+            var isMob = !!Mobs.Properties[key],
+                isNpc = !!NPCs.Properties[key],
+                info = isMob ? Mobs.Properties[key] : (isNpc ? NPCs.Properties[key] : Items.getData(key)),
+                position = self.map.indexToGridPosition(tileIndex);
+
+            if (info === 'null') {
+                if (self.debug)
+                    log.info('Unknown object spawned at: ' + position.x + ' ' + position.y);
+
+                return;
+            }
+
+            var instance = Utils.generateInstance(isMob ? 2 : (isNpc ? 3 : 4), info.id, position.x);
+
+            if (isMob)
+                self.addMob(new Mob(info.id, instance, position.x, position.y));
+
+            if (isNpc)
+                self.addNPC(new NPC(info.id, instance, position.x, position.y));
+
+            entities++;
+        });
+
+        log.info('Spawned ' + entities + ' entities!');
+
+    },
+
+    pushEntities: function(player) {
+        var self = this,
+            entities;
+
+        if (!player || !(player.group in self.groups))
+            return;
+
+        entities = _.keys(self.groups[player.group].entities);
+
+        entities = _.reject(entities, function(instance) {
+            return instance === player.instance;
+        });
+
+        entities = _.map(entities, function(instance) {
+            return parseInt(instance, 10);
+        });
+
+        if (entities)
+            player.send(new Messages.List(entities));
     },
 
     addEntity: function(entity) {
         var self = this;
 
-        self.entities[entity.id] = entity;
-        self.handleEntityGroup(entity);
+        self.entities[entity.instance] = entity;
+
+        if (!entity.isPlayer())
+            self.handleEntityGroup(entity);
     },
 
     addPlayer: function(player) {
         var self = this;
 
         self.addEntity(player);
-        self.players[player.id] = player;
-        self.packets[player.id] = [];
+        self.players[player.instance] = player;
+        self.packets[player.instance] = [];
+    },
+
+    addNPC: function(npc) {
+        var self = this;
+
+        self.addEntity(npc);
+        self.npcs[npc.instance] = npc;
+    },
+
+    addMob: function(mob) {
+        var self = this;
+
+        self.addEntity(mob);
+        self.mobs[mob.instance] = mob;
+    },
+
+    addItem: function(item) {
+
     },
 
     playerInWorld: function(username) {

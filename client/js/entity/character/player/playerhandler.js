@@ -13,6 +13,7 @@ define(function() {
             var self = this;
 
             self.game = game;
+            self.camera = game.getCamera();
             self.input = game.input;
             self.player = player;
             self.entities = game.entities;
@@ -25,6 +26,8 @@ define(function() {
             var self = this;
 
             self.player.onRequestPath(function(x, y) {
+                self.camera.focusMode = true;
+
                 var ignores = [self.player];
 
                 if (self.player.hasTarget())
@@ -46,6 +49,9 @@ define(function() {
             self.player.onStopPathing(function(x, y, forced) {
                 self.entities.unregisterPosition(self.player);
                 self.entities.registerPosition(self.player);
+
+                self.camera.focusMode = false;
+                self.camera.clip();
             });
 
             self.player.onBeforeStep(function() {
@@ -55,8 +61,6 @@ define(function() {
             self.player.onStep(function() {
                 if (self.player.hasNextStep())
                     self.entities.registerDuality(self.player);
-
-                log.info('step..');
 
                 self.socket.send(Packets.Step, [self.player.gridX, self.player.gridY]);
             });

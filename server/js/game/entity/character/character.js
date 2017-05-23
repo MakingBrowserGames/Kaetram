@@ -4,10 +4,11 @@ var Entity = require('../entity');
 
 module.exports = Character = Entity.extend({
 
-    init: function(name) {
+    init: function(id, type, instance, x, y) {
         var self = this;
 
-        self.name = name;
+        self._super(id, type, instance, x, y);
+
         self.level = -1;
 
         self.movementSpeed = 150;
@@ -16,6 +17,12 @@ module.exports = Character = Entity.extend({
 
         self.previousX = -1;
         self.previousY = -1;
+
+        self.target = null;
+    },
+
+    clearTarget: function() {
+        this.target = null;
     }
 
 });

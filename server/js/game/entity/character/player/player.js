@@ -23,13 +23,14 @@ module.exports = Player = Character.extend({
         self.mysql = database;
         self.connection = connection;
 
-        self.id = self.connection.id;
         self.clientId = clientId;
 
         self.incoming = new Incoming(self);
 
         self.isNew = false;
         self.ready = false;
+
+        self._super(-1, 'player', self.connection.id, -1, -1);
     },
 
     load: function(data) {
@@ -188,8 +189,8 @@ module.exports = Player = Character.extend({
     sendToSpawn: function() {
         var self = this;
 
-        self.x = 20;
-        self.y = 18;
+        self.x = 36;
+        self.y = 97;
     }
 
 });

@@ -51,7 +51,7 @@ define(['./renderer/renderer', './utils/storage',
 
             self.renderer.renderedFrame[0] = -1;
             self.input.newCursor = self.getSprite('hand');
-            self.input.targetColour = 'rgba(255, 255, 255, 0.5)';
+            self.input.newTargetColour = 'rgba(255, 255, 255, 0.5)';
         },
 
         stop: function() {
@@ -233,11 +233,25 @@ define(['./renderer/renderer', './utils/storage',
 
             });
 
-            self.messages.onSpawn(function() {
-                var entity;
+            self.messages.onSpawn(function(data) {
+                var mobData = data.shift(),
+                    type = mobData.shift();
 
-                entity.handler.setGame(self);
-                entity.handler.load();
+                self.entities.create(type, mobData);
+            });
+
+            self.messages.onEntityList(function(data) {
+                var ids = _.pluck(self.entities.getAll(), 'id'),
+                    known = _.intersection(ids, data),
+                    newIds = _.difference(data, known);
+
+                self.entities.decrepit = _.reject(self.entities.getAll(), function(entity) {
+                    return _.include(known, entity.id) || entity.id === self.player.id;
+                });
+
+                self.entities.clean();
+
+                self.socket.send(Packets.Who, newIds);
             });
         },
 

@@ -1,8 +1,10 @@
 var cls = require('../lib/class'),
     NPCData = require('../../data/npcs.json'),
     ItemData = require('../../data/items.json'),
+    MobData = require('../../data/mobs.json'),
     Items = require('./items'),
     NPCs = require('./npcs'),
+    Mobs = require('./mobs'),
     _ = require('underscore'),
     Formulas = require('../game/formulas');
 
@@ -11,9 +13,44 @@ module.exports = Parser = cls.Class.extend({
     init: function() {
         var self = this;
 
+        self.loadMobData();
         self.loadNPCData();
         self.loadItemData();
         self.loadLevels();
+    },
+
+    loadMobData: function() {
+        var self = this,
+            mobCounter = 0;
+
+        _.each(MobData, function(value, key) {
+            key = key.toLowerCase();
+
+            Mobs.Properties[key] = {
+                key: key,
+                id: value.id,
+                name: value.name ? value.name : key,
+                drops: value.drops ? value.drops : null,
+                hitPoints: value.hitPoints ? value.hitPoints : 10,
+                armour: value.armour ? value.armour : 0,
+                weapon: value.weapon ? value.weapon : 0,
+                xp: value.xp ? value.xp : 0,
+                level: value.level ? value.level : 0,
+                aggroRange: value.aggroRange ? value.aggroRange : 2,
+                attackRange: value.attackRange ? value.attackRange : 1,
+                isAggressive: value.isAggressive ? value.isAggressive : false,
+                isPoisonous: value.isPoisonous ? value.isPoisonous : false,
+                attackRate: value.attackRate ? value.attackRate : 1000,
+                movementSpeed: value.movementSpeed ? value.movementSpeed : 200,
+                spawnDelay: value.spawnDelay ? value.spawnDelay : 60000
+            };
+
+            Mobs.Ids[value.id] = Mobs.Properties[key];
+
+            mobCounter++;
+        });
+
+        log.info('Finished loading ' + mobCounter + ' mobs.');
     },
 
     loadNPCData: function() {
@@ -25,11 +62,11 @@ module.exports = Parser = cls.Class.extend({
 
             NPCs.Properties[key] = {
                 key: key,
-                npcId: value.npcId,
+                id: value.id,
                 name: value.name ? value.name : key
             };
 
-            NPCs.Ids[value.npcId] = NPCs.Properties[key];
+            NPCs.Ids[value.id] = NPCs.Properties[key];
 
             npcCounter++;
         });

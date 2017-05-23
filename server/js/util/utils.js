@@ -19,3 +19,7 @@ Utils.randomInt = function(min, max) {
 Utils.generateClientId = function() {
     return Utils.randomInt(0, 1000000) + Utils.randomInt(0, 40000) + Utils.randomInt(0, 9000);
 };
+
+Utils.generateInstance = function(randomizer, id, modulo) {
+    return '' + randomizer + id + randomizer + Utils.randomInt(0, modulo);
+};

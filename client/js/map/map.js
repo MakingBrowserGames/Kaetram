@@ -140,16 +140,17 @@ define(['jquery'], function($) {
                     self.grid[i][j] = 0;
             }
 
-            for (var c = 0; c < self.collisions.length; c++) {
-                var cPosition = self.indexToGridPosition(self.collisions[c] + 1);
-                self.grid[cPosition.x][cPosition.y] = 1;
-            }
+            _.each(self.collisions, function(index) {
+                var position = self.indexToGridPosition(index + 1);
+                self.grid[position.y][position.x] = true;
+            });
 
-            for (var b = 0; b < self.blocking.length; b++) {
-                var bPosition = self.indexToGridPosition(self.blocking[b] + 1);
-                if (self.grid[bPosition.y] !== undefined)
-                    self.grid[bPosition.y][bPosition.x] = 1;
-            }
+            _.each(self.blocking, function(index) {
+                var position = self.indexToGridPosition(index + 1);
+
+                if (self.grid[position.y])
+                    self.grid[position.y][position.x] = true;
+            });
         },
 
         indexToGridPosition: function(index) {

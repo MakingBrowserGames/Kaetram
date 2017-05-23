@@ -1,208 +1,208 @@
 {
   "King": {
-    "npcId": 0
+    "id": 0
   },
 
   "VillageGirl": {
     "name": "Azaria",
-    "npcId": 1
+    "id": 1
   },
 
   "Villager": {
-    "npcId": 2,
+    "id": 2,
     "name": "Bulk Bogan"
   },
 
   "BeachNpc": {
-    "npcId": 3,
+    "id": 3,
     "name": "Randy"
   },
 
   "Agent": {
-    "npcId": 4,
+    "id": 4,
     "name": "Secret Agent"
   },
 
   "Nyan": {
-    "npcId": 5
+    "id": 5
   },
 
   "Rick": {
-    "npcId": 6
+    "id": 6
   },
 
   "Priest": {
-    "npcId": 7
+    "id": 7
   },
 
   "Guard": {
-    "npcId": 8
+    "id": 8
   },
 
   "Scientist": {
-    "npcId": 9
+    "id": 9
   },
 
   "DesertNpc": {
-    "npcId": 10,
+    "id": 10,
     "name": "Billey"
   },
   "LavaNpc": {
-    "npcId": 11,
+    "id": 11,
     "name": "Dying Man"
   },
 
   "Boxingman": {
-    "npcId": 12,
+    "id": 12,
     "name": "Mike Tyson"
   },
 
   "Vampire": {
-    "npcId": 13
+    "id": 13
   },
 
   "Doctor": {
-    "npcId": 14
+    "id": 14
   },
 
   "Oddeyecat": {
-    "npcId": 15,
+    "id": 15,
     "name": "Odd-Eyed Cat"
   },
 
   "Sorcerer": {
-    "npcId": 16
+    "id": 16
   },
 
   "Coder": {
-    "npcId": 17
+    "id": 17
   },
 
   "ForestNpc": {
-    "npcId": 18
+    "id": 18
   },
 
   "Octocat": {
-    "npcId": 19
+    "id": 19
   },
 
   "Soldier": {
-    "npcId": 20,
+    "id": 20,
     "name": "Melee Instructor"
   },
 
   "Fisherman": {
-    "npcId": 21
+    "id": 21
   },
 
   "Octopus": {
-    "npcId": 22
+    "id": 22
   },
 
   "Mermaidnpc": {
-    "npcId": 23,
+    "id": 23,
     "name": "Mermaid"
   },
 
   "Sponge": {
-    "npcId": 24
+    "id": 24
   },
 
   "Fairynpc": {
-    "npcId": 25
+    "id": 25
   },
 
   "Shepherdboy": {
-    "npcId": 26,
+    "id": 26,
     "name": "Shepherd Boy"
   },
 
   "Zombiegf": {
-    "npcId": 27,
+    "id": 27,
     "name": "Zombie Girlfriend"
   },
 
   "Pirategirlnpc": {
-    "npcId": 28,
+    "id": 28,
     "name": "Pirate Girl"
   },
 
   "Bluebikinigirlnpc": {
-    "npcId": 29,
+    "id": 29,
     "name": "Pretzel"
   },
 
   "Redbikinigirlnpc": {
-    "npcId": 30
+    "id": 30
   },
 
   "Iamverycoldnpc": {
-    "npcId": 31,
+    "id": 31,
     "name": "Babushka"
   },
 
   "Iceelfnpc": {
-    "npcId": 32,
+    "id": 32,
     "name": "Ice Elf"
   },
 
   "Elfnpc": {
-    "npcId": 33,
+    "id": 33,
     "name": "Elf"
   },
 
   "Snowshepherdboy": {
-    "npcId": 34,
+    "id": 34,
     "name": "Some Boy"
   },
 
   "Angelnpc": {
-    "npcId": 35,
+    "id": 35,
     "name": "Angel"
   },
 
   "Momangelnpc": {
-    "npcId": 36,
+    "id": 36,
     "name": "Archangel"
   },
 
   "Superiorangelnpc": {
-    "npcId": 37,
+    "id": 37,
     "name": "Mentor"
   },
 
   "Firstsonangelnpc": {
-    "npcId": 38,
+    "id": 38,
     "name": "Angel"
   },
 
   "Secondsonangelnpc": {
-    "npcId": 39,
+    "id": 39,
     "name": "Superior Angel"
   },
 
   "Mojojojonpc": {
-    "npcId": 40,
+    "id": 40,
     "name": "Monky"
   },
 
   "Ancientmanumentnpc": {
-    "npcId": 41,
+    "id": 41,
     "name": "Ancient Monument"
   },
 
   "Vendingmachine": {
-    "npcId": 42,
+    "id": 42,
     "name": "Enchantment Table"
   },
 
   "Redstoremannpc": {
-    "npcId": 43,
+    "id": 43,
     "name": "Banker"
   },
 
   "Bluestoremannpc": {
-    "npcId": 44,
+    "id": 44,
     "name": "Clerk"
   }
 }

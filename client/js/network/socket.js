@@ -63,9 +63,14 @@ define(['./packets', './messages'], function(Packets, Messages) {
             if (!self.listening)
                 return;
 
-            if (message.startsWith('['))
-                self.messages.handleData(JSON.parse(message).shift());
-            else
+            if (message.startsWith('[')) {
+                var data = JSON.parse(message);
+
+                if (data.length > 1)
+                    self.messages.handleBulkData(data);
+                else
+                    self.messages.handleData(JSON.parse(message).shift());
+            } else
                 self.messages.handleUTF8(message);
 
         },

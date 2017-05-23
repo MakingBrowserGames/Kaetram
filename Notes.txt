@@ -5,9 +5,10 @@ Kaetram To-Do List:
 - Get proper button interfaces for "Login," "New Character" and "Back."
 - Directly download map data from the server.
 
-- Make animations use every 3rd gridX and gridY whilst panning to delay animation reset.
+- Have the draw() being called only when the gridX and gridY have changed?
 
 - Don't let target cell redraw when not necessary
+
 - Save player orientation upon logout.
 
 

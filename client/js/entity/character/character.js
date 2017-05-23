@@ -31,11 +31,10 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
             self.movement = new Transition();
 
-
             self.idleSpeed = 450;
             self.attackAnimationSpeed = 50;
             self.walkAnimationSpeed = 100;
-            self.movementSpeed = 150;
+            self.movementSpeed = 250;
         },
 
         animate: function(animation, speed, count, onEndCount) {

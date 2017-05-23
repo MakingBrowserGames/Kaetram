@@ -46,7 +46,7 @@ define(['../entity/character/character'], function(Character) {
                 if (entity.movement && entity.movement.inProgress)
                     entity.movement.step(self.game.time);
 
-                if (entity.id === self.game.player.id && entity.hasPath())
+                if (self.camera.centered && entity.id === self.game.player.id && self.camera.focusMode)
                     self.camera.centreOn(entity);
 
                 if (entity instanceof Character && entity.hasPath() && !entity.movement.inProgress) {

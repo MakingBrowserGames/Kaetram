@@ -1,8 +1,8 @@
-/* global log, _ */
+/* global log, _, Modules */
 
 define(['../renderer/grids', '../entity/objects/chest',
         '../entity/character/character', '../entity/character/player/player',
-        '../entity/objects/item', './sprites'], function(Grids, Chest, Character, Player, Item, Sprites) {
+        '../entity/objects/item', './sprites', '../entity/character/mob/mob'], function(Grids, Chest, Character, Player, Item, Sprites, Mob) {
 
     return Class.extend({
 
@@ -17,6 +17,7 @@ define(['../renderer/grids', '../entity/objects/chest',
             self.sprites = null;
 
             self.entities = {};
+            self.decrepit = {};
         },
 
         load: function() {
@@ -34,6 +35,62 @@ define(['../renderer/grids', '../entity/objects/chest',
 
             if (self.sprites)
                 self.sprites.updateSprites();
+        },
+
+        clean: function() {
+            var self = this;
+
+        },
+
+        create: function(type, info) {
+            var self = this,
+                id = info.shift(),
+                kind = info.shift(),
+                name = info.shift(),
+                x = info.shift(),
+                y = info.shift();
+
+            //entity.handler.setGame(self);
+            //entity.handler.load();
+
+            switch (type) {
+
+                case 'npc':
+
+                    break;
+
+                case 'item':
+
+                    break;
+
+                case 'mob':
+
+                    var mob = new Mob(id, kind);
+
+                    mob.setGridPosition(x, y);
+                    mob.setName(name);
+
+                    mob.setSprite(self.getSprite(kind));
+                    mob.performAction(Modules.Orientation.Down, Modules.Actions.Walk);
+
+                    self.addEntity(mob);
+
+                    break;
+
+                case 'player':
+
+                    break;
+
+            }
+        },
+
+        get: function(id) {
+            var self = this;
+
+            if (id in self.entities)
+                return self.entities[id];
+
+            return null;
         },
 
         addEntity: function(entity) {
@@ -108,12 +165,12 @@ define(['../renderer/grids', '../entity/objects/chest',
             if (!entity)
                 return;
 
-            self.grids.entityGrid[entity.gridY][entity.gridY][entity.id] = entity;
+            self.grids.entityGrid[entity.gridY][entity.gridX][entity.id] = entity;
 
             self.grids.addToRenderingGrid(entity, entity.gridX, entity.gridY);
 
             if (entity.nextGridX >= 0 && entity.nextGridY) {
-                self.grids.entityGrid[entity.nextGridY][entity.nextGridY][entity.id] = entity;
+                self.grids.entityGrid[entity.nextGridY][entity.nextGridX][entity.id] = entity;
 
                 //TODO - Remove this after all pathing is done
                 if (!(entity instanceof Player))
@@ -132,6 +189,10 @@ define(['../renderer/grids', '../entity/objects/chest',
 
         getSprite: function(name) {
             return this.sprites.sprites[name];
+        },
+
+        getAll: function() {
+            return this.entities;
         },
 
         forEachEntity: function(callback) {

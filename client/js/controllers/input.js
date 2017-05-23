@@ -72,6 +72,8 @@ define(function() {
 
                         var coordinates = self.getCoords();
 
+                        log.info(coordinates);
+
                         self.game.player.go(coordinates.x, coordinates.y);
 
                         break;

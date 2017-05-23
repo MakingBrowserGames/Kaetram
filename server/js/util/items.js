@@ -3,6 +3,13 @@ var Items = {};
 Items.Data = {};
 Items.Ids = {};
 
+Items.getData = function(name) {
+    if (name in Items.Data)
+        return Items.Data[name];
+
+    return 'null';
+};
+
 Items.idToString = function(id) {
     if (id in Items.Ids)
         return Items.Ids[id].key;

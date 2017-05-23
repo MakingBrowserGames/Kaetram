@@ -21,6 +21,9 @@ define(function() {
             self.speed = 1;
             self.panning = false;
 
+            self.focusMode = false;
+            self.centered = true;
+
             self.player = null;
 
             self.update();
@@ -48,6 +51,10 @@ define(function() {
 
             if (self.gridCallback && (self.prevGridX !== self.gridX || self.prevGridY !== self.gridY))
                 self.gridCallback();
+        },
+
+        clip: function() {
+            this.setGridPosition(Math.round(this.x / 16), Math.round(this.y / 16));
         },
 
         setGridPosition: function(x, y) {

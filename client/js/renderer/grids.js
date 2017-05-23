@@ -1,3 +1,5 @@
+/* global log */
+
 define(function() {
 
     return Class.extend({

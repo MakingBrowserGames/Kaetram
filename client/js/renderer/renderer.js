@@ -41,6 +41,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.fps = 0;
             self.frameCount = 0;
             self.renderedFrame = [0, 0];
+            self.lastTarget = [0, 0];
 
             self.animatedTiles = [];
 
@@ -238,6 +239,8 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             if (!animation || !sprite || !entity.isVisible())
                 return;
 
+            self.context.save();
+
             var frame = animation.currentFrame,
                 x = frame.x * self.drawingScale,
                 y = frame.y * self.drawingScale,
@@ -293,6 +296,8 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
                                     weapon.offsetX * self.drawingScale, weapon.offsetY * self.drawingScale,
                                     weaponWidth, weaponHeight);
             }
+
+            self.context.restore();
         },
 
         drawCursor: function() {

@@ -2,7 +2,9 @@ var cls = require('../lib/class'),
     Packets = require('../network/packets'),
     Request = require('request'),
     config = require('../../config.json'),
-    Creator = require('../database/creator');
+    Creator = require('../database/creator'),
+    _ = require('underscore'),
+    Messages = require('../network/messages');
 
 module.exports = Incoming = cls.Class.extend({
 
@@ -31,6 +33,10 @@ module.exports = Incoming = cls.Class.extend({
 
                 case Packets.Step:
                     self.handleStep(message);
+                    break;
+
+                case Packets.Who:
+                    self.handleWho(message);
                     break;
 
             }
@@ -147,10 +153,13 @@ module.exports = Incoming = cls.Class.extend({
         var self = this,
             isReady = message.shift();
 
-        if (isReady) {
-            self.player.ready = true;
-            self.player.sendEquipment();
-        }
+        if (!isReady)
+            return;
+
+        self.player.ready = true;
+        self.player.sendEquipment();
+        self.world.handleEntityGroup(self.player);
+        self.world.pushEntities(self.player);
     },
 
     handleStep: function(message) {
@@ -159,6 +168,18 @@ module.exports = Incoming = cls.Class.extend({
             y = message.shift();
 
         log.info('[Incoming] Position: ' + x + ' ' + y);
+    },
+
+    handleWho: function(message) {
+        var self = this;
+
+        _.each(message.shift(), function(id) {
+            var entity = self.world.getEntityById(id);
+
+            if (entity && entity.id)
+                self.player.send(new Messages.Spawn(entity));
+
+        });
     }
 
 });

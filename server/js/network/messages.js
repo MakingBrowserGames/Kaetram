@@ -32,7 +32,17 @@ Messages.Spawn = Message.extend({
     },
 
     serialize: function() {
-        return [Packets.Spawns].concat(this.entities.getState());
+        return [Packets.Spawn, this.entity.getState()];
+    }
+});
+
+Messages.List = Message.extend({
+    init: function(list) {
+        this.list = list;
+    },
+
+    serialize: function() {
+        return [Packets.List, this.list];
     }
 });
 
@@ -46,5 +56,9 @@ Messages.Equipment = Message.extend({
     serialize: function() {
         return [Packets.Equipment, this.opcode, this.equipmentData];
     }
+
+});
+
+Messages.Drop = Message.extend({
 
 });
