@@ -142,14 +142,14 @@ define(['jquery'], function($) {
 
             _.each(self.collisions, function(index) {
                 var position = self.indexToGridPosition(index + 1);
-                self.grid[position.y][position.x] = true;
+                self.grid[position.y][position.x] = 1;
             });
 
             _.each(self.blocking, function(index) {
                 var position = self.indexToGridPosition(index + 1);
 
                 if (self.grid[position.y])
-                    self.grid[position.y][position.x] = true;
+                    self.grid[position.y][position.x] = 1;
             });
         },
 
@@ -177,7 +177,7 @@ define(['jquery'], function($) {
             if (self.isOutOfBounds(x, y) || !self.grid)
                 return false;
 
-            return self.grid[y][x] === true;
+            return self.grid[y][x] === 1;
         },
 
         isHighTile: function(id) {

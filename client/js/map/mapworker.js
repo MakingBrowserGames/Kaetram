@@ -1,4 +1,4 @@
-importScripts('../../data/maps/world_client.js');
+importScripts('../../data/maps/world_client.js', '../lib/underscore.min.js');
 
 onmessage = function(event) {
 
@@ -18,16 +18,17 @@ function loadCollisionGrid() {
             mapData.grid[i][j] = 0;
     }
 
-    for (var c = 0; c < mapData.collisions.length; c++) {
-        var cPosition = indexToGridPosition(mapData.collisions[c] + 1);
-        mapData.grid[cPosition.x][cPosition.y] = 1;
-    }
+    _.each(mapData.collisions, function(tileIndex) {
+        var position = indexToGridPosition(tileIndex + 1);
+        mapData.grid[position.y][position.x] = 1;
+    });
 
-    for (var b = 0; b < mapData.blocking.length; b++) {
-        var bPosition = indexToGridPosition(mapData.blocking[b] + 1);
-        if (mapData.grid[bPosition.y] !== undefined)
-            mapData.grid[bPosition.y][bPosition.x] = 1;
-    }
+    _.each(mapData.blocking, function(tileIndex) {
+        var position = indexToGridPosition(tileIndex + 1);
+
+        if (mapData.grid[position.y])
+            mapData.grid[position.y][position.x] = 1;
+    });
 }
 
 function indexToGridPosition(index) {

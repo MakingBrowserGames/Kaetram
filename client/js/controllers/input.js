@@ -76,6 +76,8 @@ define(function() {
 
                         self.game.player.go(coordinates.x, coordinates.y);
 
+                        log.info(self.game.map.isColliding(coordinates.x, coordinates.y));
+
                         break;
             }
         },
