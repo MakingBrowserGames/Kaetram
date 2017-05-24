@@ -8,7 +8,7 @@ Packets = {
     Equipment: 6,
     Ready: 7,
     Drop: 8,
-    Step: 9
+    Movement: 9
 };
 
 Packets.IntroOpcode = {
@@ -20,4 +20,11 @@ Packets.EquipmentOpcode = {
     Batch: 0,
     Equip: 1,
     Unequip: 2
+};
+
+Packets.MovementOpcode = {
+    Request: 0,
+    Started: 1,
+    Step: 2,
+    Stop: 3
 };

@@ -48,13 +48,29 @@ define(function() {
 
             self.gridX = Math.floor(x / 16);
             self.gridY = Math.floor(y / 16);
-
-            if (self.gridCallback && (self.prevGridX !== self.gridX || self.prevGridY !== self.gridY))
-                self.gridCallback();
         },
 
         clip: function() {
             this.setGridPosition(Math.round(this.x / 16), Math.round(this.y / 16));
+        },
+
+        center: function() {
+            var self = this;
+
+            if (self.centered)
+                return;
+
+            self.centered = true;
+            self.centreOn(self.player);
+        },
+
+        decenter: function() {
+            var self = this;
+
+            if (!self.centered)
+                return;
+
+            self.centered = false;
         },
 
         setGridPosition: function(x, y) {
@@ -68,9 +84,6 @@ define(function() {
 
             self.x = self.gridX * 16;
             self.y = self.gridY * 16;
-
-            if (self.gridCallback && (self.prevGridX !== self.gridX || self.prevGridY !== self.gridY))
-                self.gridCallback();
         },
 
         setPlayer: function(player) {
@@ -122,17 +135,16 @@ define(function() {
             self.gridY = Math.round(entity.y / 16) - height;
         },
 
-        forEachVisiblePosition: function(callback) {
+        forEachVisiblePosition: function(callback, offset) {
             var self = this;
 
-            for(var y = self.gridY - 1, maxY = y + self.gridHeight + 2; y < maxY; y++) {
-                for(var x = self.gridX - 1, maxX = x + self.gridWidth + 2; x < maxX; x++)
+            if (!offset)
+                offset = 1;
+
+            for(var y = self.gridY - offset, maxY = y + self.gridHeight + (offset * 2); y < maxY; y++) {
+                for(var x = self.gridX - offset, maxX = x + self.gridWidth + (offset * 2); x < maxX; x++)
                     callback(x, y);
             }
-        },
-
-        onGridChange: function(callback) {
-            this.gridCallback = callback;
         }
 
     });

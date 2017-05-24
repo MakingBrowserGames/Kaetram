@@ -13,11 +13,12 @@ Currently Finished:
 * Properly done Title Screen and connection
 * Re-arranged CSS accordingly
 * Sprite loading done properly (without massive amounts of hardcoding)
+* Entity movement (pathfinding)
+* Entity spawning (receive information from the server side) --- STILL IN PROGRESS
 
 To-Do:
 
-* Entity movement (pathfinding)
-* Entity spawning (receive information from the server side)
+
 * Add door system
 * Combat System (should be handled in the server side)
 * Add the new interface

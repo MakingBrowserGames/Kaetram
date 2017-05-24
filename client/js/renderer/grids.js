@@ -95,12 +95,12 @@ define(function() {
 
             if (entity) {
                 self.removeFromEntityGrid(entity, entity.gridX, entity.gridY);
-                self.removeFromPathingGrid(entity, entity.gridX, entity.gridY);
+                self.removeFromPathingGrid(entity.gridX, entity.gridY);
                 self.removeFromRenderingGrid(entity, entity.gridX, entity.gridY);
 
                 if (entity.nextGridX > -1 && entity.nextGridY > -1) {
                     self.removeFromEntityGrid(entity, entity.nextGridX, entity.nextGridY);
-                    self.removeFromPathingGrid(entity, entity.nextGridX, entity.nextGridY);
+                    self.removeFromPathingGrid(entity.nextGridX, entity.nextGridY);
                 }
             }
         }

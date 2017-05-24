@@ -5,8 +5,6 @@ Kaetram To-Do List:
 - Get proper button interfaces for "Login," "New Character" and "Back."
 - Directly download map data from the server.
 
-- Have the draw() being called only when the gridX and gridY have changed?
-
 - Don't let target cell redraw when not necessary
 
 - Save player orientation upon logout.

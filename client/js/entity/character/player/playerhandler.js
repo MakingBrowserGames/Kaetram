@@ -18,6 +18,7 @@ define(function() {
             self.player = player;
             self.entities = game.entities;
             self.socket = game.socket;
+            self.renderer = game.renderer;
 
             self.load();
         },
@@ -33,6 +34,8 @@ define(function() {
                 if (self.player.hasTarget())
                     ignores.push(self.player.target);
 
+                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Request, x, y, self.player.gridX, self.player.gridY]);
+
                 return self.game.findPath(self.player, x, y, ignores);
             });
 
@@ -43,6 +46,8 @@ define(function() {
                 self.input.selectedY = path[i][1];
                 self.input.selectedCellVisible = true;
 
+                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Started, self.input.selectedX, self.input.selectedY, self.player.gridX, self.player.gridY]);
+
                 //TODO - Fix dirty on mobile for target? May not be necessary if done in the renderer.
             });
 
@@ -52,6 +57,8 @@ define(function() {
 
                 self.camera.focusMode = false;
                 self.camera.clip();
+
+                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Stop, x, y, forced])
             });
 
             self.player.onBeforeStep(function() {
@@ -62,11 +69,16 @@ define(function() {
                 if (self.player.hasNextStep())
                     self.entities.registerDuality(self.player);
 
-                self.socket.send(Packets.Step, [self.player.gridX, self.player.gridY]);
+                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Step, self.player.gridX, self.player.gridY]);
+            });
+
+            self.player.onSecondStep(function() {
+                self.renderer.updateAnimatedTiles();
             });
 
             self.player.onMove(function() {
-                log.info('Player moved!');
+
+
             });
         }
 

@@ -70,6 +70,7 @@ define(['./packets', './messages'], function(Packets, Messages) {
                     self.messages.handleBulkData(data);
                 else
                     self.messages.handleData(JSON.parse(message).shift());
+
             } else
                 self.messages.handleUTF8(message);
 

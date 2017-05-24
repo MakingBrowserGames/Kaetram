@@ -71,7 +71,7 @@ define(['../renderer/grids', '../entity/objects/chest',
                     mob.setName(name);
 
                     mob.setSprite(self.getSprite(kind));
-                    mob.performAction(Modules.Orientation.Down, Modules.Actions.Walk);
+                    mob.performAction(Modules.Orientation.Down, Modules.Actions.Idle);
 
                     self.addEntity(mob);
 

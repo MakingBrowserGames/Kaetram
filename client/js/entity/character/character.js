@@ -126,6 +126,10 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
                 stop = false,
                 x, y, path;
 
+            if (self.step % 2 === 0 && self.secondStepCallback)
+                self.secondStepCallback();
+
+
             self.prevGridX = self.gridX;
             self.prevGridY = self.gridY;
 
@@ -319,6 +323,10 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
         onStep: function(callback) {
             this.stepCallback = callback;
+        },
+
+        onSecondStep: function(callback) {
+            this.secondStepCallback = callback;
         },
 
         onMove: function(callback) {

@@ -62,6 +62,18 @@ define(function() {
                                 log.info(self.game.player.gridX + ' ' + self.game.player.gridY);
 
                             break;
+
+                        case Modules.Keys.Three:
+
+                            self.renderer.camera.center();
+
+                            break;
+
+                        case Modules.Keys.Four:
+
+                            self.renderer.camera.decenter();
+
+                            break;
                     }
 
                     break;
@@ -72,11 +84,7 @@ define(function() {
 
                         var coordinates = self.getCoords();
 
-                        log.info(coordinates);
-
                         self.game.player.go(coordinates.x, coordinates.y);
-
-                        log.info(self.game.map.isColliding(coordinates.x, coordinates.y));
 
                         break;
             }

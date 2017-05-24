@@ -31,12 +31,12 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleReady(message);
                     break;
 
-                case Packets.Step:
-                    self.handleStep(message);
-                    break;
-
                 case Packets.Who:
                     self.handleWho(message);
+                    break;
+
+                case Packets.Movement:
+                    self.handleMovement(message);
                     break;
 
             }
@@ -162,14 +162,6 @@ module.exports = Incoming = cls.Class.extend({
         self.world.pushEntities(self.player);
     },
 
-    handleStep: function(message) {
-        var self = this,
-            x = message.shift(),
-            y = message.shift();
-
-        log.info('[Incoming] Position: ' + x + ' ' + y);
-    },
-
     handleWho: function(message) {
         var self = this;
 
@@ -180,6 +172,13 @@ module.exports = Incoming = cls.Class.extend({
                 self.player.send(new Messages.Spawn(entity));
 
         });
+    },
+
+    handleMovement: function(message) {
+        var self = this,
+            opcode = message.shift();
+
+        log.info(opcode);
     }
 
 });

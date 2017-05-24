@@ -207,6 +207,8 @@ define(['./renderer/renderer', './utils/storage',
                 self.socket.send(Packets.Ready, [true]);
 
                 self.playerHandler = new PlayerHandler(self, self.player);
+
+                self.renderer.updateAnimatedTiles();
             });
 
             self.messages.onEquipment(function(equipType, info) {

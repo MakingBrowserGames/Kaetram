@@ -1,4 +1,4 @@
-/* global _, log */
+/* global _, log, Detect */
 
 define(['./camera', './tile', '../entity/character/player/player', '../entity/character/character'], function(Camera, Tile, Player, Character) {
 
@@ -102,11 +102,8 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
 
             self.loadSizes();
 
-            self.camera.onGridChange(function() {
-                self.updateAnimatedTiles();
-            });
-
-            self.updateAnimatedTiles();
+            if (self.firefox)
+                self.camera.centered = false;
         },
 
         resize: function() {
@@ -435,7 +432,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
                 tile.setPosition(position);
 
                 newTiles.push(tile);
-            });
+            }, 2);
 
             self.animatedTiles = newTiles;
         },
@@ -507,16 +504,16 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
          * Primordial Rendering functions
          */
 
-        forEachVisibleIndex: function(callback) {
+        forEachVisibleIndex: function(callback, offset) {
             var self = this;
 
             self.camera.forEachVisiblePosition(function(x, y) {
                 if (!self.map.isOutOfBounds(x, y))
                     callback(self.map.gridPositionToIndex(x, y) - 1);
-            });
+            }, offset);
         },
 
-        forEachVisibleTile: function(callback) {
+        forEachVisibleTile: function(callback, offset) {
             var self = this;
 
             if (!self.map || !self.map.mapLoaded)
@@ -527,7 +524,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
                     _.each(self.map.data[index], function(id) { callback(id - 1, index); });
                 else if (!(isNaN(self.map.data[index] - 1)))
                     callback(self.map.data[index] - 1, index);
-            });
+            }, offset);
         },
 
         forEachAnimatedTile: function(callback) {
@@ -699,6 +696,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
 
             self.mobile = self.game.app.isMobile();
             self.tablet = self.game.app.isTablet();
+            self.firefox = Detect.isFirefox();
         },
 
         isPortableDevice: function() {
