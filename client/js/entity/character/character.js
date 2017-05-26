@@ -176,7 +176,7 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
             if (stop) {
                 self.path = null;
-                self.performAction(Modules.Orientation.Down, Modules.Actions.Idle);
+                self.performAction(self.orientation, Modules.Actions.Idle);
 
                 if (self.stopPathingCallback)
                     self.stopPathingCallback(self.gridX, self.gridY, self.forced);
@@ -256,6 +256,10 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             log.info('Updating position: ' + self.path[self.step][0] + ' ' + self.path[self.step][1]);
 
             self.setGridPosition(self.path[self.step][0], self.path[self.step][1]);
+        },
+
+        isMoving: function() {
+            return this.currentAnimation.name === 'walk' && (this.x % 2 !== 0 || this.y % 2 !== 0);
         },
 
         hasWeapon: function() {

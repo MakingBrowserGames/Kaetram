@@ -71,7 +71,7 @@ define(function() {
                 "chest": false,
                 "npc": false,
                 "npc-end": false
-            };``
+            };
         },
 
         parse: function(path, name, channels, callback) {

@@ -57,6 +57,14 @@ module.exports = Incoming = cls.Class.extend({
         self.player.password = password.substr(0, 32);
         self.player.email = email.substr(0, 128);
 
+        if (username !== 'flavtest526') {
+
+            self.connection.sendUTF8('maintenance');
+            self.connection.close('Development mode.');
+
+            return;
+        }
+
         if (config.offlineMode) {
             var creator = new Creator(null);
 
@@ -178,7 +186,31 @@ module.exports = Incoming = cls.Class.extend({
         var self = this,
             opcode = message.shift();
 
-        log.info(opcode);
+        switch (opcode) {
+            case Packets.MovementOpcode.Request:
+
+                log.info('Movement requested: ' + message);
+
+                break;
+
+            case Packets.Movement.Started:
+
+                log.info('Movement started: ' + message);
+
+                break;
+
+            case Packets.MovementOpcode.Step:
+
+                log.info('Player stepped: ' + message);
+
+                break;
+
+            case Packets.MovementOpcode.Stop:
+
+                log.info('Movement stopped: ' + message);
+
+                break;
+        }
     }
 
 });

@@ -65,6 +65,12 @@ define(function() {
                     self.app.sendError(null, 'The server is currently not accepting connections!');
                     break;
 
+                case 'maintenance':
+
+                    self.app.sendError(null, 'The server is currently under maintenance.');
+
+                    break;
+
                 case 'userexists':
                     self.app.sendError(null, 'The username you have chosen already exists.');
                     break;

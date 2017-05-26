@@ -47,18 +47,16 @@ define(function() {
                 self.input.selectedCellVisible = true;
 
                 self.socket.send(Packets.Movement, [Packets.MovementOpcode.Started, self.input.selectedX, self.input.selectedY, self.player.gridX, self.player.gridY]);
-
-                //TODO - Fix dirty on mobile for target? May not be necessary if done in the renderer.
             });
 
-            self.player.onStopPathing(function(x, y, forced) {
+            self.player.onStopPathing(function(x, y) {
                 self.entities.unregisterPosition(self.player);
                 self.entities.registerPosition(self.player);
 
                 self.camera.focusMode = false;
                 self.camera.clip();
 
-                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Stop, x, y, forced])
+                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Stop, x, y])
             });
 
             self.player.onBeforeStep(function() {
@@ -77,8 +75,11 @@ define(function() {
             });
 
             self.player.onMove(function() {
+                /**
+                 * This is a callback representing the absolute exact position of the player.
+                 */
 
-
+                self.camera.centreOn(self.player);
             });
         }
 

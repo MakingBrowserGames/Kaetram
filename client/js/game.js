@@ -32,6 +32,7 @@ define(['./renderer/renderer', './utils/storage',
             self.stopped = false;
             self.started = false;
             self.ready = false;
+            self.loaded = false;
 
             self.time = new Date();
 
@@ -104,6 +105,8 @@ define(['./renderer/renderer', './utils/storage',
 
             if (self.app.hasWorker())
                 self.loadMap();
+
+            self.loaded = true;
         },
 
         loadMap: function() {
@@ -255,6 +258,23 @@ define(['./renderer/renderer', './utils/storage',
 
                 self.socket.send(Packets.Who, newIds);
             });
+        },
+
+        setPlayerMovement: function(direction) {
+            this.player.direction = direction;
+        },
+
+        movePlayer: function(x, y) {
+            this.moveCharacter(this.player, x, y);
+        },
+
+        moveCharacter: function(character, x, y) {
+            var self = this;
+
+            if (!character)
+                return;
+
+            character.go(x, y);
         },
 
         findPath: function(character, x, y, ignores) {

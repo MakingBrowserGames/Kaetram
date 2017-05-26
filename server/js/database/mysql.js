@@ -1,7 +1,8 @@
 var cls = require('../lib/class'),
     mysql = require('mysql'),
     Creator = require('./creator'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    Loader = require('./loader');
 
 module.exports = MySQL = cls.Class.extend({
 
@@ -20,6 +21,8 @@ module.exports = MySQL = cls.Class.extend({
         self.user = user;
         self.password = pass;
         self.database = database;
+
+        self.loader = null;
 
         self.connect(true, false);
         self.loadCallbacks();
@@ -60,6 +63,7 @@ module.exports = MySQL = cls.Class.extend({
             }
 
             log.info('Successfully established connection to the MySQL database!');
+            self.loader = new Loader(self);
         });
 
         self.onSelected(function() {

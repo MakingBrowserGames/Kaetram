@@ -74,6 +74,15 @@ define(['jquery'], function($) {
                 self.game.onInput(Modules.InputType.Key, key);
             });
 
+            $(document).keyup(function(e) {
+                var key = e.which;
+
+                if (!self.game || !self.game.started)
+                    return;
+
+                self.game.input.keyUp(key);
+            });
+
             $(document).mousemove(function(event) {
                 if (!self.game || !self.game.input)
                     return;
@@ -95,7 +104,7 @@ define(['jquery'], function($) {
         login: function() {
             var self = this;
 
-            if (!self.verifyForm())
+            if (!self.verifyForm() || !self.game || !self.game.loaded)
                 return;
 
             self.toggleLogin(true);

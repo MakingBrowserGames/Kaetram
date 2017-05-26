@@ -25,6 +25,8 @@ define(['../character', './equipment/armour', './equipment/weapon',
             self.prevX = 0;
             self.prevY = 0;
 
+            self.direction = null;
+
             self.loadEquipment();
         },
 

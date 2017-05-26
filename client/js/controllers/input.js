@@ -42,8 +42,29 @@ define(function() {
                         case Modules.Keys.Up:
                         case Modules.Keys.Down:
 
-                            if (self.game.development)
+                            if (self.game.development && !self.game.getCamera().centered)
                                 self.game.getCamera().handlePanning(data);
+
+                            break;
+
+                        case Modules.Keys.W:
+
+                            self.game.setPlayerMovement('up');
+
+                            break;
+                        case Modules.Keys.A:
+
+                            self.game.setPlayerMovement('left');
+
+                            break;
+                        case Modules.Keys.S:
+
+                            self.game.setPlayerMovement('down');
+
+                            break;
+                        case Modules.Keys.D:
+
+                            self.game.setPlayerMovement('right');
 
                             break;
 
@@ -82,12 +103,36 @@ define(function() {
 
                         self.setCoords(data);
 
-                        var coordinates = self.getCoords();
-
-                        self.game.player.go(coordinates.x, coordinates.y);
+                        self.click(self.getCoords());
 
                         break;
             }
+        },
+
+        keyUp: function(key) {
+            var self = this;
+
+            switch(key) {
+                case Modules.Keys.W:
+                case Modules.Keys.A:
+                case Modules.Keys.S:
+                case Modules.Keys.D:
+                    self.game.player.direction = null;
+                    break;
+            }
+        },
+
+        keyMove: function(position) {
+            var self = this;
+
+            if (!self.game.player.hasPath())
+                self.click(position);
+        },
+
+        click: function(position) {
+            var self = this;
+
+            self.game.player.go(position.x, position.y);
         },
 
         setCoords: function(event) {

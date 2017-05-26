@@ -17,6 +17,7 @@ define(['../entity/character/character'], function(Character) {
             this.animateTiles();
             this.updateCharacters();
             this.input.updateCursor();
+            this.updateKeyboard();
         },
 
         animateTiles: function() {
@@ -45,9 +46,6 @@ define(['../entity/character/character'], function(Character) {
 
                 if (entity.movement && entity.movement.inProgress)
                     entity.movement.step(self.game.time);
-
-                if (self.camera.centered && entity.id === self.game.player.id && self.camera.focusMode)
-                    self.camera.centreOn(entity);
 
                 if (entity instanceof Character && entity.hasPath() && !entity.movement.inProgress) {
                     var tick = Math.round(16 / Math.round((entity.movementSpeed / (1000 / 60))));
@@ -145,6 +143,29 @@ define(['../entity/character/character'], function(Character) {
                 entity.fadingAlpha = 1;
             } else
                 entity.fadingAlpha = dt / duration;
+        },
+
+        updateKeyboard: function() {
+            var self = this,
+                player = self.game.player,
+                position = {
+                    x: player.gridX,
+                    y: player.gridY
+                };
+
+
+            if (player.direction === 'up')
+                position.y--;
+            else if (player.direction === 'down')
+                position.y++;
+            else if (player.direction === 'right')
+                position.x++;
+            else if (player.direction === 'left')
+                position.x--;
+
+            if (player.direction)
+                self.input.keyMove(position);
+
         }
 
     });

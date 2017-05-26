@@ -38,7 +38,7 @@ Packets.MovementOpcode = {
     Request: 0,
     Started: 1,
     Step: 2,
-    Finished: 3
+    Stop: 3
 };
 
 module.exports = Packets;

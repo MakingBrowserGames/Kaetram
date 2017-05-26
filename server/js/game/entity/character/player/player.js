@@ -12,7 +12,8 @@ var Character = require('../character'),
     Formulas = require('../../../formulas'),
     Hitpoints = require('./points/hitpoints'),
     Mana = require('./points/mana'),
-    Packets = require('../../../../network/packets');
+    Packets = require('../../../../network/packets'),
+    Modules = require('../../../../util/modules');
 
 module.exports = Player = Character.extend({
 
@@ -29,6 +30,10 @@ module.exports = Player = Character.extend({
 
         self.isNew = false;
         self.ready = false;
+
+        self.inventory = null;
+
+        self.moving = false;
 
         self._super(-1, 'player', self.connection.id, -1, -1);
     },
@@ -71,7 +76,7 @@ module.exports = Player = Character.extend({
             self.connection.close('Player: ' + self.player.username + ' is banned.');
         }
 
-        if (self.x === 0 || self.y === 0)
+        if (self.x <= 0 || self.y <= 0)
             self.sendToSpawn();
 
         var info = [
@@ -97,6 +102,41 @@ module.exports = Player = Character.extend({
         self.send(new Messages.Welcome(info));
     },
 
+    equip: function(type, id, count, skill, skillLevel) {
+        var self = this;
+
+        switch(type) {
+            case Modules.Equipment.Armour:
+
+                self.setArmour(id, count, skill, skillLevel);
+                break;
+
+            case Modules.Equipment.Weapon:
+
+
+                self.setWeapon(id, count, skill, skillLevel);
+                break;
+
+            case Modules.Equipment.Pendant:
+
+
+                self.setPendant(id, count, skill, skillLevel);
+                break;
+
+            case Modules.Equipment.Ring:
+
+
+                self.setRing(id, count, skill, skillLevel);
+                break;
+
+            case Modules.Equipment.Boots:
+
+
+                self.setBoots(id, count, skill, skillLevel);
+                break;
+        }
+    },
+
     /**
      * Setters
      */
@@ -107,7 +147,10 @@ module.exports = Player = Character.extend({
         if (!id)
             return;
 
-        self.armour = new Armour(Items.idToString(id), id, count, skill, skillLevel);
+        if (self.armour)
+            self.armour.update();
+        else
+            self.armour = new Armour(Items.idToString(id), id, count, skill, skillLevel);
     },
 
     setWeapon: function(id, count, skill, skillLevel) {
@@ -191,6 +234,15 @@ module.exports = Player = Character.extend({
 
         self.x = 36;
         self.y = 97;
+    },
+
+    loadInventory: function() {
+        var self = this;
+
+        if (self.inventory)
+            return;
+
+
     }
 
 });

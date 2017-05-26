@@ -138,7 +138,8 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
                     self.stopRendering = false;
                     self.resizeTimeout = null;
 
-                    self.camera.centreOn(self.game.player);
+                    if (self.camera)
+                        self.camera.centreOn(self.game.player);
                 }, 500);
         },
 
