@@ -57,14 +57,6 @@ module.exports = Incoming = cls.Class.extend({
         self.player.password = password.substr(0, 32);
         self.player.email = email.substr(0, 128);
 
-        if (username !== 'flavtest526') {
-
-            self.connection.sendUTF8('maintenance');
-            self.connection.close('Development mode.');
-
-            return;
-        }
-
         if (config.offlineMode) {
             var creator = new Creator(null);
 
@@ -188,26 +180,57 @@ module.exports = Incoming = cls.Class.extend({
 
         switch (opcode) {
             case Packets.MovementOpcode.Request:
+                var requestX = message.shift(),
+                    requestY = message.shift(),
+                    playerX = message.shift(),
+                    playerY = message.shift();
 
-                log.info('Movement requested: ' + message);
+                if (playerX !== self.player.x || playerY !== self.player.y) {
+                    log.info('[Request] Player not in sync..');
+                    return;
+                }
+
+                self.player.guessPosition(requestX, requestY);
 
                 break;
 
             case Packets.Movement.Started:
+                var selectedX = message.shift(),
+                    selectedY = message.shift(),
+                    pX = message.shift(),
+                    pY = message.shift();
 
-                log.info('Movement started: ' + message);
+                if (pX !== self.player.x || pY !== self.player.y) {
+                    log.info('[Started] Player not in sync..');
+                    return;
+                }
+
+                self.player.moving = true;
 
                 break;
 
             case Packets.MovementOpcode.Step:
+                var x = message.shift(),
+                    y = message.shift();
 
-                log.info('Player stepped: ' + message);
+                self.player.setPosition(x, y);
 
                 break;
 
             case Packets.MovementOpcode.Stop:
+                var posX = message.shift(),
+                    posY = message.shift();
 
-                log.info('Movement stopped: ' + message);
+                if (self.world.map.isDoor(posX, posY)) {
+                    var destination = self.world.map.getDoorDestination(posX, posY);
+
+                    self.player.send(new Messages.Teleport(self.player.instance, destination.x, destination.y));
+
+                } else
+                    self.player.setPosition(posX, posY);
+
+                self.player.moving = false;
+
 
                 break;
         }

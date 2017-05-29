@@ -20,10 +20,7 @@ define(function() {
 
             self.speed = 1;
             self.panning = false;
-
-            self.focusMode = false;
             self.centered = true;
-
             self.player = null;
 
             self.update();
@@ -67,8 +64,12 @@ define(function() {
         decenter: function() {
             var self = this;
 
+            log.info('hey');
+
             if (!self.centered)
                 return;
+
+            log.info('decentering...');
 
             self.centered = false;
         },

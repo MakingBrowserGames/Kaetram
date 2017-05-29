@@ -62,3 +62,32 @@ Messages.Equipment = Message.extend({
 Messages.Drop = Message.extend({
 
 });
+
+Messages.Movement = Message.extend({
+
+    init: function(id, opcode, forced, teleport) {
+        this.id = id;
+        this.opcode = opcode;
+        this.forced = forced;
+        this.teleport = teleport;
+    },
+
+    serialize: function() {
+        return [Packets.Movement, [this.id, this.opcode, this.forced, this.teleport]];
+    }
+
+});
+
+Messages.Teleport = Message.extend({
+
+    init: function(id, x, y) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+    },
+
+    serialize: function() {
+        return [Packets.Teleport, [this.id, this.x, this.y]];
+    }
+
+});

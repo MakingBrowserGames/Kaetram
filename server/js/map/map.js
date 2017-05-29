@@ -112,6 +112,14 @@ module.exports = Map = cls.Class.extend({
         });
     },
 
+    isDoor: function(x, y) {
+        return !!this.doors[this.gridPositionToIndex(x, y)];
+    },
+
+    getDoorDestination: function(x, y) {
+        return this.doors[this.gridPositionToIndex(x, y)];
+    },
+
     loadCollisions: function() {
         var self = this,
             location = './server/data/map/collisions.json';

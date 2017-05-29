@@ -18,6 +18,8 @@ define(['../entity/character/character'], function(Character) {
             this.updateCharacters();
             this.input.updateCursor();
             this.updateKeyboard();
+            this.updateInput();
+            this.verifyScale();
         },
 
         animateTiles: function() {
@@ -153,6 +155,8 @@ define(['../entity/character/character'], function(Character) {
                     y: player.gridY
                 };
 
+            if (player.frozen)
+                return;
 
             if (player.direction === 'up')
                 position.y--;
@@ -166,6 +170,24 @@ define(['../entity/character/character'], function(Character) {
             if (player.direction)
                 self.input.keyMove(position);
 
+        },
+
+        updateInput: function() {
+            var self = this,
+                target = self.input.targetAnimation;
+
+            if (target)
+                target.update(self.game.time);
+        },
+
+        verifyScale: function() {
+            var self = this,
+                scale = self.renderer.getDrawingScale();
+
+            if (self.renderer.tileset.scale !== scale) {
+                log.info('Updating tileset to: ' + scale + ' tileset scale: ' + self.renderer.tileset.scale);
+                self.game.map.updateTileset();
+            }
         }
 
     });

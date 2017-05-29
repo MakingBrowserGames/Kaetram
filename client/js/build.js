@@ -1,6 +1,11 @@
-'use strict';
-
 require.config({
+
+    appDir: "../",
+    baseUrl: "js/",
+    dir: "../../client-build",
+    optimize: "uglify",
+    optimizeCss: "standard.keepLines",
+
     paths: {
         jquery: 'lib/jquery'
     },
@@ -16,7 +21,7 @@ require.config({
         },
 
         {
-            name: 'home',
+            name: 'lib/home',
             exclude: ['jquery', 'game']
         }
     ]

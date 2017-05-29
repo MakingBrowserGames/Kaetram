@@ -31,6 +31,8 @@ define(['jquery'], function($) {
 
             self.parchmentAnimating = false;
 
+            self.sendStatus('Initializing the main app');
+
             self.zoom();
             self.updateOrientation();
             self.load();
@@ -252,6 +254,22 @@ define(['jquery'], function($) {
             return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
         },
 
+        sendStatus: function(message) {
+            this.cleanErrors();
+
+            if (!message)
+                return;
+
+            log.info(message);
+
+            $('<span></span>', {
+                'class': 'status blink',
+                text: message
+            }).appendTo('.validation-summary');
+
+            $('.status').append('<span class="loader__dot">.</span><span class="loader__dot">.</span><span class="loader__dot">.</span>');
+        },
+
         sendError: function(field, error) {
             this.cleanErrors();
 
@@ -282,6 +300,7 @@ define(['jquery'], function($) {
                 fields[i].removeClass('field-error');
 
             $('.validation-error').remove();
+            $('.status').remove();
         },
 
         getActiveForm: function() {

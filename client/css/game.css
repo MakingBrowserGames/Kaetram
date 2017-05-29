@@ -99,6 +99,7 @@ body.game {
 }
 
 @media only screen and (max-width: 1000px) {
-    
-    
+    .started #canvas {
+        cursor: default;
+    }
 }

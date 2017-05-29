@@ -30,6 +30,18 @@ define(['../character', './equipment/armour', './equipment/weapon',
             self.loadEquipment();
         },
 
+        stop: function(force) {
+            this._super(force);
+        },
+
+        setId: function(id) {
+            this.id = id;
+        },
+
+        idle: function() {
+            this._super();
+        },
+
         loadEquipment: function() {
             var self = this;
 
@@ -38,6 +50,10 @@ define(['../character', './equipment/armour', './equipment/weapon',
             self.pendant = null;
             self.ring = null;
             self.boots = null;
+        },
+
+        go: function(x, y, forced) {
+            this._super(x, y, forced);
         },
 
         hasWeapon: function() {

@@ -25,6 +25,7 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             self.following = false;
             self.attacking = false;
             self.interrupted = false;
+            self.frozen = false;
 
             self.path = null;
             self.target = null;
@@ -76,6 +77,13 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             }
         },
 
+        idle: function(o) {
+            var self = this,
+                orientation = o ? o : self.orientation;
+
+            self.performAction(orientation, Modules.Actions.Idle);
+        },
+
         orientationToString: function(o) {
             var oM = Modules.Orientation;
 
@@ -94,15 +102,18 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             }
         },
 
-        go: function(x, y) {
+        go: function(x, y, forced) {
             var self = this;
+
+            if (self.frozen)
+                return;
 
             if (self.following) {
                 self.following = false;
                 self.target = null;
             }
 
-            self.move(x, y);
+            self.move(x, y, forced);
         },
 
         proceed: function(x, y) {
@@ -176,7 +187,7 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
             if (stop) {
                 self.path = null;
-                self.performAction(self.orientation, Modules.Actions.Idle);
+                self.idle();
 
                 if (self.stopPathingCallback)
                     self.stopPathingCallback(self.gridX, self.gridY, self.forced);
@@ -227,7 +238,7 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             self.nextStep();
         },
 
-        move: function(x, y) {
+        move: function(x, y, forced) {
             var self = this;
 
             self.destination = {
@@ -237,10 +248,25 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
             self.adjacentTiles = {};
 
-            if (self.hasPath())
+            if (self.hasPath() && !forced)
                 self.proceed(x, y);
             else
                 self.followPath(self.requestPathfinding(x, y));
+        },
+
+        stop: function(force) {
+            var self = this;
+
+            if (!force)
+                self.interrupted = true;
+            else if (self.hasPath()) {
+                self.path = null;
+                self.newDestination = null;
+                self.movement = new Transition();
+                self.performAction(self.orientation, Modules.Actions.Idle);
+                self.nextGridX = self.gridX;
+                self.nextGridY = self.gridY;
+            }
         },
 
         requestPathfinding: function(x, y) {
@@ -252,8 +278,6 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
         updateGridPosition: function() {
             var self = this;
-
-            log.info('Updating position: ' + self.path[self.step][0] + ' ' + self.path[self.step][1]);
 
             self.setGridPosition(self.path[self.step][0], self.path[self.step][1]);
         },

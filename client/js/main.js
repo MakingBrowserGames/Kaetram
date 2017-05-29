@@ -53,6 +53,8 @@ define(['jquery', './app', './game'], function($, App, Game) {
     var initGame = function() {
 
         app.onReady(function() {
+            app.sendStatus('Loading game');
+
             game = new Game(app);
             app.setGame(game);
         });

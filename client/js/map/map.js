@@ -90,13 +90,10 @@ define(['jquery'], function($) {
             var self = this,
                 scale = self.renderer.getDrawingScale();
 
-            if (!self.tilesets[1] && scale !== self.renderer.getTileset().scale)
+            if (scale > 2 && !self.tilesets[1])
                 self.tilesets.push(self.loadTileset('img/3/tilesheet.png'));
 
-            _.each(self.tilesets, function(tileset) {
-                if (tileset.scale === self.renderer.getDrawingScale())
-                    self.renderer.setTileset(tileset);
-            });
+            self.renderer.setTileset(self.tilesets[scale - 2]);
         },
 
         loadTileset: function(path) {

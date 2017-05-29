@@ -25,6 +25,8 @@ define(function() {
             self.messages[Packets.Spawn] = self.receiveSpawn;
             self.messages[Packets.Equipment] = self.receiveEquipment;
             self.messages[Packets.List] = self.receiveEntityList;
+            self.messages[Packets.Movement] = self.receiveMovement;
+            self.messages[Packets.Teleport] = self.receiveTeleport;
         },
 
         handleData: function(data) {
@@ -66,9 +68,7 @@ define(function() {
                     break;
 
                 case 'maintenance':
-
                     self.app.sendError(null, 'The server is currently under maintenance.');
-
                     break;
 
                 case 'userexists':
@@ -131,6 +131,22 @@ define(function() {
                 self.entityListCallback(data);
         },
 
+        receiveMovement: function(data) {
+            var self = this,
+                movementData = data.shift();
+
+            if (self.movementCallback)
+                self.movementCallback(movementData);
+        },
+
+        receiveTeleport: function(data) {
+            var self = this,
+                teleportData = data.shift();
+
+            if (self.teleportCallback)
+                self.teleportCallback(teleportData);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -153,6 +169,14 @@ define(function() {
 
         onEntityList: function(callback) {
             this.entityListCallback = callback;
+        },
+
+        onMovement: function(callback) {
+            this.movementCallback = callback;
+        },
+
+        onTeleport: function(callback) {
+            this.teleportCallback = callback;
         }
 
     });

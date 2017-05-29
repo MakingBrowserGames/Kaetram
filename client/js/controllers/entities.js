@@ -23,11 +23,17 @@ define(['../renderer/grids', '../entity/objects/chest',
         load: function() {
             var self = this;
 
-            if (!self.grids)
-                self.grids = new Grids(self.game.map);
+            self.game.app.sendStatus('Loading sprites');
 
             if (!self.sprites)
                 self.sprites = new Sprites(self.game.renderer);
+
+            self.game.app.sendStatus('Loading grids');
+
+            if (!self.grids)
+                self.grids = new Grids(self.game.map);
+
+
         },
 
         update: function() {

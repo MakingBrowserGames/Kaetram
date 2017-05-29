@@ -1,6 +1,6 @@
 /* global Modules, log */
 
-define(function() {
+define(['../entity/animation'], function(Animation) {
 
     return Class.extend({
 
@@ -24,10 +24,26 @@ define(function() {
             self.targetColour = null;
             self.newTargetColour = null;
 
+            self.targetData = null;
+
             self.mouse = {
                 x: 0,
                 y: 0
-            }
+            };
+
+            self.load();
+        },
+
+        load: function() {
+            var self = this;
+
+            /**
+             * This is the animation for the target
+             * cell spinner sprite (only on desktop)
+             */
+
+            self.targetAnimation = new Animation('idle_down', 4, 0, 16, 16);
+            self.targetAnimation.setSpeed(50);
         },
 
         handle: function(inputType, data) {
@@ -135,6 +151,19 @@ define(function() {
             self.game.player.go(position.x, position.y);
         },
 
+        updateCursor: function() {
+            var self = this;
+
+            if (!self.cursorVisible)
+                return;
+
+            if (self.newCursor !== self.cursor)
+                self.cursor = self.newCursor;
+
+            if (self.newTargetColour !== self.targetColour)
+                self.targetColour = self.newTargetColour;
+        },
+
         setCoords: function(event) {
             var self = this,
                 offset = self.app.canvas.offset(),
@@ -155,6 +184,16 @@ define(function() {
                 self.mouse.y = 0;
         },
 
+        setCursor: function(cursor) {
+            var self = this,
+                newCursor = self.game.getSprite(cursor);
+
+            if (newCursor)
+                self.cursor = newCursor;
+            else
+                log.error('Cursor: ' + cursor + ' could not be found.');
+        },
+
         getCoords: function() {
             var self = this,
                 tileScale = self.renderer.tileSize * self.renderer.getDrawingScale(),
@@ -169,27 +208,26 @@ define(function() {
             }
         },
 
-        updateCursor: function() {
-            var self = this;
-
-            if (!self.cursorVisible)
-                return;
-
-            if (self.newCursor !== self.cursor)
-                self.cursor = self.newCursor;
-
-            if (self.newTargetColour !== self.targetColour)
-                self.targetColour = self.newTargetColour;
-        },
-
-        setCursor: function(cursor) {
+        getTargetData: function() {
             var self = this,
-                newCursor = self.game.getSprite(cursor);
+                frame = self.targetAnimation.currentFrame,
+                scale = self.renderer.getDrawingScale(),
+                sprite = self.game.getSprite('target');
 
-            if (newCursor)
-                self.cursor = newCursor;
-            else
-                log.error('Cursor: ' + cursor + ' could not be found.');
+            if (!sprite.loaded)
+                sprite.load();
+
+            return self.targetData = {
+                sprite: sprite,
+                x: frame.x * scale,
+                y: frame.y * scale,
+                width: sprite.width * scale,
+                height: sprite.height * scale,
+                dx: self.selectedX * 16 * scale,
+                dy: self.selectedY * 16 * scale,
+                dw: sprite.width * scale,
+                dh: sprite.height * scale
+            }
         },
 
         onKey: function(callback) {

@@ -34,6 +34,8 @@ module.exports = Player = Character.extend({
         self.inventory = null;
 
         self.moving = false;
+        self.potentialPosition = null;
+        self.futurePosition = null;
 
         self._super(-1, 'player', self.connection.id, -1, -1);
     },
@@ -41,8 +43,7 @@ module.exports = Player = Character.extend({
     load: function(data) {
         var self = this;
 
-        self.x = data.x;
-        self.y = data.y;
+        self.setPosition(data.x, data.y);
         self.kind = data.kind;
         self.rights = data.rights;
         self.experience = data.experience;
@@ -80,7 +81,7 @@ module.exports = Player = Character.extend({
             self.sendToSpawn();
 
         var info = [
-                self.id,
+                self.instance,
                 self.username,
                 self.x,
                 self.y,
@@ -189,6 +190,26 @@ module.exports = Player = Character.extend({
         self.boots = new Boots(Items.idToString(id), id, count, skill, skillLevel);
     },
 
+    guessPosition: function(x, y) {
+        this.potentialPosition = {
+            x: x,
+            y: y
+        }
+    },
+
+    setFuturePosition: function(x, y) {
+        /**
+         * Most likely will be used for anti-cheating methods
+         * of calculating the actual time and duration for the
+         * displacement.
+         */
+
+        this.futurePosition = {
+            x: x,
+            y: y
+        }
+    },
+
     /**
      * Getters
      */
@@ -232,16 +253,39 @@ module.exports = Player = Character.extend({
     sendToSpawn: function() {
         var self = this;
 
-        self.x = 36;
-        self.y = 97;
+        self.x = 94;
+        self.y = 92;
+    },
+
+    stopMovement: function(force) {
+        /**
+         * Forcefully stopping the player will simply hault
+         * them in between tiles. Should only be used if they are
+         * being transported elsewhere.
+         */
+
+        var self = this;
+
+        self.send(new Messages.Movement(Packets.MovementOpcode.Stop, force));
+    },
+
+    movePlayer: function() {
+        var self = this;
+
+        /**
+         * Server-sided callbacks towards movement should
+         * not be able to be overwritten. In the case that
+         * this is used (for Quests most likely) the server must
+         * check that no hacker removed the constraint in the client-side.
+         * If they are not within the bounds, apply the according punishment.
+         */
+
+        self.send(new Messages.Movement(Packets.MovementOpcode.Started));
+
     },
 
     loadInventory: function() {
         var self = this;
-
-        if (self.inventory)
-            return;
-
 
     }
 

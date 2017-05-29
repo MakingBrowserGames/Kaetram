@@ -27,8 +27,6 @@ define(function() {
             var self = this;
 
             self.player.onRequestPath(function(x, y) {
-                self.camera.focusMode = true;
-
                 var ignores = [self.player];
 
                 if (self.player.hasTarget())
@@ -53,8 +51,12 @@ define(function() {
                 self.entities.unregisterPosition(self.player);
                 self.entities.registerPosition(self.player);
 
-                self.camera.focusMode = false;
+                self.input.selectedCellVisible = false;
+
                 self.camera.clip();
+
+                if (!self.camera.centered)
+                    self.checkBounds();
 
                 self.socket.send(Packets.Movement, [Packets.MovementOpcode.Stop, x, y])
             });
@@ -79,8 +81,21 @@ define(function() {
                  * This is a callback representing the absolute exact position of the player.
                  */
 
-                self.camera.centreOn(self.player);
+                if (self.camera.centered)
+                    self.camera.centreOn(self.player);
             });
+        },
+
+        checkBounds: function() {
+            var self = this,
+                x = self.player.gridX - self.camera.gridX,
+                y = self.player.gridY - self.camera.gridY,
+                isBorder = false;
+
+            if (x === 0 || y === 0 || x === self.camera.gridWidth - 1 || y === self.camera.gridHeight - 1)
+                isBorder = true;
+
+
         }
 
     });

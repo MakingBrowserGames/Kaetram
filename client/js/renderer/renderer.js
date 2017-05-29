@@ -113,33 +113,36 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
 
             self.clearAll();
 
-            self.scale = self.getScale();
-            self.drawingScale = self.getDrawingScale();
-
             self.checkDevice();
 
-            if (self.camera)
-                self.camera.update();
-
-            if (self.map)
-                self.map.updateTileset();
-
-            self.loadFont();
-            self.updateAnimatedTiles();
 
             if (!self.resizeTimeout)
                 self.resizeTimeout = setTimeout(function() {
+
+                    self.scale = self.getScale();
+                    self.drawingScale = self.getDrawingScale();
+
+                    if (self.camera)
+                        self.camera.update();
+
+                    self.loadFont();
+                    self.updateAnimatedTiles();
+
                     self.loadSizes();
 
                     if (self.entities)
                         self.entities.update();
 
-                    self.renderedFrame[0] = -1;
-                    self.stopRendering = false;
-                    self.resizeTimeout = null;
+                    if (self.map)
+                        self.map.updateTileset();
 
                     if (self.camera)
                         self.camera.centreOn(self.game.player);
+
+                    self.renderedFrame[0] = -1;
+
+                    self.stopRendering = false;
+                    self.resizeTimeout = null;
                 }, 500);
         },
 
@@ -160,6 +163,8 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
 
                 if (!self.mobile && self.input.targetVisible)
                     self.drawTargetCell();
+
+                self.drawSelectedCell();
 
                 self.drawEntities(false);
             }
@@ -197,6 +202,13 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             });
 
             self.saveFrame();
+        },
+
+        drawDebugging: function() {
+            var self = this;
+
+            if (self.game.development)
+                self.drawPathing();
         },
 
         drawAnimatedTiles: function() {
@@ -333,6 +345,42 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.frameCount++;
 
             self.drawText('FPS: ' + self.realFPS, 10, 11, false, 'white');
+        },
+
+        drawPathing: function() {
+            var self = this,
+                pathingGrid = self.entities.grids.pathingGrid;
+
+            if (!pathingGrid)
+                return;
+
+            self.camera.forEachVisiblePosition(function(x, y) {
+                if (pathingGrid[y][x] !== 0)
+                    self.drawCellHighlight(x, y, 'rgba(50, 50, 255, 0.5)');
+            });
+        },
+
+        drawSelectedCell: function() {
+            var self = this;
+
+            if (!self.input.selectedCellVisible)
+                return;
+
+            var posX = self.input.selectedX,
+                posY = self.input.selectedY;
+
+            if (self.mobile)
+                self.drawCellHighlight(posX, posY, 'rgb(51, 255, 0)');
+            else {
+                var tD = self.input.getTargetData();
+
+                if (tD) {
+                    self.context.save();
+                    self.context.translate(tD.dx, tD.dy);
+                    self.context.drawImage(tD.sprite.image, tD.x, tD.y, tD.width, tD.height, 0, 0, tD.dw, tD.dh);
+                    self.context.restore();
+                }
+            }
         },
 
         /**

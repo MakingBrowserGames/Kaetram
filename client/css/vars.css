@@ -122,6 +122,13 @@ body {
     font-size: 15px;
 }
 
+.status {
+    color: #0033cc;
+    text-shadow: 2px 2px 2px #3399ff;
+    font-size: 15px;
+
+}
+
 @media only screen and (min-width: 1501px) {
 
     #parchment h1, #loadCharacter h1, #createCharacter h1, #about h1 {
@@ -210,7 +217,7 @@ body {
         height: 3px;
     }
 
-    .validation-error {
+    .validation-error, .status {
         font-size: 22px;
     }
 
@@ -306,7 +313,7 @@ body {
         margin: -150px auto 8px auto;
     }
 
-    .validation-error {
+    .validation-error, .status {
         font-size: 16px;
     }
     
@@ -393,7 +400,7 @@ body {
         margin: -75px auto 4px auto;
     }
 
-    .validation-error {
+    .validation-error, .status {
         font-size: 11px;
     }
 }

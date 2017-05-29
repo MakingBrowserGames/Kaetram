@@ -20,7 +20,8 @@ var Packets = {
     Equipment: 6,
     Ready: 7,
     Drop: 8,
-    Movement: 9
+    Movement: 9,
+    Teleport: 10
 };
 
 Packets.IntroOpcode = {

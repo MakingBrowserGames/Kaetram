@@ -3,9 +3,11 @@
 define(['./renderer/renderer', './utils/storage',
         './map/map', './network/socket', './entity/character/player/player',
         './renderer/updater', './controllers/entities', './controllers/input',
-        './entity/character/player/playerhandler',
-        './utils/pathfinder', './utils/modules', './network/packets'],
-        function(Renderer, LocalStorage, Map, Socket, Player, Updater, Entities, Input, PlayerHandler, Pathfinder) {
+        './entity/character/player/playerhandler', './utils/pathfinder',
+        './controllers/zoning',
+        './utils/modules', './network/packets'],
+        function(Renderer, LocalStorage, Map, Socket, Player, Updater,
+                 Entities, Input, PlayerHandler, Pathfinder, Zoning) {
 
     return Class.extend({
 
@@ -26,6 +28,7 @@ define(['./renderer/renderer', './utils/storage',
             self.map = null;
             self.playerHandler = null;
             self.pathfinder = null;
+            self.zoning = null;
 
             self.player = null;
 
@@ -38,7 +41,6 @@ define(['./renderer/renderer', './utils/storage',
 
             self.loadRenderer();
             self.loadControllers();
-            self.loadMisc();
         },
 
         start: function() {
@@ -47,12 +49,7 @@ define(['./renderer/renderer', './utils/storage',
             self.started = true;
 
             self.app.fadeMenu();
-            self.getCamera().setPlayer(self.player);
             self.tick();
-
-            self.renderer.renderedFrame[0] = -1;
-            self.input.newCursor = self.getSprite('hand');
-            self.input.newTargetColour = 'rgba(255, 255, 255, 0.5)';
         },
 
         stop: function() {
@@ -87,26 +84,37 @@ define(['./renderer/renderer', './utils/storage',
                 chatInput = document.getElementById('chatInput'),
                 cursor = document.getElementById('cursor');
 
+            self.app.sendStatus('Loading the renderer');
+
             self.setRenderer(new Renderer(background, entities, foreground, textCanvas, cursor, self));
         },
 
         loadControllers: function() {
-            var self = this;
+            var self = this,
+                hasWorker = self.app.hasWorker();
 
-            self.setStorage(new LocalStorage());
-            self.setSocket(new Socket(self));
-            self.setMessages(self.socket.messages);
-            self.setEntityController(new Entities(self));
-            self.setInput(new Input(self));
-        },
+            self.app.sendStatus(hasWorker ? 'Loading maps - asynchronous' : null);
 
-        loadMisc: function() {
-            var self = this;
-
-            if (self.app.hasWorker())
+            if (hasWorker)
                 self.loadMap();
 
-            self.loaded = true;
+            self.app.sendStatus('Loading local storage');
+
+            self.setStorage(new LocalStorage());
+
+            self.app.sendStatus('Initializing network socket');
+
+            self.setSocket(new Socket(self));
+            self.setMessages(self.socket.messages);
+
+            self.app.sendStatus('Loading other mumbo jumbo');
+
+            self.setEntityController(new Entities(self));
+
+            self.setInput(new Input(self));
+
+            if (!hasWorker)
+                self.loaded = true;
         },
 
         loadMap: function() {
@@ -115,17 +123,24 @@ define(['./renderer/renderer', './utils/storage',
             self.map = new Map(self);
 
             self.map.onReady(function() {
-                log.info('The map has been loaded!');
+
+                self.app.sendStatus('Loading the pathfinder');
 
                 self.setPathfinder(new Pathfinder(self.map.width, self.map.height));
 
                 self.renderer.setMap(self.map);
                 self.renderer.loadCamera();
 
+                self.app.sendStatus('Loading updater');
+
                 self.setUpdater(new Updater(self));
 
                 self.entities.load();
                 self.renderer.setEntities(self.entities);
+
+                self.app.sendStatus(null);
+
+                self.loaded = true;
             });
         },
 
@@ -171,7 +186,7 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onWelcome(function(data) {
 
-                self.player.id = data.shift();
+                self.player.setId(data.shift());
                 self.player.username = data.shift();
 
                 var x = data.shift(),
@@ -199,19 +214,7 @@ define(['./renderer/renderer', './utils/storage',
                 self.player.pvpDeaths = data.shift();
 
                 self.start();
-
-                self.entities.addEntity(self.player);
-
-                var defaultSprite = self.player.getSpriteName();
-
-                self.player.setSprite(self.getSprite(defaultSprite));
-                self.player.performAction(Modules.Orientation.Down, Modules.Actions.Idle);
-
-                self.socket.send(Packets.Ready, [true]);
-
-                self.playerHandler = new PlayerHandler(self, self.player);
-
-                self.renderer.updateAnimatedTiles();
+                self.postLoad();
             });
 
             self.messages.onEquipment(function(equipType, info) {
@@ -258,6 +261,90 @@ define(['./renderer/renderer', './utils/storage',
 
                 self.socket.send(Packets.Who, newIds);
             });
+
+            self.messages.onMovement(function(data) {
+                var id = data.shift(),
+                    isPlayer = id === self.player.id,
+                    entity = self.entities.get(id),
+                    opcode = data.shift(),
+                    forced = data.shift(),
+                    teleport = data.shift();
+
+                if (!entity)
+                    return;
+
+                log.info(opcode);
+                log.info(id);
+
+                switch (opcode) {
+                    case Packets.MovementOpcode.Stop:
+
+                        log.info('Stopping...');
+
+                        if (isPlayer)
+
+                        break;
+                }
+
+            });
+
+            self.messages.onTeleport(function(data) {
+                var id = data.shift(),
+                    x = data.shift(),
+                    y = data.shift(),
+                    isPlayer = id === self.player.id,
+                    entity = self.entities.get(id);
+
+                if (!entity)
+                    return;
+
+                entity.stop(true);
+                entity.frozen = true;
+
+                self.entities.unregisterPosition(entity);
+
+                entity.setGridPosition(x, y);
+
+                if (isPlayer) {
+                    self.renderer.camera.centreOn(entity);
+                    self.renderer.updateAnimatedTiles();
+                }
+
+                self.entities.registerPosition(entity);
+
+                entity.frozen = false;
+
+            });
+        },
+
+        postLoad: function() {
+            var self = this;
+
+            /**
+             * Call this after the player has been welcomed
+             * by the server and the client received the connection.
+             */
+
+            self.getCamera().setPlayer(self.player);
+
+            self.renderer.renderedFrame[0] = -1;
+            self.input.newCursor = self.getSprite('hand');
+            self.input.newTargetColour = 'rgba(255, 255, 255, 0.5)';
+
+            self.entities.addEntity(self.player);
+
+            var defaultSprite = self.player.getSpriteName();
+
+            self.player.setSprite(self.getSprite(defaultSprite));
+            self.player.idle();
+
+            self.socket.send(Packets.Ready, [true]);
+
+            self.playerHandler = new PlayerHandler(self, self.player);
+
+            self.renderer.updateAnimatedTiles();
+
+            self.zoning = new Zoning(self);
         },
 
         setPlayerMovement: function(direction) {
