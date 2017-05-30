@@ -164,6 +164,8 @@ define(['../entity/animation'], function(Animation) {
                 self.targetColour = self.newTargetColour;
         },
 
+
+
         setCoords: function(event) {
             var self = this,
                 offset = self.app.canvas.offset(),

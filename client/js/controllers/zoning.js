@@ -10,7 +10,7 @@ define(function() {
             self.game = game;
             self.renderer = game.renderer;
             self.camera = game.camera;
-            self.input = game.input();
+            self.input = game.input;
 
             self.direction = null;
         },

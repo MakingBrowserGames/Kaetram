@@ -28,7 +28,7 @@ define(function() {
 
         update: function() {
             var self = this,
-                factor = self.renderer.getScale();
+                factor = self.renderer.getUpscale();
 
             self.gridWidth = 15 * factor;
             self.gridHeight = 8 * factor;

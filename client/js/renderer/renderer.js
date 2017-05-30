@@ -19,6 +19,12 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.textContext = textCanvas.getContext('2d');
             self.cursorContext = cursor.getContext('2d');
 
+            self.context.mozImageSmoothingEnabled = false;
+            self.backContext.mozImageSmoothingEnabled = false;
+            self.foreContext.mozImageSmoothingEnabled = false;
+            self.textContext.mozImageSmoothingEnabled = false;
+            self.cursorContext.mozImageSmoothingEnabled = false;
+
             self.contexts = [self.backContext, self.foreContext, self.context];
             self.canvases = [self.background, self.entities, self.foreground, self.textCanvas, self.cursor];
 
@@ -89,9 +95,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
         loadFont: function() {
             var self = this;
 
-            if (self.getScale() > 2)
-                self.fontSize = 20;
-
+            self.fontSize = 10 * self.scale;
             self.textContext.font = self.fontSize + 'px AdvoCut';
         },
 
@@ -114,7 +118,6 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.clearAll();
 
             self.checkDevice();
-
 
             if (!self.resizeTimeout)
                 self.resizeTimeout = setTimeout(function() {
@@ -158,11 +161,12 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
              */
 
             if (!self.stopRendering) {
+
                 self.draw();
+
                 self.drawAnimatedTiles();
 
-                if (!self.mobile && self.input.targetVisible)
-                    self.drawTargetCell();
+                self.drawTargetCell();
 
                 self.drawSelectedCell();
 
@@ -311,8 +315,12 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
         },
 
         drawCursor: function() {
-            var self = this,
-                cursor = self.input.cursor;
+            var self = this;
+
+            if (self.tablet || self.mobile)
+                return;
+
+            var cursor = self.input.cursor;
 
             self.clearScreen(self.cursorContext);
             self.cursorContext.save();
@@ -542,10 +550,14 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
         },
 
         drawTargetCell: function() {
-            var self = this,
-                location = self.input.getCoords();
+            var self = this;
 
-            if (self.input.targetVisible && location.x !== self.input.selectedX && location.y !== self.input.selectedY)
+            if (self.mobile || !self.input.targetVisible)
+                return;
+
+            var location = self.input.getCoords();
+
+            if (location && self.input.targetVisible && location.x !== self.input.selectedX && location.y !== self.input.selectedY)
                 self.drawCellHighlight(location.x, location.y, self.input.targetColour);
         },
 
@@ -606,6 +618,16 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
                 scale = self.getScale();
 
             if (self.mobile)
+                scale = 2;
+
+            return scale;
+        },
+
+        getUpscale: function() {
+            var self = this,
+                scale = self.getScale();
+
+            if (scale > 2)
                 scale = 2;
 
             return scale;

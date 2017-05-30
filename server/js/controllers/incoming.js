@@ -57,6 +57,12 @@ module.exports = Incoming = cls.Class.extend({
         self.player.password = password.substr(0, 32);
         self.player.email = email.substr(0, 128);
 
+        if (self.player.username !== 'Flavtest') {
+            self.connection.send('maintenance');
+            self.connection.close('No one is allowed.');
+            return;
+        }
+
         if (config.offlineMode) {
             var creator = new Creator(null);
 

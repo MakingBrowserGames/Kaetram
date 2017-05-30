@@ -16,6 +16,7 @@ define(['jquery'], function($) {
             self.container = $('#container');
             self.window = $(window);
             self.canvas = $('#canvas');
+            self.border = $('#border');
 
             self.intro = $('#intro');
 
@@ -99,6 +100,7 @@ define(['jquery'], function($) {
 
                 window.scrollTo(0, 1);
                 self.game.input.handle(Modules.InputType.LeftClick, event);
+
             });
 
         },
@@ -106,7 +108,7 @@ define(['jquery'], function($) {
         login: function() {
             var self = this;
 
-            if (!self.verifyForm() || !self.game || !self.game.loaded)
+            if (!self.game || !self.game.loaded || self.statusMessage || !self.verifyForm())
                 return;
 
             self.toggleLogin(true);
@@ -117,10 +119,15 @@ define(['jquery'], function($) {
             var self = this,
                 zoomFactor = self.window.width() / self.container.width();
 
+            if (self.getScaleFactor() === 3)
+                zoomFactor -= 0.1;
+
             self.body.css({
                 'zoom': zoomFactor,
                 '-moz-transform': 'scale(' + zoomFactor + ')'
             });
+
+            self.border.css('top', 0);
 
             self.zoomFactor = zoomFactor;
         },
@@ -255,12 +262,14 @@ define(['jquery'], function($) {
         },
 
         sendStatus: function(message) {
-            this.cleanErrors();
+            var self = this;
+
+            self.cleanErrors();
+
+            self.statusMessage = message;
 
             if (!message)
                 return;
-
-            log.info(message);
 
             $('<span></span>', {
                 'class': 'status blink',

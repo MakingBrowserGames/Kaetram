@@ -184,10 +184,9 @@ define(['../entity/character/character'], function(Character) {
             var self = this,
                 scale = self.renderer.getDrawingScale();
 
-            if (self.renderer.tileset.scale !== scale) {
-                log.info('Updating tileset to: ' + scale + ' tileset scale: ' + self.renderer.tileset.scale);
+            if (self.renderer.tileset.scale !== scale)
                 self.game.map.updateTileset();
-            }
+
         }
 
     });
