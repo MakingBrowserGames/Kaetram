@@ -20,6 +20,7 @@ module.exports = Handler = cls.Class.extend({
 
         self.player.onGroup(function() {
 
+            log.info('Updating groups!');
             self.world.handleEntityGroup(self.player);
             self.world.pushEntities(self.player);
         });

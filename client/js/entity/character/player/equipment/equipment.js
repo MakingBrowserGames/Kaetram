@@ -19,6 +19,10 @@ define(function() {
             self.skillLevel = skillLevel;
         },
 
+        exists: function() {
+            return this.name !== null && this.name !== 'null';
+        },
+
         getName: function() {
             return this.name;
         },

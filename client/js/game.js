@@ -188,6 +188,8 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onWelcome(function(data) {
 
+                log.info('welcome????');
+
                 self.player.setId(data.shift());
                 self.player.username = data.shift();
 
@@ -275,14 +277,18 @@ define(['./renderer/renderer', './utils/storage',
                 if (!entity)
                     return;
 
-                log.info(opcode);
-                log.info(id);
-
                 switch (opcode) {
-                    case Packets.MovementOpcode.Stop:
+                    case Packets.MovementOpcode.Move:
 
-                        log.info('Stopping...');
+                        var x = data.shift(),
+                            y = data.shift();
 
+                        log.info(x + ' ' + y);
+
+                        if (forced)
+                            entity.stop(true);
+
+                        self.moveCharacter(entity, x, y);
 
                         break;
                 }
@@ -307,9 +313,15 @@ define(['./renderer/renderer', './utils/storage',
                 entity.setGridPosition(x, y);
 
                 if (isPlayer) {
+                    self.entities.clearEntities(self.player);
                     self.renderer.camera.centreOn(entity);
                     self.renderer.updateAnimatedTiles();
+                } else {
+                    delete self.entities.entities[entity.id];
+                    return;
                 }
+
+                self.socket.send(Packets.Request, [self.player.id]);
 
                 self.entities.registerPosition(entity);
 

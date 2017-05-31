@@ -39,6 +39,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleMovement(message);
                     break;
 
+                case Packets.Request:
+                    self.handleRequest(message);
+                    break;
+
             }
 
         });
@@ -226,7 +230,9 @@ module.exports = Incoming = cls.Class.extend({
                 if (self.world.map.isDoor(posX, posY)) {
                     var destination = self.world.map.getDoorDestination(posX, posY);
 
-                    self.player.send(new Messages.Teleport(self.player.instance, destination.x, destination.y));
+                    self.world.pushToAdjacentGroups(self.player.group, new Messages.Teleport(self.player.instance, destination.x, destination.y));
+
+                    self.player.setPosition(destination.x, destination.y);
                     self.player.checkGroups();
 
                 } else
@@ -236,6 +242,16 @@ module.exports = Incoming = cls.Class.extend({
 
                 break;
         }
+    },
+
+    handleRequest: function(message) {
+        var self = this,
+            id = message.shift();
+
+        if (id !== self.player.instance)
+            return;
+
+        self.world.pushEntities(self.player);
     }
 
 });

@@ -158,10 +158,6 @@ define(['./entityhandler'], function(EntityHandler) {
             this.setVisible(!this.visible);
         },
 
-        isPlayer: function() {
-            return this.kind === Modules.Types.Player;
-        },
-
         isVisible: function() {
             return this.visible;
         },

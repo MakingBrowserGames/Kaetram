@@ -17,8 +17,10 @@ define(['../character', './equipment/armour', './equipment/weapon',
 
             self.avatar = null;
 
+            self.rights = 0;
             self.wanted = false;
             self.experience = -1;
+            self.level = -1;
             self.pvpKills = -1;
             self.pvpDeaths = -1;
 
@@ -28,6 +30,17 @@ define(['../character', './equipment/armour', './equipment/weapon',
             self.direction = null;
 
             self.loadEquipment();
+        },
+
+        loadHandler: function(game) {
+            var self = this;
+
+            /**
+             * This is for other player characters
+             */
+
+            self.handler.setGame(game);
+            self.handler.load();
         },
 
         stop: function(force) {
@@ -57,11 +70,18 @@ define(['../character', './equipment/armour', './equipment/weapon',
         },
 
         hasWeapon: function() {
-            return !!this.weapon;
+            return this.weapon ? this.weapon.exists() : false;
         },
 
         performAction: function(orientation, action) {
             this._super(orientation, action);
+        },
+
+        setName: function(name) {
+            var self = this;
+
+            self.username = name;
+            self.name = name;
         },
 
         setSprite: function(sprite) {
@@ -74,6 +94,13 @@ define(['../character', './equipment/armour', './equipment/weapon',
 
         setGridPosition: function(x, y) {
             this._super(x, y);
+        },
+
+        setHitPoints: function(data) {
+            var self = this;
+
+            self.hitPoints = data[0];
+            self.maxHitPoints = data[1];
         },
 
         setEquipment: function(type, data) {

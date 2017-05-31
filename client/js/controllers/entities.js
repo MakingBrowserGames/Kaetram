@@ -55,15 +55,18 @@ define(['../renderer/grids', '../entity/objects/chest',
 
         create: function(type, info) {
             var self = this,
-                id, kind, name, x, y, entity;
+                id = info.shift(),
+                kind, name, x, y, entity;
 
             if (type !== 'player') {
-                id = info.shift();
                 kind = info.shift();
                 name = info.shift();
                 x = info.shift();
                 y = info.shift();
             }
+
+            if (id === self.game.player.id)
+                return;
 
             switch (type) {
 
@@ -99,7 +102,6 @@ define(['../renderer/grids', '../entity/objects/chest',
 
                     var player = new Player();
 
-                    id = info.shift();
                     name = info.shift();
                     x = info.shift();
                     y = info.shift();
@@ -110,15 +112,36 @@ define(['../renderer/grids', '../entity/objects/chest',
                         pvpKills = info.shift(),
                         pvpDeaths = info.shift(),
                         armourData = info.shift(),
-                        weaponData = info.shift();
+                        weaponData = info.shift(),
+                        pendantData = info.shift(),
+                        ringData = info.shift(),
+                        bootsData = info.shift();
 
-                    log.info(id + ' ' + name + ' ' + x + ' ' + y);
-                    log.info(rights + ' ' + level);
-                    log.info(hitPointsData);
-                    log.info(pvpKills + ' ' + pvpDeaths);
+                    player.setId(id);
+                    player.setName(name);
 
-                    log.info(armourData);
-                    log.info(weaponData);
+                    player.setGridPosition(x, y);
+                    player.rights = rights;
+                    player.level = level;
+
+                    player.setHitPoints(hitPointsData);
+                    player.pvpKills = pvpKills;
+                    player.pvpDeaths = pvpDeaths;
+
+                    player.setSprite(self.getSprite(armourData[0]));
+                    player.idle();
+
+                    player.setEquipment(Modules.Equipment.Armour, armourData);
+                    player.setEquipment(Modules.Equipment.Weapon, weaponData);
+                    player.setEquipment(Modules.Equipment.Pendant, pendantData);
+                    player.setEquipment(Modules.Equipment.Ring, ringData);
+                    player.setEquipment(Modules.Equipment.Boots, bootsData);
+
+                    player.type = type;
+
+                    self.addEntity(player);
+
+                    player.loadHandler(self.game);
 
                     break;
             }
@@ -154,6 +177,21 @@ define(['../renderer/grids', '../entity/objects/chest',
                 return self.entities[id];
 
             return null;
+        },
+
+        exists: function(id) {
+            return id in this.entities;
+        },
+
+        clearEntities: function(exception) {
+            var self = this;
+
+            _.each(self.entities, function(entity) {
+                if (entity.id !== exception.id) {
+                    self.grids.removeFromRenderingGrid(entity, entity.gridX, entity.gridY);
+                    delete self.entities[entity.id];
+                }
+            });
         },
 
         addEntity: function(entity) {

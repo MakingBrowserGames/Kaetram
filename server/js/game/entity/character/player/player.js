@@ -207,6 +207,14 @@ module.exports = Player = Character.extend({
         }
     },
 
+    setPosition: function(x, y) {
+        var self = this;
+
+        self._super(x, y);
+
+        self.world.pushToAdjacentGroups(self.group, new Messages.Movement(self.instance, Packets.MovementOpcode.Move, false, false, x, y), self.instance);
+    },
+
     setFuturePosition: function(x, y) {
         /**
          * Most likely will be used for anti-cheating methods
@@ -259,7 +267,10 @@ module.exports = Player = Character.extend({
             self.pvpKills,
             self.pvpDeaths,
             self.armour.getData(),
-            self.weapon.getData()
+            self.weapon.getData(),
+            self.pendant.getData(),
+            self.ring.getData(),
+            self.boots.getData()
         ]
     },
 

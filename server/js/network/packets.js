@@ -21,7 +21,8 @@ var Packets = {
     Ready: 7,
     Drop: 8,
     Movement: 9,
-    Teleport: 10
+    Teleport: 10,
+    Request: 11
 };
 
 Packets.IntroOpcode = {
@@ -39,7 +40,8 @@ Packets.MovementOpcode = {
     Request: 0,
     Started: 1,
     Step: 2,
-    Stop: 3
+    Stop: 3,
+    Move: 4
 };
 
 module.exports = Packets;

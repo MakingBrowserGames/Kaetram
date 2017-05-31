@@ -64,8 +64,6 @@ define(function() {
         decenter: function() {
             var self = this;
 
-            log.info('hey');
-
             if (!self.centered)
                 return;
 

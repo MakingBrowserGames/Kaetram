@@ -185,7 +185,7 @@ module.exports = World = cls.Class.extend({
             this.packets[player.instance].push(message.serialize());
     },
 
-    pushToGroup: function(id, message, ignore) {
+    pushToGroup: function(id, message, ignoreId) {
         var self = this,
             group = self.groups[id];
 
@@ -193,16 +193,16 @@ module.exports = World = cls.Class.extend({
             return;
 
         _.each(group.players, function(playerId) {
-            if (playerId !== ignore)
+            if (playerId !== ignoreId)
                 self.pushToPlayer(self.getEntityById(playerId), message);
         });
     },
 
-    pushToAdjacentGroups: function(groupId, message) {
+    pushToAdjacentGroups: function(groupId, message, ignoreId) {
         var self = this;
 
         self.map.groups.forEachAdjacentGroup(groupId, function(id) {
-            self.pushToGroup(id, message);
+            self.pushToGroup(id, message, ignoreId);
         });
     },
 

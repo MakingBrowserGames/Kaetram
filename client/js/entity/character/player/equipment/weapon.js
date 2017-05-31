@@ -11,6 +11,10 @@ define(['./equipment'], function(Equipment) {
             self.damage = -1;
         },
 
+        exists: function() {
+            return this._super();
+        },
+
         setDamage: function(damage) {
             this.damage = damage;
         },
