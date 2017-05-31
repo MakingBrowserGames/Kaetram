@@ -50,9 +50,9 @@ define(['./animation'], function(Animation) {
             self.width = sprite.width;
             self.height = sprite.height;
 
-            self.offsetX = sprite.offset_x ? sprite.offset_x : -16;
-            self.offsetY = sprite.offset_y ? sprite.offset_y : -16;
-            self.offfsetAngle = sprite.offset_angle ? sprite.offset_angle : 0;
+            self.offsetX = sprite.offsetX !== undefined ? sprite.offsetX : -16;
+            self.offsetY = sprite.offsetY !== undefined ? sprite.offsetY : -16;
+            self.offfsetAngle = sprite.offsetAngle !== undefined ? sprite.offsetAngle : 0;
         },
 
         update: function(newScale) {

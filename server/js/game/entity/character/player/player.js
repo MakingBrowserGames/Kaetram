@@ -13,7 +13,8 @@ var Character = require('../character'),
     Hitpoints = require('./points/hitpoints'),
     Mana = require('./points/mana'),
     Packets = require('../../../../network/packets'),
-    Modules = require('../../../../util/modules');
+    Modules = require('../../../../util/modules'),
+    Handler = require('./handler');
 
 module.exports = Player = Character.extend({
 
@@ -37,7 +38,12 @@ module.exports = Player = Character.extend({
         self.potentialPosition = null;
         self.futurePosition = null;
 
+        self.groupPosition = null;
+        self.newGroup = false;
+
         self._super(-1, 'player', self.connection.id, -1, -1);
+
+        self.handler = new Handler(self);
     },
 
     load: function(data) {
@@ -96,9 +102,13 @@ module.exports = Player = Character.extend({
                 self.pvpDeaths
             ];
 
+        self.groupPosition = [self.x, self.y];
+
         /**
          * Send player data to client here
          */
+
+        self.world.addPlayer(self);
 
         self.send(new Messages.Welcome(info));
     },
@@ -234,6 +244,25 @@ module.exports = Player = Character.extend({
         return this.boots;
     },
 
+    getState: function() {
+        var self = this;
+
+        return [
+            self.type,
+            self.instance,
+            self.username,
+            self.x,
+            self.y,
+            self.rights,
+            self.level,
+            self.hitPoints.getData(),
+            self.pvpKills,
+            self.pvpDeaths,
+            self.armour.getData(),
+            self.weapon.getData()
+        ]
+    },
+
     /**
      * Miscellaneous
      */
@@ -253,8 +282,8 @@ module.exports = Player = Character.extend({
     sendToSpawn: function() {
         var self = this;
 
-        self.x = 94;
-        self.y = 92;
+        self.x = 26;
+        self.y = 85;
     },
 
     stopMovement: function(force) {
@@ -267,6 +296,28 @@ module.exports = Player = Character.extend({
         var self = this;
 
         self.send(new Messages.Movement(Packets.MovementOpcode.Stop, force));
+    },
+
+    checkGroups: function() {
+        var self = this;
+
+        if (!self.groupPosition)
+            return;
+
+        var diffX = Math.abs(self.groupPosition[0] - self.x),
+            diffY = Math.abs(self.groupPosition[1] - self.y);
+
+        if (diffX >= 10 || diffY >= 10) {
+            self.groupPosition = [self.x, self.y];
+
+            if (self.groupCallback)
+                self.groupCallback();
+        }
+
+    },
+
+    getRemoteAddress: function() {
+        return this.connection.socket.conn.remoteAddress;
     },
 
     movePlayer: function() {
@@ -287,6 +338,10 @@ module.exports = Player = Character.extend({
     loadInventory: function() {
         var self = this;
 
+    },
+
+    onGroup: function(callback) {
+        this.groupCallback = callback;
     }
 
 });

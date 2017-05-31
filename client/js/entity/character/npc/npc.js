@@ -6,16 +6,10 @@ define(['../character'], function(Character) {
             var self = this;
 
             self._super(id, kind);
-
-            self.name = name;
         },
 
         idle: function() {
             this._super();
-        },
-
-        performAction: function(orientation, action) {
-            this._super(orientation, action);
         },
 
         setSprite: function(sprite) {
@@ -23,7 +17,7 @@ define(['../character'], function(Character) {
         },
 
         setName: function(name) {
-            this.name = name;
+            this._super(name);
         },
 
         setGridPosition: function(x, y) {

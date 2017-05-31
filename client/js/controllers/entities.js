@@ -2,7 +2,9 @@
 
 define(['../renderer/grids', '../entity/objects/chest',
         '../entity/character/character', '../entity/character/player/player',
-        '../entity/objects/item', './sprites', '../entity/character/mob/mob'], function(Grids, Chest, Character, Player, Item, Sprites, Mob) {
+        '../entity/objects/item', './sprites', '../entity/character/mob/mob',
+        '../entity/character/npc/npc'],
+    function(Grids, Chest, Character, Player, Item, Sprites, Mob, NPC) {
 
     return Class.extend({
 
@@ -25,15 +27,18 @@ define(['../renderer/grids', '../entity/objects/chest',
 
             self.game.app.sendStatus('Loading sprites');
 
-            if (!self.sprites)
+            if (!self.sprites) {
                 self.sprites = new Sprites(self.game.renderer);
+
+                self.sprites.onLoadedSprites(function() {
+                    self.game.input.loadCursors();
+                });
+            }
 
             self.game.app.sendStatus('Loading grids');
 
             if (!self.grids)
                 self.grids = new Grids(self.game.map);
-
-
         },
 
         update: function() {
@@ -50,22 +55,35 @@ define(['../renderer/grids', '../entity/objects/chest',
 
         create: function(type, info) {
             var self = this,
-                id = info.shift(),
-                kind = info.shift(),
-                name = info.shift(),
-                x = info.shift(),
-                y = info.shift();
+                id, kind, name, x, y, entity;
 
-            //entity.handler.setGame(self);
-            //entity.handler.load();
+            if (type !== 'player') {
+                id = info.shift();
+                kind = info.shift();
+                name = info.shift();
+                x = info.shift();
+                y = info.shift();
+            }
 
             switch (type) {
 
                 case 'npc':
 
+                    var npc = new NPC(id, kind);
+
+                    entity = npc;
+
                     break;
 
                 case 'item':
+
+                    var count = info.shift(),
+                        skill = info.shift(),
+                        skillLevel = info.shift();
+
+                    var item = new Item(id, kind, count, skill, skillLevel);
+
+                    entity = item;
 
                     break;
 
@@ -73,21 +91,60 @@ define(['../renderer/grids', '../entity/objects/chest',
 
                     var mob = new Mob(id, kind);
 
-                    mob.setGridPosition(x, y);
-                    mob.setName(name);
-
-                    mob.setSprite(self.getSprite(kind));
-                    mob.performAction(Modules.Orientation.Down, Modules.Actions.Idle);
-
-                    self.addEntity(mob);
+                    entity = mob;
 
                     break;
 
                 case 'player':
 
-                    break;
+                    var player = new Player();
 
+                    id = info.shift();
+                    name = info.shift();
+                    x = info.shift();
+                    y = info.shift();
+
+                    var rights = info.shift(),
+                        level = info.shift(),
+                        hitPointsData = info.shift(),
+                        pvpKills = info.shift(),
+                        pvpDeaths = info.shift(),
+                        armourData = info.shift(),
+                        weaponData = info.shift();
+
+                    log.info(id + ' ' + name + ' ' + x + ' ' + y);
+                    log.info(rights + ' ' + level);
+                    log.info(hitPointsData);
+                    log.info(pvpKills + ' ' + pvpDeaths);
+
+                    log.info(armourData);
+                    log.info(weaponData);
+
+                    break;
             }
+
+            if (!entity)
+                return;
+
+            entity.setGridPosition(x, y);
+            entity.setName(name);
+            entity.setSprite(self.getSprite(type === 'item' ? 'item-' + kind : kind));
+
+            entity.idle();
+            entity.type = type;
+
+            self.addEntity(entity);
+
+            /**
+             * We should add callbacks for items as well in
+             * the future. Just so we have full control over them
+             */
+
+            if (type !== 'item' && entity.handler) {
+                entity.handler.setGame(self.game);
+                entity.handler.load();
+            }
+
         },
 
         get: function(id) {
@@ -108,7 +165,7 @@ define(['../renderer/grids', '../entity/objects/chest',
             self.entities[entity.id] = entity;
             self.registerPosition(entity);
 
-            if (!(entity instanceof Item && entity.wasDropped) && !self.renderer.isPortableDevice())
+            if (!(entity instanceof Item && entity.dropped) && !self.renderer.isPortableDevice())
                 entity.fadeIn(self.game.time);
 
             /**

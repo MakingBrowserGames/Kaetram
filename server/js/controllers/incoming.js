@@ -57,9 +57,11 @@ module.exports = Incoming = cls.Class.extend({
         self.player.password = password.substr(0, 32);
         self.player.email = email.substr(0, 128);
 
-        if (self.player.username !== 'Flavtest') {
-            self.connection.send('maintenance');
-            self.connection.close('No one is allowed.');
+        log.info(self.world.playerInWorld(self.player.username));
+
+        if (self.world.playerInWorld(self.player.username)) {
+            self.connection.sendUTF8('loggedin');
+            self.connection.close('Player already logged in..');
             return;
         }
 
@@ -142,15 +144,9 @@ module.exports = Incoming = cls.Class.extend({
                 if (data && data.message) {
                     self.connection.sendUTF8('invalidlogin');
                     self.connection.close('Wrong password entered for: ' + self.player.username);
-                } else {
-                    if (self.world.playerInWorld(self.player.username)) {
-                        self.connection.sendUTF8('disallowed');
-                        self.connection.close('Player already logged in..');
-                        return;
-                    }
-
+                } else
                     self.mysql.login(self.player);
-                }
+
             });
         }
     },
@@ -231,12 +227,12 @@ module.exports = Incoming = cls.Class.extend({
                     var destination = self.world.map.getDoorDestination(posX, posY);
 
                     self.player.send(new Messages.Teleport(self.player.instance, destination.x, destination.y));
+                    self.player.checkGroups();
 
                 } else
                     self.player.setPosition(posX, posY);
 
                 self.player.moving = false;
-
 
                 break;
         }

@@ -31,6 +31,9 @@ define(['./entityhandler'], function(EntityHandler) {
             self.fading = false;
             self.handler = new EntityHandler(self);
 
+            self.angled = false;
+            self.angle = 0;
+
             self.loadDirty();
         },
 
@@ -71,6 +74,10 @@ define(['./entityhandler'], function(EntityHandler) {
                 clearInterval(self.blinking);
 
             self.setVisible(true);
+        },
+
+        setName: function(name) {
+            this.name = name;
         },
 
         setSprite: function(sprite) {

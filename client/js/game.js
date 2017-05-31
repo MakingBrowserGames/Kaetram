@@ -46,10 +46,13 @@ define(['./renderer/renderer', './utils/storage',
         start: function() {
             var self = this;
 
-            self.started = true;
+            if (self.started)
+                return;
 
             self.app.fadeMenu();
             self.tick();
+
+            self.started = true;
         },
 
         stop: function() {
@@ -106,12 +109,11 @@ define(['./renderer/renderer', './utils/storage',
 
             self.setSocket(new Socket(self));
             self.setMessages(self.socket.messages);
+            self.setInput(new Input(self));
 
             self.app.sendStatus('Loading other mumbo jumbo');
 
             self.setEntityController(new Entities(self));
-
-            self.setInput(new Input(self));
 
             if (!hasWorker)
                 self.loaded = true;
@@ -281,7 +283,6 @@ define(['./renderer/renderer', './utils/storage',
 
                         log.info('Stopping...');
 
-                        if (isPlayer)
 
                         break;
                 }
@@ -328,8 +329,6 @@ define(['./renderer/renderer', './utils/storage',
             self.getCamera().setPlayer(self.player);
 
             self.renderer.renderedFrame[0] = -1;
-            self.input.newCursor = self.getSprite('hand');
-            self.input.newTargetColour = 'rgba(255, 255, 255, 0.5)';
 
             self.entities.addEntity(self.player);
 
@@ -345,6 +344,8 @@ define(['./renderer/renderer', './utils/storage',
             self.renderer.updateAnimatedTiles();
 
             self.zoning = new Zoning(self);
+
+            self.updater.setSprites(self.entities.sprites);
         },
 
         setPlayerMovement: function(direction) {

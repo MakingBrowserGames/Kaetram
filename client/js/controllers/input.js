@@ -26,6 +26,8 @@ define(['../entity/animation'], function(Animation) {
 
             self.targetData = null;
 
+            self.cursors = {};
+
             self.mouse = {
                 x: 0,
                 y: 0
@@ -44,6 +46,23 @@ define(['../entity/animation'], function(Animation) {
 
             self.targetAnimation = new Animation('idle_down', 4, 0, 16, 16);
             self.targetAnimation.setSpeed(50);
+        },
+
+        loadCursors: function() {
+            var self = this;
+
+            self.cursors['hand'] = self.game.getSprite('hand');
+            self.cursors['sword'] = self.game.getSprite('sword');
+            self.cursors['loot'] = self.game.getSprite('loot');
+            self.cursors['target'] = self.game.getSprite('target');
+            self.cursors['arrow'] = self.game.getSprite('arrow');
+            self.cursors['talk'] = self.game.getSprite('talk');
+            self.cursors['spell'] = self.game.getSprite('spell');
+
+            self.newCursor = self.cursors['hand'];
+            self.newTargetColour = 'rgba(255, 255, 255, 0.5)';
+
+            log.info('Loaded Cursors!');
         },
 
         handle: function(inputType, data) {
@@ -148,6 +167,9 @@ define(['../entity/animation'], function(Animation) {
         click: function(position) {
             var self = this;
 
+            if (self.game.zoning && self.game.zoning.direction)
+                return;
+
             self.game.player.go(position.x, position.y);
         },
 
@@ -163,8 +185,6 @@ define(['../entity/animation'], function(Animation) {
             if (self.newTargetColour !== self.targetColour)
                 self.targetColour = self.newTargetColour;
         },
-
-
 
         setCoords: function(event) {
             var self = this,

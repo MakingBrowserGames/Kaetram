@@ -10,8 +10,9 @@ var cls = require('../lib/class'),
     Mobs = require('../util/mobs'),
     Mob = require('./entity/character/mob/mob'),
     NPCs = require('../util/npcs'),
-    NPC = require('./entity/npc/npc');
-    Items = require('../util/items');
+    NPC = require('./entity/npc/npc'),
+    Items = require('../util/items'),
+    Item = require('./entity/objects/item');
 
 module.exports = World = cls.Class.extend({
 
@@ -29,6 +30,7 @@ module.exports = World = cls.Class.extend({
 
         self.players = {};
         self.entities = {};
+        self.items = {};
         self.mobs = {};
         self.npcs = {};
 
@@ -43,7 +45,7 @@ module.exports = World = cls.Class.extend({
             var clientId = Utils.generateClientId(),
                 player = new Player(self, self.database, connection, clientId);
 
-            self.addPlayer(player);
+            self.addToPackets(player);
 
             self.pushToPlayer(player, new Messages.Handshake(clientId, config.devClient));
         });
@@ -305,10 +307,13 @@ module.exports = World = cls.Class.extend({
         _.each(self.map.staticEntities, function(key, tileIndex) {
             var isMob = !!Mobs.Properties[key],
                 isNpc = !!NPCs.Properties[key],
-                info = isMob ? Mobs.Properties[key] : (isNpc ? NPCs.Properties[key] : Items.getData(key)),
+                isItem = !!Items.Data[key],
+                info = isMob ? Mobs.Properties[key] : (isNpc ? NPCs.Properties[key] : isItem ? Items.getData(key) : null),
                 position = self.map.indexToGridPosition(tileIndex);
 
-            if (info === 'null') {
+            position.x++;
+
+            if (!info || info === 'null') {
                 if (self.debug)
                     log.info('Unknown object spawned at: ' + position.x + ' ' + position.y);
 
@@ -322,6 +327,9 @@ module.exports = World = cls.Class.extend({
 
             if (isNpc)
                 self.addNPC(new NPC(info.id, instance, position.x, position.y));
+
+            if (isItem)
+                self.addItem(new Item(info.id, instance, position.x, position.y));
 
             entities++;
         });
@@ -344,7 +352,7 @@ module.exports = World = cls.Class.extend({
         });
 
         entities = _.map(entities, function(instance) {
-            return parseInt(instance, 10);
+            return parseInt(instance);
         });
 
         if (entities)
@@ -365,6 +373,11 @@ module.exports = World = cls.Class.extend({
 
         self.addEntity(player);
         self.players[player.instance] = player;
+    },
+
+    addToPackets: function(player) {
+        var self = this;
+
         self.packets[player.instance] = [];
     },
 
@@ -383,14 +396,19 @@ module.exports = World = cls.Class.extend({
     },
 
     addItem: function(item) {
+        var self = this;
 
+        self.addEntity(item);
+        self.items[item.instance] = item;
     },
 
     playerInWorld: function(username) {
-        _.each(this.players, function(player) {
-            if (player.username === username)
-                return true;
-        });
+        var self = this;
+
+        for (var id in self.players)
+            if (self.players.hasOwnProperty(id))
+                if (self.players[id].username === username)
+                    return true;
 
         return false;
     },

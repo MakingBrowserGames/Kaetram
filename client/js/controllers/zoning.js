@@ -15,6 +15,10 @@ define(function() {
             self.direction = null;
         },
 
+        reset: function() {
+            this.direction = null;
+        },
+
         setUp: function() {
             this.direction = Modules.Orientation.Up;
         },

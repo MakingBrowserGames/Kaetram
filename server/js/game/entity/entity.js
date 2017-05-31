@@ -2,7 +2,9 @@
 
 var cls = require('../../lib/class'),
     Messages = require('../../network/messages'),
-    Mobs = require('../../util/mobs');
+    Mobs = require('../../util/mobs'),
+    NPCs = require('../../util/npcs'),
+    Items = require('../../util/items');
 
 module.exports = Entity = cls.Class.extend({
 
@@ -51,13 +53,15 @@ module.exports = Entity = cls.Class.extend({
     },
 
     getState: function() {
-        var self = this;
+        var self = this,
+            string = self.isMob() ? Mobs.idToString(self.id) : (self.isNPC() ? NPCs.idToString(self.id) : Items.idToString(self.id)),
+            name = self.isMob() ? Mobs.idToName(self.id) : (self.isNPC() ? NPCs.idToName(self.id) : Items.idToName(self.id));
 
         return [
             self.type,
             self.instance,
-            Mobs.getNameFromId(self.id),
-            Mobs.getMobNameFromId(self.id),
+            string,
+            name,
             self.x,
             self.y
         ];

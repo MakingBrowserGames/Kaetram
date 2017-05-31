@@ -1,11 +1,4 @@
 {
-  "Sword1": {
-    "id":0,
-    "type":"weapon",
-    "attack":0,
-    "name":"Sword"
-
-  },
   "Sword2": {
     "id":1,
     "type":"weapon",
@@ -1495,6 +1488,14 @@
     "spriteName":"bowstring",
     "type":"craft",
     "name":"Bow String Rare"
+  },
+
+  "Sword1": {
+    "id":248,
+    "type":"weapon",
+    "attack":0,
+    "name":"Sword"
+
   }
 }
 

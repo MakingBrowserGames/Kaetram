@@ -321,6 +321,10 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             self.moveCallback();
         },
 
+        setName: function(name) {
+            this._super(name);
+        },
+
         setSprite: function(sprite) {
             this._super(sprite);
         },

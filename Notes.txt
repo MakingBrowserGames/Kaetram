@@ -5,9 +5,9 @@ Kaetram To-Do List:
 - Get proper button interfaces for "Login," "New Character" and "Back."
 - Directly download map data from the server.
 
-- Don't let target cell redraw when not necessary
-
 - Save player orientation upon logout.
+
+- Centre properly inside buildings
 
 
 Finished:

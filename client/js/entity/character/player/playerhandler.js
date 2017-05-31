@@ -92,9 +92,19 @@ define(function() {
                 y = self.player.gridY - self.camera.gridY,
                 isBorder = false;
 
-            if (x === 0 || y === 0 || x === self.camera.gridWidth - 1 || y === self.camera.gridHeight - 1)
-                isBorder = true;
+            if (x === 0)
+                self.game.zoning.setLeft();
+            else if (y === 0)
+                self.game.zoning.setUp();
+            else if (x === self.camera.gridWidth - 1)
+                self.game.zoning.setRight();
+            else if (y === self.camera.gridHeight - 1)
+                self.game.zoning.setDown();
 
+            if (self.game.zoning.direction !== null) {
+                self.camera.zone(self.game.zoning.getDirection());
+                self.game.zoning.reset();
+            }
 
         }
 

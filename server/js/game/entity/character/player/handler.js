@@ -2,20 +2,27 @@ var cls = require('../../../../lib/class');
 
 module.exports = Handler = cls.Class.extend({
 
-    init: function(character) {
+    init: function(player) {
         var self = this;
 
-        self.character = character;
+        self.player = player;
+        self.world = player.world;
 
-        self.movementInterval = null;
-
-        self.updateMovement();
+        self.load();
     },
 
-    updateMovement: function() {
+    load: function() {
         var self = this;
 
+        self.player.onMovement(function(x, y) {
+            self.player.checkGroups();
+        });
 
+        self.player.onGroup(function() {
+
+            self.world.handleEntityGroup(self.player);
+            self.world.pushEntities(self.player);
+        });
     }
 
 });

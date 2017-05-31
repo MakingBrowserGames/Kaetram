@@ -21,8 +21,21 @@ module.exports = Character = Entity.extend({
         self.target = null;
     },
 
+    setPosition: function(x, y) {
+        var self = this;
+
+        self._super(x, y);
+
+        if (self.movementCallback)
+            self.movementCallback(x, y);
+    },
+
     clearTarget: function() {
         this.target = null;
+    },
+
+    onMovement: function(callback) {
+        this.movementCallback = callback;
     }
 
 });

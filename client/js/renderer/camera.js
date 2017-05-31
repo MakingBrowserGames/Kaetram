@@ -69,8 +69,7 @@ define(function() {
             if (!self.centered)
                 return;
 
-            log.info('decentering...');
-
+            self.clip();
             self.centered = false;
         },
 
@@ -134,6 +133,36 @@ define(function() {
 
             self.gridX = Math.round(entity.x / 16) - width;
             self.gridY = Math.round(entity.y / 16) - height;
+        },
+
+        zone: function(direction) {
+            var self = this;
+
+            switch (direction) {
+                case Modules.Orientation.Up:
+
+                    self.setGridPosition(self.gridX, self.gridY - self.gridHeight + 2);
+
+                    break;
+
+                case Modules.Orientation.Down:
+
+                    self.setGridPosition(self.gridX, self.gridY + self.gridHeight - 2);
+
+                    break;
+
+                case Modules.Orientation.Right:
+
+                    self.setGridPosition(self.gridX + self.gridWidth - 2, self.gridY);
+
+                    break;
+
+                case Modules.Orientation.Left:
+
+                    self.setGridPosition(self.gridX - self.gridWidth + 2, self.gridY);
+
+                    break;
+            }
         },
 
         forEachVisiblePosition: function(callback, offset) {

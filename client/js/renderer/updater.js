@@ -11,6 +11,7 @@ define(['../entity/character/character'], function(Character) {
             self.camera = game.getCamera();
             self.renderer = game.renderer;
             self.input = game.input;
+            self.sprites = null;
         },
 
         update: function() {
@@ -18,7 +19,7 @@ define(['../entity/character/character'], function(Character) {
             this.updateCharacters();
             this.input.updateCursor();
             this.updateKeyboard();
-            this.updateInput();
+            this.updateAnimations();
             this.verifyScale();
         },
 
@@ -172,21 +173,33 @@ define(['../entity/character/character'], function(Character) {
 
         },
 
-        updateInput: function() {
+        updateAnimations: function() {
             var self = this,
                 target = self.input.targetAnimation;
 
             if (target)
                 target.update(self.game.time);
+
+            if (!self.sprites)
+                return;
+
+            var sparks = self.sprites.sparksAnimation;
+
+            if (sparks)
+                sparks.update(self.game.time);
         },
 
         verifyScale: function() {
             var self = this,
                 scale = self.renderer.getDrawingScale();
 
-            if (self.renderer.tileset.scale !== scale)
+            if (self.renderer.tileset && self.renderer.tileset.scale !== scale)
                 self.game.map.updateTileset();
 
+        },
+
+        setSprites: function(sprites) {
+            this.sprites = sprites;
         }
 
     });

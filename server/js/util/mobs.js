@@ -3,7 +3,7 @@ var Mobs = {};
 Mobs.Properties = {};
 Mobs.Ids = {};
 
-Mobs.getNameFromId = function(id) {
+Mobs.idToString = function(id) {
 
     if (id in Mobs.Ids)
         return Mobs.Ids[id].key;
@@ -11,7 +11,7 @@ Mobs.getNameFromId = function(id) {
     return null;
 };
 
-Mobs.getMobNameFromId = function(id) {
+Mobs.idToName = function(id) {
 
     if (id in Mobs.Ids)
         return Mobs.Ids[id].name;

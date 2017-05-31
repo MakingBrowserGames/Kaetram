@@ -1,7 +1,7 @@
 {
   "Rat": {
     "name": "Rat",
-    "id": 0,
+    "id": 128,
     "drops": null,
     "hitPoints": 1,
     "armour": 0,

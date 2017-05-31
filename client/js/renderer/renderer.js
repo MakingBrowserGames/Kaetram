@@ -1,6 +1,8 @@
 /* global _, log, Detect */
 
-define(['./camera', './tile', '../entity/character/player/player', '../entity/character/character'], function(Camera, Tile, Player, Character) {
+define(['./camera', './tile',
+        '../entity/character/player/player', '../entity/character/character',
+        '../entity/objects/item'], function(Camera, Tile, Player, Character, Item) {
 
     return Class.extend({
 
@@ -22,7 +24,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.context.mozImageSmoothingEnabled = false;
             self.backContext.mozImageSmoothingEnabled = false;
             self.foreContext.mozImageSmoothingEnabled = false;
-            self.textContext.mozImageSmoothingEnabled = false;
+            self.textContext.mozImageSmoothingEnabled = true;
             self.cursorContext.mozImageSmoothingEnabled = false;
 
             self.contexts = [self.backContext, self.foreContext, self.context];
@@ -56,7 +58,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.drawTarget = false;
             self.selectedCellVisible = false;
 
-            self.stopRendering  = false;
+            self.stopRendering = false;
 
             self.load()
         },
@@ -93,10 +95,12 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
         },
 
         loadFont: function() {
-            var self = this;
+            var self = this,
+                font = 10 * self.scale + 'px AdvoCut';
 
-            self.fontSize = 10 * self.scale;
-            self.textContext.font = self.fontSize + 'px AdvoCut';
+            self.forEachContext(function(context) {
+                context.font = font;
+            })
         },
 
         loadCamera: function() {
@@ -153,6 +157,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             var self = this;
 
             self.clearScreen(self.context);
+            self.clearText();
 
             self.saveAll();
 
@@ -177,6 +182,7 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
              * Text related draws
              */
             self.drawFPS();
+            self.drawPosition();
 
             self.restoreAll();
 
@@ -279,6 +285,11 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             } else
                 self.context.translate(dx, dy);
 
+            if (sprite.offsetAngle && entity.angled) {
+                self.context.rotate(sprite.offsetAngle * (Math.PI / 180));
+                self.context.rotate(entity.angle * Math.PI / 180);
+            }
+
             if (entity.hasShadow()) {
                 if (!shadow.loaded)
                     shadow.load();
@@ -309,6 +320,21 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
                 self.context.drawImage(weapon.image, weaponX, weaponY, weaponWidth, weaponHeight,
                                     weapon.offsetX * self.drawingScale, weapon.offsetY * self.drawingScale,
                                     weaponWidth, weaponHeight);
+            }
+
+            if (entity instanceof Item) {
+                var sparks = self.entities.getSprite('sparks'),
+                    sparksAnimation = self.entities.sprites.sparksAnimation,
+                    sparksFrame = sparksAnimation.currentFrame,
+                    sx = sparks.width * sparksFrame.index * self.drawingScale,
+                    sy = sparks.height * sparksAnimation.row * self.drawingScale,
+                    sw = sparks.width * self.drawingScale,
+                    sh = sparks.height * self.drawingScale;
+
+                if (!sparks.loaded)
+                    sparks.load();
+
+                self.context.drawImage(sparks.image, sx, sy, sw, sh, 0, 0, sw, sh);
             }
 
             self.context.restore();
@@ -353,6 +379,13 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
             self.frameCount++;
 
             self.drawText('FPS: ' + self.realFPS, 10, 11, false, 'white');
+        },
+
+        drawPosition: function() {
+            var self = this,
+                player = self.game.player;
+
+            self.drawText('x: ' + player.gridX + ' y: ' + player.gridY, 10, 31, false, 'white');
         },
 
         drawPathing: function() {
@@ -423,21 +456,22 @@ define(['./camera', './tile', '../entity/character/player/player', '../entity/ch
                 strokeSize = 1,
                 context = self.textContext;
 
-            self.clearText();
-
             if (self.scale > 2)
                 strokeSize = 3;
 
             if (text && x && y) {
+                context.save();
+
                 if (centered)
                     context.textAlign = 'center';
 
                 context.strokeStyle = strokeColour || '#373737';
                 context.lineWidth = strokeSize;
-                context.fontSize = 10 + (3 * self.scale);
                 context.strokeText(text, x * self.scale, y * self.scale);
                 context.fillStyle = colour || 'white';
                 context.fillText(text, x * self.scale, y * self.scale);
+
+                context.restore()
             }
         },
 

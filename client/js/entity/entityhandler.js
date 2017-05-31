@@ -1,3 +1,5 @@
+/* global log */
+
 define(['./character/character'], function(Character) {
 
     return Class.extend({
@@ -15,7 +17,7 @@ define(['./character/character'], function(Character) {
             if (!self.entity || !self.game)
                 return;
 
-            if (self.entity instanceof Character) {
+            if (typeof self.entity === Character) {
                 self.entity.onRequestPath(function(callback) {
 
 
