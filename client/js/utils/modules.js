@@ -29,6 +29,15 @@ Modules = {
         Boots: 4
     },
 
+    Hovering: {
+        Colliding: 0,
+        Mob: 1,
+        Player: 2,
+        Item: 3,
+        NPC: 4,
+        Chest: 5
+    },
+
     Keys: {
         One: 49,
         Two: 50,

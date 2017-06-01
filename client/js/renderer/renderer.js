@@ -591,7 +591,7 @@ define(['./camera', './tile',
 
             var location = self.input.getCoords();
 
-            if (location && self.input.targetVisible && location.x !== self.input.selectedX && location.y !== self.input.selectedY)
+            if (!(location.x === self.input.selectedX && location.y === self.input.selectedY))
                 self.drawCellHighlight(location.x, location.y, self.input.targetColour);
         },
 

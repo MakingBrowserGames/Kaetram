@@ -22,7 +22,8 @@ var Packets = {
     Drop: 8,
     Movement: 9,
     Teleport: 10,
-    Request: 11
+    Request: 11,
+    Despawn: 12
 };
 
 Packets.IntroOpcode = {

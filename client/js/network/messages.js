@@ -27,6 +27,7 @@ define(function() {
             self.messages[Packets.List] = self.receiveEntityList;
             self.messages[Packets.Movement] = self.receiveMovement;
             self.messages[Packets.Teleport] = self.receiveTeleport;
+            self.messages[Packets.Despawn] = self.receiveDespawn;
         },
 
         handleData: function(data) {
@@ -147,6 +148,14 @@ define(function() {
                 self.teleportCallback(teleportData);
         },
 
+        receiveDespawn: function(data) {
+            var self = this,
+                id = data.shift();
+
+            if (self.despawnCallback)
+                self.despawnCallback(id);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -177,6 +186,10 @@ define(function() {
 
         onTeleport: function(callback) {
             this.teleportCallback = callback;
+        },
+
+        onDespawn: function(callback) {
+            this.despawnCallback = callback;
         }
 
     });

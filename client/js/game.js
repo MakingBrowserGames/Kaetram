@@ -197,6 +197,7 @@ define(['./renderer/renderer', './utils/storage',
                     y = data.shift();
 
                 self.player.setGridPosition(x, y);
+                self.input.setPosition(x, y);
 
                 self.player.kind = data.shift();
                 self.player.rights = data.shift();
@@ -328,6 +329,17 @@ define(['./renderer/renderer', './utils/storage',
                 entity.frozen = false;
 
             });
+
+            self.messages.onDespawn(function(id) {
+                var entity = self.entities.get(id);
+
+                if (!entity)
+                    return;
+
+                self.entities.unregisterPosition(entity);
+                delete self.entities.entities[entity.id];
+                
+            });
         },
 
         postLoad: function() {
@@ -358,6 +370,7 @@ define(['./renderer/renderer', './utils/storage',
             self.zoning = new Zoning(self);
 
             self.updater.setSprites(self.entities.sprites);
+
         },
 
         setPlayerMovement: function(direction) {

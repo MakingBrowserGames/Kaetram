@@ -24,6 +24,10 @@ module.exports = Handler = cls.Class.extend({
             self.world.handleEntityGroup(self.player);
             self.world.pushEntities(self.player);
         });
+
+        self.player.connection.onClose(function() {
+            self.world.removePlayer(self.player);
+        });
     }
 
 });

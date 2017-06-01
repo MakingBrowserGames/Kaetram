@@ -87,11 +87,11 @@ define(['jquery'], function($) {
             });
 
             $(document).mousemove(function(event) {
-                if (!self.game || !self.game.input)
+                if (!self.game || !self.game.input || !self.game.started)
                     return;
 
                 self.game.input.setCoords(event);
-
+                self.game.input.moveCursor();
             });
 
             self.canvas.click(function(event) {

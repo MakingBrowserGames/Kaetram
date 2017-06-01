@@ -1,4 +1,4 @@
-/* global Modules, log */
+/* global Modules, log, _ */
 
 define(['../entity/animation'], function(Animation) {
 
@@ -27,6 +27,8 @@ define(['../entity/animation'], function(Animation) {
             self.targetData = null;
 
             self.cursors = {};
+
+            self.hovering = null;
 
             self.mouse = {
                 x: 0,
@@ -137,7 +139,6 @@ define(['../entity/animation'], function(Animation) {
                     case Modules.InputType.LeftClick:
 
                         self.setCoords(data);
-
                         self.click(self.getCoords());
 
                         break;
@@ -186,6 +187,57 @@ define(['../entity/animation'], function(Animation) {
                 self.targetColour = self.newTargetColour;
         },
 
+        moveCursor: function() {
+            var self = this,
+                position = self.getCoords(),
+                entity = self.getEntityAt(position.x, position.y);
+
+            if (!entity) {
+                self.setCursor(self.cursors['hand']);
+                self.hovering = null;
+            } else {
+                switch (entity.type) {
+                    case 'item':
+                        self.setCursor(self.cursors['loot']);
+                        self.hovering = Modules.Hovering.Item;
+                        break;
+
+                    case 'mob':
+                        self.setCursor(self.cursors['sword']);
+                        self.hovering = Modules.Hovering.Mob;
+                        break;
+
+                    case 'player':
+                        self.setCursor(self.cursors['talk']);
+                        self.hovering = Modules.Hovering.Player;
+                        break;
+
+                    case 'npc':
+                        self.setCursor(self.cursors['talk']);
+                        self.hovering = Modules.Hovering.NPC;
+                        break;
+                }
+            }
+        },
+
+        getEntityAt: function(x, y) {
+            var self = this,
+                entities = self.game.entities.grids.entityGrid[y][x],
+                entity = null;
+
+            if (_.size(entities) > 0)
+                entity = entities[_.keys(entities)[0]];
+
+            return entity;
+        },
+
+        setPosition: function(x, y) {
+            var self = this;
+
+            self.selectedX = x;
+            self.selectedY = y;
+        },
+
         setCoords: function(event) {
             var self = this,
                 offset = self.app.canvas.offset(),
@@ -207,11 +259,10 @@ define(['../entity/animation'], function(Animation) {
         },
 
         setCursor: function(cursor) {
-            var self = this,
-                newCursor = self.game.getSprite(cursor);
+            var self = this;
 
-            if (newCursor)
-                self.cursor = newCursor;
+            if (cursor)
+                self.newCursor = cursor;
             else
                 log.error('Cursor: ' + cursor + ' could not be found.');
         },

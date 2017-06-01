@@ -402,6 +402,31 @@ module.exports = World = cls.Class.extend({
         self.items[item.instance] = item;
     },
 
+    removeEntity: function(entity) {
+        var self = this;
+
+        if (entity.instance in self.entities)
+            delete self.entities[entity.instance];
+
+        if (entity.instance in self.mobs)
+            delete self.mobs[entity.instance];
+
+        if (entity.instance in self.items)
+            delete self.items[entity.instance];
+
+        self.removeFromGroups(entity);
+    },
+
+    removePlayer: function(player) {
+        var self = this;
+
+        self.removeEntity(player);
+        self.pushBroadcast(new Messages.Despawn(player.instance));
+
+        delete self.players[player.instance];
+        delete self.packets[player.instance];
+    },
+
     playerInWorld: function(username) {
         var self = this;
 

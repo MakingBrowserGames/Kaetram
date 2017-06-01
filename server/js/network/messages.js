@@ -93,3 +93,15 @@ Messages.Teleport = Message.extend({
     }
 
 });
+
+Messages.Despawn = Message.extend({
+
+    init: function(id) {
+        this.id = id;
+    },
+
+    serialize: function() {
+        return [Packets.Despawn, this.id];
+    }
+
+});
