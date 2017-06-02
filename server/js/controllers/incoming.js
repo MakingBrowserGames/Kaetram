@@ -225,7 +225,12 @@ module.exports = Incoming = cls.Class.extend({
 
             case Packets.MovementOpcode.Stop:
                 var posX = message.shift(),
-                    posY = message.shift();
+                    posY = message.shift(),
+                    id = message.shift(),
+                    entity = self.world.getEntityById(id);
+
+                if (entity)
+                    self.world.removeItem(entity);
 
                 if (self.world.map.isDoor(posX, posY)) {
                     var destination = self.world.map.getDoorDestination(posX, posY);

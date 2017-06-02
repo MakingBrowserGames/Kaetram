@@ -1,4 +1,4 @@
-/* global Modules, log, _ */
+/* global Modules, log, _, Packets */
 
 define(['../entity/animation'], function(Animation) {
 
@@ -171,6 +171,11 @@ define(['../entity/animation'], function(Animation) {
             if (self.game.zoning && self.game.zoning.direction)
                 return;
 
+            if (self.hovering === Modules.Hovering.Mob) {
+                self.game.socket.send(Packets.Attack, [self.game.getEntityAt(position.x, position.y)]);
+                return;
+            }
+
             self.game.player.go(position.x, position.y);
         },
 
@@ -190,7 +195,7 @@ define(['../entity/animation'], function(Animation) {
         moveCursor: function() {
             var self = this,
                 position = self.getCoords(),
-                entity = self.getEntityAt(position.x, position.y);
+                entity = self.game.getEntityAt(position.x, position.y);
 
             if (!entity) {
                 self.setCursor(self.cursors['hand']);
@@ -218,17 +223,6 @@ define(['../entity/animation'], function(Animation) {
                         break;
                 }
             }
-        },
-
-        getEntityAt: function(x, y) {
-            var self = this,
-                entities = self.game.entities.grids.entityGrid[y][x],
-                entity = null;
-
-            if (_.size(entities) > 0)
-                entity = entities[_.keys(entities)[0]];
-
-            return entity;
         },
 
         setPosition: function(x, y) {

@@ -11,7 +11,8 @@ Packets = {
     Movement: 9,
     Teleport: 10,
     Request: 11,
-    Despawn: 12
+    Despawn: 12,
+    Attack: 13
 };
 
 Packets.IntroOpcode = {

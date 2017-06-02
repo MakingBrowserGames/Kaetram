@@ -55,10 +55,13 @@ define(function() {
 
                 self.camera.clip();
 
-                if (!self.camera.centered)
-                    self.checkBounds();
+                var id,
+                    entity = self.game.getEntityAt(x, y, true);
 
-                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Stop, x, y])
+                if (entity)
+                    id = entity.id;
+
+                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Stop, x, y, id])
             });
 
             self.player.onBeforeStep(function() {
@@ -68,6 +71,9 @@ define(function() {
             self.player.onStep(function() {
                 if (self.player.hasNextStep())
                     self.entities.registerDuality(self.player);
+
+                if (!self.camera.centered)
+                    self.checkBounds();
 
                 self.socket.send(Packets.Movement, [Packets.MovementOpcode.Step, self.player.gridX, self.player.gridY]);
             });

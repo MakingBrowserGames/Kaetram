@@ -328,8 +328,14 @@ module.exports = World = cls.Class.extend({
             if (isNpc)
                 self.addNPC(new NPC(info.id, instance, position.x, position.y));
 
-            if (isItem)
-                self.addItem(new Item(info.id, instance, position.x, position.y));
+            if (isItem) {
+                var item = new Item(info.id, instance, position.x, position.y);
+
+                item.static = true;
+
+                self.addItem(item);
+            }
+
 
             entities++;
         });
@@ -398,6 +404,8 @@ module.exports = World = cls.Class.extend({
     addItem: function(item) {
         var self = this;
 
+        item.onRespawn(self.addItem.bind(self, item));
+
         self.addEntity(item);
         self.items[item.instance] = item;
     },
@@ -415,6 +423,15 @@ module.exports = World = cls.Class.extend({
             delete self.items[entity.instance];
 
         self.removeFromGroups(entity);
+    },
+
+    removeItem: function(item) {
+        var self = this;
+
+        self.removeEntity(item);
+        self.pushBroadcast(new Messages.Despawn(item.instance));
+
+        item.respawn();
     },
 
     removePlayer: function(player) {

@@ -457,6 +457,17 @@ define(['./renderer/renderer', './utils/storage',
             return this.entities.getSprite(spriteName);
         },
 
+        getEntityAt: function(x, y, ignoreSelf) {
+            var self = this,
+                entities = self.entities.grids.entityGrid[y][x],
+                entity = null;
+
+            if (_.size(entities) > 0)
+                entity = entities[_.keys(entities)[ignoreSelf ? 1 : 0]];
+
+            return entity;
+        },
+
         setRenderer: function(renderer) {
             if (!this.renderer)
                 this.renderer = renderer;
