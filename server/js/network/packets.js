@@ -23,7 +23,10 @@ var Packets = {
     Movement: 9,
     Teleport: 10,
     Request: 11,
-    Despawn: 12
+    Despawn: 12,
+    Target: 13,
+    Combat: 14,
+    Animation: 15
 };
 
 Packets.IntroOpcode = {
@@ -42,7 +45,19 @@ Packets.MovementOpcode = {
     Started: 1,
     Step: 2,
     Stop: 3,
-    Move: 4
+    Move: 4,
+    Follow: 5
+};
+
+Packets.TargetOpcode = {
+    Talk: 0,
+    Attack: 1
+};
+
+Packets.CombatOpcode = {
+    Initiate: 0,
+    Hit: 1,
+    Finish: 2
 };
 
 module.exports = Packets;

@@ -4,6 +4,10 @@ Formulas.LevelExp = [];
 
 module.exports = Formulas;
 
+Formulas.getDamage = function(attacker, target) {
+    return 15;
+};
+
 Formulas.expToLevel = function(experience) {
     if (experience < 0)
         return -1;

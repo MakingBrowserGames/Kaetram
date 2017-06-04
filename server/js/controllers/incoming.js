@@ -43,6 +43,14 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleRequest(message);
                     break;
 
+                case Packets.Target:
+                    self.handleTarget(message);
+                    break;
+
+                case Packets.Combat:
+                    self.handleCombat(message);
+                    break;
+
             }
 
         });
@@ -172,7 +180,7 @@ module.exports = Incoming = cls.Class.extend({
         var self = this;
 
         _.each(message.shift(), function(id) {
-            var entity = self.world.getEntityById(id);
+            var entity = self.world.getEntityByInstance(id);
 
             if (entity && entity.id)
                 self.player.send(new Messages.Spawn(entity));
@@ -227,9 +235,9 @@ module.exports = Incoming = cls.Class.extend({
                 var posX = message.shift(),
                     posY = message.shift(),
                     id = message.shift(),
-                    entity = self.world.getEntityById(id);
+                    entity = self.world.getEntityByInstance(id);
 
-                if (entity)
+                if (entity && entity.type === 'item')
                     self.world.removeItem(entity);
 
                 if (self.world.map.isDoor(posX, posY)) {
@@ -257,6 +265,59 @@ module.exports = Incoming = cls.Class.extend({
             return;
 
         self.world.pushEntities(self.player);
+    },
+
+    handleTarget: function(message) {
+        var self = this,
+            opcode = message.shift(),
+            instance = message.shift();
+
+        log.info(instance);
+
+        switch (opcode) {
+
+            case Packets.TargetOpcode.Talk:
+
+                break;
+
+            case Packets.TargetOpcode.Attack:
+                var target = self.world.getEntityByInstance(instance);
+
+                if (!target)
+                    return;
+
+                self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
+
+                break;
+        }
+    },
+
+    handleCombat: function(message) {
+        var self = this,
+            opcode = message.shift();
+
+        switch (opcode) {
+            case Packets.CombatOpcode.Initiate:
+                var attacker = self.world.getEntityByInstance(message.shift()),
+                    target = self.world.getEntityByInstance(message.shift());
+
+                attacker.setTarget(target);
+                target.combat.addAttacker(attacker);
+
+                attacker.combat.attack(target);
+
+                break;
+
+            case Packets.CombatOpcode.Hit:
+
+
+
+                break;
+
+            case Packets.CombatOpcode.Finish:
+
+                break;
+        }
     }
 
 });

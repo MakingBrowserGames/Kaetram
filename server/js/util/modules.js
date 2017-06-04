@@ -15,6 +15,11 @@ var Modules = {
         Pendant: 2,
         Ring: 3,
         Boots: 4
+    },
+
+    Hits: {
+        Damage: 0,
+        Poison: 1
     }
 
 };

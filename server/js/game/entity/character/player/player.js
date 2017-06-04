@@ -14,7 +14,8 @@ var Character = require('../character'),
     Mana = require('./points/mana'),
     Packets = require('../../../../network/packets'),
     Modules = require('../../../../util/modules'),
-    Handler = require('./handler');
+    Handler = require('./handler'),
+    Quests = require('./quests');
 
 module.exports = Player = Character.extend({
 
@@ -44,6 +45,7 @@ module.exports = Player = Character.extend({
         self._super(-1, 'player', self.connection.id, -1, -1);
 
         self.handler = new Handler(self);
+        self.quests = new Quests(self);
     },
 
     load: function(data) {
@@ -274,6 +276,10 @@ module.exports = Player = Character.extend({
         ]
     },
 
+    getRemoteAddress: function() {
+        return this.connection.socket.conn.remoteAddress;
+    },
+
     /**
      * Miscellaneous
      */
@@ -309,6 +315,15 @@ module.exports = Player = Character.extend({
         self.send(new Messages.Movement(Packets.MovementOpcode.Stop, force));
     },
 
+    finishedTutorial: function() {
+        var self = this;
+
+        if (!self.quests)
+            return false;
+
+        return self.quests.getQuest('Introduction').isFinished();
+    },
+
     checkGroups: function() {
         var self = this;
 
@@ -325,10 +340,6 @@ module.exports = Player = Character.extend({
                 self.groupCallback();
         }
 
-    },
-
-    getRemoteAddress: function() {
-        return this.connection.socket.conn.remoteAddress;
     },
 
     movePlayer: function() {
@@ -353,6 +364,14 @@ module.exports = Player = Character.extend({
 
     onGroup: function(callback) {
         this.groupCallback = callback;
+    },
+
+    onAttack: function(callback) {
+        this.attackCallback = callback;
+    },
+
+    onHit: function(callback) {
+        this.hitCallback = callback;
     }
 
 });

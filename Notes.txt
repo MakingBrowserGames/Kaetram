@@ -9,6 +9,8 @@ Kaetram To-Do List:
 
 - Centre properly inside buildings
 
+- Implement range in combat styles
+
 
 Finished:
 

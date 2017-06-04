@@ -21,6 +21,11 @@ Modules = {
         Walk: 2
     },
 
+    Hits: {
+        Damage: 0,
+        Poison: 1
+    },
+
     Equipment: {
         Armour: 0,
         Weapon: 1,

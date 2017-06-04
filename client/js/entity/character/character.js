@@ -30,6 +30,8 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             self.path = null;
             self.target = null;
 
+            self.attackers = {};
+
             self.movement = new Transition();
 
             self.idleSpeed = 450;
@@ -55,6 +57,72 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             }
 
             self.setAnimation(animation, speed, count, onEndCount);
+        },
+
+        lookAt: function(character, withoutIdle) {
+            var self = this;
+
+            if (character.gridX > self.gridX)
+                self.setOrientation(Modules.Orientation.Right);
+            else if (character.gridX < self.gridX)
+                self.setOrientation(Modules.Orientation.Left);
+            else if (character.gridY > self.gridY)
+                self.setOrientation(Modules.Orientation.Down);
+            else if (character.gridY < self.gridY)
+                self.setOrientation(Modules.Orientation.Up);
+
+            self.idle();
+        },
+
+        follow: function(character) {
+            var self = this;
+
+            self.following = true;
+
+            self.setTarget(character);
+            self.move(character.gridX, character.gridY);
+        },
+
+        attack: function(attacker, character) {
+            var self = this;
+
+            self.attacking = true;
+
+            self.follow(character);
+        },
+
+        backOff: function() {
+            var self = this;
+
+            self.attacking = false;
+            self.following = false;
+
+            self.removeTarget();
+        },
+
+        addAttacker: function(character) {
+            var self = this;
+
+            if (self.hasAttacker(character))
+                return;
+
+            self.attackers[character.instance] = character;
+        },
+
+        removeAttacker: function(character) {
+            var self = this;
+
+            if (self.hasAttacker(character))
+                delete self.attackers[character.id];
+        },
+
+        hasAttacker: function(character) {
+            var self = this;
+
+            if (self.attackers.size === 0)
+                return false;
+
+            return character.instance in self.attackers;
         },
 
         performAction: function(orientation, action) {
@@ -286,6 +354,14 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             return this.currentAnimation.name === 'walk' && (this.x % 2 !== 0 || this.y % 2 !== 0);
         },
 
+        forEachAttacker: function(callback) {
+            var self = this;
+
+            _.each(self.attackers, function(attacker) {
+                callback(attacker);
+            });
+        },
+
         hasWeapon: function() {
             return false;
         },
@@ -295,7 +371,7 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
         },
 
         hasTarget: function() {
-            return !!this.target;
+            return !(this.target === null);
         },
 
         hasPath: function() {
@@ -314,6 +390,15 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             return this.attacking;
         },
 
+        removeTarget: function() {
+            var self = this;
+
+            if (!self.target)
+                return;
+
+            self.target = null;
+        },
+
         moved: function() {
             var self = this;
 
@@ -327,6 +412,23 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
         setSprite: function(sprite) {
             this._super(sprite);
+        },
+
+        setTarget: function(target) {
+            var self = this;
+
+            if (target === null) {
+                self.removeTarget();
+                return;
+            }
+
+            if (self.target && self.target.id === target.id)
+                return;
+
+            if (self.hasTarget())
+                self.removeTarget();
+
+            self.target = target;
         },
 
         setOrientation: function(orientation) {

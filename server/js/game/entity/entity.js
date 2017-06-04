@@ -18,7 +18,13 @@ module.exports = Entity = cls.Class.extend({
         self.x = x;
         self.y = y;
 
+        self.combat = null;
+
         self.recentGroups = [];
+    },
+
+    getCombat: function() {
+        return null;
     },
 
     drop: function(item) {

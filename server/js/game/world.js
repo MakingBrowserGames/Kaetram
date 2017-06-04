@@ -12,7 +12,8 @@ var cls = require('../lib/class'),
     NPCs = require('../util/npcs'),
     NPC = require('./entity/npc/npc'),
     Items = require('../util/items'),
-    Item = require('./entity/objects/item');
+    Item = require('./entity/objects/item'),
+    Character = require('./entity/character/character');
 
 module.exports = World = cls.Class.extend({
 
@@ -162,9 +163,9 @@ module.exports = World = cls.Class.extend({
         self.loadedGroups = true;
     },
 
-    getEntityById: function(id) {
-        if (id in this.entities)
-            return this.entities[id];
+    getEntityByInstance: function(instance) {
+        if (instance in this.entities)
+            return this.entities[instance];
     },
 
     /**
@@ -194,7 +195,7 @@ module.exports = World = cls.Class.extend({
 
         _.each(group.players, function(playerId) {
             if (playerId !== ignoreId)
-                self.pushToPlayer(self.getEntityById(playerId), message);
+                self.pushToPlayer(self.getEntityByInstance(playerId), message);
         });
     },
 
@@ -369,6 +370,9 @@ module.exports = World = cls.Class.extend({
         var self = this;
 
         self.entities[entity.instance] = entity;
+
+        if (entity instanceof Character)
+            entity.getCombat().setWorld(self);
 
         if (!entity.isPlayer())
             self.handleEntityGroup(entity);

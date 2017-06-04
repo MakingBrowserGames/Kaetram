@@ -340,6 +340,60 @@ define(['./renderer/renderer', './utils/storage',
                 delete self.entities.entities[entity.id];
                 
             });
+
+            self.messages.onCombat(function(data) {
+                var opcode = data.shift(),
+                    attackerId = data.shift(),
+                    targetId = data.shift(),
+                    attacker = self.entities.get(attackerId),
+                    target = self.entities.get(targetId);
+
+                switch (opcode) {
+                    case Packets.CombatOpcode.Initiate:
+
+                        attacker.setTarget(target);
+                        target.addAttacker(attacker);
+
+                        if (target.id === self.player.id || attacker.id === self.player.id)
+                            self.socket.send(Packets.Combat, [Packets.CombatOpcode.Initiate, attacker.id, target.id]);
+
+                        break;
+
+                    case Packets.CombatOpcode.Hit:
+
+                        var hitData = data.shift(),
+                            damage = hitData.shift(),
+                            type = hitData.shift();
+
+                        if (type === Modules.Hits.Damage) {
+                            attacker.lookAt(target);
+                            attacker.performAction(attacker.orientation, Modules.Actions.Attack);
+
+                            log.info(damage);
+                        }
+
+                        break;
+
+                    case Packets.CombatOpcode.Finish:
+
+                        attacker.removeTarget(target);
+                        target.removeAttacker(attacker);
+
+                        break;
+                }
+            });
+
+            self.messages.onAnimation(function(id, info) {
+                var entity = self.entities.get(id),
+                    animation = info.shift(),
+                    speed = info.shift(),
+                    count = info.shift();
+
+                if (!entity)
+                    return;
+
+                entity.animate(animation, speed, count);
+            });
         },
 
         postLoad: function() {

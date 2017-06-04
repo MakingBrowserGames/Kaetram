@@ -105,3 +105,31 @@ Messages.Despawn = Message.extend({
     }
 
 });
+
+Messages.Animation = Message.extend({
+
+    init: function(id, data) {
+        this.id = id;
+        this.data = data;
+    },
+
+    serialize: function() {
+        return [Packets.Animation, this.id, this.data];
+    }
+
+});
+
+Messages.Combat = Message.extend({
+
+    init: function(opcode, attackerId, targetId, hitData) {
+        this.opcode = opcode;
+        this.attackerId = attackerId;
+        this.targetId = targetId;
+        this.hitData = hitData;
+    },
+
+    serialize: function() {
+        return [Packets.Combat, [this.opcode, this.attackerId, this.targetId, this.hitData]];
+    }
+
+});

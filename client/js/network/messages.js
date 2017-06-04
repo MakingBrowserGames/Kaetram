@@ -28,6 +28,8 @@ define(function() {
             self.messages[Packets.Movement] = self.receiveMovement;
             self.messages[Packets.Teleport] = self.receiveTeleport;
             self.messages[Packets.Despawn] = self.receiveDespawn;
+            self.messages[Packets.Combat] = self.receiveCombat;
+            self.messages[Packets.Animation] = self.receiveAnimation;
         },
 
         handleData: function(data) {
@@ -156,6 +158,23 @@ define(function() {
                 self.despawnCallback(id);
         },
 
+        receiveCombat: function(data) {
+            var self = this,
+                combatData = data.shift();
+
+            if (self.combatCallback)
+                self.combatCallback(combatData);
+        },
+
+        receiveAnimation: function(data) {
+            var self = this,
+                id = data.shift(),
+                info = data.shift();
+
+            if (self.animationCallback)
+                self.animationCallback(id, info);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -190,6 +209,14 @@ define(function() {
 
         onDespawn: function(callback) {
             this.despawnCallback = callback;
+        },
+
+        onCombat: function(callback) {
+            this.combatCallback = callback;
+        },
+
+        onAnimation: function(callback) {
+            this.animationCallback = callback;
         }
 
     });

@@ -1,6 +1,6 @@
 var cls = require('../../../../lib/class'),
     _ = require('underscore'),
-    async = require('async');
+    Hit = require('./hit');
 
 module.exports = CombatQueue = cls.Class.extend({
 
@@ -10,14 +10,27 @@ module.exports = CombatQueue = cls.Class.extend({
         self.hitQueue = [];
     },
 
-    process: function() {
-        var self = this;
+    add: function(hit) {
+        this.hitQueue.push(hit);
+    },
 
-
+    hasQueue: function() {
+        return this.hitQueue.length > 0;
     },
 
     clear: function() {
         this.hitQueue = [];
+    },
+
+    getHit: function() {
+        var self = this;
+
+        if (self.hitQueue.length < 1)
+            return;
+
+        var hit = self.hitQueue.shift();
+
+        return hit.getData();
     }
 
 });

@@ -45,10 +45,7 @@ define(function() {
         },
 
         addToPathingGrid: function(x, y) {
-            var self = this;
-
-            if (self.pathingGrid[y][x])
-                self.pathingGrid[y][x] = 1;
+            this.pathingGrid[y][x] = 1;
         },
 
         addToEntityGrid: function(entity, x, y) {

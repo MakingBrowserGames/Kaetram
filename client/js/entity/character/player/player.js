@@ -65,6 +65,10 @@ define(['../character', './equipment/armour', './equipment/weapon',
             self.boots = null;
         },
 
+        follow: function(character) {
+            this._super(character);
+        },
+
         go: function(x, y, forced) {
             this._super(x, y, forced);
         },

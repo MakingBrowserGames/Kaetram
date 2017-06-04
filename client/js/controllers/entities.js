@@ -247,10 +247,10 @@ define(['../renderer/grids', '../entity/objects/chest',
             if (!entity)
                 return;
 
-            if (entity instanceof Character || entity instanceof Chest) {
+            if (entity.type === 'player' || entity.type === 'mob' || entity.type === 'npc') {
                 self.grids.addToEntityGrid(entity, entity.gridX, entity.gridY);
 
-                if (!(entity instanceof Player))
+                if (entity.type !== 'player')
                     self.grids.addToPathingGrid(entity.gridX, entity.gridY);
             }
 

@@ -176,6 +176,8 @@ define(['./camera', './tile',
                 self.drawSelectedCell();
 
                 self.drawEntities(false);
+
+                self.drawDebugging();
             }
 
             /**
@@ -396,6 +398,9 @@ define(['./camera', './tile',
                 return;
 
             self.camera.forEachVisiblePosition(function(x, y) {
+                if (x < 0 || y < 0)
+                    return;
+
                 if (pathingGrid[y][x] !== 0)
                     self.drawCellHighlight(x, y, 'rgba(50, 50, 255, 0.5)');
             });

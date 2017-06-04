@@ -1,4 +1,4 @@
-/* global log, Packets */
+/* global log, Packets, Modules */
 
 define(function() {
 
@@ -45,6 +45,7 @@ define(function() {
                 self.input.selectedCellVisible = true;
 
                 self.socket.send(Packets.Movement, [Packets.MovementOpcode.Started, self.input.selectedX, self.input.selectedY, self.player.gridX, self.player.gridY]);
+
             });
 
             self.player.onStopPathing(function(x, y) {
@@ -55,13 +56,18 @@ define(function() {
 
                 self.camera.clip();
 
-                var id,
+                var id = null,
                     entity = self.game.getEntityAt(x, y, true);
 
                 if (entity)
                     id = entity.id;
 
-                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Stop, x, y, id])
+                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Stop, x, y, id]);
+
+                if (self.player.target) {
+                    self.socket.send(Packets.Target, [self.player.target.type === 'mob' ? Packets.TargetOpcode.Attack : Packets.TargetOpcode.Talk, self.player.target.id]);
+                    self.player.lookAt(self.player.target);
+                }
             });
 
             self.player.onBeforeStep(function() {

@@ -171,9 +171,13 @@ define(['../entity/animation'], function(Animation) {
             if (self.game.zoning && self.game.zoning.direction)
                 return;
 
-            if (self.hovering === Modules.Hovering.Mob) {
-                self.game.socket.send(Packets.Attack, [self.game.getEntityAt(position.x, position.y)]);
-                return;
+            if (self.hovering) {
+                var entity = self.game.getEntityAt(position.x, position.y);
+
+                if (entity) {
+                    self.game.player.follow(entity);
+                    return;
+                }
             }
 
             self.game.player.go(position.x, position.y);
