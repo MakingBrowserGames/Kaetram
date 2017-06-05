@@ -100,7 +100,6 @@ module.exports = World = cls.Class.extend({
          * whenever the server has time
          */
 
-
         for (var id in self.packets) {
             if (self.packets.hasOwnProperty(id) && self.packets[id].length > 0) {
                 var conn = self.socket.getConnection(id);

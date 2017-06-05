@@ -28,36 +28,60 @@ module.exports = Combat = cls.Class.extend({
         self.attackTimeout = null;
         self.followTimeout = null;
 
-        self.tick();
+        self.first = false;
+
+        self.start();
     },
 
-    tick: function() {
+    start: function() {
         var self = this;
 
-        self.attackTimeout = setInterval(function() {
-            if (!self.world || !self.queue)
-                return;
+        self.attackTimeout = setInterval(function() { self.parseAttack(); }, self.character.attackRate);
 
-            if (self.character.hasTarget() && self.inProximity()) {
-                if (self.queue.hasQueue())
-                    self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, self.character.instance, self.character.target.instance, self.queue.getHit()));
+        self.followTimeout = setInterval(function() { self.parseFollow(); }, 400);
+    },
 
-                if (!self.character.target.isDead())
-                    self.attack(self.character.target);
-            } else
-                self.queue.clear();
+    stop: function() {
+        var self = this;
 
-        }, self.character.attackRate);
+        clearTimeout(self.attackTimeout);
+        clearTimeout(self.followTimeout);
 
-        self.followTimeout = setInterval(function() {
-            if (self.character.hasTarget() && !self.inProximity()) {
-                var attacker = self.getClosestAttacker();
+        self.attackTimeout = null;
+        self.followTimeout = null;
+    },
 
-                if (attacker)
-                    self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Follow, false, false, null, null, attacker.instance));
-            }
+    parseAttack: function() {
+        var self = this;
 
-        }, 400);
+        if (!self.world || !self.queue)
+            return;
+
+        if (self.character.hasTarget() && self.inProximity()) {
+            if (self.queue.hasQueue())
+                self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, self.character.instance, self.character.target.instance, self.queue.getHit()));
+
+            if (!self.character.target.isDead())
+                self.attack(self.character.target);
+        } else
+            self.queue.clear();
+    },
+
+    parseFollow: function() {
+        var self = this;
+
+        if (self.onSameTile()) {
+            var position = self.getNewPosition();
+
+            self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Move, false, false, position.x, position.y))
+        }
+
+        if (self.character.hasTarget() && !self.inProximity() && (self.character.type === 'mob' || self.isRetaliating())) {
+            var attacker = self.getClosestAttacker();
+
+            if (attacker)
+                self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Follow, false, false, null, null, attacker.instance));
+        }
     },
 
     attack: function(target) {
@@ -65,6 +89,26 @@ module.exports = Combat = cls.Class.extend({
             hit = new Hit(Modules.Hits.Damage, Formulas.getDamage(self.character, target));
 
         self.queue.add(hit);
+    },
+
+    attackCount: function(count, target) {
+        var self = this;
+
+        for (var i = 0; i < count; i++)
+            self.attack(new Hit(Modules.Hits.Damage, Formulas.getDamage(self.character, target)));
+    },
+
+    forceAttack: function() {
+        var self = this;
+
+        if (!self.character.target || !self.inProximity())
+            return;
+
+        self.stop();
+        self.start();
+
+        self.attackCount(2, self.character.target);
+        self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, self.character.instance, self.character.target.instance, self.queue.getHit()));
     },
 
     addAttacker: function(character) {
@@ -92,8 +136,38 @@ module.exports = Combat = cls.Class.extend({
         return character.instance in self.attackers;
     },
 
+    onSameTile: function() {
+        var self = this;
+
+        if (!self.character.target)
+            return;
+
+        return self.character.x === self.character.target.x && self.character.y === self.character.target.y;
+    },
+
     isAttacked: function() {
         return Object.keys(this.attackers).length > 0;
+    },
+
+    getNewPosition: function() {
+        var self = this,
+            position = {
+                x: self.character.x,
+                y: self.character.y
+            };
+
+        var random = Utils.randomInt(0, 3);
+
+        if (random === 0)
+            position.x++;
+        else if (random === 1)
+            position.y--;
+        else if (random === 2)
+            position.x--;
+        else if (random === 3)
+            position.y++;
+
+        return position;
     },
 
     isRetaliating: function() {

@@ -43,6 +43,7 @@ define(['./character/character'], function(Character) {
 
                     self.entities.unregisterPosition(self.entity);
                     self.entities.registerPosition(self.entity);
+
                 });
 
                 self.entity.onMove(function(callback) {

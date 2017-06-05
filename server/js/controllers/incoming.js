@@ -267,6 +267,9 @@ module.exports = Incoming = cls.Class.extend({
 
                 oEntity.setPosition(entityX, entityY);
 
+                if (oEntity.hasTarget())
+                    oEntity.combat.forceAttack();
+
                 break;
         }
     },
@@ -321,11 +324,11 @@ module.exports = Incoming = cls.Class.extend({
                     target = self.world.getEntityByInstance(message.shift());
 
                 attacker.setTarget(target);
-                attacker.combat.attack(target);
+                attacker.combat.forceAttack();
 
                 if (target.type === 'mob' || (target.type === 'player' && target.combat.isRetaliating())) {
                     target.setTarget(attacker);
-                    target.combat.attack(attacker);
+                    target.combat.attack(target); //To give it a delay
                 }
 
                 target.combat.addAttacker(attacker);
