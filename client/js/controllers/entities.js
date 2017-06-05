@@ -183,15 +183,19 @@ define(['../renderer/grids', '../entity/objects/chest',
             return id in this.entities;
         },
 
-        clearEntities: function(exception) {
+        clearPlayers: function(exception) {
             var self = this;
 
             _.each(self.entities, function(entity) {
-                if (entity.id !== exception.id) {
+                if (entity.id !== exception.id && entity.type === 'player') {
                     self.grids.removeFromRenderingGrid(entity, entity.gridX, entity.gridY);
+                    self.grids.removeFromPathingGrid(entity.gridX, entity.gridY);
+
                     delete self.entities[entity.id];
                 }
             });
+
+            self.grids.resetPathingGrid();
         },
 
         addEntity: function(entity) {
@@ -225,10 +229,6 @@ define(['../renderer/grids', '../entity/objects/chest',
 
         },
 
-        addItem: function(item, x, y) {
-            //TODO - Sprite controller necessary
-        },
-
         removeItem: function(item) {
             var self = this;
 
@@ -254,7 +254,7 @@ define(['../renderer/grids', '../entity/objects/chest',
                     self.grids.addToPathingGrid(entity.gridX, entity.gridY);
             }
 
-            if (entity instanceof Item)
+            if (entity.type === 'item')
                 self.grids.addToItemGrid(entity, entity.gridX, entity.gridY);
 
             self.grids.addToRenderingGrid(entity, entity.gridX, entity.gridY);

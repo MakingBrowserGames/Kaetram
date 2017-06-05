@@ -59,7 +59,7 @@ module.exports = Combat = cls.Class.extend({
 
         if (self.character.hasTarget() && self.inProximity()) {
             if (self.queue.hasQueue())
-                self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, self.character.instance, self.character.target.instance, self.queue.getHit()));
+                self.world.pushToAdjacentGroups(self.character.group, new Messages.Combat(Packets.CombatOpcode.Hit, self.character.instance, self.character.target.instance, self.queue.getHit()));
 
             if (!self.character.target.isDead())
                 self.attack(self.character.target);
@@ -70,10 +70,18 @@ module.exports = Combat = cls.Class.extend({
     parseFollow: function() {
         var self = this;
 
+        if (self.character.type === 'mob' && !self.character.isAtSpawn() && !self.isAttacked()) {
+            log.info('returning...?');
+
+            self.character.return();
+
+            self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Move, false, false, self.character.x, self.character.y));
+        }
+
         if (self.onSameTile()) {
             var position = self.getNewPosition();
 
-            self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Move, false, false, position.x, position.y))
+            self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Move, false, false, position.x, position.y));
         }
 
         if (self.character.hasTarget() && !self.inProximity() && (self.character.type === 'mob' || self.isRetaliating())) {
@@ -108,7 +116,7 @@ module.exports = Combat = cls.Class.extend({
         self.start();
 
         self.attackCount(2, self.character.target);
-        self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, self.character.instance, self.character.target.instance, self.queue.getHit()));
+        self.world.pushToAdjacentGroups(self.character.group, new Messages.Combat(Packets.CombatOpcode.Hit, self.character.instance, self.character.target.instance, self.queue.getHit()));
     },
 
     addAttacker: function(character) {
@@ -125,6 +133,11 @@ module.exports = Combat = cls.Class.extend({
 
         if (self.hasAttacker(character))
             delete self.attackers[character.instance];
+
+        if (self.character.type === 'mob' && Object.keys(self.attackers).length === 0) {
+            self.character.return();
+            self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Move, false, false, self.character.spawnLocation[0], self.character.spawnLocation[1]));
+        }
     },
 
     hasAttacker: function(character) {
@@ -215,6 +228,10 @@ module.exports = Combat = cls.Class.extend({
 
         if (!self.world)
             self.world = world;
+    },
+
+    forget: function() {
+        this.attackers = {};
     },
 
     forEachAttacker: function(callback) {

@@ -35,6 +35,14 @@ module.exports = Entity = cls.Class.extend({
         return x > y ? x : y;
     },
 
+    getCoordDistance: function(toX, toY) {
+        var self = this,
+            x = Math.abs(self.x - toX),
+            y = Math.abs(self.y - toY);
+
+        return x > y ? x : y;
+    },
+
     isAdjacent: function(entity) {
         var self = this;
 

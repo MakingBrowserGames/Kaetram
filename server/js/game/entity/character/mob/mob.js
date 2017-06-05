@@ -33,6 +33,14 @@ module.exports = Mob = Character.extend({
         self.move(self.x, self.y);
     },
 
+    distanceToSpawn: function() {
+        return this.getCoordDistance(this.spawnLocation[0], this.spawnLocation[1]);
+    },
+
+    isAtSpawn: function() {
+        return this.x === this.spawnLocation[0] && this.y === this.spawnLocation[1];
+    },
+
     respawn: function() {
 
     },

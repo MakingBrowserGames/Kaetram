@@ -33,9 +33,8 @@ define(['./character/character'], function(Character) {
                 self.entity.onStep(function() {
                     self.entities.registerDuality(self.entity);
 
-                    log.info('x: ' + self.entity.gridX + ' y: ' + self.entity.gridY);
-
-                    self.game.socket.send(Packets.Movement, [Packets.MovementOpcode.Entity, self.entity.id, self.entity.gridX, self.entity.gridY]);
+                    if (self.entity.type === 'mob')
+                        self.game.socket.send(Packets.Movement, [Packets.MovementOpcode.Entity, self.entity.id, self.entity.gridX, self.entity.gridY]);
                 });
 
                 self.entity.onStopPathing(function() {

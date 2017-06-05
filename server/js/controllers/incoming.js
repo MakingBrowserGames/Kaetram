@@ -69,8 +69,6 @@ module.exports = Incoming = cls.Class.extend({
         self.player.password = password.substr(0, 32);
         self.player.email = email.substr(0, 128);
 
-        log.info(self.world.playerInWorld(self.player.username));
-
         if (self.world.playerInWorld(self.player.username)) {
             self.connection.sendUTF8('loggedin');
             self.connection.close('Player already logged in..');
@@ -214,10 +212,8 @@ module.exports = Incoming = cls.Class.extend({
                     pX = message.shift(),
                     pY = message.shift();
 
-                if (pX !== self.player.x || pY !== self.player.y) {
-                    log.info('[Started] Player not in sync..');
+                if (pX !== self.player.x || pY !== self.player.y)
                     return;
-                }
 
                 self.player.moving = true;
 
@@ -248,6 +244,8 @@ module.exports = Incoming = cls.Class.extend({
                     self.player.setPosition(destination.x, destination.y);
                     self.player.checkGroups();
 
+                    self.world.cleanCombat(self.player);
+
                 } else
                     self.player.setPosition(posX, posY);
 
@@ -266,6 +264,13 @@ module.exports = Incoming = cls.Class.extend({
                     return;
 
                 oEntity.setPosition(entityX, entityY);
+
+                if (oEntity.type === 'mob' && oEntity.distanceToSpawn() > oEntity.spawnDistance) {
+                    oEntity.removeTarget();
+                    oEntity.combat.forget();
+                    oEntity.return();
+                    self.world.pushBroadcast(new Messages.Movement(instance, Packets.MovementOpcode.Move, false, false, oEntity.spawnLocation[0], oEntity.spawnLocation[1]));
+                }
 
                 if (oEntity.hasTarget())
                     oEntity.combat.forceAttack();
@@ -301,7 +306,7 @@ module.exports = Incoming = cls.Class.extend({
                 if (!target)
                     return;
 
-                self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
+                self.world.pushToAdjacentGroups(target.group, new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
 
                 break;
 
@@ -324,7 +329,7 @@ module.exports = Incoming = cls.Class.extend({
                     target = self.world.getEntityByInstance(message.shift());
 
                 attacker.setTarget(target);
-                attacker.combat.forceAttack();
+                attacker.combat.attack(target);
 
                 if (target.type === 'mob' || (target.type === 'player' && target.combat.isRetaliating())) {
                     target.setTarget(attacker);

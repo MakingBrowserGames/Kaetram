@@ -37,6 +37,20 @@ define(function() {
             log.info('Finished loading preliminary grids.');
         },
 
+        resetPathingGrid: function() {
+            var self = this;
+
+            self.pathingGrid = [];
+
+            for (var i = 0; i < self.map.height; i++) {
+                self.pathingGrid[i] = [];
+
+                for (var j = 0; j < self.map.width; j++)
+                    self.pathingGrid[i][j] = self.map.grid[i][j];
+
+            }
+        },
+
         addToRenderingGrid: function(entity, x, y) {
             var self = this;
 

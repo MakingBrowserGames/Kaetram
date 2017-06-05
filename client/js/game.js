@@ -326,7 +326,7 @@ define(['./renderer/renderer', './utils/storage',
                 entity.setGridPosition(x, y);
 
                 if (isPlayer) {
-                    self.entities.clearEntities(self.player);
+                    self.entities.clearPlayers(self.player);
                     self.renderer.camera.centreOn(entity);
                     self.renderer.updateAnimatedTiles();
                 } else {
@@ -380,8 +380,6 @@ define(['./renderer/renderer', './utils/storage',
                         if (type === Modules.Hits.Damage) {
                             attacker.lookAt(target);
                             attacker.performAction(attacker.orientation, Modules.Actions.Attack);
-
-                            log.info(damage);
                         }
 
                         break;
@@ -525,13 +523,22 @@ define(['./renderer/renderer', './utils/storage',
 
         getEntityAt: function(x, y, ignoreSelf) {
             var self = this,
-                entities = self.entities.grids.entityGrid[y][x],
+                entities = self.entities.grids.renderingGrid[y][x],
                 entity = null;
 
             if (_.size(entities) > 0)
-                entity = entities[_.keys(entities)[ignoreSelf ? 1 : 0]];
+                return entities[_.keys(entities)[ignoreSelf ? 1 : 0]];
 
-            return entity;
+            var items = self.entities.grids.itemGrid[y][x];
+
+            if (_.size(items) > 0) {
+                _.each(items, function(item) {
+                    if (item.stackable)
+                        return item;
+                });
+
+                return items[_.keys(items)[0]];
+            }
         },
 
         setRenderer: function(renderer) {

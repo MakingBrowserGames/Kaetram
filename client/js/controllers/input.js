@@ -166,21 +166,22 @@ define(['../entity/animation'], function(Animation) {
         },
 
         click: function(position) {
-            var self = this;
+            var self = this,
+                player = self.game.player;
 
-            if (self.game.zoning && self.game.zoning.direction)
+            if ((self.game.zoning && self.game.zoning.direction) || (position.x === player.gridX && position.y === player.gridY))
                 return;
 
             if (self.hovering) {
                 var entity = self.game.getEntityAt(position.x, position.y);
 
-                if (entity) {
-                    self.game.player.follow(entity);
+                if (entity && entity.type !== 'item') {
+                    player.follow(entity);
                     return;
                 }
             }
 
-            self.game.player.go(position.x, position.y);
+            player.go(position.x, position.y);
         },
 
         updateCursor: function() {

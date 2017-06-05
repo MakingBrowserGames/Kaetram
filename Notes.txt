@@ -13,6 +13,8 @@ Kaetram To-Do List:
 
 - Implement auto-retaliation
 
+- Fix spam click attack?
+
 
 Finished:
 

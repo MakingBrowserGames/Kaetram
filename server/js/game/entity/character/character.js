@@ -25,6 +25,8 @@ module.exports = Character = Entity.extend({
         self.hitPoints = -1;
 
         self.dead = false;
+        self.aggressive = false;
+        self.aggroRange = 2;
 
         self.target = null;
         self.potentialTarget = null;

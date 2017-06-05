@@ -12,6 +12,7 @@ define(['../entity'], function(Entity) {
             self.skillLevel = skillLevel;
 
             self.dropped = false;
+            self.stackable = false;
         },
 
         idle: function() {

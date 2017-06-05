@@ -419,8 +419,6 @@ module.exports = World = cls.Class.extend({
         if (entity.instance in self.entities)
             delete self.entities[entity.instance];
 
-        self.cleanCombat(entity);
-
         if (entity.instance in self.mobs)
             delete self.mobs[entity.instance];
 
@@ -432,9 +430,10 @@ module.exports = World = cls.Class.extend({
 
     cleanCombat: function(entity) {
         _.each(this.entities, function(oEntity) {
-            if (oEntity.type === 'mob' || oEntity.type === 'player')
-                if (oEntity.combat && oEntity.combat.hasAttacker(entity))
-                    oEntity.combat.removeAttacker(entity);
+            if ((oEntity.type === 'mob' || oEntity.type === 'player') &&
+                (oEntity.combat && oEntity.combat.hasAttacker(entity) && !oEntity.combat.canFollow(entity))) {
+                oEntity.combat.removeAttacker(entity);
+            }
         });
     },
 
@@ -452,6 +451,8 @@ module.exports = World = cls.Class.extend({
 
         self.removeEntity(player);
         self.pushBroadcast(new Messages.Despawn(player.instance));
+
+        self.cleanCombat(player);
 
         delete self.players[player.instance];
         delete self.packets[player.instance];
