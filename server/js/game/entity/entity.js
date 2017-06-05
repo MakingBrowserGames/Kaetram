@@ -27,6 +27,27 @@ module.exports = Entity = cls.Class.extend({
         return null;
     },
 
+    getDistance: function(entity) {
+        var self = this,
+            x = Math.abs(self.x - entity.x),
+            y = Math.abs(self.y - entity.y);
+
+        return x > y ? x : y;
+    },
+
+    isAdjacent: function(entity) {
+        var self = this;
+
+        if (!entity)
+            return false;
+
+        return self.getDistance(entity) <= 1;
+    },
+
+    isNonDiagonal: function(entity) {
+        return this.isAdjacent(entity) && !(entity.x !== this.x && entity.y !== this.y);
+    },
+
     drop: function(item) {
         return new Messages.Drop(this, item);
     },

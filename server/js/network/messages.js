@@ -65,17 +65,18 @@ Messages.Drop = Message.extend({
 
 Messages.Movement = Message.extend({
 
-    init: function(id, opcode, forced, teleport, x, y) {
+    init: function(id, opcode, forced, teleport, x, y, toFollow) {
         this.id = id;
         this.opcode = opcode;
         this.forced = forced;
         this.teleport = teleport;
         this.x = x;
         this.y = y;
+        this.toFollow = toFollow;
     },
 
     serialize: function() {
-        return [Packets.Movement, [this.id, this.opcode, this.forced, this.teleport, this.x, this.y]];
+        return [Packets.Movement, [this.id, this.opcode, this.forced, this.teleport, this.x, this.y, this.toFollow]];
     }
 
 });

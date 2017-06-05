@@ -420,6 +420,8 @@ module.exports = World = cls.Class.extend({
         if (entity.instance in self.entities)
             delete self.entities[entity.instance];
 
+        self.cleanCombat(entity);
+
         if (entity.instance in self.mobs)
             delete self.mobs[entity.instance];
 
@@ -427,6 +429,14 @@ module.exports = World = cls.Class.extend({
             delete self.items[entity.instance];
 
         self.removeFromGroups(entity);
+    },
+
+    cleanCombat: function(entity) {
+        _.each(this.entities, function(oEntity) {
+            if (oEntity.type === 'mob' || oEntity.type === 'player')
+                if (oEntity.combat && oEntity.combat.hasAttacker(entity))
+                    oEntity.combat.removeAttacker(entity);
+        });
     },
 
     removeItem: function(item) {

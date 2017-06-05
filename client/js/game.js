@@ -284,12 +284,24 @@ define(['./renderer/renderer', './utils/storage',
                         var x = data.shift(),
                             y = data.shift();
 
-                        log.info(x + ' ' + y);
-
                         if (forced)
                             entity.stop(true);
 
                         self.moveCharacter(entity, x, y);
+
+                        break;
+
+                    case Packets.MovementOpcode.Follow:
+                        data.shift();
+                        data.shift();
+
+                        var idToFollow = data.shift(),
+                            target = self.entities.get(idToFollow);
+
+                        if (!target)
+                            return;
+
+                        entity.follow(target);
 
                         break;
                 }

@@ -254,6 +254,20 @@ module.exports = Incoming = cls.Class.extend({
                 self.player.moving = false;
 
                 break;
+
+            case Packets.MovementOpcode.Entity:
+
+                var instance = message.shift(),
+                    entityX = message.shift(),
+                    entityY = message.shift(),
+                    oEntity = self.world.getEntityByInstance(instance);
+
+                if (!oEntity || (oEntity.x === entityX && oEntity.y === entityY))
+                    return;
+
+                oEntity.setPosition(entityX, entityY);
+
+                break;
         }
     },
 
@@ -272,8 +286,6 @@ module.exports = Incoming = cls.Class.extend({
             opcode = message.shift(),
             instance = message.shift();
 
-        log.info(instance);
-
         switch (opcode) {
 
             case Packets.TargetOpcode.Talk:
@@ -289,6 +301,13 @@ module.exports = Incoming = cls.Class.extend({
                 self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
 
                 break;
+
+            case Packets.TargetOpcode.None:
+
+                if (self.player.hasTarget())
+                    self.player.removeTarget();
+
+                break;
         }
     },
 
@@ -302,9 +321,14 @@ module.exports = Incoming = cls.Class.extend({
                     target = self.world.getEntityByInstance(message.shift());
 
                 attacker.setTarget(target);
-                target.combat.addAttacker(attacker);
-
                 attacker.combat.attack(target);
+
+                if (target.type === 'mob' || (target.type === 'player' && target.combat.isRetaliating())) {
+                    target.setTarget(attacker);
+                    target.combat.attack(attacker);
+                }
+
+                target.combat.addAttacker(attacker);
 
                 break;
 

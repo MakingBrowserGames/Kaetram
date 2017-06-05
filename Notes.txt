@@ -11,6 +11,8 @@ Kaetram To-Do List:
 
 - Implement range in combat styles
 
+- Implement auto-retaliation
+
 
 Finished:
 

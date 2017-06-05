@@ -44,8 +44,10 @@ define(function() {
                 self.input.selectedY = path[i][1];
                 self.input.selectedCellVisible = true;
 
-                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Started, self.input.selectedX, self.input.selectedY, self.player.gridX, self.player.gridY]);
+                if (!self.game.getEntityAt(self.input.selectedX, self.input.selectedY))
+                    self.socket.send(Packets.Target, [Packets.TargetOpcode.None]);
 
+                self.socket.send(Packets.Movement, [Packets.MovementOpcode.Started, self.input.selectedX, self.input.selectedY, self.player.gridX, self.player.gridY]);
             });
 
             self.player.onStopPathing(function(x, y) {

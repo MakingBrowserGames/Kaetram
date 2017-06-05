@@ -46,12 +46,14 @@ Packets.MovementOpcode = {
     Step: 2,
     Stop: 3,
     Move: 4,
-    Follow: 5
+    Follow: 5,
+    Entity: 6
 };
 
 Packets.TargetOpcode = {
     Talk: 0,
-    Attack: 1
+    Attack: 1,
+    None: 2
 };
 
 Packets.CombatOpcode = {

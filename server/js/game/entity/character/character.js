@@ -17,6 +17,8 @@ module.exports = Character = Entity.extend({
         self.attackRange = 1;
         self.attackRate = 1000;
 
+        self.spawnDistance = 7;
+
         self.previousX = -1;
         self.previousY = -1;
 
