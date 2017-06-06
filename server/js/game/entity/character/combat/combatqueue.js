@@ -2,6 +2,11 @@ var cls = require('../../../../lib/class'),
     _ = require('underscore'),
     Hit = require('./hit');
 
+/**
+ * Author: Tachyon
+ * Company: uDeva 2017
+ */
+
 module.exports = CombatQueue = cls.Class.extend({
 
     init: function() {

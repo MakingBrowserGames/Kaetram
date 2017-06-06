@@ -14,13 +14,13 @@ Currently Finished:
 * Re-arranged CSS accordingly
 * Sprite loading done properly (without massive amounts of hardcoding)
 * Entity movement (pathfinding)
+* Add door system
 * Entity spawning (receive information from the server side) --- STILL IN PROGRESS
+* Combat System --- STILL IN PROGRESS
 
 To-Do:
 
-
-* Add door system
-* Combat System (should be handled in the server side)
+* Loading other player data from MySQL after postLoad
 * Add the new interface
 * Implement Abilities, Special Effects and Inventory
 * Miscellaneous stuff from TTA such as Guilds, Parties, Shops, Enchantment, etc.

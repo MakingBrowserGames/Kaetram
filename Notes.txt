@@ -11,10 +11,16 @@ Kaetram To-Do List:
 
 - Implement range in combat styles
 
-- Implement auto-retaliation
+- Review combat and test out PvP
+- Format combat code and smoothen it out (take as many things out of incoming.js)
 
-- Fix spam click attack?
+- Loading other information from MySQL
+- Determine what to save to the MySQL
 
+- Have combat sync up from other's perspectives (pushToOthers)
+- Implement projectiles and ranged combat
+
+- Add the info manager from TTA
 
 Finished:
 
@@ -27,9 +33,12 @@ Finished:
 - Fix the third scale ✓
 - Finish basic tile-map rendering ✓
 - Begin entity-rendering and distribution of sprites (scales accordingly) ✓
+- Fix spam click attack ✓
+- Implement auto-retaliation ✓
 
 
 Reasoning:
 
-- Have the pathfinding and movement client sided because the server is capable of verifying whether the player position is valid.
-    The movement should be sent to the server when animation is done and calculated (in the future) for accuracy.
+- Have the pathfinding and movement client sided because the server is capable of verifying whether the player position is valid. The movement should be sent to the server when animation is done and calculated (in the future) for accuracy.
+
+- The combat is based on each entity, and thus it allows full control over what that entity does, removing the need to have to parse through every entity in the world.

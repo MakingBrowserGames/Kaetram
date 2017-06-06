@@ -75,6 +75,7 @@ module.exports = World = cls.Class.extend({
          */
 
         self.tick();
+        self.dataParser();
 
         self.ready = true;
 
@@ -90,6 +91,14 @@ module.exports = World = cls.Class.extend({
             self.parseGroups();
 
         }, 1000 / self.updateTime);
+    },
+
+    dataParser: function() {
+        var self = this;
+
+        setInterval(function() {
+            self.saveAll();
+        }, 30000);
     },
 
     parsePackets: function() {
@@ -467,6 +476,14 @@ module.exports = World = cls.Class.extend({
                     return true;
 
         return false;
+    },
+
+    saveAll: function() {
+        var self = this;
+
+        _.each(self.players, function(player) {
+            self.database.save(player);
+        })
     },
 
     onPopulationUpdate: function(callback) {

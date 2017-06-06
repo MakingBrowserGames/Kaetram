@@ -1,1 +1,16 @@
-[Sun Apr 16 2017 16:55:33 GMT-0600 (MDT)] INFO Hello :)
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO Loaded 17 PVP areas.
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO Loaded 72 music areas.
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] NOTICE Initializing Kaetram game engine...
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] NOTICE Server is now listening on: 1800
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO [Map] Successfully loaded the collision grid!
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] NOTICE Finished creating 1 world!
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO ************ World 1 ***********
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO Loaded 17 PVP areas.
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO Loaded 72 music areas.
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO ********************************
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO Finished loading 128 mobs.
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO Finished loading 45 NPCs.
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO Finished loading 247 items.
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO [Map] Successfully loaded the collision grid!
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO Spawned 933 entities!
+[Tue Jun 06 2017 13:06:10 GMT-0600 (MDT)] INFO Successfully established connection to the MySQL database!

@@ -3,10 +3,10 @@
   "host": "0.0.0.0",
   "port": 1800,
 
-  "offlineMode": true,
+  "offlineMode": false,
   "devClient": true,
 
-  "mysqlHost": "144.217.92.76",
+  "mysqlHost": "107.173.65.136",
   "mysqlPort": 3306,
   "mysqlUser": "flavius",
   "mysqlPassword": "Demise255",

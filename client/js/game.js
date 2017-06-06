@@ -174,7 +174,7 @@ define(['./renderer/renderer', './utils/storage',
                     var registerInfo = self.app.registerFields,
                         username = registerInfo[0].val(),
                         password = registerInfo[1].val(),
-                        email = registerInfo[2].val();
+                        email = registerInfo[3].val();
 
                     self.socket.send(Packets.Intro, [Packets.IntroOpcode.Register, username, password, email]);
                 } else {
@@ -187,8 +187,6 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onWelcome(function(data) {
-
-                log.info('welcome????');
 
                 self.player.setId(data.shift());
                 self.player.username = data.shift();

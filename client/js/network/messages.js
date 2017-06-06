@@ -78,6 +78,10 @@ define(function() {
                     self.app.sendError(null, 'The username you have chosen already exists.');
                     break;
 
+                case 'emailexists':
+                    self.app.sendError(null, 'The email you have chosen is not available.');
+                    break;
+
                 case 'loggedin':
                     self.app.sendError(null, 'The player is already logged in!');
                     break;

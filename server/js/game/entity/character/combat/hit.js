@@ -1,5 +1,10 @@
 var cls = require('../../../../lib/class');
 
+/**
+ * Author: Tachyon
+ * Company: uDeva 2017
+ */
+
 module.exports = Hit = cls.Class.extend({
 
     init: function(type, damage) {

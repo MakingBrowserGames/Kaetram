@@ -88,40 +88,44 @@ module.exports = Incoming = cls.Class.extend({
 
         if (isRegistering) {
             var registerOptions = {
-                method: 'POST',
-                uri: 'https://forum.taptapadventure.com/api/v1/users',
-                form: {
-                    'username': self.player.username.toLowerCase(),
-                    'password': self.player.password,
-                    'email': self.player.email,
-                    '_uid': '9a4c5ddb-5ce6-4a01-a14f-3ae49d8c6507'
-                }
+                method: 'GET',
+                uri: 'https://taptapadventure.com/api/register.php?a=' + '9a4c5ddb-5ce6-4a01-a14f-3ae49d8c6507' + '&u=' + self.player.username + '&p=' + self.player.password + '&e=' + self.player.email
             };
 
             Request(registerOptions, function(error, reponse, body) {
-                log.info(body);
-                //TODO - Redo registration API on the website
+                try {
+                    var data = JSON.parse(JSON.parse(body).data);
+
+                    switch (data.code) {
+                        case 'ok':
+                            self.mysql.register(self.player);
+                            break;
+
+                        case 'internal-server-error': //email
+
+                            self.connection.sendUTF8('emailexists');
+                            self.connection.close('Email not available.');
+                            break;
+
+                        case 'not-authorised': //username
+                            self.connection.sendUTF8('userexists');
+                            self.connection.close('Username not available.');
+                            break;
+
+                        default:
+
+                            self.connection.sendUTF8('error');
+                            self.connection.close('Unknown API Response: ' + error);
+                            break;
+                    }
+
+                } catch (e) {
+                    log.info('Could not decipher API message');
+                    self.connection.sendUTF8('disallowed');
+                    self.connection.close('API response is malformed!')
+                }
             });
 
-            /*var registerOptions = {
-                method: 'GET',
-                uri: 'https://taptapadventure.com/api/register.php?a=9a4c5ddb-5ce6-4a01-a14f-3ae49d8c6507&u=' + self.player.username.toLowerCase() + '&p=' + self.player.password + '&e=' + self.player.email
-            };
-
-            Request(registerOptions, function(error, response, body) {
-                log.info(body);
-                
-                switch(JSON.parse(JSON.parse(body).data).code) {
-                    case 'ok':
-                        self.mysql.register(self.player);
-                        break;
-
-                    default:
-                        self.connection.sendUTF8('userexists');
-                        self.connection.close('Username: ' + username + ' not available.');
-                        break;
-                }
-            });*/
         } else {
             var loginOptions = {
                 method: 'POST',
@@ -327,6 +331,9 @@ module.exports = Incoming = cls.Class.extend({
             case Packets.CombatOpcode.Initiate:
                 var attacker = self.world.getEntityByInstance(message.shift()),
                     target = self.world.getEntityByInstance(message.shift());
+
+                attacker.combat.start();
+                target.combat.start();
 
                 attacker.setTarget(target);
                 attacker.combat.attack(target);

@@ -122,8 +122,6 @@ module.exports = MySQL = cls.Class.extend({
             });
 
             if (!exists) {
-                log.info('Player: ' + player.username + ' does not exist, registering...');
-
                 player.isNew = true;
                 player.load(self.creator.getPlayerData(player));
                 self.creator.save(player);
@@ -131,6 +129,12 @@ module.exports = MySQL = cls.Class.extend({
                 player.intro();
             }
         });
+    },
+
+    save: function(player) {
+        var self = this;
+
+
     },
 
     loadDatabases: function() {

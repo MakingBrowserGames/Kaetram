@@ -9,6 +9,11 @@ var cls = require('../../../../lib/class'),
     Messages = require('../../../../network/messages'),
     Packets = require('../../../../network/packets');
 
+/**
+ * Author: Tachyon
+ * Company: uDeva 2017
+ */
+
 module.exports = Combat = cls.Class.extend({
 
     init: function(character) {
@@ -25,30 +30,53 @@ module.exports = Combat = cls.Class.extend({
 
         self.attacking = false;
 
-        self.attackTimeout = null;
-        self.followTimeout = null;
+        self.attackLoop = null;
+        self.followLoop = null;
+        self.checkLoop = null;
 
         self.first = false;
-
-        self.start();
+        self.started = false;
+        self.lastAction = -1;
     },
 
     start: function() {
         var self = this;
 
-        self.attackTimeout = setInterval(function() { self.parseAttack(); }, self.character.attackRate);
+        if (self.started)
+            return;
 
-        self.followTimeout = setInterval(function() { self.parseFollow(); }, 400);
+        self.lastAction = new Date();
+
+        self.attackLoop = setInterval(function() { self.parseAttack(); }, self.character.attackRate);
+
+        self.followLoop = setInterval(function() { self.parseFollow(); }, 400);
+
+        self.checkLoop = setInterval(function() {
+            var time = new Date();
+
+            if (time - self.lastAction > 15000)
+                self.stop();
+
+        }, 1000);
+
+        self.started = true;
     },
 
     stop: function() {
         var self = this;
 
-        clearTimeout(self.attackTimeout);
-        clearTimeout(self.followTimeout);
+        if (!self.started)
+            return;
 
-        self.attackTimeout = null;
-        self.followTimeout = null;
+        clearInterval(self.attackLoop);
+        clearInterval(self.followLoop);
+        clearInterval(self.checkLoop);
+
+        self.attackLoop = null;
+        self.followLoop = null;
+        self.checkLoop = null;
+
+        self.started = false;
     },
 
     parseAttack: function() {
@@ -59,10 +87,13 @@ module.exports = Combat = cls.Class.extend({
 
         if (self.character.hasTarget() && self.inProximity()) {
             if (self.queue.hasQueue())
-                self.world.pushToAdjacentGroups(self.character.group, new Messages.Combat(Packets.CombatOpcode.Hit, self.character.instance, self.character.target.instance, self.queue.getHit()));
+                self.hit(self.character, self.character.target, self.queue.getHit());
 
             if (!self.character.target.isDead())
                 self.attack(self.character.target);
+
+            self.lastAction = new Date();
+
         } else
             self.queue.clear();
     },
@@ -71,24 +102,20 @@ module.exports = Combat = cls.Class.extend({
         var self = this;
 
         if (self.character.type === 'mob' && !self.character.isAtSpawn() && !self.isAttacked()) {
-            log.info('returning...?');
-
             self.character.return();
-
-            self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Move, false, false, self.character.x, self.character.y));
+            self.move(self.character, self.character.x, self.character.y);
         }
 
         if (self.onSameTile()) {
             var position = self.getNewPosition();
-
-            self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Move, false, false, position.x, position.y));
+            self.move(self.character, position.x, position.y);
         }
 
         if (self.character.hasTarget() && !self.inProximity() && (self.character.type === 'mob' || self.isRetaliating())) {
             var attacker = self.getClosestAttacker();
 
             if (attacker)
-                self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Follow, false, false, null, null, attacker.instance));
+                self.follow(self.character, attacker);
         }
     },
 
@@ -97,13 +124,6 @@ module.exports = Combat = cls.Class.extend({
             hit = new Hit(Modules.Hits.Damage, Formulas.getDamage(self.character, target));
 
         self.queue.add(hit);
-    },
-
-    attackCount: function(count, target) {
-        var self = this;
-
-        for (var i = 0; i < count; i++)
-            self.attack(new Hit(Modules.Hits.Damage, Formulas.getDamage(self.character, target)));
     },
 
     forceAttack: function() {
@@ -116,7 +136,14 @@ module.exports = Combat = cls.Class.extend({
         self.start();
 
         self.attackCount(2, self.character.target);
-        self.world.pushToAdjacentGroups(self.character.group, new Messages.Combat(Packets.CombatOpcode.Hit, self.character.instance, self.character.target.instance, self.queue.getHit()));
+        self.hit(self.character, self.character.target, self.queue.getHit());
+    },
+
+    attackCount: function(count, target) {
+        var self = this;
+
+        for (var i = 0; i < count; i++)
+            self.attack(new Hit(Modules.Hits.Damage, Formulas.getDamage(self.character, target)));
     },
 
     addAttacker: function(character) {
@@ -136,7 +163,7 @@ module.exports = Combat = cls.Class.extend({
 
         if (self.character.type === 'mob' && Object.keys(self.attackers).length === 0) {
             self.character.return();
-            self.world.pushBroadcast(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Move, false, false, self.character.spawnLocation[0], self.character.spawnLocation[1]));
+            self.move(self.character, self.character.spawnLocation[0], self.character.spawnLocation[1]);
         }
     },
 
@@ -152,7 +179,7 @@ module.exports = Combat = cls.Class.extend({
     onSameTile: function() {
         var self = this;
 
-        if (!self.character.target)
+        if (!self.character.target || self.character.type !== 'mob')
             return;
 
         return self.character.x === self.character.target.x && self.character.y === self.character.target.y;
@@ -185,6 +212,10 @@ module.exports = Combat = cls.Class.extend({
 
     isRetaliating: function() {
         return Object.keys(this.attackers).length === 0 && this.retaliate;
+    },
+
+    inCombat: function() {
+        return this.started;
     },
 
     inProximity: function() {
@@ -232,6 +263,18 @@ module.exports = Combat = cls.Class.extend({
 
     forget: function() {
         this.attackers = {};
+    },
+
+    move: function(character, x, y) {
+        this.world.pushBroadcast(new Messages.Movement(character.instance, Packets.MovementOpcode.Move, false, false, x, y));
+    },
+
+    hit: function(character, target, hitInfo) {
+        this.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, character.instance, target.instance, hitInfo));
+    },
+
+    follow: function(character, target) {
+        this.world.pushBroadcast(new Messages.Movement(character.instance, Packets.MovementOpcode.Follow, false, false, null, null, target.instance));
     },
 
     forEachAttacker: function(callback) {

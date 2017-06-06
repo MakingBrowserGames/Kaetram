@@ -11,7 +11,11 @@ var fs = require('fs'),
 
 log = new Log(config.worlds > 1 ? 'notice' : config.debugLevel, config.localDebug ? fs.createWriteStream('runtime.log') : null);
 
+    const ShutdownHook = require('shutdown-hook');
+
 function Main() {
+
+    var shutdownHook = new ShutdownHook();
 
     log.notice('Initializing ' + config.name + ' game engine...');
 
@@ -74,6 +78,17 @@ function Main() {
 
     }, 200);
 
+    process.on('SIGINT', function() {
+        shutdownHook.register();
+    });
+
+    process.on('SIGQUIT', function() {
+        shutdownHook.register();
+    });
+
+    shutdownHook.on('ShutdownStarted', function(e) {
+        saveAll(worlds);
+    });
 }
 
 function loadParser() {
@@ -94,6 +109,14 @@ function getPopulations(worlds) {
             counts.push(worlds[index].playerCount);
 
     return counts;
+}
+
+function saveAll(worlds) {
+    _.each(worlds, function(world) {
+        world.saveAll();
+    });
+
+    log.notice('Saved players for ' + worlds.length + ' world(s).')
 }
 
 if ( typeof String.prototype.startsWith !== 'function' ) {
