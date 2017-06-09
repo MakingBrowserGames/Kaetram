@@ -66,6 +66,10 @@ define(function() {
                     self.app.sendError(null, 'The server has responded with an error!');
                     break;
 
+                case 'development':
+                    self.app.sendError(null, 'The game is currently in development mode.');
+                    break;
+
                 case 'disallowed':
                     self.app.sendError(null, 'The server is currently not accepting connections!');
                     break;

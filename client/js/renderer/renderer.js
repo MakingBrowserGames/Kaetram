@@ -72,8 +72,6 @@ define(['./camera', './tile',
             self.forEachContext(function(context) {
                 context.mozImageSmoothingEnabled = false;
             });
-
-            self.loadFont();
         },
 
         loadSizes: function() {
@@ -92,15 +90,6 @@ define(['./camera', './tile',
                 canvas.width = width;
                 canvas.height = height;
             });
-        },
-
-        loadFont: function() {
-            var self = this,
-                font = 10 * self.scale + 'px AdvoCut';
-
-            self.forEachContext(function(context) {
-                context.font = font;
-            })
         },
 
         loadCamera: function() {
@@ -132,7 +121,6 @@ define(['./camera', './tile',
                     if (self.camera)
                         self.camera.update();
 
-                    self.loadFont();
                     self.updateAnimatedTiles();
 
                     self.loadSizes();
@@ -177,6 +165,8 @@ define(['./camera', './tile',
 
                 self.drawEntities(false);
 
+                self.drawInfos();
+
                 self.drawDebugging();
             }
 
@@ -216,10 +206,23 @@ define(['./camera', './tile',
             self.saveFrame();
         },
 
+        drawInfos: function() {
+            var self = this;
+
+            self.game.info.forEachInfo(function(info) {
+                self.textContext.save();
+                self.textContext.font = '20px AdvoCut';
+                self.setCameraView(self.textContext);
+                self.textContext.globalAlpha = info.opacity;
+                self.drawText('' + info.text, (info.x + 8), Math.floor(info.y), true, info.fill, info.stroke);
+                self.textContext.restore();
+            });
+        },
+
         drawDebugging: function() {
             var self = this;
 
-            if (self.game.development)
+            if (self.game.development && !self.mobile)
                 self.drawPathing();
         },
 
@@ -339,6 +342,29 @@ define(['./camera', './tile',
                 self.context.drawImage(sparks.image, sx, sy, sw, sh, 0, 0, sw, sh);
             }
 
+            self.context.restore();
+
+            self.drawHealth(entity);
+        },
+
+        drawHealth: function(entity) {
+            var self = this;
+
+            if (!entity.hitPoints || entity.hitPoints < 0)
+                return;
+
+            var barLength = 16,
+                healthX = entity.x * self.drawingScale - barLength / 2 + 8,
+                healthY = (entity.y - 9) * self.drawingScale,
+                healthWidth = Math.round(entity.hitPoints / entity.maxHitPoints * barLength * self.drawingScale),
+                healthHeight = 2 * self.drawingScale;
+
+            self.context.save();
+            self.context.strokeStyle = '#00000';
+            self.context.lineWidth = 1;
+            self.context.strokeRect(healthX, healthY, barLength * self.drawingScale, healthHeight);
+            self.context.fillStyle = '#FD0000';
+            self.context.fillRect(healthX, healthY, healthWidth, healthHeight);
             self.context.restore();
         },
 

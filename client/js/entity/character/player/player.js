@@ -24,6 +24,11 @@ define(['../character', './equipment/armour', './equipment/weapon',
             self.pvpKills = -1;
             self.pvpDeaths = -1;
 
+            self.hitPoints = -1;
+            self.maxHitPoints = -1;
+            self.mana = -1;
+            self.maxMana = -1;
+
             self.prevX = 0;
             self.prevY = 0;
 
@@ -100,11 +105,20 @@ define(['../character', './equipment/armour', './equipment/weapon',
             this._super(x, y);
         },
 
-        setHitPoints: function(data) {
-            var self = this;
+        setHitPoints: function(hitPoints) {
+            this._super(hitPoints);
+        },
 
-            self.hitPoints = data[0];
-            self.maxHitPoints = data[1];
+        setMaxHitPoints: function(maxHitPoints) {
+            this._super(maxHitPoints);
+        },
+
+        setMana: function(mana) {
+            this.mana = mana;
+        },
+
+        setMaxMana: function(maxMana) {
+            this.maxMana = maxMana;
         },
 
         setEquipment: function(type, data) {

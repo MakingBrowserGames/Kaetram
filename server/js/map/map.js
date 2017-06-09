@@ -14,6 +14,7 @@ var cls = require('../lib/class'),
 module.exports = Map = cls.Class.extend({
 
     init: function(world) {
+
         var self = this;
 
         self.world = world;

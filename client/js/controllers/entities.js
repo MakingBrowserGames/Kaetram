@@ -92,7 +92,12 @@ define(['../renderer/grids', '../entity/objects/chest',
 
                 case 'mob':
 
-                    var mob = new Mob(id, kind);
+                    var mob = new Mob(id, kind),
+                        hitPoints = info.shift(),
+                        maxHitPoints = info.shift();
+
+                    mob.setHitPoints(hitPoints);
+                    mob.setMaxHitPoints(maxHitPoints);
 
                     entity = mob;
 
@@ -124,7 +129,9 @@ define(['../renderer/grids', '../entity/objects/chest',
                     player.rights = rights;
                     player.level = level;
 
-                    player.setHitPoints(hitPointsData);
+                    player.setHitPoints(hitPointsData[0]);
+                    player.setMaxHitPoints(hitPointsData[1]);
+
                     player.pvpKills = pvpKills;
                     player.pvpDeaths = pvpDeaths;
 

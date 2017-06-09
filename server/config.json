@@ -5,6 +5,7 @@
 
   "offlineMode": false,
   "devClient": true,
+  "development": true,
 
   "mysqlHost": "107.173.65.136",
   "mysqlPort": 3306,

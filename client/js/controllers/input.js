@@ -132,6 +132,16 @@ define(['../entity/animation'], function(Animation) {
                             self.renderer.camera.decenter();
 
                             break;
+
+                        case Modules.Keys.Five:
+
+                            log.info(self.game.info.infos);
+
+                            self.game.info.forEachInfo(function(info) {
+                                log.info(info);
+                            });
+
+                            break;
                     }
 
                     break;

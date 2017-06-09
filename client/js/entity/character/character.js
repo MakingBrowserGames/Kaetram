@@ -21,6 +21,8 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             self.mana = -1;
             self.maxMana = -1;
 
+            self.healtBarVisible = false;
+
             self.dead = false;
             self.following = false;
             self.attacking = false;
@@ -429,6 +431,14 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
                 self.removeTarget();
 
             self.target = target;
+        },
+
+        setHitPoints: function(hitPoints, maxHitPoints) {
+            this.hitPoints = hitPoints;
+        },
+
+        setMaxHitPoints: function (maxHitPoints) {
+            this.maxHitPoints = maxHitPoints;
         },
 
         setOrientation: function(orientation) {

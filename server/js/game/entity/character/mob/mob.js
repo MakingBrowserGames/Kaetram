@@ -10,6 +10,7 @@ module.exports = Mob = Character.extend({
 
         self.data = Mobs.Ids[self.id];
         self.hitPoints = self.data.hitPoints;
+        self.maxHitPoints = self.data.hitPoints;
 
         self.spawnLocation = [x, y];
 
@@ -43,6 +44,15 @@ module.exports = Mob = Character.extend({
 
     respawn: function() {
 
+    },
+
+    getState: function() {
+        var self = this,
+            base = self._super();
+
+        base.push(self.hitPoints, self.maxHitPoints);
+
+        return base;
     },
 
     resetPosition: function() {

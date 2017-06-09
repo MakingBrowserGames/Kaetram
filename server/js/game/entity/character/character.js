@@ -23,6 +23,7 @@ module.exports = Character = Entity.extend({
         self.previousY = -1;
 
         self.hitPoints = -1;
+        self.maxHitPoints = -1;
 
         self.dead = false;
         self.aggressive = false;

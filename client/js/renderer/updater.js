@@ -21,6 +21,7 @@ define(['../entity/character/character'], function(Character) {
             this.updateKeyboard();
             this.updateAnimations();
             this.verifyScale();
+            this.updateInfos();
         },
 
         animateTiles: function() {
@@ -196,6 +197,11 @@ define(['../entity/character/character'], function(Character) {
             if (self.renderer.tileset && self.renderer.tileset.scale !== scale)
                 self.game.map.updateTileset();
 
+        },
+
+        updateInfos: function() {
+            if (this.game.info)
+                this.game.info.update(this.game.time);
         },
 
         setSprites: function(sprites) {

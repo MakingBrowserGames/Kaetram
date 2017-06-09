@@ -8,6 +8,17 @@ define(['../character'], function(Character) {
             self._super(id, kind);
 
             self.name = name;
+
+            self.hitPoints = -1;
+            self.maxHitPoints = -1;
+        },
+
+        setHitPoints: function(hitPoints) {
+            this._super(hitPoints);
+        },
+
+        setMaxHitPoints: function(maxHitPoints) {
+            this._super(maxHitPoints);
         },
 
         idle: function() {

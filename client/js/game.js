@@ -4,10 +4,10 @@ define(['./renderer/renderer', './utils/storage',
         './map/map', './network/socket', './entity/character/player/player',
         './renderer/updater', './controllers/entities', './controllers/input',
         './entity/character/player/playerhandler', './utils/pathfinder',
-        './controllers/zoning',
+        './controllers/zoning', './controllers/info',
         './utils/modules', './network/packets'],
         function(Renderer, LocalStorage, Map, Socket, Player, Updater,
-                 Entities, Input, PlayerHandler, Pathfinder, Zoning) {
+                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info) {
 
     return Class.extend({
 
@@ -29,6 +29,7 @@ define(['./renderer/renderer', './utils/storage',
             self.playerHandler = null;
             self.pathfinder = null;
             self.zoning = null;
+            self.info = null;
 
             self.player = null;
 
@@ -115,6 +116,8 @@ define(['./renderer/renderer', './utils/storage',
 
             self.setEntityController(new Entities(self));
 
+            self.setInfo(new Info(self));
+
             if (!hasWorker)
                 self.loaded = true;
         },
@@ -200,14 +203,16 @@ define(['./renderer/renderer', './utils/storage',
                 self.player.kind = data.shift();
                 self.player.rights = data.shift();
 
+                log.info(hitPointsData);
+
                 var hitPointsData = data.shift(),
                     manaData = data.shift();
 
-                self.player.hitPoints = hitPointsData.shift();
-                self.player.maxHitPoints = hitPointsData.shift();
+                self.player.setHitPoints(hitPointsData.shift());
+                self.player.setMaxHitPoints(hitPointsData.shift());
 
-                self.player.mana = manaData.shift();
-                self.player.maxMana = manaData.shift();
+                self.player.setMana(manaData.shift());
+                self.player.setMaxMana(manaData.shift());
 
                 self.player.experience = data.shift();
                 self.player.level = data.shift();
@@ -378,6 +383,11 @@ define(['./renderer/renderer', './utils/storage',
                         if (type === Modules.Hits.Damage) {
                             attacker.lookAt(target);
                             attacker.performAction(attacker.orientation, Modules.Actions.Attack);
+
+                            var isTarget = target.id === self.player.id,
+                                info = [damage, isTarget];
+
+                            self.info.create(type, info, target.x, target.y);
                         }
 
                         break;
@@ -581,6 +591,11 @@ define(['./renderer/renderer', './utils/storage',
         setPathfinder: function(pathfinder) {
             if (!this.pathfinder)
                 this.pathfinder = pathfinder;
+        },
+
+        setInfo: function(info) {
+            if (!this.info)
+                this.info = info;
         }
 
     });

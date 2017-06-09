@@ -62,5 +62,37 @@ Modules = {
         U: 85,
         J: 74,
         Enter: 13
+    },
+
+    DamageColours: {
+        'received': {
+            fill: 'rgb(255, 50, 50)',
+            stroke: 'rgb(255, 180, 180)'
+        },
+
+        'inflicted': {
+            fill: 'white',
+            stroke: '#373737'
+        },
+
+        'healed': {
+            fill: 'rgb(80, 255, 80)',
+            stroke: 'rgb(50, 120, 50)'
+        },
+
+        'health': {
+            fill: 'white',
+            stroke: '#373737'
+        },
+
+        'exp': {
+            fill: 'rgb(80, 80, 255)',
+            stroke: 'rgb(50, 50, 255)'
+        },
+
+        'poison': {
+            fill: 'rgb(66, 183, 77)',
+            stroke: 'rgb(50, 120 , 50)'
+        }
     }
 };

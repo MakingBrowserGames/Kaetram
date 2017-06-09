@@ -88,6 +88,12 @@ module.exports = Player = Character.extend({
         if (self.x <= 0 || self.y <= 0)
             self.sendToSpawn();
 
+        if (self.hitPoints.getHitPoints() < 0)
+            self.hitPoints.setHitPoints(self.hitPoints.getMaxHitPoints());
+
+        if (self.mana.getMana() < 0)
+            self.mana.setMana(self.mana.getMaxMana());
+
         var info = [
                 self.instance,
                 self.username,

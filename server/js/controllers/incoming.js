@@ -75,6 +75,14 @@ module.exports = Incoming = cls.Class.extend({
             return;
         }
 
+        log.info(self.player.username);
+
+        if (config.development && self.player.username !== 'Test' && self.player.username !== 'Tachyon') {
+            self.connection.sendUTF8('development');
+            self.connection.close();
+            return;
+        }
+
         if (config.offlineMode) {
             var creator = new Creator(null);
 

@@ -117,6 +117,7 @@ module.exports = World = cls.Class.extend({
                     connection = conn;
                     connection.send(self.packets[id]);
                     self.packets[id] = [];
+                    self.packets[id].id = id;
                 } else
                     delete self.socket.getConnection(id);
             }
@@ -186,6 +187,15 @@ module.exports = World = cls.Class.extend({
 
         _.each(self.packets, function(packet) {
             packet.push(message.serialize());
+        });
+    },
+
+    pushSelectively: function(message, ignores) {
+        var self = this;
+
+        _.each(self.packets, function(packet) {
+            if (ignores.indexOf(packet.id) < 0)
+                packet.push(message.serialize());
         });
     },
 

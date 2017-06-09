@@ -1,10 +1,8 @@
 var fs = require('fs'),
     config = require('../config.json'),
     Log = require('log'),
-    World = require('./game/world'),
     MySQL = require('./database/mysql'),
     WebSocket = require('./network/websocket'),
-    Utils = require('./util/utils'),
     _ = require('underscore'),
     allowConnections = false,
     Parser = require('./util/parser');
@@ -15,11 +13,11 @@ log = new Log(config.worlds > 1 ? 'notice' : config.debugLevel, config.localDebu
 
 function Main() {
 
-    var shutdownHook = new ShutdownHook();
-
     log.notice('Initializing ' + config.name + ' game engine...');
 
-    var worlds = [],
+    var shutdownHook = new ShutdownHook(),
+        World = require('./game/world'),
+        worlds = [],
         webSocket = new WebSocket.Server(config.host, config.port, config.gver),
         database;
 
@@ -52,19 +50,6 @@ function Main() {
 
     });
 
-    webSocket.onRequestStatus(function() {
-        return JSON.stringify(getPopulations(worlds));
-    });
-
-    webSocket.onError(function() {
-        log.notice('Web Socket has encountered an error.');
-    });
-
-    /**
-     * We want to generate worlds after the socket
-     * has finished initializing.
-     */
-
     setTimeout(function() {
         for (var i = 0; i < config.worlds; i++)
             worlds.push(new World(i + 1, webSocket, database));
@@ -77,6 +62,19 @@ function Main() {
         loadParser();
 
     }, 200);
+
+    webSocket.onRequestStatus(function() {
+        return JSON.stringify(getPopulations(worlds));
+    });
+
+    webSocket.onError(function() {
+        log.notice('Web Socket has encountered an error.');
+    });
+
+    /**
+     * We want to generate worlds after the socket
+     * has finished initializing.
+     */
 
     process.on('SIGINT', function() {
         shutdownHook.register();

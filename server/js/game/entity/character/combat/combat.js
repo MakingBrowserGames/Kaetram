@@ -37,6 +37,7 @@ module.exports = Combat = cls.Class.extend({
         self.first = false;
         self.started = false;
         self.lastAction = -1;
+        self.lastHit = -1;
     },
 
     start: function() {
@@ -100,6 +101,8 @@ module.exports = Combat = cls.Class.extend({
 
     parseFollow: function() {
         var self = this;
+
+        self.sendFollow();
 
         if (self.character.type === 'mob' && !self.character.isAtSpawn() && !self.isAttacked()) {
             self.character.return();
@@ -270,11 +273,30 @@ module.exports = Combat = cls.Class.extend({
     },
 
     hit: function(character, target, hitInfo) {
-        this.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, character.instance, target.instance, hitInfo));
+        var self = this,
+            time = new Date().getTime();
+
+        if (time - self.lastHit < 1000)
+            return;
+
+        self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, character.instance, target.instance, hitInfo));
+
+        self.lastHit = new Date().getTime();
     },
 
     follow: function(character, target) {
         this.world.pushBroadcast(new Messages.Movement(character.instance, Packets.MovementOpcode.Follow, false, false, null, null, target.instance));
+    },
+
+    sendFollow: function() {
+        var self = this;
+
+        if (!self.character.hasTarget())
+            return;
+
+        var ignores = [self.character.instance, self.character.target.instance];
+
+        self.world.pushSelectively(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Follow, false, false, null, null, self.character.target.instance), ignores);
     },
 
     forEachAttacker: function(callback) {
