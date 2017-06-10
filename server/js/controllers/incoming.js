@@ -75,8 +75,6 @@ module.exports = Incoming = cls.Class.extend({
             return;
         }
 
-        log.info(self.player.username);
-
         if (config.development && self.player.username !== 'Test' && self.player.username !== 'Tachyon') {
             self.connection.sendUTF8('development');
             self.connection.close();
@@ -282,6 +280,7 @@ module.exports = Incoming = cls.Class.extend({
                     oEntity.combat.forget();
                     oEntity.return();
                     self.world.pushBroadcast(new Messages.Movement(instance, Packets.MovementOpcode.Move, false, false, oEntity.spawnLocation[0], oEntity.spawnLocation[1]));
+                    self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Finish, null, oEntity.instance))
                 }
 
                 if (oEntity.hasTarget())
@@ -349,19 +348,10 @@ module.exports = Incoming = cls.Class.extend({
                 if (target.type === 'mob' || (target.type === 'player' && target.combat.isRetaliating())) {
                     target.setTarget(attacker);
                     target.combat.attack(target); //To give it a delay
+                    attacker.combat.addAttacker(target);
                 }
 
                 target.combat.addAttacker(attacker);
-
-                break;
-
-            case Packets.CombatOpcode.Hit:
-
-
-
-                break;
-
-            case Packets.CombatOpcode.Finish:
 
                 break;
         }

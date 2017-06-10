@@ -1,4 +1,5 @@
-var Equipment = require('./equipment');
+var Equipment = require('./equipment'),
+    Items = require('../../../../../util/items');
 
 module.exports = Armour = Equipment.extend({
 
@@ -7,8 +8,7 @@ module.exports = Armour = Equipment.extend({
 
         self._super(name, id, count, skill, skillLevel);
 
-        self.defense = -1;
-
+        self.defense = Items.getArmourLevel(name);
     },
 
     setDefense: function(defense) {

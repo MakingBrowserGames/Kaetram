@@ -106,18 +106,14 @@ define(['../entity/animation'], function(Animation) {
                             break;
 
                         case Modules.Keys.One:
-                            if (self.game.development)
-                                self.renderer.forEachDrawingContext(function(context) {
-                                    log.info(context.canvas.id);
-                                });
 
+                            self.game.development = true;
 
                             break;
 
                         case Modules.Keys.Two:
 
-                            if (self.game.development)
-                                log.info(self.game.player.gridX + ' ' + self.game.player.gridY);
+                            self.game.development = false;
 
                             break;
 
@@ -135,10 +131,13 @@ define(['../entity/animation'], function(Animation) {
 
                         case Modules.Keys.Five:
 
-                            log.info(self.game.info.infos);
+                            /**
+                             * Testing to see how the current info system holds up.
+                             */
 
-                            self.game.info.forEachInfo(function(info) {
-                                log.info(info);
+                            self.renderer.forEachVisibleEntity(function(entity) {
+                                if (entity.type === 'mob' || entity.type === 'player')
+                                    var hitSplat = self.game.info.create(Modules.Hits.Damage, [10, entity.id === self.game.player.id], entity.x, entity.y);
                             });
 
                             break;
@@ -212,7 +211,7 @@ define(['../entity/animation'], function(Animation) {
                 position = self.getCoords(),
                 entity = self.game.getEntityAt(position.x, position.y);
 
-            if (!entity) {
+            if (!entity || (entity.id === self.game.player.id)) {
                 self.setCursor(self.cursors['hand']);
                 self.hovering = null;
             } else {

@@ -121,6 +121,10 @@ define(['../character', './equipment/armour', './equipment/weapon',
             this.maxMana = maxMana;
         },
 
+        clearHealthBar: function() {
+            this._super();
+        },
+
         setEquipment: function(type, data) {
             var self = this,
                 name = data.shift(),

@@ -1,4 +1,5 @@
-var Equipment = require('./equipment');
+var Equipment = require('./equipment'),
+    Items = require('../../../../../util/items');
 
 module.exports = Weapon = Equipment.extend({
 
@@ -7,15 +8,20 @@ module.exports = Weapon = Equipment.extend({
 
         self._super(name, id, count, skill, skillLevel);
 
-        self.damage = -1;
+        self.level = Items.getWeaponLevel(name);
+        self.ranged = Items.isArcherWeapon(name);
     },
 
-    setDamage: function(damage) {
-        this.damage = damage;
+    isRanged: function() {
+        return this.ranged;
     },
 
-    getDamage: function() {
-        return this.damage;
+    setLevel: function(level) {
+        this.level = level;
+    },
+
+    getLevel: function() {
+        return this.level;
     }
 
 });

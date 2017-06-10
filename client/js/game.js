@@ -203,8 +203,6 @@ define(['./renderer/renderer', './utils/storage',
                 self.player.kind = data.shift();
                 self.player.rights = data.shift();
 
-                log.info(hitPointsData);
-
                 var hitPointsData = data.shift(),
                     manaData = data.shift();
 
@@ -220,6 +218,8 @@ define(['./renderer/renderer', './utils/storage',
                 self.player.lastLogin = data.shift();
                 self.player.pvpKills = data.shift();
                 self.player.pvpDeaths = data.shift();
+
+                self.player.type = 'player';
 
                 self.start();
                 self.postLoad();
@@ -330,6 +330,7 @@ define(['./renderer/renderer', './utils/storage',
 
                 if (isPlayer) {
                     self.entities.clearPlayers(self.player);
+                    self.player.clearHealthBar();
                     self.renderer.camera.centreOn(entity);
                     self.renderer.updateAnimatedTiles();
                 } else {
@@ -365,9 +366,11 @@ define(['./renderer/renderer', './utils/storage',
 
                 switch (opcode) {
                     case Packets.CombatOpcode.Initiate:
-
                         attacker.setTarget(target);
                         target.addAttacker(attacker);
+
+                        attacker.healthBarVisible = true;
+                        target.healthBarVisible = true;
 
                         if (target.id === self.player.id || attacker.id === self.player.id)
                             self.socket.send(Packets.Combat, [Packets.CombatOpcode.Initiate, attacker.id, target.id]);
@@ -390,12 +393,20 @@ define(['./renderer/renderer', './utils/storage',
                             self.info.create(type, info, target.x, target.y);
                         }
 
+                        attacker.triggerHealthBar();
+                        target.triggerHealthBar();
+
                         break;
 
                     case Packets.CombatOpcode.Finish:
 
-                        attacker.removeTarget(target);
-                        target.removeAttacker(attacker);
+                        if (target) {
+                            target.removeTarget();
+                            target.forget();
+                        }
+
+                        if (attacker)
+                            attacker.removeTarget();
 
                         break;
                 }

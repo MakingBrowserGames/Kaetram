@@ -52,18 +52,20 @@ module.exports = Player = Character.extend({
         var self = this;
 
         self.setPosition(data.x, data.y);
+
         self.kind = data.kind;
         self.rights = data.rights;
         self.experience = data.experience;
-        self.level = Formulas.expToLevel(self.experience);
-        self.hitPoints = new Hitpoints(data.hitPoints, Formulas.getMaxHitPoints(self.level));
-        self.mana = new Mana(data.mana, Formulas.getMaxMana(self.level));
         self.ban = data.ban;
         self.membership = data.membership;
         self.lastLogin = data.lastLogin;
         self.pvpKills = data.pvpKills;
         self.pvpDeaths = data.pvpDeaths;
-        
+
+        self.level = Formulas.expToLevel(self.experience);
+        self.hitPoints = new Hitpoints(data.hitPoints, Formulas.getMaxHitPoints(self.level));
+        self.mana = new Mana(data.mana, Formulas.getMaxMana(self.level));
+
         var armour = data.armour,
             weapon = data.weapon,
             pendant = data.pendant,

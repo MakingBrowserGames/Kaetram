@@ -166,15 +166,9 @@ define(['./camera', './tile',
                 self.drawEntities(false);
 
                 self.drawInfos();
-
-                self.drawDebugging();
             }
 
-            /**
-             * Text related draws
-             */
-            self.drawFPS();
-            self.drawPosition();
+            self.drawDebugging();
 
             self.restoreAll();
 
@@ -209,12 +203,17 @@ define(['./camera', './tile',
         drawInfos: function() {
             var self = this;
 
+            if (self.game.info.getCount() === 0)
+                return;
+
             self.game.info.forEachInfo(function(info) {
+                var factor = self.mobile ? 2 : 1;
+
                 self.textContext.save();
                 self.textContext.font = '20px AdvoCut';
                 self.setCameraView(self.textContext);
                 self.textContext.globalAlpha = info.opacity;
-                self.drawText('' + info.text, (info.x + 8), Math.floor(info.y), true, info.fill, info.stroke);
+                self.drawText('' + info.text, Math.floor((info.x + 8) * factor), Math.floor(info.y * factor), true, info.fill, info.stroke);
                 self.textContext.restore();
             });
         },
@@ -222,8 +221,12 @@ define(['./camera', './tile',
         drawDebugging: function() {
             var self = this;
 
-            if (self.game.development && !self.mobile)
+            self.drawFPS();
+
+            if (self.game.development && !self.mobile) {
+                self.drawPosition();
                 self.drawPathing();
+            }
         },
 
         drawAnimatedTiles: function() {
@@ -345,12 +348,13 @@ define(['./camera', './tile',
             self.context.restore();
 
             self.drawHealth(entity);
+            self.drawName(entity);
         },
 
         drawHealth: function(entity) {
             var self = this;
 
-            if (!entity.hitPoints || entity.hitPoints < 0)
+            if (!entity.hitPoints || entity.hitPoints < 0 || !entity.healthBarVisible)
                 return;
 
             var barLength = 16,
@@ -366,6 +370,29 @@ define(['./camera', './tile',
             self.context.fillStyle = '#FD0000';
             self.context.fillRect(healthX, healthY, healthWidth, healthHeight);
             self.context.restore();
+        },
+
+        drawName: function(entity) {
+            var self = this;
+
+            if (entity.type !== 'player' || entity.hidden)
+                return;
+
+            var colour = entity.wanted ? 'red' : 'white';
+
+            if (entity.rights > 0)
+                colour = '#999999';
+            else if (entity.rights > 1)
+                colour = '#cccc00';
+
+            if (entity.id === self.game.player.id)
+                colour = '#fcda5c';
+
+            self.textContext.save();
+            self.setCameraView(self.textContext);
+            self.textContext.font = '16px AdvoCut';
+            self.drawText(entity.username, entity.x + 8, entity.y - 10, true, colour);
+            self.textContext.restore();
         },
 
         drawCursor: function() {
@@ -703,7 +730,7 @@ define(['./camera', './tile',
         },
         
         clearText: function() {
-            this.textContext.clearRect(0, 0, this.screenWidth * this.scale, this.screenHeight * this.scale);
+            this.textContext.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
         },
 
         restore: function() {

@@ -25,6 +25,7 @@ define(['./entityhandler'], function(EntityHandler) {
             self.currentAnimation = null;
 
             self.shadowOffsetY = 0;
+            self.hidden = false;
 
             self.spriteLoaded = false;
             self.visible = true;

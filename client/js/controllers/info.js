@@ -20,8 +20,12 @@ define(['../utils/queue', '../renderer/infos/splat'], function(Queue, Splat) {
                 case Modules.Hits.Damage:
                     var damage = data.shift(),
                         isTarget = data.shift(),
-                        id = self.generateId(self.game.time, damage, x, y),
-                        hitSplat = new Splat(id, type, damage, x, y, false),
+                        id = self.generateId(self.game.time, damage, x, y);
+
+                    if (damage < 1 || !isInt(damage))
+                        damage = 'MISS';
+
+                    var hitSplat = new Splat(id, type, damage, x, y, false),
                         colour = isTarget ? Modules.DamageColours.received : Modules.DamageColours.inflicted;
 
                     hitSplat.setColours(colour.fill, colour.stroke);
@@ -30,6 +34,10 @@ define(['../utils/queue', '../renderer/infos/splat'], function(Queue, Splat) {
 
                     break;
             }
+        },
+
+        getCount: function() {
+            return Object.keys(this.infos).length;
         },
 
         addInfo: function(info) {

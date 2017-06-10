@@ -38,6 +38,8 @@ module.exports = Combat = cls.Class.extend({
         self.started = false;
         self.lastAction = -1;
         self.lastHit = -1;
+
+        self.cleanTimeout = null;
     },
 
     start: function() {
@@ -55,7 +57,7 @@ module.exports = Combat = cls.Class.extend({
         self.checkLoop = setInterval(function() {
             var time = new Date();
 
-            if (time - self.lastAction > 15000)
+            if (time - self.lastAction > 5000)
                 self.stop();
 
         }, 1000);
@@ -78,6 +80,15 @@ module.exports = Combat = cls.Class.extend({
         self.checkLoop = null;
 
         self.started = false;
+
+        self.cleanTimeout = setTimeout(function() {
+            if (self.lastHit - new Date().getTime() > 10000 && self.character.type === 'mob') {
+                self.forget();
+                self.character.removeTarget();
+                self.sendToSpawn();
+            }
+
+        }, 20000);
     },
 
     parseAttack: function() {
@@ -163,6 +174,12 @@ module.exports = Combat = cls.Class.extend({
 
         if (self.hasAttacker(character))
             delete self.attackers[character.instance];
+
+        self.sendToSpawn();
+    },
+
+    sendToSpawn: function() {
+        var self = this;
 
         if (self.character.type === 'mob' && Object.keys(self.attackers).length === 0) {
             self.character.return();
@@ -286,6 +303,10 @@ module.exports = Combat = cls.Class.extend({
 
     follow: function(character, target) {
         this.world.pushBroadcast(new Messages.Movement(character.instance, Packets.MovementOpcode.Follow, false, false, null, null, target.instance));
+    },
+
+    end: function() {
+        this.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Finish, this.character.instance, null));
     },
 
     sendFollow: function() {

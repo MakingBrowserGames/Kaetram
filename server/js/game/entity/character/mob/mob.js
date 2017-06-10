@@ -12,6 +12,10 @@ module.exports = Mob = Character.extend({
         self.hitPoints = self.data.hitPoints;
         self.maxHitPoints = self.data.hitPoints;
 
+        self.armourLevel = self.data.armour;
+        self.weaponLevel = self.data.weapon;
+        self.attackRange = self.data.attackRange;
+
         self.spawnLocation = [x, y];
 
         self.dead = false;
@@ -32,6 +36,10 @@ module.exports = Mob = Character.extend({
         self.clearTarget();
         self.resetPosition();
         self.move(self.x, self.y);
+    },
+
+    isRanged: function() {
+        return this.attackRange > 1;
     },
 
     distanceToSpawn: function() {

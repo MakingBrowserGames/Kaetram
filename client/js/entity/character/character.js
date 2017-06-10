@@ -21,7 +21,8 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             self.mana = -1;
             self.maxMana = -1;
 
-            self.healtBarVisible = false;
+            self.healthBarVisible = false;
+            self.healthBarTimeout = false;
 
             self.dead = false;
             self.following = false;
@@ -339,6 +340,31 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             }
         },
 
+        /**
+         * TRIGGERED!!!!
+         */
+
+        triggerHealthBar: function() {
+            var self = this;
+
+            self.healthBarVisible = true;
+
+            if (self.healthBarTimeout)
+                clearTimeout(self.healthBarTimeout);
+
+            self.healthBarTimeout = setTimeout(function() {
+                self.healthBarVisible = false;
+            }, 7000);
+        },
+
+        clearHealthBar: function() {
+            var self = this;
+
+            self.healthBarVisible = false;
+            clearTimeout(self.healthBarTimeout);
+            self.healthBarTimeout = null;
+        },
+
         requestPathfinding: function(x, y) {
             var self = this;
 
@@ -362,6 +388,10 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             _.each(self.attackers, function(attacker) {
                 callback(attacker);
             });
+        },
+
+        isAttacked: function() {
+            return Object.keys(this.attackers).length > 0;
         },
 
         hasWeapon: function() {
@@ -399,6 +429,10 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
                 return;
 
             self.target = null;
+        },
+
+        forget: function() {
+            this.attackers = {};
         },
 
         moved: function() {
