@@ -1,6 +1,7 @@
+/* global log */
+
 var cls = require('../../../../lib/class'),
     CombatQueue = require('./combatqueue'),
-    Player = require('../player/player'),
     Utils = require('../../../../util/utils'),
     Formulas = require('../../../formulas'),
     _ = require('underscore'),
@@ -98,6 +99,7 @@ module.exports = Combat = cls.Class.extend({
             return;
 
         if (self.character.hasTarget() && self.inProximity()) {
+
             if (self.queue.hasQueue())
                 self.hit(self.character, self.character.target, self.queue.getHit());
 
@@ -234,10 +236,6 @@ module.exports = Combat = cls.Class.extend({
         return Object.keys(this.attackers).length === 0 && this.retaliate;
     },
 
-    inCombat: function() {
-        return this.started;
-    },
-
     inProximity: function() {
         var self = this,
             targetDistance = self.character.getDistance(self.character.target),
@@ -248,15 +246,6 @@ module.exports = Combat = cls.Class.extend({
             return self.character.getDistance(self.character.target) <= self.character.attackRange;
 
         return isRanged ? targetDistance <= attackRange : self.character.isNonDiagonal(self.character.target);
-    },
-
-    canFollow: function(character) {
-        var self = this;
-
-        if (self.character.type !== 'mob')
-            return true;
-
-        return self.character.spawnDistance > self.character.getDistance(character);
     },
 
     getClosestAttacker: function() {
@@ -297,6 +286,8 @@ module.exports = Combat = cls.Class.extend({
             return;
 
         self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, character.instance, target.instance, hitInfo));
+
+        self.world.handleDamage(character, target, hitInfo[0]);
 
         self.lastHit = new Date().getTime();
     },

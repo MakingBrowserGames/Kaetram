@@ -125,6 +125,8 @@ define(['./entityhandler'], function(EntityHandler) {
 
             var anim = self.getAnimationByName(name);
 
+            log.info(anim);
+
             if (!anim)
                 return;
 

@@ -134,11 +134,8 @@ define(['../entity/animation'], function(Animation) {
                             /**
                              * Testing to see how the current info system holds up.
                              */
-
-                            self.renderer.forEachVisibleEntity(function(entity) {
-                                if (entity.type === 'mob' || entity.type === 'player')
-                                    var hitSplat = self.game.info.create(Modules.Hits.Damage, [10, entity.id === self.game.player.id], entity.x, entity.y);
-                            });
+                            self.game.player.setSprite(self.game.getSprite('death'));
+                            self.game.player.animate('death', 120, 1);
 
                             break;
                     }

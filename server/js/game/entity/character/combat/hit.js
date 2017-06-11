@@ -18,10 +18,6 @@ module.exports = Hit = cls.Class.extend({
         return this.damage;
     },
 
-    getType: function() {
-        return this.type;
-    },
-
     getData: function() {
         return [this.damage, this.type];
     }

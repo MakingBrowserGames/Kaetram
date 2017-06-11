@@ -30,6 +30,9 @@ define(function() {
             self.messages[Packets.Despawn] = self.receiveDespawn;
             self.messages[Packets.Combat] = self.receiveCombat;
             self.messages[Packets.Animation] = self.receiveAnimation;
+            self.messages[Packets.Projectile] = self.receiveProjectile;
+            self.messages[Packets.Population] = self.receivePopulation;
+            self.messages[Packets.Points] = self.receivePoints;
         },
 
         handleData: function(data) {
@@ -183,6 +186,22 @@ define(function() {
                 self.animationCallback(id, info);
         },
 
+        receiveProjectile: function(data) {
+
+        },
+
+        receivePopulation: function(data) {
+
+        },
+
+        receivePoints: function(data) {
+            var self = this,
+                pointsData = data.shift();
+
+            if (self.pointsCallback)
+                self.pointsCallback(pointsData);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -225,6 +244,18 @@ define(function() {
 
         onAnimation: function(callback) {
             this.animationCallback = callback;
+        },
+
+        onProjectile: function(callback) {
+            this.projectileCallback = callback;
+        },
+
+        onPopulation: function(callback) {
+            this.populationCallback = callback;
+        },
+
+        onPoints: function(callback) {
+            this.pointsCallback = callback;
         }
 
     });

@@ -62,7 +62,7 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             self.setAnimation(animation, speed, count, onEndCount);
         },
 
-        lookAt: function(character, withoutIdle) {
+        lookAt: function(character) {
             var self = this;
 
             if (character.gridX > self.gridX)
@@ -418,10 +418,6 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             return !!this.newDestination;
         },
 
-        isAttacking: function() {
-            return this.attacking;
-        },
-
         removeTarget: function() {
             var self = this;
 
@@ -467,7 +463,7 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             self.target = target;
         },
 
-        setHitPoints: function(hitPoints, maxHitPoints) {
+        setHitPoints: function(hitPoints) {
             this.hitPoints = hitPoints;
         },
 

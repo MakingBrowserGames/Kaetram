@@ -1,6 +1,4 @@
-var cls = require('../../../../lib/class'),
-    _ = require('underscore'),
-    Hit = require('./hit');
+var cls = require('../../../../lib/class');
 
 /**
  * Author: Tachyon

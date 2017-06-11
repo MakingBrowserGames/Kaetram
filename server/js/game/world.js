@@ -1,4 +1,4 @@
-/* global module */
+/* global module, log */
 
 var cls = require('../lib/class'),
     config = require('../../config.json'),
@@ -49,6 +49,14 @@ module.exports = World = cls.Class.extend({
             self.addToPackets(player);
 
             self.pushToPlayer(player, new Messages.Handshake(clientId, config.devClient));
+
+            self.populationCallback(self.playerCount + 1);
+        });
+
+        self.onPopulationUpdate(function(newPopulation) {
+            self.playerCount = newPopulation;
+
+
         });
     },
 
@@ -132,7 +140,6 @@ module.exports = World = cls.Class.extend({
             return;
 
         self.map.groups.forEachGroup(function(groupId) {
-            var spawns = [];
 
             if (self.groups[groupId].incoming.length < 1)
                 return;
@@ -142,6 +149,27 @@ module.exports = World = cls.Class.extend({
             self.groups[groupId].incoming = [];
         });
     },
+
+    /**
+     * Entity related functions
+     */
+
+    handleDamage: function(attacker, target, damage) {
+        var self = this;
+
+        target.applyDamage(damage);
+
+        self.pushToAdjacentGroups(target.group, new Messages.Points(target.instance, target.hitPoints, null));
+
+        if (target.hitPoints < 1)
+            self.pushBroadcast(new Messages.Despawn(target.instance));
+
+    },
+
+    /**
+     *
+     * @param {{instance: int}} groupId
+     */
 
     sendSpawns: function(groupId) {
         var self = this;
@@ -392,6 +420,7 @@ module.exports = World = cls.Class.extend({
         if (entity instanceof Character)
             entity.getCombat().setWorld(self);
 
+
         if (!entity.isPlayer())
             self.handleEntityGroup(entity);
     },
@@ -447,12 +476,16 @@ module.exports = World = cls.Class.extend({
         self.removeFromGroups(entity);
     },
 
+    /**
+     * @param {{combat: Combat}} entity
+     */
+
     cleanCombat: function(entity) {
+        entity.combat.stop();
+
         _.each(this.entities, function(oEntity) {
-            if ((oEntity.type === 'mob' || oEntity.type === 'player') &&
-                (oEntity.combat && oEntity.combat.hasAttacker(entity) && !oEntity.combat.canFollow(entity))) {
+            if (oEntity instanceof Character && oEntity.combat.hasAttacker(entity))
                 oEntity.combat.removeAttacker(entity);
-            }
         });
     },
 
@@ -475,6 +508,8 @@ module.exports = World = cls.Class.extend({
 
         delete self.players[player.instance];
         delete self.packets[player.instance];
+
+        self.populationCallback(self.playerCount - 1);
     },
 
     playerInWorld: function(username) {

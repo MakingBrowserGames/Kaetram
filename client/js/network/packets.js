@@ -14,7 +14,10 @@ Packets = {
     Despawn: 12,
     Target: 13,
     Combat: 14,
-    Animation: 15
+    Animation: 15,
+    Projectile: 16,
+    Population: 17,
+    Points: 18
 };
 
 Packets.IntroOpcode = {
@@ -48,4 +51,9 @@ Packets.CombatOpcode = {
     Initiate: 0,
     Hit: 1,
     Finish: 2
+};
+
+Packets.ProjectileOpcode = {
+    Static: 0,
+    Dynamic: 1
 };

@@ -35,6 +35,10 @@ module.exports = Character = Entity.extend({
         self.combat = new Combat(self);
     },
 
+    applyDamage: function(damage) {
+        this.hitPoints -= damage;
+    },
+
     isDead: function() {
         return this.hitPoints < 1 || this.dead;
     },

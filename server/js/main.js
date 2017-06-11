@@ -1,15 +1,14 @@
 var fs = require('fs'),
     config = require('../config.json'),
-    Log = require('log'),
     MySQL = require('./database/mysql'),
     WebSocket = require('./network/websocket'),
     _ = require('underscore'),
     allowConnections = false,
-    Parser = require('./util/parser');
+    Parser = require('./util/parser'),
+    ShutdownHook = require('shutdown-hook'),
+    Log = require('log');
 
 log = new Log(config.worlds > 1 ? 'notice' : config.debugLevel, config.localDebug ? fs.createWriteStream('runtime.log') : null);
-
-    const ShutdownHook = require('shutdown-hook');
 
 function Main() {
 

@@ -134,3 +134,17 @@ Messages.Combat = Message.extend({
     }
 
 });
+
+Messages.Points = Message.extend({
+
+    init: function(id, hitPoints, mana) {
+        this.id = id;
+        this.hitPoints = hitPoints;
+        this.mana = mana;
+    },
+
+    serialize: function() {
+        return [Packets.Points, [this.id, this.hitPoints, this.mana]];
+    }
+
+});

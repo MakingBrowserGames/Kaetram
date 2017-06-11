@@ -1,4 +1,4 @@
-/* global module */
+/* global module, log */
 
 var Character = require('../character'),
     Incoming = require('../../../../controllers/incoming'),

@@ -83,10 +83,6 @@ module.exports = Entity = cls.Class.extend({
         self.y = y;
     },
 
-    getType: function() {
-        return this.type;
-    },
-
     getState: function() {
         var self = this,
             string = self.isMob() ? Mobs.idToString(self.id) : (self.isNPC() ? NPCs.idToString(self.id) : Items.idToString(self.id)),

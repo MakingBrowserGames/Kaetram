@@ -349,12 +349,14 @@ define(['./renderer/renderer', './utils/storage',
             self.messages.onDespawn(function(id) {
                 var entity = self.entities.get(id);
 
-                if (!entity)
+                if (!entity || entity.type === 'item')
                     return;
 
-                self.entities.unregisterPosition(entity);
-                delete self.entities.entities[entity.id];
-                
+                entity.setSprite(self.getSprite('death'));
+                entity.animate('death', 120, 1, function() {
+                    self.entities.unregisterPosition(entity);
+                    delete self.entities.entities[entity.id];
+                });
             });
 
             self.messages.onCombat(function(data) {
@@ -422,6 +424,30 @@ define(['./renderer/renderer', './utils/storage',
                     return;
 
                 entity.animate(animation, speed, count);
+            });
+
+            self.messages.onProjectile(function(data) {
+
+            });
+
+            self.messages.onPopulation(function(population) {
+
+            });
+
+            self.messages.onPoints(function(data) {
+                var id = data.shift(),
+                    hitPoints = data.shift(),
+                    mana = data.shift(),
+                    entity = self.entities.get(id);
+
+                if (!entity)
+                    return;
+
+                if (hitPoints)
+                    entity.setHitPoints(hitPoints);
+
+                if (mana)
+                    entity.setMana(mana);
             });
         },
 
