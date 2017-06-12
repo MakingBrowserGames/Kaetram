@@ -88,7 +88,6 @@ module.exports = Combat = cls.Class.extend({
                 self.character.removeTarget();
                 self.sendToSpawn();
             }
-
         }, 20000);
     },
 

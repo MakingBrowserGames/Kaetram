@@ -135,6 +135,31 @@ Messages.Combat = Message.extend({
 
 });
 
+Messages.Projectile = Message.extend({
+
+    init: function(opcode, data) {
+        this.opcode = opcode;
+        this.data = data;
+    },
+
+    serialize: function() {
+        return [Packets.Projectile, this.opcode, this.data];
+    }
+
+});
+
+Messages.Population = Message.extend({
+
+    init: function(playerCount) {
+        this.playerCount = playerCount
+    },
+
+    serialize: function() {
+        return [Packets.Population, this.playerCount];
+    }
+
+});
+
 Messages.Points = Message.extend({
 
     init: function(id, hitPoints, mana) {

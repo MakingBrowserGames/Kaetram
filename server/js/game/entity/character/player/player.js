@@ -180,7 +180,7 @@ module.exports = Player = Character.extend({
         if (!id)
             return;
 
-        self.weapon = new Weapon(Items.idToString(id), id, count, skill, skillLevel);
+        self.weapon = new Weapon(Items.idToString(87), 87, count, skill, skillLevel);
     },
 
     setPendant: function(id, count, skill, skillLevel) {
@@ -286,6 +286,10 @@ module.exports = Player = Character.extend({
 
     getRemoteAddress: function() {
         return this.connection.socket.conn.remoteAddress;
+    },
+
+    isRanged: function() {
+        return this.weapon && this.weapon.isRanged();
     },
 
     /**

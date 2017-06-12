@@ -20,6 +20,10 @@ var Modules = {
     Hits: {
         Damage: 0,
         Poison: 1
+    },
+
+    Projectiles: {
+        Arrow: 0
     }
 
 };

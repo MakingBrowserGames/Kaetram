@@ -4,10 +4,10 @@ define(['./renderer/renderer', './utils/storage',
         './map/map', './network/socket', './entity/character/player/player',
         './renderer/updater', './controllers/entities', './controllers/input',
         './entity/character/player/playerhandler', './utils/pathfinder',
-        './controllers/zoning', './controllers/info',
+        './controllers/zoning', './controllers/info', './entity/objects/projectile',
         './utils/modules', './network/packets'],
         function(Renderer, LocalStorage, Map, Socket, Player, Updater,
-                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info) {
+                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info, Projectile) {
 
     return Class.extend({
 
@@ -231,7 +231,7 @@ define(['./renderer/renderer', './utils/storage',
                     case Packets.EquipmentOpcode.Batch:
 
                         for (var i = 0; i < info.length; i++)
-                            self.player.setEquipment(i, info);
+                            self.player.setEquipment(i, info[i]);
 
                         break;
 
@@ -371,9 +371,6 @@ define(['./renderer/renderer', './utils/storage',
                         attacker.setTarget(target);
                         target.addAttacker(attacker);
 
-                        attacker.healthBarVisible = true;
-                        target.healthBarVisible = true;
-
                         if (target.id === self.player.id || attacker.id === self.player.id)
                             self.socket.send(Packets.Combat, [Packets.CombatOpcode.Initiate, attacker.id, target.id]);
 
@@ -389,10 +386,7 @@ define(['./renderer/renderer', './utils/storage',
                             attacker.lookAt(target);
                             attacker.performAction(attacker.orientation, Modules.Actions.Attack);
 
-                            var isTarget = target.id === self.player.id,
-                                info = [damage, isTarget];
-
-                            self.info.create(type, info, target.x, target.y);
+                            self.info.create(type, [damage, target.id === self.player.id], target.x, target.y);
                         }
 
                         attacker.triggerHealthBar();
@@ -426,8 +420,34 @@ define(['./renderer/renderer', './utils/storage',
                 entity.animate(animation, speed, count);
             });
 
-            self.messages.onProjectile(function(data) {
+            self.messages.onProjectile(function(type, info) {
+                switch (type) {
+                    case Packets.ProjectileOpcode.Create:
+                        //TODO - Move this to entities later and have the type be determined...
 
+                        var pKind = info.shift(),
+                            pId = info.shift(),
+                            attacker = self.entities.get(info.shift()),
+                            target = self.entities.get(info.shift());
+
+                        if (!attacker || !target)
+                            return;
+
+                        if (attacker.target.id !== target.id)
+                            attacker.setTarget(target);
+
+                        var projectile = new Projectile(pId, pKind, attacker);
+
+                        projectile.setStart(attacker.gridX, attacker.gridY);
+                        projectile.setTarget(target);
+
+                        projectile.setSprite(self.getSprite('projectile-pinearrow'));
+                        projectile.setAnimation('travel', 60, 0, function() {});
+
+                        self.entities.addEntity(projectile);
+
+                        break;
+                }
             });
 
             self.messages.onPopulation(function(population) {

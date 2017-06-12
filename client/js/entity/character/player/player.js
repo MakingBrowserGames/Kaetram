@@ -70,6 +70,10 @@ define(['../character', './equipment/armour', './equipment/weapon',
             self.boots = null;
         },
 
+        isRanged: function() {
+            return this.weapon && this.weapon.ranged;
+        },
+
         follow: function(character) {
             this._super(character);
         },
@@ -149,6 +153,9 @@ define(['../character', './equipment/armour', './equipment/weapon',
                         self.weapon = new Weapon(name, string, count, skill, skillLevel);
                     else
                         self.weapon.update(name, string, count, skill, skillLevel);
+
+                    if (string.includes('bow'))
+                        self.weapon.ranged = true;
 
                     break;
 

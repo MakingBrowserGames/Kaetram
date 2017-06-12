@@ -44,10 +44,6 @@ define(['./character/character'], function(Character) {
                     self.entities.registerPosition(self.entity);
 
                 });
-
-                self.entity.onMove(function(callback) {
-
-                });
             }
         },
 

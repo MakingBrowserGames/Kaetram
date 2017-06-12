@@ -1,3 +1,5 @@
+/* global log */
+
 var cls = require('../lib/class'),
     Packets = require('../network/packets'),
     Request = require('request'),
@@ -312,6 +314,7 @@ module.exports = Incoming = cls.Class.extend({
                 break;
 
             case Packets.TargetOpcode.Attack:
+
                 var target = self.world.getEntityByInstance(instance);
 
                 if (!target)
@@ -339,6 +342,23 @@ module.exports = Incoming = cls.Class.extend({
                 var attacker = self.world.getEntityByInstance(message.shift()),
                     target = self.world.getEntityByInstance(message.shift());
 
+                attacker.setTarget(target);
+
+                if (attacker.isRanged()) { //ranged combat
+                    attacker.combat.start();
+                    self.world.createProjectile(true, [attacker, target]);
+
+                } else {
+                    log.info('Melee combat...');
+                }
+
+
+
+                /*var attacker = self.world.getEntityByInstance(message.shift()),
+                    target = self.world.getEntityByInstance(message.shift());
+
+                //TODO - Determine ranged combat
+
                 attacker.combat.start();
                 target.combat.start();
 
@@ -351,7 +371,7 @@ module.exports = Incoming = cls.Class.extend({
                     attacker.combat.addAttacker(target);
                 }
 
-                target.combat.addAttacker(attacker);
+                target.combat.addAttacker(attacker);*/
 
                 break;
         }

@@ -12,6 +12,8 @@ module.exports = Mob = Character.extend({
         self.hitPoints = self.data.hitPoints;
         self.maxHitPoints = self.data.hitPoints;
 
+        self.respawnDelay = self.data.spawnDelay;
+
         self.armourLevel = self.data.armour;
         self.weaponLevel = self.data.weapon;
         self.attackRange = self.data.attackRange;
@@ -19,6 +21,8 @@ module.exports = Mob = Character.extend({
         self.spawnLocation = [x, y];
 
         self.dead = false;
+        self.boss = false;
+        self.static = false;
     },
 
     destroy: function() {
@@ -51,7 +55,16 @@ module.exports = Mob = Character.extend({
     },
 
     respawn: function() {
+        var self = this;
 
+        if (!self.static)
+            return;
+
+        setTimeout(function() {
+            if (self.respawnCallback)
+                self.respawnCallback();
+
+        }, self.respawnDelay);
     },
 
     getState: function() {
@@ -67,6 +80,10 @@ module.exports = Mob = Character.extend({
         var self = this;
 
         self.setPosition(self.spawnLocation[0], self.spawnLocation[1]);
+    },
+
+    onRespawn: function(callback) {
+        this.respawnCallback = callback;
     },
 
     onMove: function(callback) {

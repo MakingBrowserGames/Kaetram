@@ -9,6 +9,7 @@ define(['./equipment'], function(Equipment) {
 
             self.level = -1;
             self.damage = -1;
+            self.ranged = false;
         },
 
         exists: function() {
@@ -29,6 +30,10 @@ define(['./equipment'], function(Equipment) {
 
         getLevel: function() {
             return this.level;
+        },
+
+        getString: function() {
+            return this._super();
         },
 
         update: function(name, string, count, skill, skillLevel) {

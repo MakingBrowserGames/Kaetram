@@ -125,8 +125,6 @@ define(['./entityhandler'], function(EntityHandler) {
 
             var anim = self.getAnimationByName(name);
 
-            log.info(anim);
-
             if (!anim)
                 return;
 
@@ -144,6 +142,14 @@ define(['./entityhandler'], function(EntityHandler) {
 
         setVisible: function(visible) {
             this.visible = visible
+        },
+
+        getDistance: function(entity) {
+            var self = this,
+                x = Math.abs(self.gridX - entity.gridX),
+                y = Math.abs(self.gridY - entity.gridY);
+
+            return x > y ? x : y;
         },
 
         getAnimationByName: function(name) {

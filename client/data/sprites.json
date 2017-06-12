@@ -18408,6 +18408,19 @@
       }
     }
   },
+
+  {
+    "id": "bow",
+    "width": 16,
+    "height": 16,
+    "animations": {
+      "idle_down": {
+        "length": 1,
+        "row": 0
+      }
+    }
+  },
+
   {
     "id": "explosion-terror",
     "width": 64,

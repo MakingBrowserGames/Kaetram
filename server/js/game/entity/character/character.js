@@ -2,7 +2,8 @@
 
 var Entity = require('../entity'),
     _ = require('underscore'),
-    Combat = require('./combat/combat');
+    Combat = require('./combat/combat'),
+    Modules = require('../../../util/modules');
 
 module.exports = Character = Entity.extend({
 
@@ -33,6 +34,14 @@ module.exports = Character = Entity.extend({
         self.potentialTarget = null;
 
         self.combat = new Combat(self);
+    },
+
+    getProjectile: function() {
+        return Modules.Projectiles.Arrow;
+    },
+
+    isRanged: function() {
+        return this.attackRange > 1;
     },
 
     applyDamage: function(damage) {

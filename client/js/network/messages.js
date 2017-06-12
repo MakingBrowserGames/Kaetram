@@ -187,7 +187,12 @@ define(function() {
         },
 
         receiveProjectile: function(data) {
+            var self = this,
+                type = data.shift(),
+                info = data.shift();
 
+            if (self.projectileCallback)
+                self.projectileCallback(type, info);
         },
 
         receivePopulation: function(data) {

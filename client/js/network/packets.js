@@ -55,5 +55,7 @@ Packets.CombatOpcode = {
 
 Packets.ProjectileOpcode = {
     Static: 0,
-    Dynamic: 1
+    Dynamic: 1,
+    Create: 2,
+    Update: 3
 };

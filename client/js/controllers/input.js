@@ -60,6 +60,7 @@ define(['../entity/animation'], function(Animation) {
             self.cursors['arrow'] = self.game.getSprite('arrow');
             self.cursors['talk'] = self.game.getSprite('talk');
             self.cursors['spell'] = self.game.getSprite('spell');
+            self.cursors['bow'] = self.game.getSprite('bow');
 
             self.newCursor = self.cursors['hand'];
             self.newTargetColour = 'rgba(255, 255, 255, 0.5)';
@@ -134,8 +135,8 @@ define(['../entity/animation'], function(Animation) {
                             /**
                              * Testing to see how the current info system holds up.
                              */
-                            self.game.player.setSprite(self.game.getSprite('death'));
-                            self.game.player.animate('death', 120, 1);
+                            self.getPlayer().setSprite(self.game.getSprite('death'));
+                            self.getPlayer().animate('death', 120, 1);
 
                             break;
                     }
@@ -159,7 +160,7 @@ define(['../entity/animation'], function(Animation) {
                 case Modules.Keys.A:
                 case Modules.Keys.S:
                 case Modules.Keys.D:
-                    self.game.player.direction = null;
+                    self.getPlayer().direction = null;
                     break;
             }
         },
@@ -167,13 +168,13 @@ define(['../entity/animation'], function(Animation) {
         keyMove: function(position) {
             var self = this;
 
-            if (!self.game.player.hasPath())
+            if (!self.getPlayer().hasPath())
                 self.click(position);
         },
 
         click: function(position) {
             var self = this,
-                player = self.game.player;
+                player = self.getPlayer();
 
             if ((self.game.zoning && self.game.zoning.direction) || (position.x === player.gridX && position.y === player.gridY))
                 return;
@@ -181,11 +182,22 @@ define(['../entity/animation'], function(Animation) {
             if (self.hovering) {
                 var entity = self.game.getEntityAt(position.x, position.y);
 
-                if (entity && entity.type !== 'item') {
-                    player.follow(entity);
-                    return;
+                if (entity) {
+                    player.setTarget(entity);
+
+                    if (player.getDistance(entity) < 7 && player.isRanged() && self.hoveringCharacter()) {
+                        self.game.socket.send(Packets.Target, [Packets.TargetOpcode.Attack, entity.id]);
+                        player.lookAt(entity);
+                        return;
+                    }
+
+                    if (entity.type !== 'item') {
+                        player.follow(entity);
+                        return;
+                    }
                 }
-            }
+            } else
+                player.removeTarget();
 
             player.go(position.x, position.y);
         },
@@ -204,11 +216,15 @@ define(['../entity/animation'], function(Animation) {
         },
 
         moveCursor: function() {
-            var self = this,
-                position = self.getCoords(),
+            var self = this;
+
+            if (self.renderer.mobile)
+                return;
+
+            var position = self.getCoords(),
                 entity = self.game.getEntityAt(position.x, position.y);
 
-            if (!entity || (entity.id === self.game.player.id)) {
+            if (!entity || (entity.id === self.getPlayer().id)) {
                 self.setCursor(self.cursors['hand']);
                 self.hovering = null;
             } else {
@@ -219,7 +235,7 @@ define(['../entity/animation'], function(Animation) {
                         break;
 
                     case 'mob':
-                        self.setCursor(self.cursors['sword']);
+                        self.setCursor(self.cursors[self.getPlayer().isRanged() ? 'bow' : 'sword']);
                         self.hovering = Modules.Hovering.Mob;
                         break;
 
@@ -306,6 +322,14 @@ define(['../entity/animation'], function(Animation) {
                 dw: sprite.width * scale,
                 dh: sprite.height * scale
             }
+        },
+
+        hoveringCharacter: function() {
+            return this.hovering === Modules.Hovering.Mob || this.hovering === Modules.Hovering.Player;
+        },
+
+        getPlayer: function() {
+            return this.game.player;
         },
 
         onKey: function(callback) {

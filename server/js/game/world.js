@@ -13,7 +13,9 @@ var cls = require('../lib/class'),
     NPC = require('./entity/npc/npc'),
     Items = require('../util/items'),
     Item = require('./entity/objects/item'),
-    Character = require('./entity/character/character');
+    Character = require('./entity/character/character'),
+    Projectile = require('./entity/objects/projectile'),
+    Packets = require('../network/packets');
 
 module.exports = World = cls.Class.extend({
 
@@ -56,7 +58,7 @@ module.exports = World = cls.Class.extend({
         self.onPopulationUpdate(function(newPopulation) {
             self.playerCount = newPopulation;
 
-
+            self.pushBroadcast(new Messages.Population(self.playerCount));
         });
     },
 
@@ -161,8 +163,54 @@ module.exports = World = cls.Class.extend({
 
         self.pushToAdjacentGroups(target.group, new Messages.Points(target.instance, target.hitPoints, null));
 
-        if (target.hitPoints < 1)
-            self.pushBroadcast(new Messages.Despawn(target.instance));
+        if (target.hitPoints < 1) {
+            attacker.combat.stop();
+            self.pushToAdjacentGroups(target.group, new Messages.Despawn(target.instance));
+
+            self.handleDeath(target);
+        }
+
+    },
+
+    handleDeath: function(character) {
+        var self = this;
+
+        if (character.type === 'mob') {
+            self.removeEntity(character);
+            character.destroy();
+        } else if (character.type === 'player') {
+            //TODO - Handle player death here...
+        }
+    },
+
+    createProjectile: function(dynamic, info) {
+        var self = this;
+
+        if (dynamic) {
+            var attacker = info.shift(),
+                target = info.shift();
+
+            if (!target || !attacker)
+                return;
+
+            var startX = attacker.x,
+                startY = attacker.y,
+                type = attacker.getProjectile(),
+                projectile = new Projectile(type, Utils.generateInstance(5, type, startX));
+
+            projectile.setStart(startX, startY);
+            projectile.setTarget(target);
+
+            projectile.onDestinationUpdate(function(x, y) {
+                //log.info('new destination...')
+            });
+
+            self.pushToAdjacentGroups(attacker.group, new Messages.Projectile(Packets.ProjectileOpcode.Create, [type, projectile.instance, attacker.instance, target.instance]));
+
+        } else {
+
+        }
+
 
     },
 
@@ -369,8 +417,18 @@ module.exports = World = cls.Class.extend({
 
             var instance = Utils.generateInstance(isMob ? 2 : (isNpc ? 3 : 4), info.id, position.x);
 
-            if (isMob)
-                self.addMob(new Mob(info.id, instance, position.x, position.y));
+            if (isMob) {
+                var mob = new Mob(info.id, instance, position.x, position.y);
+
+                mob.static = true;
+
+                mob.onRespawn(function() {
+                    mob.dead = false;
+                    self.addMob(mob);
+                });
+
+                self.addMob(mob);
+            }
 
             if (isNpc)
                 self.addNPC(new NPC(info.id, instance, position.x, position.y));
@@ -502,7 +560,7 @@ module.exports = World = cls.Class.extend({
         var self = this;
 
         self.removeEntity(player);
-        self.pushBroadcast(new Messages.Despawn(player.instance));
+        self.pushToAdjacentGroups(player.group, new Messages.Despawn(player.instance));
 
         self.cleanCombat(player);
 

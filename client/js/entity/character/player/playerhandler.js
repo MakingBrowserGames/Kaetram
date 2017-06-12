@@ -83,6 +83,9 @@ define(function() {
                 if (!self.camera.centered)
                     self.checkBounds();
 
+                if (self.player.hasTarget() && self.player.getDistance(self.player.target) < 7 && self.player.isRanged())
+                    self.player.stop();
+
                 self.socket.send(Packets.Movement, [Packets.MovementOpcode.Step, self.player.gridX, self.player.gridY]);
             });
 
