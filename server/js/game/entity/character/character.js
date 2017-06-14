@@ -63,6 +63,10 @@ module.exports = Character = Entity.extend({
         return this.combat;
     },
 
+    getHitPoints: function() {
+        return this.hitPoints;
+    },
+
     setPosition: function(x, y) {
         var self = this;
 

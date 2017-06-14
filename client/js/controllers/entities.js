@@ -79,9 +79,7 @@ define(['../renderer/grids', '../entity/objects/chest',
                     if (!attacker || !target)
                         return;
 
-                    attacker.performAction(attacker.orientation, Modules.Actions.Attack);
                     attacker.lookAt(target);
-                    attacker.triggerHealthBar();
 
                     var projectile = new Projectile(id, pType, attacker);
 
@@ -108,6 +106,9 @@ define(['../renderer/grids', '../entity/objects/chest',
                     });
 
                     self.addEntity(projectile);
+
+                    attacker.performAction(attacker.orientation, Modules.Actions.Attack);
+                    attacker.triggerHealthBar();
 
                     return;
 

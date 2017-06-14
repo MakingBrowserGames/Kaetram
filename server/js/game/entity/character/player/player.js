@@ -158,6 +158,14 @@ module.exports = Player = Character.extend({
         }
     },
 
+    applyDamage: function(damage) {
+        this.hitPoints.decrement(damage);
+    },
+
+    getHitPoints: function() {
+        return this.hitPoints.getHitPoints();
+    },
+
     /**
      * Setters
      */
@@ -183,6 +191,9 @@ module.exports = Player = Character.extend({
         //TODO - Don't forget to change this
 
         self.weapon = new Weapon(Items.idToString(87), 87, count, skill, skillLevel);
+
+        if (self.weapon.ranged)
+            self.attackRange = 7;
     },
 
     setPendant: function(id, count, skill, skillLevel) {

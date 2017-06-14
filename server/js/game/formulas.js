@@ -6,6 +6,9 @@ Formulas.LevelExp = [];
 module.exports = Formulas;
 
 Formulas.getDamage = function(attacker, target) {
+    if (!attacker || !target)
+        return;
+
     var damage, damageAbsorbed,
         weaponLevel = attacker.weapon ? attacker.weapon.getLevel() : attacker.weaponLevel,
         attackerArmourLevel = attacker.armour ? attacker.armour.getDefense() : attacker.armourLevel,
@@ -46,10 +49,7 @@ Formulas.getDamage = function(attacker, target) {
 
     damage -= damageAbsorbed;
 
-    if (isNaN(damage))
-        damage = 0;
-
-    if (damage < 0)
+    if (isNaN(damage) || !damage || damage < 0)
         damage = 0;
 
     return damage;

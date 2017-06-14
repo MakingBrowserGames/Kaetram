@@ -164,7 +164,7 @@ module.exports = World = cls.Class.extend({
         target.hit(attacker);
         target.applyDamage(damage);
 
-        self.pushToAdjacentGroups(target.group, new Messages.Points(target.instance, target.hitPoints, null));
+        self.pushToAdjacentGroups(target.group, new Messages.Points(target.instance, target.getHitPoints(), null));
 
         if (target.hitPoints < 1) {
             attacker.combat.stop();
@@ -187,7 +187,8 @@ module.exports = World = cls.Class.extend({
     },
 
     createProjectile: function(dynamic, info) {
-        var self = this;
+        var self = this,
+            projectile;
 
         if (dynamic) {
             var attacker = info.shift(),
@@ -198,21 +199,23 @@ module.exports = World = cls.Class.extend({
 
             var startX = attacker.x,
                 startY = attacker.y,
-                type = attacker.getProjectile(),
-                projectile = new Projectile(type, Utils.generateInstance(5, type, startX));
+                type = attacker.getProjectile();
+
+            projectile = new Projectile(type, Utils.generateInstance(5, type, startX));
 
             projectile.setStart(startX, startY);
             projectile.setTarget(target);
-            projectile.damage = Formulas.getDamage(attacker, target);
 
-            self.pushToAdjacentGroups(attacker.group, new Messages.Projectile(Packets.ProjectileOpcode.Create, [projectile.instance, type, attacker.instance, target.instance, projectile.damage]));
+            projectile.damage = Formulas.getDamage(attacker, target);
+            projectile.owner = attacker;
+
             self.addProjectile(projectile);
 
         } else {
 
         }
 
-
+        return projectile;
     },
 
     /**

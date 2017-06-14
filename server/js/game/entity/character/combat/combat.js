@@ -83,7 +83,7 @@ module.exports = Combat = cls.Class.extend({
         self.started = false;
 
         self.cleanTimeout = setTimeout(function() {
-            if (self.lastHit - new Date().getTime() > 10000 && self.character.type === 'mob') {
+            if (new Date().getTime() - self.lastHit > 10000 && self.character.type === 'mob') {
                 self.forget();
                 self.character.removeTarget();
                 self.sendToSpawn();
@@ -236,15 +236,18 @@ module.exports = Combat = cls.Class.extend({
     },
 
     inProximity: function() {
-        var self = this,
-            targetDistance = self.character.getDistance(self.character.target),
-            attackRange = self.character.attackRange,
-            isRanged = targetDistance > 1;
+        var self = this;
 
-        if (self.character.attackRange > 1)
-            return self.character.getDistance(self.character.target) <= self.character.attackRange;
+        if (!self.character.target)
+            return;
 
-        return isRanged ? targetDistance <= attackRange : self.character.isNonDiagonal(self.character.target);
+        var targetDistance = self.character.getDistance(self.character.target),
+            range = self.character.attackRange;
+
+        if (self.character.isRanged())
+            return targetDistance <= range;
+
+        return self.character.isNonDiagonal(self.character.target);
     },
 
     getClosestAttacker: function() {
@@ -281,12 +284,21 @@ module.exports = Combat = cls.Class.extend({
         var self = this,
             time = new Date().getTime();
 
-        if (time - self.lastHit < 1000)
+        if (time - self.lastHit < self.character.attackRate)
             return;
 
-        self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, character.instance, target.instance, hitInfo));
+        if (character.isRanged()) {
+            var projectile = self.world.createProjectile(true, [character, target]);
 
-        self.world.handleDamage(character, target, hitInfo[0]);
+            self.world.pushToAdjacentGroups(character.group, new Messages.Projectile(Packets.ProjectileOpcode.Create, [projectile.instance, projectile.id, character.instance, target.instance, projectile.damage]));
+
+        } else {
+
+            self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Hit, character.instance, target.instance, hitInfo));
+
+            self.world.handleDamage(character, target, hitInfo[0]);
+
+        }
 
         self.lastHit = new Date().getTime();
     },

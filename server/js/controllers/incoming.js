@@ -324,10 +324,7 @@ module.exports = Incoming = cls.Class.extend({
                 if (!target)
                     return;
 
-                if (self.player.isRanged())
-                    self.world.createProjectile(true, [self.player, target]);
-                else
-                    self.world.pushToAdjacentGroups(target.group, new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
+                self.world.pushToAdjacentGroups(target.group, new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
 
                 break;
 
@@ -351,36 +348,10 @@ module.exports = Incoming = cls.Class.extend({
 
                 attacker.setTarget(target);
 
-                if (attacker.isRanged()) { //ranged combat
-                    attacker.combat.start();
-                    self.world.createProjectile(true, [attacker, target]);
-
-                } else {
-                    attacker.combat.start();
-                    attacker.setTarget(target);
-                    attacker.combat.attack(target);
-                }
-
-
-
-                /*var attacker = self.world.getEntityByInstance(message.shift()),
-                    target = self.world.getEntityByInstance(message.shift());
-
-                //TODO - Determine ranged combat
-
                 attacker.combat.start();
-                target.combat.start();
-
                 attacker.setTarget(target);
+
                 attacker.combat.attack(target);
-
-                if (target.type === 'mob' || (target.type === 'player' && target.combat.isRetaliating())) {
-                    target.setTarget(attacker);
-                    target.combat.attack(target); //To give it a delay
-                    attacker.combat.addAttacker(target);
-                }
-
-                target.combat.addAttacker(attacker);*/
 
                 break;
         }
@@ -390,20 +361,20 @@ module.exports = Incoming = cls.Class.extend({
         var self = this,
             type = message.shift();
 
-        if (!target)
-            return;
-
         switch (type) {
             case Packets.ProjectileOpcode.Impact:
                 var projectile = self.world.getEntityByInstance(message.shift()),
                     target = self.world.getEntityByInstance(message.shift());
 
-                if (!projectile || !target)
+                self.world.handleDamage(projectile.owner, target, projectile.damage);
+
+                if (target.combat.started)
                     return;
 
-
-
-                log.info('projectile impacted: ' + target.instance);
+                target.combat.start();
+                target.setTarget(projectile.owner);
+                target.combat.addAttacker(projectile.owner);
+                target.combat.attack(projectile.owner);
 
                 break;
         }

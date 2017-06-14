@@ -9,6 +9,14 @@ module.exports = Points = cls.Class.extend({
         self.maxPoints = maxPoints;
     },
 
+    increment: function(amount) {
+        this.points += amount;
+    },
+
+    decrement: function(amount) {
+        this.points -= amount;
+    },
+
     setPoints: function(points) {
         this.points = points;
     },
