@@ -15,7 +15,8 @@ var cls = require('../lib/class'),
     Item = require('./entity/objects/item'),
     Character = require('./entity/character/character'),
     Projectile = require('./entity/objects/projectile'),
-    Packets = require('../network/packets');
+    Packets = require('../network/packets'),
+    Formulas = require('./formulas');
 
 module.exports = World = cls.Class.extend({
 
@@ -36,6 +37,7 @@ module.exports = World = cls.Class.extend({
         self.items = {};
         self.mobs = {};
         self.npcs = {};
+        self.projectiles = {};
 
         self.packets = {};
         self.groups = {};
@@ -159,6 +161,7 @@ module.exports = World = cls.Class.extend({
     handleDamage: function(attacker, target, damage) {
         var self = this;
 
+        target.hit(attacker);
         target.applyDamage(damage);
 
         self.pushToAdjacentGroups(target.group, new Messages.Points(target.instance, target.hitPoints, null));
@@ -190,7 +193,7 @@ module.exports = World = cls.Class.extend({
             var attacker = info.shift(),
                 target = info.shift();
 
-            if (!target || !attacker)
+            if (!attacker || !target)
                 return;
 
             var startX = attacker.x,
@@ -200,12 +203,10 @@ module.exports = World = cls.Class.extend({
 
             projectile.setStart(startX, startY);
             projectile.setTarget(target);
+            projectile.damage = Formulas.getDamage(attacker, target);
 
-            projectile.onDestinationUpdate(function(x, y) {
-                //log.info('new destination...')
-            });
-
-            self.pushToAdjacentGroups(attacker.group, new Messages.Projectile(Packets.ProjectileOpcode.Create, [type, projectile.instance, attacker.instance, target.instance]));
+            self.pushToAdjacentGroups(attacker.group, new Messages.Projectile(Packets.ProjectileOpcode.Create, [projectile.instance, type, attacker.instance, target.instance, projectile.damage]));
+            self.addProjectile(projectile);
 
         } else {
 
@@ -478,7 +479,6 @@ module.exports = World = cls.Class.extend({
         if (entity instanceof Character)
             entity.getCombat().setWorld(self);
 
-
         if (!entity.isPlayer())
             self.handleEntityGroup(entity);
     },
@@ -508,6 +508,17 @@ module.exports = World = cls.Class.extend({
 
         self.addEntity(mob);
         self.mobs[mob.instance] = mob;
+
+        mob.onHit(function(attacker) {
+            if (mob.isDead())
+                return;
+
+            mob.combat.start();
+            mob.setTarget(attacker);
+            mob.combat.addAttacker(attacker);
+
+            mob.combat.attack(attacker);
+        });
     },
 
     addItem: function(item) {
@@ -517,6 +528,13 @@ module.exports = World = cls.Class.extend({
 
         self.addEntity(item);
         self.items[item.instance] = item;
+    },
+
+    addProjectile: function(projectile) {
+        var self = this;
+
+        self.addEntity(projectile);
+        self.projectiles[projectile.instance] = projectile;
     },
 
     removeEntity: function(entity) {

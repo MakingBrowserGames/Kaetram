@@ -4,10 +4,10 @@ define(['./renderer/renderer', './utils/storage',
         './map/map', './network/socket', './entity/character/player/player',
         './renderer/updater', './controllers/entities', './controllers/input',
         './entity/character/player/playerhandler', './utils/pathfinder',
-        './controllers/zoning', './controllers/info', './entity/objects/projectile',
+        './controllers/zoning', './controllers/info',
         './utils/modules', './network/packets'],
         function(Renderer, LocalStorage, Map, Socket, Player, Updater,
-                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info, Projectile) {
+                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info) {
 
     return Class.extend({
 
@@ -352,6 +352,8 @@ define(['./renderer/renderer', './utils/storage',
                 if (!entity || entity.type === 'item')
                     return;
 
+                entity.hitPoints = 0;
+
                 entity.setSprite(self.getSprite('death'));
                 entity.animate('death', 120, 1, function() {
                     self.entities.unregisterPosition(entity);
@@ -423,28 +425,8 @@ define(['./renderer/renderer', './utils/storage',
             self.messages.onProjectile(function(type, info) {
                 switch (type) {
                     case Packets.ProjectileOpcode.Create:
-                        //TODO - Move this to entities later and have the type be determined...
 
-                        var pKind = info.shift(),
-                            pId = info.shift(),
-                            attacker = self.entities.get(info.shift()),
-                            target = self.entities.get(info.shift());
-
-                        if (!attacker || !target)
-                            return;
-
-                        if (attacker.target.id !== target.id)
-                            attacker.setTarget(target);
-
-                        var projectile = new Projectile(pId, pKind, attacker);
-
-                        projectile.setStart(attacker.gridX, attacker.gridY);
-                        projectile.setTarget(target);
-
-                        projectile.setSprite(self.getSprite('projectile-pinearrow'));
-                        projectile.setAnimation('travel', 60, 0, function() {});
-
-                        self.entities.addEntity(projectile);
+                        self.entities.create('projectile', info);
 
                         break;
                 }

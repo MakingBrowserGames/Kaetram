@@ -36,6 +36,13 @@ module.exports = Character = Entity.extend({
         self.combat = new Combat(self);
     },
 
+    hit: function(attacker) {
+        var self = this;
+
+        if (self.hitCallback)
+            self.hitCallback(attacker);
+    },
+
     getProjectile: function() {
         return Modules.Projectiles.Arrow;
     },
@@ -109,6 +116,10 @@ module.exports = Character = Entity.extend({
 
     onMovement: function(callback) {
         this.movementCallback = callback;
+    },
+
+    onHit: function(callback) {
+        this.hitCallback = callback;
     }
 
 });

@@ -180,6 +180,8 @@ module.exports = Player = Character.extend({
         if (!id)
             return;
 
+        //TODO - Don't forget to change this
+
         self.weapon = new Weapon(Items.idToString(87), 87, count, skill, skillLevel);
     },
 

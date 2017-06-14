@@ -435,7 +435,9 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             var self = this;
 
             self.loadDirty();
-            self.moveCallback();
+
+            if (self.moveCallback)
+                self.moveCallback();
         },
 
         setName: function(name) {

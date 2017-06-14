@@ -14,6 +14,8 @@ module.exports = Projectile = Entity.extend({
 
         self.target = false;
         self.static = false;
+
+        self.damage = -1;
     },
 
     setStart: function(x, y) {

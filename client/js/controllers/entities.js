@@ -1,10 +1,10 @@
-/* global log, _, Modules */
+/* global log, _, Modules, Packets */
 
 define(['../renderer/grids', '../entity/objects/chest',
         '../entity/character/character', '../entity/character/player/player',
         '../entity/objects/item', './sprites', '../entity/character/mob/mob',
-        '../entity/character/npc/npc'],
-    function(Grids, Chest, Character, Player, Item, Sprites, Mob, NPC) {
+        '../entity/character/npc/npc', '../entity/objects/projectile'],
+    function(Grids, Chest, Character, Player, Item, Sprites, Mob, NPC, Projectile) {
 
     return Class.extend({
 
@@ -58,7 +58,7 @@ define(['../renderer/grids', '../entity/objects/chest',
                 id = info.shift(),
                 kind, name, x, y, entity;
 
-            if (type !== 'player') {
+            if (type !== 'player' && type !== 'projectile') {
                 kind = info.shift();
                 name = info.shift();
                 x = info.shift();
@@ -69,6 +69,47 @@ define(['../renderer/grids', '../entity/objects/chest',
                 return;
 
             switch (type) {
+
+                case 'projectile':
+                    var pType = info.shift(),
+                        attacker = self.get(info.shift()),
+                        target = self.get(info.shift()),
+                        damage = info.shift();
+
+                    if (!attacker || !target)
+                        return;
+
+                    attacker.performAction(attacker.orientation, Modules.Actions.Attack);
+                    attacker.lookAt(target);
+                    attacker.triggerHealthBar();
+
+                    var projectile = new Projectile(id, pType, attacker);
+
+                    projectile.setStart(attacker.x, attacker.y);
+                    projectile.setTarget(target);
+
+                    projectile.setSprite(self.getSprite('projectile-pinearrow'));
+                    projectile.setAnimation('travel', 60);
+
+                    projectile.angled = true;
+                    projectile.type = type;
+
+                    projectile.onImpact(function() {
+
+                        self.unregisterPosition(projectile);
+                        delete self.entities[id];
+
+                        if (self.game.player.id === projectile.owner.id)
+                            self.game.socket.send(Packets.Projectile, [Packets.ProjectileOpcode.Impact, id, target.id]);
+
+                        self.game.info.create(Modules.Hits.Damage, [damage, target.id === self.game.player.id], target.x, target.y);
+
+                        target.triggerHealthBar();
+                    });
+
+                    self.addEntity(projectile);
+
+                    return;
 
                 case 'npc':
 
@@ -135,7 +176,9 @@ define(['../renderer/grids', '../entity/objects/chest',
                     player.pvpKills = pvpKills;
                     player.pvpDeaths = pvpDeaths;
 
-                    player.setSprite(self.getSprite(armourData[0]));
+                    log.info(armourData[0]);
+
+                    player.setSprite(self.getSprite(armourData[1]));
                     player.idle();
 
                     player.setEquipment(Modules.Equipment.Armour, armourData);
@@ -145,10 +188,9 @@ define(['../renderer/grids', '../entity/objects/chest',
                     player.setEquipment(Modules.Equipment.Boots, bootsData);
 
                     player.type = type;
+                    player.loadHandler(self.game);
 
                     self.addEntity(player);
-
-                    player.loadHandler(self.game);
 
                     break;
             }
@@ -192,6 +234,8 @@ define(['../renderer/grids', '../entity/objects/chest',
 
         clearPlayers: function(exception) {
             var self = this;
+
+            log.info('clearing players????');
 
             _.each(self.entities, function(entity) {
                 if (entity.id !== exception.id && entity.type === 'player') {
@@ -255,6 +299,7 @@ define(['../renderer/grids', '../entity/objects/chest',
                 return;
 
             if (entity.type === 'player' || entity.type === 'mob' || entity.type === 'npc') {
+
                 self.grids.addToEntityGrid(entity, entity.gridX, entity.gridY);
 
                 if (entity.type !== 'player')

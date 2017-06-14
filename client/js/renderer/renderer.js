@@ -293,18 +293,16 @@ define(['./camera', './tile',
             } else
                 self.context.translate(dx, dy);
 
-            if (sprite.offsetAngle && entity.angled) {
-                self.context.rotate(sprite.offsetAngle * (Math.PI / 180));
+            if (entity.angled)
                 self.context.rotate(entity.angle * Math.PI / 180);
-            }
 
             if (entity.hasShadow()) {
                 if (!shadow.loaded)
                     shadow.load();
 
                 self.context.drawImage(shadow.image, 0, 0, shadow.width * self.drawingScale, shadow.height * self.drawingScale,
-                                        0, entity.shadowOffsetY * self.drawingScale, shadow.width * self.drawingScale,
-                                        shadow.height * self.drawingScale);
+                    0, entity.shadowOffsetY * self.drawingScale, shadow.width * self.drawingScale,
+                    shadow.height * self.drawingScale);
             }
 
             self.context.drawImage(sprite.image, x, y, width, height, ox, oy, dw, dh);
@@ -390,7 +388,7 @@ define(['./camera', './tile',
 
             self.textContext.save();
             self.setCameraView(self.textContext);
-            self.textContext.font = '16px AdvoCut';
+            self.textContext.font = '14px AdvoCut';
             self.drawText(entity.username, entity.x + 8, entity.y - 10, true, colour);
             self.textContext.restore();
         },

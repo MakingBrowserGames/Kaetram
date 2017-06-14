@@ -17,6 +17,15 @@ define(['../entity'], function(Entity) {
 
             self.static = false;
             self.dynamic = false;
+
+            self.speed = 200;
+
+            self.angle = 0;
+        },
+
+        impact: function() {
+            if (this.impactCallback)
+                this.impactCallback();
         },
 
         setSprite: function(sprite) {
@@ -30,7 +39,7 @@ define(['../entity'], function(Entity) {
         setStart: function(x, y) {
             var self = this;
 
-            self.setGridPosition(x, y);
+            self.setGridPosition(Math.floor(x / 16), Math.floor(y / 16));
 
             self.startX = x;
             self.startY = y;
@@ -43,6 +52,8 @@ define(['../entity'], function(Entity) {
 
             self.destX = x;
             self.destY = y;
+
+            self.updateAngle();
         },
 
         setTarget: function(target) {
@@ -56,9 +67,13 @@ define(['../entity'], function(Entity) {
             self.destX = target.x;
             self.destY = target.y;
 
+            self.updateAngle();
+
             target.onMove(function() {
                 self.destX = target.x;
                 self.destY = target.y;
+
+                self.updateAngle();
             });
         },
 
@@ -67,8 +82,15 @@ define(['../entity'], function(Entity) {
 
             self.destX = x;
             self.destY = y;
-        }
+        },
 
+        updateAngle: function() {
+            this.angle = Math.atan2(this.destY - this.y, this.destX - this.x) * (180 / Math.PI) - 90;
+        },
+
+        onImpact: function(callback) {
+            this.impactCallback = callback;
+        }
 
     });
 

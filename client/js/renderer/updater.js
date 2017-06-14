@@ -15,13 +15,15 @@ define(['../entity/character/character'], function(Character) {
         },
 
         update: function() {
+            this.timeDifferential = (new Date() - this.lastUpdate) / 1000;
             this.animateTiles();
-            this.updateCharacters();
+            this.updateEntities();
             this.input.updateCursor();
             this.updateKeyboard();
             this.updateAnimations();
             this.verifyScale();
             this.updateInfos();
+            this.lastUpdate = new Date();
         },
 
         animateTiles: function() {
@@ -36,7 +38,7 @@ define(['../entity/character/character'], function(Character) {
             });
         },
 
-        updateCharacters: function() {
+        updateEntities: function() {
             var self = this;
 
             self.game.entities.forEachEntity(function(entity) {
@@ -47,6 +49,25 @@ define(['../entity/character/character'], function(Character) {
 
                 if (animation && animation.update(self.game.time))
                     entity.loadDirty();
+
+                if (entity.type === 'projectile') {
+                    var mDistance = entity.speed * self.timeDifferential,
+                        dx = entity.destX - entity.x,
+                        dy = entity.destY - entity.y,
+                        tDistance = Math.sqrt(dx * dx + dy * dy),
+                        amount = mDistance / tDistance;
+
+                    if (amount > 1)
+                        amount = 1;
+
+                    entity.x += dx * amount;
+                    entity.y += dy * amount;
+
+                    if (tDistance < 1)
+                        entity.impact();
+
+                    return;
+                }
 
                 if (entity.movement && entity.movement.inProgress)
                     entity.movement.step(self.game.time);
@@ -135,7 +156,7 @@ define(['../entity/character/character'], function(Character) {
         updateFading: function(entity) {
             var self = this;
 
-            if (!entity || !entity.fading)
+            if (!entity || !entity.fading || entity.type === 'projectile')
                 return;
 
             var duration = 1000,

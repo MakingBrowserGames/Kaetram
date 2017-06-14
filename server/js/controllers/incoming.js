@@ -53,6 +53,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleCombat(message);
                     break;
 
+                case Packets.Projectile:
+                    self.handleProjectile(message);
+                    break;
+
             }
 
         });
@@ -320,7 +324,10 @@ module.exports = Incoming = cls.Class.extend({
                 if (!target)
                     return;
 
-                self.world.pushToAdjacentGroups(target.group, new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
+                if (self.player.isRanged())
+                    self.world.createProjectile(true, [self.player, target]);
+                else
+                    self.world.pushToAdjacentGroups(target.group, new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
 
                 break;
 
@@ -349,7 +356,9 @@ module.exports = Incoming = cls.Class.extend({
                     self.world.createProjectile(true, [attacker, target]);
 
                 } else {
-                    log.info('Melee combat...');
+                    attacker.combat.start();
+                    attacker.setTarget(target);
+                    attacker.combat.attack(target);
                 }
 
 
@@ -372,6 +381,29 @@ module.exports = Incoming = cls.Class.extend({
                 }
 
                 target.combat.addAttacker(attacker);*/
+
+                break;
+        }
+    },
+
+    handleProjectile: function(message) {
+        var self = this,
+            type = message.shift();
+
+        if (!target)
+            return;
+
+        switch (type) {
+            case Packets.ProjectileOpcode.Impact:
+                var projectile = self.world.getEntityByInstance(message.shift()),
+                    target = self.world.getEntityByInstance(message.shift());
+
+                if (!projectile || !target)
+                    return;
+
+
+
+                log.info('projectile impacted: ' + target.instance);
 
                 break;
         }

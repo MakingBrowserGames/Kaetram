@@ -18291,16 +18291,16 @@
   },
   {
     "id": "projectile-pinearrow",
-    "width": 48,
-    "height": 48,
+    "width": 24,
+    "height": 24,
     "animations": {
       "travel": {
         "length": 1,
         "row": 0
       }
     },
-    "offsetX": -24,
-    "offsetY": -24,
+    "offsetX": -12,
+    "offsetY": -12,
     "offsetAngle": 180
   },
   {
