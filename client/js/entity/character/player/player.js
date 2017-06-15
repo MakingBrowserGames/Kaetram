@@ -37,6 +37,39 @@ define(['../character', './equipment/armour', './equipment/weapon',
             self.loadEquipment();
         },
 
+        load: function(data) {
+            var self = this;
+
+            self.setId(data.shift());
+            self.username = data.shift();
+
+            var x = data.shift(),
+                y = data.shift();
+
+            self.setGridPosition(x, y);
+
+            self.kind = data.shift();
+            self.rights = data.shift();
+
+            var hitPointsData = data.shift(),
+                manaData = data.shift();
+
+            self.setHitPoints(hitPointsData.shift());
+            self.setMaxHitPoints(hitPointsData.shift());
+
+            self.setMana(manaData.shift());
+            self.setMaxMana(manaData.shift());
+
+            self.experience = data.shift();
+            self.level = data.shift();
+
+            self.lastLogin = data.shift();
+            self.pvpKills = data.shift();
+            self.pvpDeaths = data.shift();
+
+            self.type = 'player';
+        },
+
         loadHandler: function(game) {
             var self = this;
 
@@ -127,6 +160,14 @@ define(['../character', './equipment/armour', './equipment/weapon',
 
         clearHealthBar: function() {
             this._super();
+        },
+
+        getX: function() {
+            return this.gridX;
+        },
+
+        getY: function() {
+            return this.gridY;
         },
 
         setEquipment: function(type, data) {

@@ -9,18 +9,12 @@ Kaetram To-Do List:
 
 - Centre properly inside buildings
 
-- Implement range in combat styles
-
 - Review combat and test out PvP
-- Format combat code and smoothen it out (take as many things out of incoming.js)
 
 - Loading other information from MySQL
 - Determine what to save to the MySQL
 
-- Have combat sync up from other's perspectives (pushToOthers)
-- Implement projectiles and ranged combat
-
-- Add the info manager from TTA
+- Load projectiles prior to attacking if necessary.
 
 Finished:
 
@@ -35,6 +29,11 @@ Finished:
 - Begin entity-rendering and distribution of sprites (scales accordingly) ✓
 - Fix spam click attack ✓
 - Implement auto-retaliation ✓
+- Have combat sync up from other's perspectives (pushToOthers) ✓
+- Implement projectiles and ranged combat ✓
+- Add the info manager from TTA ✓
+- Format combat code and smoothen it out ✓
+- Implement range in combat styles ✓
 
 
 Reasoning:

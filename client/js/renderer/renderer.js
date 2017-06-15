@@ -1,8 +1,8 @@
 /* global _, log, Detect */
 
 define(['./camera', './tile',
-        '../entity/character/player/player', '../entity/character/character',
-        '../entity/objects/item'], function(Camera, Tile, Player, Character, Item) {
+    '../entity/character/player/player', '../entity/character/character',
+    '../entity/objects/item'], function(Camera, Tile, Player, Character, Item) {
 
     return Class.extend({
 
@@ -226,6 +226,7 @@ define(['./camera', './tile',
             if (self.game.development && !self.mobile) {
                 self.drawPosition();
                 self.drawPathing();
+                self.drawLatency();
             }
         },
 
@@ -324,8 +325,8 @@ define(['./camera', './tile',
                     weaponHeight = weapon.height * self.drawingScale;
 
                 self.context.drawImage(weapon.image, weaponX, weaponY, weaponWidth, weaponHeight,
-                                    weapon.offsetX * self.drawingScale, weapon.offsetY * self.drawingScale,
-                                    weaponWidth, weaponHeight);
+                    weapon.offsetX * self.drawingScale, weapon.offsetY * self.drawingScale,
+                    weaponWidth, weaponHeight);
             }
 
             if (entity instanceof Item) {
@@ -376,7 +377,8 @@ define(['./camera', './tile',
             if (entity.type !== 'player' || entity.hidden)
                 return;
 
-            var colour = entity.wanted ? 'red' : 'white';
+            var colour = entity.wanted ? 'red' : 'white',
+                factor = self.mobile ? 2 : 1;
 
             if (entity.rights > 0)
                 colour = '#999999';
@@ -389,7 +391,7 @@ define(['./camera', './tile',
             self.textContext.save();
             self.setCameraView(self.textContext);
             self.textContext.font = '14px AdvoCut';
-            self.drawText(entity.username, entity.x + 8, entity.y - 10, true, colour);
+            self.drawText(entity.username, (entity.x + 8) * factor, (entity.y - 10) * factor, true, colour);
             self.textContext.restore();
         },
 
@@ -410,8 +412,8 @@ define(['./camera', './tile',
 
                 if (cursor.loaded)
                     self.cursorContext.drawImage(cursor.image, 0, 0, 14 * self.drawingScale, 14 * self.drawingScale,
-                                            self.input.mouse.x, self.input.mouse.y,
-                                            14 * self.drawingScale, 14 * self.drawingScale);
+                        self.input.mouse.x, self.input.mouse.y,
+                        14 * self.drawingScale, 14 * self.drawingScale);
             }
 
             self.cursorContext.restore();
@@ -455,6 +457,15 @@ define(['./camera', './tile',
                 if (pathingGrid[y][x] !== 0)
                     self.drawCellHighlight(x, y, 'rgba(50, 50, 255, 0.5)');
             });
+        },
+
+        drawLatency: function() {
+            var self = this;
+
+            if (!self.game || !self.game.socket)
+                return;
+
+            self.drawText('Latency: ' + self.game.messages.latency, 10, 51, false, 'white');
         },
 
         drawSelectedCell: function() {
@@ -696,7 +707,7 @@ define(['./camera', './tile',
 
         isVisiblePosition: function(x, y) {
             return y >= this.camera.gridY && y < this.camera.gridY + this.camera.gridHeight &&
-                    x >= this.camera.gridX && x < this.camera.gridX + this.camera.gridWidth
+                x >= this.camera.gridX && x < this.camera.gridX + this.camera.gridWidth
         },
 
         getScale: function() {
@@ -726,7 +737,7 @@ define(['./camera', './tile',
         clearContext: function() {
             this.context.clearRect(0, 0, this.screenWidth * this.scale, this.screenHeight * this.scale);
         },
-        
+
         clearText: function() {
             this.textContext.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
         },

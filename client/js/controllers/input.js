@@ -135,8 +135,9 @@ define(['../entity/animation'], function(Animation) {
                             /**
                              * Testing to see how the current info system holds up.
                              */
-                            self.getPlayer().setSprite(self.game.getSprite('death'));
-                            self.getPlayer().animate('death', 120, 1);
+
+                            self.game.bubble.create(self.game.player.id, 'Hello humans.', self.game.time, 10000000);
+                            //self.game.bubble.setTo(self.game.player);
 
                             break;
                     }
@@ -179,22 +180,20 @@ define(['../entity/animation'], function(Animation) {
             if ((self.game.zoning && self.game.zoning.direction) || (position.x === player.gridX && position.y === player.gridY))
                 return;
 
-            if (self.hovering) {
-                var entity = self.game.getEntityAt(position.x, position.y);
+            var entity = self.game.getEntityAt(position.x, position.y);
 
-                if (entity) {
-                    player.setTarget(entity);
+            if (entity) {
+                player.setTarget(entity);
 
-                    if (player.getDistance(entity) < 7 && player.isRanged() && self.hoveringCharacter()) {
-                        self.game.socket.send(Packets.Target, [Packets.TargetOpcode.Attack, entity.id]);
-                        player.lookAt(entity);
-                        return;
-                    }
+                if (player.getDistance(entity) < 7 && player.isRanged() && self.isCharacter(entity)) {
+                    self.game.socket.send(Packets.Target, [Packets.TargetOpcode.Attack, entity.id]);
+                    player.lookAt(entity);
+                    return;
+                }
 
-                    if (entity.type !== 'item') {
-                        player.follow(entity);
-                        return;
-                    }
+                if (entity.type !== 'item') {
+                    player.follow(entity);
+                    return;
                 }
             } else
                 player.removeTarget();
@@ -324,8 +323,8 @@ define(['../entity/animation'], function(Animation) {
             }
         },
 
-        hoveringCharacter: function() {
-            return this.hovering === Modules.Hovering.Mob || this.hovering === Modules.Hovering.Player;
+        isCharacter: function(entity) {
+            return entity.type === 'mob' || entity.type === 'player';
         },
 
         getPlayer: function() {

@@ -173,3 +173,14 @@ Messages.Points = Message.extend({
     }
 
 });
+
+Messages.Network = Message.extend({
+
+    init: function(opcode) {
+        this.opcode = opcode;
+    },
+
+    serialize: function() {
+        return [Packets.Network, this.opcode];
+    }
+});

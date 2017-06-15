@@ -23,6 +23,7 @@ define(['../entity/character/character'], function(Character) {
             this.updateAnimations();
             this.verifyScale();
             this.updateInfos();
+            this.updateBubbles();
             this.lastUpdate = new Date();
         },
 
@@ -63,7 +64,12 @@ define(['../entity/character/character'], function(Character) {
                     entity.x += dx * amount;
                     entity.y += dy * amount;
 
-                    if (tDistance < 1)
+                    /**
+                     * Prevents bug where the arrow becomes
+                     * lodged into the target without de-spawning.
+                     */
+
+                    if (tDistance < 5)
                         entity.impact();
 
                     return;
@@ -223,6 +229,11 @@ define(['../entity/character/character'], function(Character) {
         updateInfos: function() {
             if (this.game.info)
                 this.game.info.update(this.game.time);
+        },
+
+        updateBubbles: function() {
+            if (this.game.bubble)
+                this.game.bubble.update(this.game.time);
         },
 
         setSprites: function(sprites) {

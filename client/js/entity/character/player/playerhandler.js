@@ -83,7 +83,7 @@ define(function() {
                 if (!self.camera.centered)
                     self.checkBounds();
 
-                if (self.player.hasTarget() && self.player.getDistance(self.player.target) < 7 && self.player.isRanged())
+                if (self.player.hasTarget() && self.player.getDistance(self.player.target) < 7 && self.player.isRanged() && self.isAttackable())
                     self.player.stop();
 
                 self.socket.send(Packets.Movement, [Packets.MovementOpcode.Step, self.player.gridX, self.player.gridY]);
@@ -101,6 +101,15 @@ define(function() {
                 if (self.camera.centered)
                     self.camera.centreOn(self.player);
             });
+        },
+
+        isAttackable: function() {
+            var self = this;
+
+            if (!self.player.target)
+                return;
+
+            return self.player.target.type === 'mob' || (self.game.pvp && self.player.target.type === 'player');
         },
 
         checkBounds: function() {

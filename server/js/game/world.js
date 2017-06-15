@@ -161,6 +161,9 @@ module.exports = World = cls.Class.extend({
     handleDamage: function(attacker, target, damage) {
         var self = this;
 
+        if (!attacker || !target || !damage)
+            return;
+
         target.hit(attacker);
         target.applyDamage(damage);
 
@@ -168,8 +171,8 @@ module.exports = World = cls.Class.extend({
 
         if (target.hitPoints < 1) {
             attacker.combat.stop();
-            self.pushToAdjacentGroups(target.group, new Messages.Despawn(target.instance));
 
+            self.pushToAdjacentGroups(target.group, new Messages.Despawn(target.instance));
             self.handleDeath(target);
         }
 

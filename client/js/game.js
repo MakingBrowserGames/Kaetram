@@ -4,10 +4,10 @@ define(['./renderer/renderer', './utils/storage',
         './map/map', './network/socket', './entity/character/player/player',
         './renderer/updater', './controllers/entities', './controllers/input',
         './entity/character/player/playerhandler', './utils/pathfinder',
-        './controllers/zoning', './controllers/info',
+        './controllers/zoning', './controllers/info', './controllers/bubble',
         './utils/modules', './network/packets'],
         function(Renderer, LocalStorage, Map, Socket, Player, Updater,
-                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info) {
+                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info, Bubble) {
 
     return Class.extend({
 
@@ -39,6 +39,8 @@ define(['./renderer/renderer', './utils/storage',
             self.loaded = false;
 
             self.time = new Date();
+
+            self.pvp = false;
 
             self.loadRenderer();
             self.loadControllers();
@@ -118,6 +120,8 @@ define(['./renderer/renderer', './utils/storage',
 
             self.setInfo(new Info(self));
 
+            self.setBubble(new Bubble(self));
+
             if (!hasWorker)
                 self.loaded = true;
         },
@@ -191,35 +195,9 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onWelcome(function(data) {
 
-                self.player.setId(data.shift());
-                self.player.username = data.shift();
+                self.player.load(data);
 
-                var x = data.shift(),
-                    y = data.shift();
-
-                self.player.setGridPosition(x, y);
-                self.input.setPosition(x, y);
-
-                self.player.kind = data.shift();
-                self.player.rights = data.shift();
-
-                var hitPointsData = data.shift(),
-                    manaData = data.shift();
-
-                self.player.setHitPoints(hitPointsData.shift());
-                self.player.setMaxHitPoints(hitPointsData.shift());
-
-                self.player.setMana(manaData.shift());
-                self.player.setMaxMana(manaData.shift());
-
-                self.player.experience = data.shift();
-                self.player.level = data.shift();
-
-                self.player.lastLogin = data.shift();
-                self.player.pvpKills = data.shift();
-                self.player.pvpDeaths = data.shift();
-
-                self.player.type = 'player';
+                self.input.setPosition(self.player.getX(), self.player.getY());
 
                 self.start();
                 self.postLoad();
@@ -482,6 +460,11 @@ define(['./renderer/renderer', './utils/storage',
 
             self.updater.setSprites(self.entities.sprites);
 
+            setInterval(function() {
+                self.messages.calculateLatency();
+                self.socket.send(Packets.Network, [Packets.NetworkOpcode.Ping]);
+            }, 2000);
+
         },
 
         setPlayerMovement: function(direction) {
@@ -635,6 +618,11 @@ define(['./renderer/renderer', './utils/storage',
         setInfo: function(info) {
             if (!this.info)
                 this.info = info;
+        },
+
+        setBubble: function(bubble) {
+            if (!this.bubble)
+                this.bubble = bubble;
         }
 
     });

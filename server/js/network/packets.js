@@ -29,7 +29,8 @@ var Packets = {
     Animation: 15,
     Projectile: 16,
     Population: 17,
-    Points: 18
+    Points: 18,
+    Network: 19
 };
 
 Packets.IntroOpcode = {
@@ -71,6 +72,11 @@ Packets.ProjectileOpcode = {
     Create: 2,
     Update: 3,
     Impact: 4
+};
+
+Packets.NetworkOpcode = {
+    Ping: 0,
+    Pong: 1
 };
 
 module.exports = Packets;

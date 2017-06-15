@@ -33,6 +33,15 @@ define(function() {
             self.messages[Packets.Projectile] = self.receiveProjectile;
             self.messages[Packets.Population] = self.receivePopulation;
             self.messages[Packets.Points] = self.receivePoints;
+            self.messages[Packets.Network] = self.receiveNetwork;
+
+            self.latency = -1;
+        },
+
+        calculateLatency: function() {
+            var self = this;
+
+            self.latencyTime = new Date().getTime();
         },
 
         handleData: function(data) {
@@ -205,6 +214,17 @@ define(function() {
 
             if (self.pointsCallback)
                 self.pointsCallback(pointsData);
+        },
+
+        receiveNetwork: function(data) {
+            var self = this,
+                info = data.shift();
+
+            switch (info) {
+                case Packets.NetworkOpcode.Pong:
+                    this.latency = new Date().getTime() - this.latencyTime;
+                    return;
+            }
         },
 
         /**

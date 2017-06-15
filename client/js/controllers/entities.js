@@ -97,6 +97,11 @@ define(['../renderer/grids', '../entity/objects/chest',
                         self.unregisterPosition(projectile);
                         delete self.entities[id];
 
+                        /**
+                         * Don't fool yourself, the client only knows the damage as a number,
+                         * you cannot change or exploit it in any way client-sided.
+                         */
+
                         if (self.game.player.id === projectile.owner.id)
                             self.game.socket.send(Packets.Projectile, [Packets.ProjectileOpcode.Impact, id, target.id]);
 

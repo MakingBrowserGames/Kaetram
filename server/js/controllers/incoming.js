@@ -57,6 +57,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleProjectile(message);
                     break;
 
+                case Packets.Network:
+                    self.handleNetwork(message);
+                    break;
+
             }
 
         });
@@ -78,12 +82,6 @@ module.exports = Incoming = cls.Class.extend({
         if (self.world.playerInWorld(self.player.username)) {
             self.connection.sendUTF8('loggedin');
             self.connection.close('Player already logged in..');
-            return;
-        }
-
-        if (config.development && self.player.username !== 'Test' && self.player.username !== 'Tachyon') {
-            self.connection.sendUTF8('development');
-            self.connection.close();
             return;
         }
 
@@ -315,6 +313,8 @@ module.exports = Incoming = cls.Class.extend({
 
             case Packets.TargetOpcode.Talk:
 
+
+
                 break;
 
             case Packets.TargetOpcode.Attack:
@@ -368,7 +368,7 @@ module.exports = Incoming = cls.Class.extend({
 
                 self.world.handleDamage(projectile.owner, target, projectile.damage);
 
-                if (target.combat.started)
+                if (target.combat.started || target.isDead())
                     return;
 
                 target.combat.start();
@@ -376,6 +376,17 @@ module.exports = Incoming = cls.Class.extend({
                 target.combat.addAttacker(projectile.owner);
                 target.combat.attack(projectile.owner);
 
+                break;
+        }
+    },
+
+    handleNetwork: function(message) {
+        var self = this,
+            opcode = message.shift();
+
+        switch (opcode) {
+            case Packets.NetworkOpcode.Ping:
+                self.world.pushToPlayer(self.player, new Messages.Network(Packets.NetworkOpcode.Pong));
                 break;
         }
     }
