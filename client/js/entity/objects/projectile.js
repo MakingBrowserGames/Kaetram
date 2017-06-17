@@ -23,6 +23,10 @@ define(['../entity'], function(Entity) {
             self.angle = 0;
         },
 
+        getId: function() {
+            return this.id;
+        },
+
         impact: function() {
             if (this.impactCallback)
                 this.impactCallback();
@@ -68,6 +72,9 @@ define(['../entity'], function(Entity) {
             self.destY = target.y;
 
             self.updateAngle();
+
+            if (target.type !== 'mob')
+                return;
 
             target.onMove(function() {
                 self.destX = target.x;

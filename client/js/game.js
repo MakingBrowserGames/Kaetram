@@ -249,21 +249,20 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onMovement(function(data) {
-                var id = data.shift(),
-                    isPlayer = id === self.player.id,
-                    entity = self.entities.get(id),
-                    opcode = data.shift(),
-                    forced = data.shift(),
-                    teleport = data.shift();
+                var opcode = data.shift(),
+                    info = data.shift();
 
-                if (!entity)
-                    return;
-
-                switch (opcode) {
+                switch(opcode) {
                     case Packets.MovementOpcode.Move:
+                        var id = info.shift(),
+                            x = info.shift(),
+                            y = info.shift(),
+                            forced = info.shift(),
+                            teleport = info.shift(),
+                            entity = self.entities.get(id);
 
-                        var x = data.shift(),
-                            y = data.shift();
+                        if (!entity)
+                            return;
 
                         if (forced)
                             entity.stop(true);
@@ -273,16 +272,15 @@ define(['./renderer/renderer', './utils/storage',
                         break;
 
                     case Packets.MovementOpcode.Follow:
-                        data.shift();
-                        data.shift();
+                        var follower = self.entities.get(info.shift()),
+                            followee = self.entities.get(info.shift()),
+                            isRanged = info.shift(),
+                            attackRange = info.shift();
 
-                        var idToFollow = data.shift(),
-                            target = self.entities.get(idToFollow);
-
-                        if (!target)
+                        if (!followee || !follower)
                             return;
 
-                        entity.follow(target);
+                        follower.follow(followee);
 
                         break;
                 }
@@ -341,15 +339,15 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onCombat(function(data) {
                 var opcode = data.shift(),
-                    attackerId = data.shift(),
-                    targetId = data.shift(),
-                    attacker = self.entities.get(attackerId),
-                    target = self.entities.get(targetId);
+                    attacker = self.entities.get(data.shift()),
+                    target = self.entities.get(data.shift());
 
                 switch (opcode) {
                     case Packets.CombatOpcode.Initiate:
                         attacker.setTarget(target);
+
                         target.addAttacker(attacker);
+                        target.setTarget(attacker);
 
                         if (target.id === self.player.id || attacker.id === self.player.id)
                             self.socket.send(Packets.Combat, [Packets.CombatOpcode.Initiate, attacker.id, target.id]);
@@ -375,6 +373,8 @@ define(['./renderer/renderer', './utils/storage',
                         break;
 
                     case Packets.CombatOpcode.Finish:
+
+                        log.info('finishing combat..?');
 
                         if (target) {
                             target.removeTarget();
@@ -429,6 +429,10 @@ define(['./renderer/renderer', './utils/storage',
                 if (mana)
                     entity.setMana(mana);
             });
+
+            self.messages.onNetwork(function() {
+                self.socket.send(Packets.Network, [Packets.NetworkOpcode.Pong]);
+            });
         },
 
         postLoad: function() {
@@ -459,12 +463,6 @@ define(['./renderer/renderer', './utils/storage',
             self.zoning = new Zoning(self);
 
             self.updater.setSprites(self.entities.sprites);
-
-            setInterval(function() {
-                self.messages.calculateLatency();
-                self.socket.send(Packets.Network, [Packets.NetworkOpcode.Ping]);
-            }, 2000);
-
         },
 
         setPlayerMovement: function(direction) {
@@ -476,8 +474,6 @@ define(['./renderer/renderer', './utils/storage',
         },
 
         moveCharacter: function(character, x, y) {
-            var self = this;
-
             if (!character)
                 return;
 
@@ -553,8 +549,7 @@ define(['./renderer/renderer', './utils/storage',
 
         getEntityAt: function(x, y, ignoreSelf) {
             var self = this,
-                entities = self.entities.grids.renderingGrid[y][x],
-                entity = null;
+                entities = self.entities.grids.renderingGrid[y][x]
 
             if (_.size(entities) > 0)
                 return entities[_.keys(entities)[ignoreSelf ? 1 : 0]];

@@ -13,7 +13,6 @@ define(['../renderer/grids', '../entity/objects/chest',
 
             self.game = game;
             self.renderer = game.renderer;
-            self.camera = self.renderer.camera;
 
             self.grids = null;
             self.sprites = null;
@@ -95,19 +94,20 @@ define(['../renderer/grids', '../entity/objects/chest',
                     projectile.onImpact(function() {
 
                         self.unregisterPosition(projectile);
-                        delete self.entities[id];
+                        delete self.entities[projectile.getId()];
 
                         /**
                          * Don't fool yourself, the client only knows the damage as a number,
                          * you cannot change or exploit it in any way client-sided.
                          */
 
-                        if (self.game.player.id === projectile.owner.id)
+                        if (self.game.player.id === projectile.owner.id || target.id === self.game.player.id)
                             self.game.socket.send(Packets.Projectile, [Packets.ProjectileOpcode.Impact, id, target.id]);
 
                         self.game.info.create(Modules.Hits.Damage, [damage, target.id === self.game.player.id], target.x, target.y);
 
                         target.triggerHealthBar();
+
                     });
 
                     self.addEntity(projectile);
@@ -141,10 +141,12 @@ define(['../renderer/grids', '../entity/objects/chest',
 
                     var mob = new Mob(id, kind),
                         hitPoints = info.shift(),
-                        maxHitPoints = info.shift();
+                        maxHitPoints = info.shift(),
+                        attackRange = info.shift();
 
                     mob.setHitPoints(hitPoints);
                     mob.setMaxHitPoints(maxHitPoints);
+                    mob.attackRange = attackRange;
 
                     entity = mob;
 
@@ -182,8 +184,6 @@ define(['../renderer/grids', '../entity/objects/chest',
                     player.pvpKills = pvpKills;
                     player.pvpDeaths = pvpDeaths;
 
-                    log.info(armourData[0]);
-
                     player.setSprite(self.getSprite(armourData[1]));
                     player.idle();
 
@@ -198,7 +198,7 @@ define(['../renderer/grids', '../entity/objects/chest',
 
                     self.addEntity(player);
 
-                    break;
+                    return;
             }
 
             if (!entity)
@@ -241,8 +241,6 @@ define(['../renderer/grids', '../entity/objects/chest',
         clearPlayers: function(exception) {
             var self = this;
 
-            log.info('clearing players????');
-
             _.each(self.entities, function(entity) {
                 if (entity.id !== exception.id && entity.type === 'player') {
                     self.grids.removeFromRenderingGrid(entity, entity.gridX, entity.gridY);
@@ -278,7 +276,7 @@ define(['../renderer/grids', '../entity/objects/chest',
                 if (!self.game.renderer.isPortableDevice())
                     return;
 
-                if (self.camera && !self.camera.isVisiblePosition(e.gridX, e.gridY)) {
+                if (self.game.renderer.camera && !self.game.renderer.camera.isVisiblePosition(e.gridX, e.gridY)) {
                     e.dirtyRect = self.renderer.getEntityBounds(e);
                     self.renderer.checkDirty(e);
                 }

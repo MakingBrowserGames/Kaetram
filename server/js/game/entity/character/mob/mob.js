@@ -17,12 +17,23 @@ module.exports = Mob = Character.extend({
         self.armourLevel = self.data.armour;
         self.weaponLevel = self.data.weapon;
         self.attackRange = self.data.attackRange;
+        self.aggroRange = self.data.aggroRange;
+        self.aggressive = self.data.aggressive;
 
         self.spawnLocation = [x, y];
 
         self.dead = false;
         self.boss = false;
         self.static = false;
+    },
+
+    canAggro: function(player) {
+        var self = this;
+
+        if (self.hasTarget() || !self.aggressive)
+            return false;
+
+        return self.isNear(player, self.aggroRange);
     },
 
     destroy: function() {
@@ -71,7 +82,7 @@ module.exports = Mob = Character.extend({
         var self = this,
             base = self._super();
 
-        base.push(self.hitPoints, self.maxHitPoints);
+        base.push(self.hitPoints, self.maxHitPoints, self.attackRange);
 
         return base;
     },

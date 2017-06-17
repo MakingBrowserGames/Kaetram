@@ -1,4 +1,7 @@
-var cls = require('../../../../lib/class');
+/* global log */
+
+var cls = require('../../../../lib/class'),
+    _ = require('underscore');
 
 module.exports = Handler = cls.Class.extend({
 
@@ -16,11 +19,23 @@ module.exports = Handler = cls.Class.extend({
 
         self.player.onMovement(function(x, y) {
             self.player.checkGroups();
+
+            var group = self.world.groups[self.player.group];
+
+            if (!group)
+                return;
+
+            _.each(group.entities, function(entity) {
+                if (entity && entity.type === 'mob') {
+                    var aggro = entity.canAggro(self.player);
+
+                    if (aggro)
+                        entity.combat.begin(self.player);
+                }
+            });
         });
 
         self.player.onGroup(function() {
-
-            log.info('Updating groups!');
             self.world.handleEntityGroup(self.player);
             self.world.pushEntities(self.player);
         });

@@ -162,7 +162,7 @@ module.exports = Incoming = cls.Class.extend({
                 } catch (e) {
                     log.info('Could not decipher API message');
                     self.connection.sendUTF8('disallowed');
-                    self.connection.close('API response is malformed!')
+                    self.connection.close('API response is malformed!');
                 }
 
                 if (data && data.message) {
@@ -283,8 +283,9 @@ module.exports = Incoming = cls.Class.extend({
                     oEntity.removeTarget();
                     oEntity.combat.forget();
                     oEntity.return();
-                    self.world.pushBroadcast(new Messages.Movement(instance, Packets.MovementOpcode.Move, false, false, oEntity.spawnLocation[0], oEntity.spawnLocation[1]));
-                    self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Finish, null, oEntity.instance))
+
+                    self.world.pushBroadcast(new Messages.Movement(Packets.MovementOpcode.Move, [instance, oEntity.spawnLocation[0], oEntity.spawnLocation[1], false, false]));
+                    self.world.pushBroadcast(new Messages.Combat(Packets.CombatOpcode.Finish, null, oEntity.instance));
                 }
 
                 if (oEntity.hasTarget())
@@ -368,7 +369,7 @@ module.exports = Incoming = cls.Class.extend({
 
                 self.world.handleDamage(projectile.owner, target, projectile.damage);
 
-                if (target.combat.started || target.isDead())
+                if (target.combat.started || target.isDead() || target.type !== 'mob')
                     return;
 
                 target.combat.start();
@@ -385,8 +386,10 @@ module.exports = Incoming = cls.Class.extend({
             opcode = message.shift();
 
         switch (opcode) {
-            case Packets.NetworkOpcode.Ping:
-                self.world.pushToPlayer(self.player, new Messages.Network(Packets.NetworkOpcode.Pong));
+            case Packets.NetworkOpcode.Pong:
+                self.latency = new Date().getTime() - self.latencyTime;
+
+                log.info(self.latency / 2 + 'ms');
                 break;
         }
     }

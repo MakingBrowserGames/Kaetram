@@ -108,8 +108,6 @@ define(['./entityhandler'], function(EntityHandler) {
 
             self.x = x;
             self.y = y;
-
-
         },
 
         setGridPosition: function(x, y) {

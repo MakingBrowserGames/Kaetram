@@ -226,7 +226,6 @@ define(['./camera', './tile',
             if (self.game.development && !self.mobile) {
                 self.drawPosition();
                 self.drawPathing();
-                self.drawLatency();
             }
         },
 
@@ -457,15 +456,6 @@ define(['./camera', './tile',
                 if (pathingGrid[y][x] !== 0)
                     self.drawCellHighlight(x, y, 'rgba(50, 50, 255, 0.5)');
             });
-        },
-
-        drawLatency: function() {
-            var self = this;
-
-            if (!self.game || !self.game.socket)
-                return;
-
-            self.drawText('Latency: ' + self.game.messages.latency, 10, 51, false, 'white');
         },
 
         drawSelectedCell: function() {

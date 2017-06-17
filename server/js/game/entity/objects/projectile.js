@@ -34,14 +34,6 @@ module.exports = Projectile = Entity.extend({
 
         self.destX = target.x;
         self.destY = target.y;
-
-        target.onMovement(function(x, y) {
-            self.destX = x;
-            self.destY = y;
-
-            if (self.destinationCallback)
-                self.destinationCallback(self.destX, self.destY);
-        });
     },
 
     setStaticTarget: function(x, y) {
@@ -51,10 +43,6 @@ module.exports = Projectile = Entity.extend({
 
         self.destX = x;
         self.destY = y;
-    },
-
-    onDestinationUpdate: function(callback) {
-        this.destinationCallback = callback;
     }
 
 });

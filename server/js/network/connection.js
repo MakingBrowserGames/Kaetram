@@ -1,4 +1,4 @@
-/* global module */
+/* global log */
 
 var cls = require('../lib/class');
 
@@ -24,7 +24,10 @@ module.exports = Connection = cls.Class.extend({
         throw 'Invalid initialization.'
     },
 
-    close: function() {
+    close: function(reason) {
+        if (reason)
+            log.info(reason);
+
         this.socket.conn.close();
     }
 });

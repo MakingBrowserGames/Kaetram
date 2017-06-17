@@ -34,14 +34,6 @@ define(function() {
             self.messages[Packets.Population] = self.receivePopulation;
             self.messages[Packets.Points] = self.receivePoints;
             self.messages[Packets.Network] = self.receiveNetwork;
-
-            self.latency = -1;
-        },
-
-        calculateLatency: function() {
-            var self = this;
-
-            self.latencyTime = new Date().getTime();
         },
 
         handleData: function(data) {
@@ -218,13 +210,10 @@ define(function() {
 
         receiveNetwork: function(data) {
             var self = this,
-                info = data.shift();
+                opcode = data.shift();
 
-            switch (info) {
-                case Packets.NetworkOpcode.Pong:
-                    this.latency = new Date().getTime() - this.latencyTime;
-                    return;
-            }
+            if (self.networkCallback)
+                self.networkCallback(opcode);
         },
 
         /**
@@ -281,6 +270,10 @@ define(function() {
 
         onPoints: function(callback) {
             this.pointsCallback = callback;
+        },
+
+        onNetwork: function(callback) {
+            this.networkCallback = callback;
         }
 
     });

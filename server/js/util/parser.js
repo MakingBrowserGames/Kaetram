@@ -38,7 +38,7 @@ module.exports = Parser = cls.Class.extend({
                 level: value.level ? value.level : 0,
                 aggroRange: value.aggroRange ? value.aggroRange : 2,
                 attackRange: value.attackRange ? value.attackRange : 1,
-                isAggressive: value.isAggressive ? value.isAggressive : false,
+                aggressive: value.aggressive ? value.aggressive : false,
                 isPoisonous: value.isPoisonous ? value.isPoisonous : false,
                 attackRate: value.attackRate ? value.attackRate : 1000,
                 movementSpeed: value.movementSpeed ? value.movementSpeed : 200,

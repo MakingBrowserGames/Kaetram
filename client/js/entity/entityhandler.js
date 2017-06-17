@@ -35,6 +35,10 @@ define(['./character/character'], function(Character) {
 
                     if (self.entity.type === 'mob')
                         self.game.socket.send(Packets.Movement, [Packets.MovementOpcode.Entity, self.entity.id, self.entity.gridX, self.entity.gridY]);
+
+                    if (self.entity.attackRange > 1 && self.entity.hasTarget() && self.entity.getDistance(self.entity.target) <= self.entity.attackRange)
+                        self.entity.stop(false);
+
                 });
 
                 self.entity.onStopPathing(function() {

@@ -87,7 +87,9 @@ module.exports = World = cls.Class.extend({
          */
 
         self.tick();
-        self.dataParser();
+
+        if (!config.offlineMode)
+            self.dataParser();
 
         self.ready = true;
 
@@ -114,20 +116,18 @@ module.exports = World = cls.Class.extend({
     },
 
     parsePackets: function() {
-        var self = this, connection;
+        var self = this;
 
         /**
-         * This parses through all the packet pool and sends them
-         * whenever the server has time
+         * This parses through the packet pool and sends them
          */
 
         for (var id in self.packets) {
-            if (self.packets.hasOwnProperty(id) && self.packets[id].length > 0) {
+            if (self.packets[id].length > 0 && self.packets.hasOwnProperty(id)) {
                 var conn = self.socket.getConnection(id);
 
                 if (conn) {
-                    connection = conn;
-                    connection.send(self.packets[id]);
+                    conn.send(self.packets[id]);
                     self.packets[id] = [];
                     self.packets[id].id = id;
                 } else
@@ -516,14 +516,10 @@ module.exports = World = cls.Class.extend({
         self.mobs[mob.instance] = mob;
 
         mob.onHit(function(attacker) {
-            if (mob.isDead())
+            if (mob.isDead() || mob.combat.started)
                 return;
 
-            mob.combat.start();
-            mob.setTarget(attacker);
-            mob.combat.addAttacker(attacker);
-
-            mob.combat.attack(attacker);
+            mob.combat.begin(attacker);
         });
     },
 

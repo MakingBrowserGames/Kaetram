@@ -43,6 +43,16 @@ module.exports = Combat = cls.Class.extend({
         self.cleanTimeout = null;
     },
 
+    begin: function(attacker) {
+        var self = this;
+
+        self.start();
+        self.character.setTarget(attacker);
+
+        self.addAttacker(attacker);
+        self.attack(attacker);
+    },
+
     start: function() {
         var self = this;
 
@@ -114,7 +124,8 @@ module.exports = Combat = cls.Class.extend({
     parseFollow: function() {
         var self = this;
 
-        self.sendFollow();
+        if (!self.character.isRanged())
+            self.sendFollow();
 
         if (self.character.type === 'mob' && !self.character.isAtSpawn() && !self.isAttacked()) {
             self.character.return();
@@ -277,7 +288,7 @@ module.exports = Combat = cls.Class.extend({
     },
 
     move: function(character, x, y) {
-        this.world.pushBroadcast(new Messages.Movement(character.instance, Packets.MovementOpcode.Move, false, false, x, y));
+        this.world.pushBroadcast(new Messages.Movement(Packets.MovementOpcode.Move, [character.instance, x, y, false, false]));
     },
 
     hit: function(character, target, hitInfo) {
@@ -304,7 +315,9 @@ module.exports = Combat = cls.Class.extend({
     },
 
     follow: function(character, target) {
-        this.world.pushBroadcast(new Messages.Movement(character.instance, Packets.MovementOpcode.Follow, false, false, null, null, target.instance));
+        var self = this;
+
+        self.world.pushBroadcast(new Messages.Movement(Packets.MovementOpcode.Follow, [character.instance, target.instance, character.isRanged(), character.attackRange]));
     },
 
     end: function() {
@@ -314,12 +327,12 @@ module.exports = Combat = cls.Class.extend({
     sendFollow: function() {
         var self = this;
 
-        if (!self.character.hasTarget())
+        if (!self.character.hasTarget() || !self.character.target || self.character.target.isDead())
             return;
 
         var ignores = [self.character.instance, self.character.target.instance];
 
-        self.world.pushSelectively(new Messages.Movement(self.character.instance, Packets.MovementOpcode.Follow, false, false, null, null, self.character.target.instance), ignores);
+        self.world.pushSelectively(new Messages.Movement(Packets.MovementOpcode.Follow, [self.character.instance, self.character.target.instance]), ignores);
     },
 
     forEachAttacker: function(callback) {

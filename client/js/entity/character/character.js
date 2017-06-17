@@ -41,6 +41,8 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             self.attackAnimationSpeed = 50;
             self.walkAnimationSpeed = 100;
             self.movementSpeed = 250;
+
+            self.attackRange = 1;
         },
 
         animate: function(animation, speed, count, onEndCount) {

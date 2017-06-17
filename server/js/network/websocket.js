@@ -1,4 +1,4 @@
-/* global module */
+/* global module, log */
 
 var Socket = require('./socket'),
     Connection = require('./connection'),

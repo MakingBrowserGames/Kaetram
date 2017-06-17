@@ -56,6 +56,19 @@ module.exports = Entity = cls.Class.extend({
         return this.isAdjacent(entity) && !(entity.x !== this.x && entity.y !== this.y);
     },
 
+    isNear: function(entity, distance) {
+        var self = this,
+            near = false;
+
+        var dx = Math.abs(self.x - entity.x),
+            dy = Math.abs(self.y - entity.y);
+
+        if (dx <= distance && dy <= distance)
+            near = true;
+
+        return near;
+    },
+
     drop: function(item) {
         return new Messages.Drop(this, item);
     },

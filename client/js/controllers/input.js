@@ -183,7 +183,8 @@ define(['../entity/animation'], function(Animation) {
             var entity = self.game.getEntityAt(position.x, position.y);
 
             if (entity) {
-                player.setTarget(entity);
+                if (entity.type !== 'item')
+                    player.setTarget(entity);
 
                 if (player.getDistance(entity) < 7 && player.isRanged() && self.isCharacter(entity)) {
                     self.game.socket.send(Packets.Target, [Packets.TargetOpcode.Attack, entity.id]);

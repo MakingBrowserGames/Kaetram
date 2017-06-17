@@ -16,6 +16,8 @@ Kaetram To-Do List:
 
 - Load projectiles prior to attacking if necessary.
 
+- Projectiles break centered camera?
+
 Finished:
 
 - Convert the getPlayerData(player) method from MySQL to be directly inputted into query(``, {}); ✓

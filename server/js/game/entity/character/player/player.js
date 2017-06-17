@@ -235,7 +235,7 @@ module.exports = Player = Character.extend({
 
         self._super(x, y);
 
-        self.world.pushToAdjacentGroups(self.group, new Messages.Movement(self.instance, Packets.MovementOpcode.Move, false, false, x, y), self.instance);
+        self.world.pushToAdjacentGroups(self.group, new Messages.Movement(Packets.MovementOpcode.Move, [self.instance, x, y, false, false]), self.instance);
     },
 
     setFuturePosition: function(x, y) {
@@ -324,8 +324,8 @@ module.exports = Player = Character.extend({
     sendToSpawn: function() {
         var self = this;
 
-        self.x = 26;
-        self.y = 85;
+        self.x = 46;
+        self.y = 88;
     },
 
     stopMovement: function(force) {
