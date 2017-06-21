@@ -168,7 +168,7 @@ define(['./camera', './tile',
                 self.drawInfos();
             }
 
-            self.drawDebugging();
+            //self.drawDebugging();
 
             self.restoreAll();
 

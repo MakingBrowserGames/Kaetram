@@ -57,6 +57,7 @@ module.exports = Player = Character.extend({
         self.rights = data.rights;
         self.experience = data.experience;
         self.ban = data.ban;
+        self.mute = data.mute;
         self.membership = data.membership;
         self.lastLogin = data.lastLogin;
         self.pvpKills = data.pvpKills;

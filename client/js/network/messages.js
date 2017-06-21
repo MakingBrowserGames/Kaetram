@@ -34,6 +34,7 @@ define(function() {
             self.messages[Packets.Population] = self.receivePopulation;
             self.messages[Packets.Points] = self.receivePoints;
             self.messages[Packets.Network] = self.receiveNetwork;
+            self.messages[Packets.Command] = self.receiveCommand;
         },
 
         handleData: function(data) {
@@ -216,6 +217,14 @@ define(function() {
                 self.networkCallback(opcode);
         },
 
+        receiveCommand: function(data) {
+            var self = this,
+                info = data.shift();
+
+            if (self.commandCallback)
+                self.commandCallback(info);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -274,6 +283,10 @@ define(function() {
 
         onNetwork: function(callback) {
             this.networkCallback = callback;
+        },
+
+        onCommand: function(callback) {
+            this.commandCallback = callback;
         }
 
     });

@@ -433,6 +433,15 @@ define(['./renderer/renderer', './utils/storage',
             self.messages.onNetwork(function() {
                 self.socket.send(Packets.Network, [Packets.NetworkOpcode.Pong]);
             });
+
+            self.messages.onCommand(function(info) {
+
+                /**
+                 * This is for random miscellaneous commands that require
+                 * a specific action done by the client as opposed to
+                 * packet-oriented ones.
+                 */
+            });
         },
 
         postLoad: function() {

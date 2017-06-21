@@ -25,7 +25,7 @@ canvas {
     image-rendering:optimizeSpeed;
 }
 
-#background, #textCanvas, #foreground {
+#background, #textCanvas, #foreground, #cursor {
     margin: 0;
     padding: 0;
 }
@@ -64,8 +64,8 @@ footer {
 }
 
 #about-link span:hover, #credits-link span:hover, #git-link span:hover, #forums-link span:hover, .sub-forum-link:hover {
-    color:#fcda5c;
-    cursor:pointer;
+    color: #fcda5c;
+    cursor: pointer;
 }
 
 .upscaled.game footer {
@@ -84,7 +84,11 @@ footer div {
     display: inline-block;
 }
 
-#canvas, #foreground, #background, #textCanvas, #container, #border, #footer {
+#cursor {
+    z-index: 1;
+}
+
+#canvas, #foreground, #background, #textCanvas, #container, #border, #footer, #cursor {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -347,47 +351,6 @@ footer div {
         animation: parchmiddle3 1s ease-in-out 1;
     }
 
-    #chatBox {
-        position: absolute;
-        left: 53.2%;
-        bottom: 35px;
-        width: 394px;
-        height: 16px;
-        margin-left: -197px;
-        background: url('../img/1/main.png') 0 -298px;
-        display: none;
-    }
-
-    #chatBox.active {
-        display: block;
-    }
-
-    #chatBox input {
-        font-size: 10px;
-        color: #eee;
-        background: none;
-        width: 90%;
-        border: 0;
-        margin-left: 2%;
-        padding: 4px 0;
-    }
-
-    #chatBox .legend {
-        position: absolute;
-        top: -30px;
-        left: 15px;
-        padding: 6px 9px;
-        color: #FFF;
-        background: rgba(45,45,45,0.8);
-        z-index: 6;
-        border-radius: 9px 9px 0 0;
-        display: none;
-    }
-
-    #chatBox .legend p {
-        line-height: 3;
-    }
-
     #respawn {
         width: 375px;
         height: 153px;
@@ -496,48 +459,6 @@ footer div {
         animation: parchmiddle2 1s ease-in-out 1;
     }
 
-    #chatBox {
-        position: absolute;
-        left: 53.2%;
-        bottom: 70px;
-        width: 788px;
-        height: 32px;
-        margin-left: -394px;
-        background: url('../img/2/main.png') 0 -596px;
-        display: none;
-    }
-
-    #chatBox.active {
-        display: block;
-
-    }
-
-    #chatBox input {
-        font-size: 20px;
-        color: #eee;
-        background: none;
-        width: 90%;
-        border: 0;
-        margin-left: 2%;
-        padding: 16px 0;
-    }
-
-    #chatBox .legend {
-        position: absolute;
-        top: -20px;
-        left: 10px;
-        padding: 4px 6px;
-        color: #FFF;
-        background: rgba(45,45,45,0.8);
-        z-index: 4;
-        border-radius: 6px 6px 0 0;
-        display: none;
-    }
-
-    #chatBox .legend p{
-        line-height: 2;
-    }
-
     #respawn {
         width: 250px;
         height: 102px;
@@ -637,47 +558,6 @@ footer div {
         -webkit-animation: parchmiddle1 1s ease-in-out 1;
         -o-animation: parchmiddle1 1s ease-in-out 1;
         animation: parchmiddle1 1s ease-in-out 1;
-    }
-
-    #chatBox {
-        position: absolute;
-        left: 53.2%;
-        bottom: 35px;
-        width: 394px;
-        height: 16px;
-        margin-left: -197px;
-        background: url('../img/1/main.png') 0 -298px;
-        display: none;
-    }
-    
-    #chatBox.active {
-        display: block;
-    }
-    
-    #chatBox input {
-        font-size: 10px;
-        color: #eee;
-        background: none;
-        width: 90%;
-        border: 0;
-        margin-left: 2%;
-        padding: 4px 0;
-    }
-    
-    #chatBox .legend {
-        position: absolute;
-        top: -10px;
-        left: 5px;
-        padding: 2px 3px;
-        color: #FFF;
-        background: rgba(45,45,45,0.8);
-        z-index: 2;
-        border-radius: 3px 3px 0 0;
-        display: none;
-    }
-    
-    #chatBox .legend p{
-        line-height: 1;
     }
 
     #respawn {

@@ -28,6 +28,7 @@ module.exports = Creator = cls.Class.extend({
             'pvpDeaths int,' +
             'rank int,' +
             'ban int(64),' +
+            'mute int(64),' +
             'membership int(64),' +
             'lastLogin int(64),' +
             'PRIMARY KEY(username))');
@@ -112,6 +113,7 @@ module.exports = Creator = cls.Class.extend({
                     pvpDeaths: data.pvpDeaths,
                     rank: data.rank,
                     ban: data.ban,
+                    mute: data.mute,
                     membership: data.membership,
                     lastLogin: data.lastLogin
                 };
@@ -148,6 +150,7 @@ module.exports = Creator = cls.Class.extend({
             poisoned: player.poisoned ? player.poisoned : 0,
             experience: player.experience ? player.experience : 0,
             ban: player.ban ? player.ban : 0,
+            mute: player.mute ? player.mute : 0,
             rank: player.rank ? player.rank : 0,
             membership: player.membership ? player.membership : 0,
             lastLogin: player.lastLogin ? player.lastLogin : 0,

@@ -1,6 +1,6 @@
 /* global Modules, log, _, Packets */
 
-define(['../entity/animation'], function(Animation) {
+define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat) {
 
     return Class.extend({
 
@@ -48,6 +48,8 @@ define(['../entity/animation'], function(Animation) {
 
             self.targetAnimation = new Animation('idle_down', 4, 0, 16, 16);
             self.targetAnimation.setSpeed(50);
+
+            self.chatHandler = new Chat(self.game);
         },
 
         loadCursors: function() {
@@ -74,47 +76,37 @@ define(['../entity/animation'], function(Animation) {
             switch(inputType) {
                 case Modules.InputType.Key:
 
+                    if (self.chatHandler.isActive()) {
+                        self.chatHandler.key(data);
+                        return;
+                    }
+
                     switch(data) {
-                        case Modules.Keys.Right:
-                        case Modules.Keys.Left:
                         case Modules.Keys.Up:
-                        case Modules.Keys.Down:
-
-                            if (self.game.development && !self.game.getCamera().centered)
-                                self.game.getCamera().handlePanning(data);
-
-                            break;
-
                         case Modules.Keys.W:
 
                             self.game.setPlayerMovement('up');
 
                             break;
+
                         case Modules.Keys.A:
+                        case Modules.Keys.Left:
 
                             self.game.setPlayerMovement('left');
 
                             break;
+
                         case Modules.Keys.S:
+                        case Modules.Keys.Down:
 
                             self.game.setPlayerMovement('down');
 
                             break;
+
                         case Modules.Keys.D:
+                        case Modules.Keys.Right:
 
                             self.game.setPlayerMovement('right');
-
-                            break;
-
-                        case Modules.Keys.One:
-
-                            self.game.development = true;
-
-                            break;
-
-                        case Modules.Keys.Two:
-
-                            self.game.development = false;
 
                             break;
 
@@ -136,8 +128,17 @@ define(['../entity/animation'], function(Animation) {
                              * Testing to see how the current info system holds up.
                              */
 
-                            self.game.bubble.create(self.game.player.id, 'Hello humans.', self.game.time, 10000000);
-                            //self.game.bubble.setTo(self.game.player);
+                            self.game.bubble.create(self.game.player.id, 'Hello humans.', self.game.time, 5000);
+
+                            self.game.renderer.forEachVisibleEntity(function(entity) {
+                                self.game.bubble.setTo(entity);
+                            });
+
+                            break;
+
+                        case Modules.Keys.Enter:
+
+                            self.chatHandler.toggle();
 
                             break;
                     }

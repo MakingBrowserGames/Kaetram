@@ -61,7 +61,8 @@ Modules = {
         V: 86,
         U: 85,
         J: 74,
-        Enter: 13
+        Enter: 13,
+        T: 84
     },
 
     DamageColours: {

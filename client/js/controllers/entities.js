@@ -276,7 +276,7 @@ define(['../renderer/grids', '../entity/objects/chest',
                 if (!self.game.renderer.isPortableDevice())
                     return;
 
-                if (self.game.renderer.camera && !self.game.renderer.camera.isVisiblePosition(e.gridX, e.gridY)) {
+                if (self.game.renderer.camera && e && e.gridX && e.gridY && !self.game.renderer.camera.isVisiblePosition(e.gridX, e.gridY)) {
                     e.dirtyRect = self.renderer.getEntityBounds(e);
                     self.renderer.checkDirty(e);
                 }

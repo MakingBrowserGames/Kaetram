@@ -18,7 +18,9 @@ Packets = {
     Projectile: 16,
     Population: 17,
     Points: 18,
-    Network: 19
+    Network: 19,
+    Chat: 20,
+    Command: 21
 };
 
 Packets.IntroOpcode = {

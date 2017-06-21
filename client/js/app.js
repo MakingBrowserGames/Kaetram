@@ -63,18 +63,25 @@ define(['jquery'], function($) {
                     self.readyCallback();
             });
 
+            $(document).bind('keydown', function(e) {
+                if (e.which === Modules.Keys.Enter)
+                    return false;
+            });
+
             $(document).keydown(function(e) {
                 var key = e.which;
 
-                if (key === Modules.Keys.Enter) {
+                if (!self.game)
+                    return;
+
+                if (key === Modules.Keys.Enter && !self.game.started) {
                     self.login();
                     return;
                 }
 
-                if (!self.game || !self.game.started)
-                    return;
+                if (self.game.started)
+                    self.game.onInput(Modules.InputType.Key, key);
 
-                self.game.onInput(Modules.InputType.Key, key);
             });
 
             $(document).keyup(function(e) {

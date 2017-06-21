@@ -24,6 +24,15 @@ var Modules = {
 
     Projectiles: {
         Arrow: 0
+    },
+
+    Skills: {
+        Freeze: 0,
+        Curse: 1,
+        Smash: 2,
+        Tornado: 3,
+        Run: 4,
+        Call: 5
     }
 
 };

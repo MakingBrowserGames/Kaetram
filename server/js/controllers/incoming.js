@@ -6,7 +6,9 @@ var cls = require('../lib/class'),
     config = require('../../config.json'),
     Creator = require('../database/creator'),
     _ = require('underscore'),
-    Messages = require('../network/messages');
+    Messages = require('../network/messages'),
+    sanitizer = require('sanitizer'),
+    Commands = require('./commands');
 
 module.exports = Incoming = cls.Class.extend({
 
@@ -17,6 +19,7 @@ module.exports = Incoming = cls.Class.extend({
         self.connection = self.player.connection;
         self.world = self.player.world;
         self.mysql = self.player.mysql;
+        self.commands = new Commands(self.player);
 
         self.connection.listen(function(data) {
 
@@ -59,6 +62,10 @@ module.exports = Incoming = cls.Class.extend({
 
                 case Packets.Network:
                     self.handleNetwork(message);
+                    break;
+
+                case Packets.Chat:
+                    self.handleChat(message);
                     break;
 
             }
@@ -387,11 +394,24 @@ module.exports = Incoming = cls.Class.extend({
 
         switch (opcode) {
             case Packets.NetworkOpcode.Pong:
-                self.latency = new Date().getTime() - self.latencyTime;
-
-                log.info(self.latency / 2 + 'ms');
+                log.info('Pingy pongy pung pong.');
                 break;
         }
+    },
+
+    handleChat: function(message) {
+        var self = this,
+            text = sanitizer.escape(sanitizer.sanitize(message.shift()));
+
+        if (!text || text.length < 1 || !(/\S/.test(text)))
+            return;
+
+        if (text.charAt(0) === '/' || text.charAt(0) === ';')
+            self.commands.parse(text);
+        else {
+            
+        }
+
     }
 
 });
