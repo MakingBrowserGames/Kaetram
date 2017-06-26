@@ -128,9 +128,8 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
                              * Testing to see how the current info system holds up.
                              */
 
-                            self.game.bubble.create(self.game.player.id, 'Hello humans.', self.game.time, 5000);
-
                             self.game.renderer.forEachVisibleEntity(function(entity) {
+                                self.game.bubble.create(entity.id, 'Hello humans.', self.game.time, 5000);
                                 self.game.bubble.setTo(entity);
                             });
 
@@ -177,6 +176,9 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
         click: function(position) {
             var self = this,
                 player = self.getPlayer();
+
+            if (self.chatHandler.input.is(':visible') && self.chatHandler.input.val() !== '')
+                self.chatHandler.hideInput();
 
             if ((self.game.zoning && self.game.zoning.direction) || (position.x === player.gridX && position.y === player.gridY))
                 return;

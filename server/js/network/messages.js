@@ -178,3 +178,17 @@ Messages.Network = Message.extend({
         return [Packets.Network, this.opcode];
     }
 });
+
+Messages.Chat = Message.extend({
+
+    init: function(id, text, duration) {
+        this.id = id;
+        this.text = text;
+        this.duration = duration;
+    },
+
+    serialize: function() {
+        return [Packets.Chat, [this.id, this.text, this.duration]];
+    }
+
+});

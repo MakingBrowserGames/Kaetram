@@ -15,7 +15,9 @@ var Character = require('../character'),
     Packets = require('../../../../network/packets'),
     Modules = require('../../../../util/modules'),
     Handler = require('./handler'),
-    Quests = require('./quests');
+    Quests = require('./quests'),
+    Inventory = require('./inventory/inventory'),
+    Abilities = require('./ability/abilities');
 
 module.exports = Player = Character.extend({
 
@@ -33,8 +35,6 @@ module.exports = Player = Character.extend({
         self.isNew = false;
         self.ready = false;
 
-        self.inventory = null;
-
         self.moving = false;
         self.potentialPosition = null;
         self.futurePosition = null;
@@ -46,6 +46,8 @@ module.exports = Player = Character.extend({
 
         self.handler = new Handler(self);
         self.quests = new Quests(self);
+        self.inventory = new Inventory(self, 20);
+        self.abilities = new Abilities();
     },
 
     load: function(data) {
@@ -78,6 +80,14 @@ module.exports = Player = Character.extend({
         self.setPendant(pendant[0], pendant[1], pendant[2], pendant[3]);
         self.setRing(ring[0], ring[1], ring[2], ring[3]);
         self.setBoots(boots[0], boots[1], boots[2], boots[3]);
+    },
+
+    loadInventory: function() {
+        var self = this;
+
+        self.mysql.loader.getInventory(self, function(ids, counts, skills, skillLevels) {
+            self.inventory.load(ids, counts, skills, skillLevels);
+        });
     },
 
     intro: function() {
@@ -124,37 +134,37 @@ module.exports = Player = Character.extend({
         self.send(new Messages.Welcome(info));
     },
 
-    equip: function(type, id, count, skill, skillLevel) {
+    equip: function(type, id, count, ability, abilityLevel) {
         var self = this;
 
         switch(type) {
             case Modules.Equipment.Armour:
 
-                self.setArmour(id, count, skill, skillLevel);
+                self.setArmour(id, count, ability, abilityLevel);
                 break;
 
             case Modules.Equipment.Weapon:
 
 
-                self.setWeapon(id, count, skill, skillLevel);
+                self.setWeapon(id, count, ability, abilityLevel);
                 break;
 
             case Modules.Equipment.Pendant:
 
 
-                self.setPendant(id, count, skill, skillLevel);
+                self.setPendant(id, count, ability, abilityLevel);
                 break;
 
             case Modules.Equipment.Ring:
 
 
-                self.setRing(id, count, skill, skillLevel);
+                self.setRing(id, count, ability, abilityLevel);
                 break;
 
             case Modules.Equipment.Boots:
 
 
-                self.setBoots(id, count, skill, skillLevel);
+                self.setBoots(id, count, ability, abilityLevel);
                 break;
         }
     },
@@ -171,7 +181,7 @@ module.exports = Player = Character.extend({
      * Setters
      */
 
-    setArmour: function(id, count, skill, skillLevel) {
+    setArmour: function(id, count, ability, abilityLevel) {
         var self = this;
 
         if (!id)
@@ -180,10 +190,10 @@ module.exports = Player = Character.extend({
         if (self.armour)
             self.armour.update();
         else
-            self.armour = new Armour(Items.idToString(id), id, count, skill, skillLevel);
+            self.armour = new Armour(Items.idToString(id), id, count, ability, abilityLevel);
     },
 
-    setWeapon: function(id, count, skill, skillLevel) {
+    setWeapon: function(id, count, ability, abilityLevel) {
         var self = this;
 
         if (!id)
@@ -191,37 +201,37 @@ module.exports = Player = Character.extend({
 
         //TODO - Don't forget to change this
 
-        self.weapon = new Weapon(Items.idToString(87), 87, count, skill, skillLevel);
+        self.weapon = new Weapon(Items.idToString(87), 87, count, ability, abilityLevel);
 
         if (self.weapon.ranged)
             self.attackRange = 7;
     },
 
-    setPendant: function(id, count, skill, skillLevel) {
+    setPendant: function(id, count, ability, abilityLevel) {
         var self = this;
 
         if (!id)
             return;
 
-        self.pendant = new Pendant(Items.idToString(id), id, count, skill, skillLevel);
+        self.pendant = new Pendant(Items.idToString(id), id, count, ability, abilityLevel);
     },
 
-    setRing: function(id, count, skill, skillLevel) {
+    setRing: function(id, count, ability, abilityLevel) {
         var self = this;
 
         if (!id)
             return;
 
-        self.ring = new Ring(Items.idToString(id), id, count, skill, skillLevel);
+        self.ring = new Ring(Items.idToString(id), id, count, ability, abilityLevel);
     },
 
-    setBoots: function(id, count, skill, skillLevel) {
+    setBoots: function(id, count, ability, abilityLevel) {
         var self = this;
 
         if (!id)
             return;
 
-        self.boots = new Boots(Items.idToString(id), id, count, skill, skillLevel);
+        self.boots = new Boots(Items.idToString(id), id, count, ability, abilityLevel);
     },
 
     guessPosition: function(x, y) {
@@ -302,6 +312,13 @@ module.exports = Player = Character.extend({
         return this.connection.socket.conn.remoteAddress;
     },
 
+    isMuted: function() {
+        var self = this,
+            time = new Date().getTime();
+
+        return self.muted - time > 0;
+    },
+
     isRanged: function() {
         return this.weapon && this.weapon.isRanged();
     },
@@ -380,11 +397,6 @@ module.exports = Player = Character.extend({
          */
 
         self.send(new Messages.Movement(Packets.MovementOpcode.Started));
-
-    },
-
-    loadInventory: function() {
-        var self = this;
 
     },
 

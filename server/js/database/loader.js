@@ -1,3 +1,5 @@
+/* global log */
+
 var cls = require('../lib/class');
 
 module.exports = Loader = cls.Class.extend({
@@ -11,8 +13,14 @@ module.exports = Loader = cls.Class.extend({
     getInventory: function(player, callback) {
         var self = this;
 
-        self.mysql.query('SELECT * FROM `player_inventory` WHERE `player_inventory`.`username`=' + "'" + player.username + "'", function(error, rows, fields) {
-            log.info('Querying..')
+        self.mysql.connection.query('SELECT * FROM `player_inventory` WHERE `player_inventory`.`username`=' + "'" + player.username + "'", function(error, rows, fields) {
+            var info = rows.shift();
+
+            if (info.username !== player.username)
+                log.info('Mismatch whilst retrieving inventory data for: ' + player.username);
+
+            callback(info.ids.split(' '), info.counts.split(' '), info.abilities.split(' '), info.abilityLevels.split(' '));
+
         });
     }
 

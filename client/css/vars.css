@@ -160,6 +160,47 @@ body {
     position: relative;
 }
 
+.chatInputData {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    font-family: 'AdvoCut', sans-serif;
+}
+
+#abilityShortcut {
+    left: 38%;
+    position: absolute;
+}
+
+#chat {
+    display: none;
+    position: absolute;
+}
+
+#chat p {
+    font-family: 'AdvoCut', sans-serif;
+}
+
+#chatLog {
+    width: 100%;
+    height: 100%;
+    margin-top: -44%;
+    overflow-y: hidden;
+}
+
+#talk {
+    width: 100%
+}
+
+#talk .input {
+    color: #eee;
+    background: none;
+    width: 90%;
+    margin-left: 2%;
+    border: 0;
+}
+
 @media only screen and (min-width: 1501px) {
 
     #parchment h1, #loadCharacter h1, #createCharacter h1, #about h1 {
@@ -268,6 +309,27 @@ body {
         position: absolute;
         font-family: 'AdvoCut', sans-serif;
     }
+
+    #chat {
+        width: 750px;
+        height: 300px;
+        top: 405px;
+        left: 375px;
+    }
+
+    #chatLog {
+        font-size: 15px;
+    }
+
+    #talk {
+        margin-top: 300px;
+        height: 30px;
+    }
+
+    #talk .input {
+        font-size: 15px;
+        padding: 6px 0;
+    }
     
 }
 
@@ -374,6 +436,27 @@ body {
         font-family: 'AdvoCut', sans-serif;
     }
 
+    #chat {
+        width: 500px;
+        height: 200px;
+        top: 250px;
+        left: 250px;
+    }
+
+    #chatLog {
+        font-size: 15px;
+    }
+
+    #talk {
+        margin-top: 200px;
+        height: 20px;
+    }
+
+    #talk .input {
+        font-size: 10px;
+        padding: 4px 0;
+    }
+
 }
 
 @media only screen and (max-width: 1000px) {
@@ -473,4 +556,26 @@ body {
         position: absolute;
         font-family: 'AdvoCut', sans-serif;
     }
+
+    #chat {
+        width: 250px;
+        height: 100px;
+        top: 135px;
+        left: 125px;
+    }
+
+    #chatLog {
+        font-size: 10px;
+    }
+
+    #talk {
+        margin-top: 100px;
+        height: 10px;
+    }
+
+    #talk .input {
+        font-size: 5px;
+        padding: 2px 0;
+    }
+
 }

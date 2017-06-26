@@ -128,10 +128,10 @@ define(['../renderer/grids', '../entity/objects/chest',
                 case 'item':
 
                     var count = info.shift(),
-                        skill = info.shift(),
-                        skillLevel = info.shift();
+                        ability = info.shift(),
+                        abilityLevel = info.shift();
 
-                    var item = new Item(id, kind, count, skill, skillLevel);
+                    var item = new Item(id, kind, count, ability, abilityLevel);
 
                     entity = item;
 

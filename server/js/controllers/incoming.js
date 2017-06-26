@@ -191,6 +191,7 @@ module.exports = Incoming = cls.Class.extend({
 
         self.player.ready = true;
         self.player.sendEquipment();
+        self.player.loadInventory();
         self.world.handleEntityGroup(self.player);
         self.world.pushEntities(self.player);
     },
@@ -374,6 +375,9 @@ module.exports = Incoming = cls.Class.extend({
                 var projectile = self.world.getEntityByInstance(message.shift()),
                     target = self.world.getEntityByInstance(message.shift());
 
+                if (!target || !projectile)
+                    return;
+
                 self.world.handleDamage(projectile.owner, target, projectile.damage);
 
                 if (target.combat.started || target.isDead() || target.type !== 'mob')
@@ -409,7 +413,12 @@ module.exports = Incoming = cls.Class.extend({
         if (text.charAt(0) === '/' || text.charAt(0) === ';')
             self.commands.parse(text);
         else {
-            
+            if (self.player.isMuted()) {
+                //send notification
+                return;
+            }
+
+            self.world.pushToGroup(self.player.group, new Messages.Chat(self.player.instance, text, 7000));
         }
 
     }

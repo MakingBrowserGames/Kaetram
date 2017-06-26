@@ -1,10 +1,14 @@
+/* global log */
+
 var cls = require('../lib/class'),
     NPCData = require('../../data/npcs.json'),
     ItemData = require('../../data/items.json'),
     MobData = require('../../data/mobs.json'),
+    AbilityData = require('../../data/abilities.json'),
     Items = require('./items'),
     NPCs = require('./npcs'),
     Mobs = require('./mobs'),
+    Abilities = require('./abilities');
     _ = require('underscore'),
     Formulas = require('../game/formulas');
 
@@ -16,6 +20,7 @@ module.exports = Parser = cls.Class.extend({
         self.loadMobData();
         self.loadNPCData();
         self.loadItemData();
+        self.loadAbilityData();
         self.loadLevels();
     },
 
@@ -98,6 +103,29 @@ module.exports = Parser = cls.Class.extend({
         });
 
         log.info('Finished loading ' + itemCounter + ' items.');
+    },
+
+    loadAbilityData: function() {
+        var self = this,
+            skillCounter = 0;
+
+        _.each(AbilityData, function(value, key) {
+            key = key.toLowerCase();
+
+            Abilities.Data[key] = {
+                key: key,
+                id: value.id,
+                type: value.type,
+                mana: value.mana ? value.mana : 0,
+                cooldown: value.cooldown ? value.cooldown : null
+            };
+
+            Abilities.Ids[value.id] = Abilities.Data[key];
+
+            skillCounter++;
+        });
+
+        log.info('Finished loading ' + skillCounter + ' skills.')
     },
 
     loadLevels: function() {

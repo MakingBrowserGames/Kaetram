@@ -1,3 +1,5 @@
+/* global log */
+
 var cls = require('../lib/class'),
     mysql = require('mysql'),
     Creator = require('./creator'),
@@ -14,6 +16,9 @@ module.exports = MySQL = cls.Class.extend({
          * it is empty and for testing purposes, and will
          * be erased as soon as Kaetram is finished and
          * moved back into TTA.
+         *
+         * Note: Offline mode disables features such as abilities,
+         * skills, inventory, guilds, etc.
          */
 
         self.host = host;

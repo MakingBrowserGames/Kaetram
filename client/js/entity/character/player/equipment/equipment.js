@@ -9,14 +9,14 @@ define(function() {
 
     return Class.extend({
 
-        init: function(name, string, count, skill, skillLevel) {
+        init: function(name, string, count, ability, abilityLevel) {
             var self = this;
 
             self.name = name;
             self.string = string;
             self.count = count;
-            self.skill = skill;
-            self.skillLevel = skillLevel;
+            self.ability = ability;
+            self.abilityLevel = abilityLevel;
         },
 
         exists: function() {
@@ -35,22 +35,22 @@ define(function() {
             return this.count;
         },
 
-        getSkill: function() {
-            return this.skill;
+        getAbility: function() {
+            return this.ability;
         },
 
-        getSkillLevel: function() {
-            return this.skillLevel;
+        getAbilityLevel: function() {
+            return this.abilityLevel;
         },
 
-        update: function(name, string, count, skill, skillLevel) {
+        update: function(name, string, count, ability, abilityLevel) {
             var self = this;
 
             self.name = name;
             self.string = string;
             self.count = count;
-            self.skill = skill;
-            self.skillLevel = skillLevel;
+            self.ability = ability;
+            self.abilityLevel = abilityLevel;
         }
 
     });

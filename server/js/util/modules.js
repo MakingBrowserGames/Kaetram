@@ -26,7 +26,7 @@ var Modules = {
         Arrow: 0
     },
 
-    Skills: {
+    Abilities: {
         Freeze: 0,
         Curse: 1,
         Smash: 2,

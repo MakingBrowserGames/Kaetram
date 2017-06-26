@@ -11,8 +11,8 @@ module.exports = Item = Entity.extend({
         self.fromChest = false;
 
         self.count = 1;
-        self.skill = 0;
-        self.skillLevel = 0;
+        self.ability = 0;
+        self.abilityLevel = 0;
 
         self.respawnTime = 30000;
         self.despawnDuration = 4000;
@@ -65,7 +65,7 @@ module.exports = Item = Entity.extend({
         var self = this,
             state = self._super();
 
-        state.push(self.count, self.skill, self.skillLevel);
+        state.push(self.count, self.ability, self.abilityLevel);
 
         return state;
     },
@@ -74,12 +74,12 @@ module.exports = Item = Entity.extend({
         this.count = count;
     },
 
-    setSkill: function(skill) {
-        this.skill = skill;
+    setAbility: function(ability) {
+        this.ability = ability;
     },
 
-    setSkillLevel: function(skillLevel) {
-        this.skillLevel = skillLevel;
+    setAbilityLevel: function(abilityLevel) {
+        this.abilityLevel = abilityLevel;
     },
 
     onRespawn: function(callback) {

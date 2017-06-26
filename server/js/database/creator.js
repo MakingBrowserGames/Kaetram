@@ -1,3 +1,5 @@
+/* global log */
+
 var cls = require('../lib/class');
 
 module.exports = Creator = cls.Class.extend({
@@ -52,23 +54,23 @@ module.exports = Creator = cls.Class.extend({
             'username varchar(64),' +
             'ids text COLLATE utf8_unicode_ci NOT NULL,' +
             'counts text COLLATE utf8_unicode_ci NOT NULL,' +
-            'skillKinds text COLLATE utf8_unicode_ci NOT NULL,' +
-            'skillLevels text COLLATE utf8_unicode_ci NOT NULL,' +
+            'abilities text COLLATE utf8_unicode_ci NOT NULL,' +
+            'abilityLevels text COLLATE utf8_unicode_ci NOT NULL,' +
             'PRIMARY KEY(username))');
 
-        self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_skills (' +
+        self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_abilities (' +
             'username varchar(64),' +
-            'skills text COLLATE utf8_unicode_ci NOT NULL,' +
-            'skillLevels text COLLATE utf8_unicode_ci NOT NULL,' +
-            'skillSlots text COLLATE utf8_unicode_ci NOT NULL,' +
+            'abilities text COLLATE utf8_unicode_ci NOT NULL,' +
+            'abilityLevels text COLLATE utf8_unicode_ci NOT NULL,' +
+            'shortcuts text COLLATE utf8_unicode_ci NOT NULL,' +
             'PRIMARY KEY (username))');
 
         self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_inventory (' +
             'username varchar(64),' +
             'ids text COLLATE utf8_unicode_ci NOT NULL,' +
             'counts text COLLATE utf8_unicode_ci NOT NULL,' +
-            'skillKinds text COLLATE utf8_unicode_ci NOT NULL,' +
-            'skillLevels text COLLATE utf8_unicode_ci NOT NULL,' +
+            'abilities text COLLATE utf8_unicode_ci NOT NULL,' +
+            'abilityLevels text COLLATE utf8_unicode_ci NOT NULL,' +
             'PRIMARY KEY(username))');
 
         self.mysql.connection.query('CREATE TABLE IF NOT EXISTS ipbans (' +
@@ -86,10 +88,12 @@ module.exports = Creator = cls.Class.extend({
         var self = this,
             queryKey = player.isNew ? 'INSERT INTO' : 'UPDATE',
             playerData = self.formatData(self.getPlayerData(player), 'data'),
-            equipmentData = self.formatData(self.getPlayerData(player), 'equipment');
+            equipmentData = self.formatData(self.getPlayerData(player), 'equipment'),
+            inventoryArray = player.inventory.getArray();
 
         self.mysql.connection.query(queryKey + ' `player_data` SET ?', playerData);
         self.mysql.connection.query(queryKey + ' `player_equipment` SET ?', equipmentData);
+        self.mysql.connection.query(queryKey + ' `player_inventory` SET ?', inventoryArray);
     },
 
     formatData: function(data, type) {
@@ -156,11 +160,11 @@ module.exports = Creator = cls.Class.extend({
             lastLogin: player.lastLogin ? player.lastLogin : 0,
             pvpKills: player.pvpKills ? player.pvpKills : 0,
             pvpDeaths: player.pvpDeaths ? player.pvpDeaths : 0,
-            armour: [player.armour ? player.armour.getId() : 114, player.armour ? player.armour.getCount() : 0, player.armour ? player.armour.getSkill() : 0, player.armour ? player.armour.getSkillLevel() : 0],
-            weapon: [player.weapon ? player.weapon.getId() : -1, player.weapon ? player.weapon.getCount() : 0, player.weapon ? player.weapon.getSkill() : 0, player.weapon ? player.weapon.getSkillLevel() : 0],
-            pendant: [player.pendant ? player.pendant.getId() : -1, player.pendant ? player.pendant.getCount() : 0, player.pendant ? player.pendant.getSkill() : 0, player.pendant ? player.pendant.getSkillLevel() : 0],
-            ring: [player.ring ? player.ring.getId() : -1, player.ring ? player.ring.getCount() : 0, player.ring ? player.ring.getSkill() : 0, player.ring ? player.ring.getSkillLevel() : 0],
-            boots: [player.boots ? player.boots.getId() : -1, player.boots ? player.boots.getCount() : 0, player.boots ? player.boots.getSkill() : 0, player.boots ? player.boots.getSkillLevel() : 0]
+            armour: [player.armour ? player.armour.getId() : 114, player.armour ? player.armour.getCount() : 0, player.armour ? player.armour.getAbility() : 0, player.armour ? player.armour.getAbilityLevel() : 0],
+            weapon: [player.weapon ? player.weapon.getId() : -1, player.weapon ? player.weapon.getCount() : 0, player.weapon ? player.weapon.getAbility() : 0, player.weapon ? player.weapon.getAbilityLevel() : 0],
+            pendant: [player.pendant ? player.pendant.getId() : -1, player.pendant ? player.pendant.getCount() : 0, player.pendant ? player.pendant.getAbility() : 0, player.pendant ? player.pendant.getAbilityLevel() : 0],
+            ring: [player.ring ? player.ring.getId() : -1, player.ring ? player.ring.getCount() : 0, player.ring ? player.ring.getAbility() : 0, player.ring ? player.ring.getAbilityLevel() : 0],
+            boots: [player.boots ? player.boots.getId() : -1, player.boots ? player.boots.getCount() : 0, player.boots ? player.boots.getAbility() : 0, player.boots ? player.boots.getAbilityLevel() : 0]
         }
     }
 

@@ -1,8 +1,8 @@
 /* global _, log, Detect */
 
-define(['./camera', './tile',
+define(['jquery', './camera', './tile',
     '../entity/character/player/player', '../entity/character/character',
-    '../entity/objects/item'], function(Camera, Tile, Player, Character, Item) {
+    '../entity/objects/item'], function($, Camera, Tile, Player, Character, Item) {
 
     return Class.extend({
 

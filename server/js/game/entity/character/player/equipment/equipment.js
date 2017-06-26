@@ -8,14 +8,14 @@ module.exports = Equipment = cls.Class.extend({
      * the equipment child
      */
 
-    init: function(name, id, count, skill, skillLevel) {
+    init: function(name, id, count, ability, abilityLevel) {
         var self = this;
 
         self.name = name;
         self.id = id;
         self.count = count ? count : 0;
-        self.skill = skill ? skill : 0;
-        self.skillLevel = skillLevel ? skillLevel : 0;
+        self.ability = ability ? ability : 0;
+        self.abilityLevel = abilityLevel ? abilityLevel : 0;
     },
 
     getName: function() {
@@ -30,16 +30,16 @@ module.exports = Equipment = cls.Class.extend({
         return this.count;
     },
 
-    getSkill: function() {
-        return this.skill;
+    getAbility: function() {
+        return this.ability;
     },
 
-    getSkillLevel: function() {
-        return this.skillLevel;
+    getAbilityLevel: function() {
+        return this.abilityLevel;
     },
 
     getData: function() {
-        return [Items.idToName(this.id), Items.idToString(this.id), this.count, this.skill, this.skillLevel];
+        return [Items.idToName(this.id), Items.idToString(this.id), this.count, this.ability, this.abilityLevel];
     }
 
 });

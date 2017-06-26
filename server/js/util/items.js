@@ -66,4 +66,8 @@ Items.isArmour = function(string) {
     return false;
 };
 
+Items.isStackable = function(id) {
+    return id === 190 || id === 191 || id === 192 || id === 193 || id === 195 || id === 199 || id === 202;
+};
+
 module.exports = Items;

@@ -434,6 +434,24 @@ define(['./renderer/renderer', './utils/storage',
                 self.socket.send(Packets.Network, [Packets.NetworkOpcode.Pong]);
             });
 
+            self.messages.onChat(function(info) {
+                var id = info.shift(),
+                    text = info.shift(),
+                    duration = info.shift(),
+                    entity = self.entities.get(id);
+
+                if (!entity)
+                    return;
+
+                if (!duration)
+                    duration = 5000;
+
+                self.bubble.create(id, text, self.time, duration);
+                self.bubble.setTo(entity);
+
+                self.input.chatHandler.add(entity, text);
+            });
+
             self.messages.onCommand(function(info) {
 
                 /**
@@ -556,9 +574,13 @@ define(['./renderer/renderer', './utils/storage',
             return this.entities.getSprite(spriteName);
         },
 
+        getChat: function() {
+            return this.input.chatHandler;
+        },
+
         getEntityAt: function(x, y, ignoreSelf) {
             var self = this,
-                entities = self.entities.grids.renderingGrid[y][x]
+                entities = self.entities.grids.renderingGrid[y][x];
 
             if (_.size(entities) > 0)
                 return entities[_.keys(entities)[ignoreSelf ? 1 : 0]];

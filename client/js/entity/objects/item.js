@@ -2,14 +2,14 @@ define(['../entity'], function(Entity) {
 
     return Entity.extend({
 
-        init: function(id, kind, count, skill, skillLevel) {
+        init: function(id, kind, count, ability, abilityLevel) {
             var self = this;
 
             self._super(id, kind);
 
             self.count = count;
-            self.skill = skill;
-            self.skillLevel = skillLevel;
+            self.ability = ability;
+            self.abilityLevel = abilityLevel;
 
             self.dropped = false;
             self.stackable = false;

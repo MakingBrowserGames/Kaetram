@@ -10,12 +10,25 @@ define(['jquery'], function($) {
             self.game = game;
 
             self.chat = $('#chat');
+            self.log = $('#chatLog');
             self.input = $('#chatInput');
 
             self.visible = false;
 
             self.fadingDuration = 5000;
             self.fadingTimeout = null;
+        },
+
+        add: function(entity, text) {
+            var self = this;
+
+            if (entity.type !== 'player')
+                return;
+
+            var element = $('<p style="color: white">' + entity.username + ': ' + text + '</pstyle>');
+
+            self.log.append(element);
+            self.log.scrollTop(99999);
         },
 
         key: function(data) {
@@ -59,7 +72,7 @@ define(['jquery'], function($) {
         showChat: function() {
             var self = this;
 
-            self.chat.css('display', 'block');
+            self.chat.fadeIn('fast');
 
             self.visible = true;
         },
@@ -67,7 +80,7 @@ define(['jquery'], function($) {
         showInput: function() {
             var self = this;
 
-            self.input.css('display', 'block');
+            self.input.fadeIn('fast');
             self.input.val('');
             self.input.focus();
         },
@@ -77,7 +90,7 @@ define(['jquery'], function($) {
 
             self.fadingTimeout = setTimeout(function() {
 
-                self.chat.css('display', 'none');
+                self.chat.fadeOut('slow');
 
                 self.visible = false;
 
@@ -85,7 +98,13 @@ define(['jquery'], function($) {
         },
 
         hideInput: function() {
-            this.input.css('display', 'none');
+            var self = this;
+
+            log.info('Hiding input...');
+
+            self.input.val('');
+            self.input.fadeOut('fast');
+            self.input.blur();
         },
 
         clean: function() {
