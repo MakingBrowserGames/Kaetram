@@ -1,30 +1,26 @@
 /* global log */
 
 var cls = require('../../../../../lib/class'),
+    _ = require('underscore'),
     Slot = require('./slot'),
-    Items = require('../../../../../util/Items'),
-    _ = require('underscore');
+    Items = require('../../../../../util/items');
 
-module.exports = Inventory = cls.Class.extend({
+module.exports = Container = cls.Class.extend({
 
     /**
-     * Not particularly sure whether or not this class will
-     * require an update function to push any updates
-     * of the inventory to the client. This is just a baseline
-     * setup for the inventory until the interface is done.
+     * Why split bank and inventory into two
+     * classes with a similar functionality
+     * when we have our lord and saviour - OOP Programming.
      */
 
-    init: function(owner, size) {
+    init: function(type, owner, size) {
         var self = this;
 
+        self.type = type;
         self.owner = owner;
         self.size = size;
 
         self.slots = [];
-
-        /**
-         * Initialize the empty containers
-         */
 
         for (var i = 0; i < self.size; i++)
             self.slots.push(new Slot(i));
@@ -34,11 +30,11 @@ module.exports = Inventory = cls.Class.extend({
         var self = this;
 
         /**
-         * Plug data into the containers accordingly.
+         * Fill each slot with data from the database
          */
 
         if (ids.length !== self.slots.length)
-            log.error('Mismatch in inventory size!');
+            log.error('[' + self.type + '] Mismatch in container size.');
 
         for (var i = 0; i < self.slots.length; i++)
             self.slots[i].load(ids[i], counts[i], abilities[i], abilityLevels[i]);
@@ -142,8 +138,6 @@ module.exports = Inventory = cls.Class.extend({
             abilityLevels = '';
 
         for (var i = 0; i < self.slots.length; i++) {
-            var isLast = i === self.slots.length - 1;
-
             ids += self.slots[i].id + ' ';
             counts += self.slots[i].count + ' ';
             abilities += self.slots[i].ability + ' ';
@@ -157,7 +151,6 @@ module.exports = Inventory = cls.Class.extend({
             abilities: abilities.slice(0, -1),
             abilityLevels: abilityLevels.slice(0, -1)
         }
-
     }
 
 });

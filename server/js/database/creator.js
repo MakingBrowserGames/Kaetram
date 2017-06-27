@@ -88,12 +88,12 @@ module.exports = Creator = cls.Class.extend({
         var self = this,
             queryKey = player.isNew ? 'INSERT INTO' : 'UPDATE',
             playerData = self.formatData(self.getPlayerData(player), 'data'),
-            equipmentData = self.formatData(self.getPlayerData(player), 'equipment'),
-            inventoryArray = player.inventory.getArray();
+            equipmentData = self.formatData(self.getPlayerData(player), 'equipment');
 
         self.mysql.connection.query(queryKey + ' `player_data` SET ?', playerData);
         self.mysql.connection.query(queryKey + ' `player_equipment` SET ?', equipmentData);
-        self.mysql.connection.query(queryKey + ' `player_inventory` SET ?', inventoryArray);
+        self.mysql.connection.query(queryKey + ' `player_inventory` SET ?', player.inventory.getArray());
+        self.mysql.connection.query(queryKey + ' `player_abilities` SET ?', player.abilities.getArray());
     },
 
     formatData: function(data, type) {

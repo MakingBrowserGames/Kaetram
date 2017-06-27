@@ -16,8 +16,9 @@ var Character = require('../character'),
     Modules = require('../../../../util/modules'),
     Handler = require('./handler'),
     Quests = require('./quests'),
-    Inventory = require('./inventory/inventory'),
-    Abilities = require('./ability/abilities');
+    Inventory = require('./containers/inventory/inventory'),
+    Abilities = require('./ability/abilities'),
+    Bank = require('./containers/bank/bank');
 
 module.exports = Player = Character.extend({
 
@@ -47,6 +48,7 @@ module.exports = Player = Character.extend({
         self.handler = new Handler(self);
         self.quests = new Quests(self);
         self.inventory = new Inventory(self, 20);
+        self.bank = new Bank(self, 100);
         self.abilities = new Abilities();
     },
 

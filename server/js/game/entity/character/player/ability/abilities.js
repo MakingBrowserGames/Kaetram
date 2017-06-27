@@ -51,6 +51,24 @@ module.exports = Abilities = cls.Class.extend({
 
     isShortcut: function(ability) {
         return this.shortcuts.indexOf(ability.name) > -1;
+    },
+
+    getArray: function() {
+        var self = this,
+            abilities = '',
+            abilityLevels = '',
+            shortcuts = self.shortcuts.toString();
+
+        _.each(self.abilities, function(ability) {
+            abilities += ability.name;
+            abilityLevels += ability.level;
+        });
+
+        return {
+            abilities: abilities,
+            abilityLevels: abilityLevels,
+            shortcuts: shortcuts
+        }
     }
 
 });
