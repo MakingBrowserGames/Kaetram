@@ -1,6 +1,88 @@
+#buttons {
+    margin-top: 49%;
+    margin-left: 86%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background-color: rgba(0, 0, 0, 0);
+}
 
+#buttons ul {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+#buttons ul li {
+    float: left;
+}
 
 @media only screen and (min-width: 1501px) {
+
+    #buttons {
+        width: 168px;
+        height: 45px;
+    }
+
+    #chatButton {
+        position: relative;
+        width: 14px;
+        height: 15px;
+        background: url('../img/3/maintwo.png') no-repeat -588px -942px;
+    }
+
+    #chatButton:hover {
+        background: url('../img/3/maintwo.png') no-repeat -630px -942px;
+    }
+
+    #chatButton.active {
+        background: url('../img/3/maintwo.png') no-repeat -672px -942px;
+    }
+
+    #soundButton {
+        position: relative;
+        width: 14px;
+        height: 15px;
+        background: url('../img/3/main.png') no-repeat -378px -942px;
+    }
+
+    #soundButton:hover {
+        background: url('../img/3/main.png') no-repeat -336px -942px;
+    }
+
+    #soundButton.active {
+        background: url('../img/3/main.png') no-repeat -294px -942px;
+    }
+
+    #inventoryButton {
+        position: relative;
+        width: 14px;
+        height: 15px;
+        background: url('../img/3/main.png') no-repeat -588px -942px;
+    }
+
+    #inventoryButton:hover {
+        background: url('../img/3/main.png') no-repeat -630px -942px;
+    }
+
+    #inventoryButton.active {
+        background: url('../img/3/main.png') no-repeat -672px -942px;
+    }
+
+    #profileButton {
+        position: relative;
+        width: 14px;
+        height: 15px;
+        background: url('../img/3/main.png') no-repeat -714px -942px;
+    }
+
+    #profileButton:hover {
+        background: url('../img/3/main.png') no-repeat -756px -942px;
+    }
+
+    #profileButton.active {
+        background: url('../img/3/main.png') no-repeat -798px -942px;
+    }
 
     #abilityShortcut {
         width: 366px;
@@ -12,6 +94,71 @@
 
 @media only screen and (max-width: 1500px), only screen and (max-height: 870px) {
 
+    #buttons {
+        width: 112px;
+        height: 30px;
+    }
+
+    #chatButton {
+        position: relative;
+        width: 28px;
+        height: 30px;
+        background: url('../img/2/maintwo.png') no-repeat -392px -628px;
+    }
+
+    #chatButton:hover {
+        background: url('../img/2/maintwo.png') no-repeat -420px -628px;
+    }
+
+    #chatButton.active {
+        background: url('../img/2/maintwo.png') no-repeat -448px -628px;
+    }
+
+    #soundButton {
+        position: relative;
+        width: 28px;
+        height: 30px;
+        background: url('../img/2/main.png') no-repeat -252px -628px;
+    }
+
+    #soundButton:hover {
+        background: url('../img/2/main.png') no-repeat -224px -628px;
+    }
+
+    #soundButton.active {
+        background: url('../img/2/main.png') no-repeat -196px -628px;
+    }
+
+    #inventoryButton {
+        position: relative;
+        width: 28px;
+        height: 30px;
+        background: url('../img/2/main.png') no-repeat -392px -628px;
+    }
+
+    #inventoryButton:hover {
+        background: url('../img/2/main.png') no-repeat -420px -628px;
+    }
+
+    #inventoryButton.active {
+        background: url('../img/2/main.png') no-repeat -448px -628px;
+    }
+
+    #profileButton {
+        position: relative;
+        width: 28px;
+        height: 30px;
+        background: url('../img/2/main.png') no-repeat -476px -628px;
+    }
+
+    #profileButton:hover {
+        background: url('../img/2/main.png') no-repeat -504px -628px;
+    }
+
+    #profileButton.active {
+        background: url('../img/2/main.png') no-repeat -532px -628px;
+    }
+
     #abilityShortcut {
         width: 244px;
         height: 40px;
@@ -21,6 +168,71 @@
 }
 
 @media only screen and (max-width: 1000px) {
+
+    #buttons {
+        width: 56px;
+        height: 15px;
+    }
+
+    #chatButton {
+        position: relative;
+        width: 14px;
+        height: 15px;
+        background: url('../img/1/maintwo.png') no-repeat -196px -314px;
+    }
+
+    #chatButton:hover {
+        background: url('../img/1/maintwo.png') no-repeat -210px -314px;
+    }
+
+    #chatButton.active {
+        background: url('../img/1/maintwo.png') no-repeat -224px -314px;
+    }
+
+    #soundButton {
+        position: relative;
+        width: 14px;
+        height: 15px;
+        background: url('../img/1/main.png') no-repeat -126px -314px;
+    }
+
+    #soundButton:hover {
+        background: url('../img/1/main.png') no-repeat -112px -314px;
+    }
+
+    #soundButton.active {
+        background: url('../img/1/main.png') no-repeat -98px -314px;
+    }
+
+    #inventoryButton {
+        position: relative;
+        width: 14px;
+        height: 15px;
+        background: url('../img/1/main.png') no-repeat -196px -314px;
+    }
+
+    #inventoryButton:hover {
+        background: url('../img/1/main.png') no-repeat -210px -314px;
+    }
+
+    #inventoryButton.active {
+        background: url('../img/1/main.png') no-repeat -224px -314px;
+    }
+
+    #profileButton {
+        position: relative;
+        width: 14px;
+        height: 15px;
+        background: url('../img/1/main.png') no-repeat -238px -314px;
+    }
+
+    #profileButton:hover {
+        background: url('../img/1/main.png') no-repeat -252px -314px;
+    }
+
+    #profileButton.active {
+        background: url('../img/1/main.png') no-repeat -266px -314px;
+    }
 
     #abilityShortcut {
         width: 122px;

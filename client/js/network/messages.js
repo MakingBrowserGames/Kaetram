@@ -36,6 +36,10 @@ define(function() {
             self.messages[Packets.Network] = self.receiveNetwork;
             self.messages[Packets.Chat] = self.receiveChat;
             self.messages[Packets.Command] = self.receiveCommand;
+            self.messages[Packets.Inventory] = self.receiveInventory;
+            self.messages[Packets.Bank] = self.receiveBank;
+            self.messages[Packets.Ability] = self.receiveAbility;
+            self.messages[Packets.Quest] = self.receiveQuest;
         },
 
         handleData: function(data) {
@@ -234,6 +238,42 @@ define(function() {
                 self.commandCallback(info);
         },
 
+        receiveInventory: function(data) {
+            var self = this,
+                opcode = data.shift(),
+                info = data.shift();
+
+            if (self.inventoryCallback)
+                self.inventoryCallback(opcode, info);
+        },
+
+        receiveBank: function(data) {
+            var self = this,
+                opcode = data.shift(),
+                info = data.shift();
+
+            if (self.bankCallback)
+                self.bankCallback(opcode, info);
+        },
+
+        receiveAbility: function(data) {
+            var self = this,
+                opcode = data.shift(),
+                info = data.shift();
+
+            if (self.abilityCallback)
+                self.abilityCallback(opcode, info);
+        },
+
+        receiveQuest: function(data) {
+            var self = this,
+                opcode = data.shift(),
+                info = data.shift();
+
+            if (self.questCallback)
+                self.questCallback(opcode, info);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -300,6 +340,22 @@ define(function() {
 
         onCommand: function(callback) {
             this.commandCallback = callback;
+        },
+
+        onInventory: function(callback) {
+            this.inventoryCallback = callback;
+        },
+
+        onBank: function(callback) {
+            this.bankCallback = callback;
+        },
+
+        onAbility: function(callback) {
+            this.abilityCallback = callback;
+        },
+
+        onQuest: function(callback) {
+            this.questCallback = questcallbac
         }
 
     });

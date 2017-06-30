@@ -94,6 +94,7 @@ module.exports = Creator = cls.Class.extend({
         self.mysql.connection.query(queryKey + ' `player_equipment` SET ?', equipmentData);
         self.mysql.connection.query(queryKey + ' `player_inventory` SET ?', player.inventory.getArray());
         self.mysql.connection.query(queryKey + ' `player_abilities` SET ?', player.abilities.getArray());
+        self.mysql.connection.query(queryKey + ' `player_bank` SET ?', player.bank.getArray());
     },
 
     formatData: function(data, type) {

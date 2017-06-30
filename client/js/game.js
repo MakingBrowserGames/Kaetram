@@ -5,9 +5,10 @@ define(['./renderer/renderer', './utils/storage',
         './renderer/updater', './controllers/entities', './controllers/input',
         './entity/character/player/playerhandler', './utils/pathfinder',
         './controllers/zoning', './controllers/info', './controllers/bubble',
+        './controllers/interface',
         './utils/modules', './network/packets'],
         function(Renderer, LocalStorage, Map, Socket, Player, Updater,
-                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info, Bubble) {
+                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info, Bubble, Interface) {
 
     return Class.extend({
 
@@ -30,6 +31,7 @@ define(['./renderer/renderer', './utils/storage',
             self.pathfinder = null;
             self.zoning = null;
             self.info = null;
+            self.interface = null;
 
             self.player = null;
 
@@ -121,6 +123,8 @@ define(['./renderer/renderer', './utils/storage',
             self.setInfo(new Info(self));
 
             self.setBubble(new Bubble(self));
+
+            self.setInterface(new Interface(self));
 
             if (!hasWorker)
                 self.loaded = true;
@@ -460,6 +464,18 @@ define(['./renderer/renderer', './utils/storage',
                  * packet-oriented ones.
                  */
             });
+
+            self.messages.onInventory(function(opcode, info) {
+
+                switch (opcode) {
+                    case Packets.InventoryOpcode.Batch:
+
+
+
+                        break;
+                }
+
+            });
         },
 
         postLoad: function() {
@@ -649,6 +665,11 @@ define(['./renderer/renderer', './utils/storage',
         setBubble: function(bubble) {
             if (!this.bubble)
                 this.bubble = bubble;
+        },
+
+        setInterface: function(interface) {
+            if (!this.interface)
+                this.interface = interface;
         }
 
     });

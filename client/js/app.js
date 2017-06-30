@@ -110,6 +110,22 @@ define(['jquery'], function($) {
 
             });
 
+            $('#inventoryButton').click(function(event) {
+
+            });
+
+            $('#profileButton').click(function(event) {
+
+            });
+
+            $('#chatButton').click(function(event) {
+
+            });
+
+            $('#soundButton').click(function(event) {
+
+            });
+
         },
 
         login: function() {

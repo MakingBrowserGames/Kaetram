@@ -1,6 +1,8 @@
 /* global log */
 
-var Container = require('../container');
+var Container = require('../container'),
+    Messages = require('../../../../../../network/messages'),
+    Packets = require('../../../../../../network/packets');
 
 module.exports = Inventory = Container.extend({
 
@@ -15,6 +17,14 @@ module.exports = Inventory = Container.extend({
         var self = this;
 
         self._super('Inventory', owner, size);
+    },
+
+    load: function(ids, counts, abilities, abilityLevels) {
+        var self = this;
+
+        self._super(ids, counts, abilities, abilityLevels);
+
+        self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Batch, self.slots))
     }
 
 });

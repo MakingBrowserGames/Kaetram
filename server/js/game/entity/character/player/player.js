@@ -46,10 +46,11 @@ module.exports = Player = Character.extend({
         self._super(-1, 'player', self.connection.id, -1, -1);
 
         self.handler = new Handler(self);
-        self.quests = new Quests(self);
+
         self.inventory = new Inventory(self, 20);
         self.bank = new Bank(self, 100);
-        self.abilities = new Abilities();
+        self.quests = new Quests(self);
+        self.abilities = new Abilities(self);
     },
 
     load: function(data) {

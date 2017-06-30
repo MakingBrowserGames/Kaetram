@@ -84,10 +84,6 @@ footer div {
     display: inline-block;
 }
 
-#cursor {
-    z-index: 1;
-}
-
 #canvas, #foreground, #background, #textCanvas, #container, #border, #footer, #cursor {
     -moz-user-select: none;
     -webkit-user-select: none;

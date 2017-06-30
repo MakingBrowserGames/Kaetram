@@ -192,3 +192,60 @@ Messages.Chat = Message.extend({
     }
 
 });
+
+/**
+ * Should we just have a packet that represents containers
+ * as a whole or just send it separately for each?
+ */
+
+Messages.Inventory = Message.extend({
+
+    init: function(opcode, data) {
+        this.opcode = opcode;
+        this.data = data;
+    },
+
+    serialize: function() {
+        return [Packets.Inventory, this.opcode, this.data];
+    }
+
+});
+
+Messages.Bank = Message.extend({
+
+    init: function(opcode, data) {
+        this.opcode = opcode;
+        this.data = data;
+    },
+
+    serialize: function() {
+        return [Packets.Bank, this.opcode, this.data];
+    }
+
+});
+
+Messages.Ability = Message.extend({
+
+    init: function(opcode, data) {
+        this.opcode = opcode;
+        this.data = data;
+    },
+
+    serialize: function() {
+        return [Packets.Ability, this.opcode, this.data];
+    }
+
+});
+
+Messages.Quest = Message.extend({
+
+    init: function(opcode, data) {
+        this.opcode = opcode;
+        this.data = data;
+    },
+
+    serialize: function() {
+        return [Packets.Quest, this.opcode, this.data];
+    }
+
+});

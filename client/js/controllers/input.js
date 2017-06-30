@@ -177,7 +177,12 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
             var self = this,
                 player = self.getPlayer();
 
-            if (self.chatHandler.input.is(':visible') && self.chatHandler.input.val() !== '')
+            /**
+             * It can be really annoying having the chat open
+             * on mobile, and it is far harder to control.
+             */
+
+            if (self.renderer.mobile && self.chatHandler.input.is(':visible') && self.chatHandler.input.val() === '')
                 self.chatHandler.hideInput();
 
             if ((self.game.zoning && self.game.zoning.direction) || (position.x === player.gridX && position.y === player.gridY))

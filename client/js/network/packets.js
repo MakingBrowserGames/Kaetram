@@ -20,7 +20,11 @@ Packets = {
     Points: 18,
     Network: 19,
     Chat: 20,
-    Command: 21
+    Command: 21,
+    Inventory: 22,
+    Bank: 23,
+    Ability: 24,
+    Quest: 25
 };
 
 Packets.IntroOpcode = {
@@ -67,4 +71,10 @@ Packets.ProjectileOpcode = {
 Packets.NetworkOpcode = {
     Ping: 0,
     Pong: 1
+};
+
+Packets.InventoryOpcode = {
+    Batch: 0,
+    Add: 1,
+    Remove: 2
 };

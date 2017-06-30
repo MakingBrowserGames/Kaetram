@@ -4,8 +4,10 @@ var cls = require('../../../../../lib/class'),
 
 module.exports = Abilities = cls.Class.extend({
 
-    init: function() {
+    init: function(player) {
         var self = this;
+
+        self.player = player;
 
         self.abilities = {};
         self.shortcuts = [];
@@ -65,6 +67,7 @@ module.exports = Abilities = cls.Class.extend({
         });
 
         return {
+            username: self.player.username,
             abilities: abilities,
             abilityLevels: abilityLevels,
             shortcuts: shortcuts

@@ -100,8 +100,6 @@ define(['jquery'], function($) {
         hideInput: function() {
             var self = this;
 
-            log.info('Hiding input...');
-
             self.input.val('');
             self.input.fadeOut('fast');
             self.input.blur();
