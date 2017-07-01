@@ -83,6 +83,24 @@ define(['./renderer/renderer', './utils/storage',
             }
         },
 
+        unload: function() {
+            var self = this;
+
+            self.socket = null;
+            self.messages = null;
+            self.renderer = null;
+            self.updater = null;
+            self.storage = null;
+            self.entities = null;
+            self.input = null;
+            self.map = null;
+            self.playerHandler = null;
+            self.pathfinder = null;
+            self.zoning = null;
+            self.info = null;
+            self.interface = null;
+        },
+
         loadRenderer: function() {
             var self = this,
                 background = document.getElementById('background'),
@@ -271,6 +289,8 @@ define(['./renderer/renderer', './utils/storage',
                         if (forced)
                             entity.stop(true);
 
+                        log.info(teleport);
+
                         self.moveCharacter(entity, x, y);
 
                         break;
@@ -283,6 +303,8 @@ define(['./renderer/renderer', './utils/storage',
 
                         if (!followee || !follower)
                             return;
+
+                        log.info(isRanged + ' ' + attackRange);
 
                         follower.follow(followee);
 
@@ -470,7 +492,7 @@ define(['./renderer/renderer', './utils/storage',
                 switch (opcode) {
                     case Packets.InventoryOpcode.Batch:
 
-
+                        log.info(info);
 
                         break;
                 }
@@ -558,8 +580,20 @@ define(['./renderer/renderer', './utils/storage',
             if (!self.started)
                 return;
 
+            self.stop();
+            self.renderer.stop();
+
+            self.unload();
+
+            self.app.showMenu();
             self.app.toggleLogin(false);
-            self.app.sendError(null, 'You have been disconnected from the server...');
+            self.app.updateLoader('');
+
+            self.app.sendError(null, 'You have been disconnected from the server');
+            self.app.statusMessage = null;
+
+            self.loadRenderer();
+            self.loadControllers();
         },
 
         resize: function() {
@@ -588,10 +622,6 @@ define(['./renderer/renderer', './utils/storage',
 
         getSprite: function(spriteName) {
             return this.entities.getSprite(spriteName);
-        },
-
-        getChat: function() {
-            return this.input.chatHandler;
         },
 
         getEntityAt: function(x, y, ignoreSelf) {
@@ -667,9 +697,9 @@ define(['./renderer/renderer', './utils/storage',
                 this.bubble = bubble;
         },
 
-        setInterface: function(interface) {
+        setInterface: function(intrface) {
             if (!this.interface)
-                this.interface = interface;
+                this.interface = intrface;
         }
 
     });

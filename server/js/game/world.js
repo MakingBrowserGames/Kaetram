@@ -232,11 +232,11 @@ module.exports = World = cls.Class.extend({
         if (!groupId)
             return;
 
-        return _.each(self.groups[groupId].incoming, function(entity) {
+        _.each(self.groups[groupId].incoming, function(entity) {
             if (entity.instance === null)
                 return;
 
-            self.pushToGroup(groupId, new Messages.Spawn(entity), entity instanceof Player ? entity.instance : null);
+            self.pushToGroup(groupId, new Messages.Spawn(entity), entity.isPlayer() ? entity.instance : null);
         });
     },
 
@@ -448,7 +448,6 @@ module.exports = World = cls.Class.extend({
                 self.addItem(item);
             }
 
-
             entities++;
         });
 
@@ -481,12 +480,10 @@ module.exports = World = cls.Class.extend({
         var self = this;
 
         self.entities[entity.instance] = entity;
+        self.handleEntityGroup(entity);
 
         if (entity instanceof Character)
             entity.getCombat().setWorld(self);
-
-        if (!entity.isPlayer())
-            self.handleEntityGroup(entity);
     },
 
     addPlayer: function(player) {

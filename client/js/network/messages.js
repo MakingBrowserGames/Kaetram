@@ -64,6 +64,7 @@ define(function() {
             self.app.toggleLogin(false);
 
             switch (message) {
+
                 case 'updated':
                     self.app.sendError(null, 'The client has been updated, please refresh using CTRL!');
                     break;

@@ -1,3 +1,5 @@
+/* global log */
+
 define(['../interface/inventory', '../interface/bank',
         '../interface/quests', '../interface/abilities'], function(Inventory, Bank, Quests, Abilities) {
 
@@ -12,6 +14,12 @@ define(['../interface/inventory', '../interface/bank',
             self.abilities = new Abilities(game);
             self.quests = new Quests(game);
             self.bank = new Bank(game);
+        },
+
+        handle: function(event) {
+            var self = this;
+
+            log.info(event);
         }
 
     });

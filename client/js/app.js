@@ -111,19 +111,31 @@ define(['jquery'], function($) {
             });
 
             $('#inventoryButton').click(function(event) {
+                if (!self.game || !self.game.started)
+                    return;
 
+                self.game.interface.handle(event);
             });
 
             $('#profileButton').click(function(event) {
+                if (!self.game || !self.game.started)
+                    return;
 
+                self.game.interface.handle(event);
             });
 
             $('#chatButton').click(function(event) {
+                if (!self.game || !self.game.started)
+                    return;
 
+                self.game.interface.handle(event);
             });
 
             $('#soundButton').click(function(event) {
+                if (!self.game || !self.game.started)
+                    return;
 
+                self.game.interface.handle(event);
             });
 
         },
@@ -165,6 +177,14 @@ define(['jquery'], function($) {
                 self.body.addClass('started');
                 self.body.removeClass('intro');
             }, 500);
+        },
+
+        showMenu: function() {
+            var self = this;
+
+            self.body.removeClass('game');
+            self.body.removeClass('started');
+            self.body.addClass('intro');
         },
 
         openScroll: function(origin, destination) {

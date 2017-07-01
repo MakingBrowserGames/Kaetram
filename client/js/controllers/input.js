@@ -226,7 +226,7 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
         moveCursor: function() {
             var self = this;
 
-            if (self.renderer.mobile)
+            if (!self.renderer || self.renderer.mobile || !self.renderer.camera)
                 return;
 
             var position = self.getCoords(),
@@ -297,8 +297,12 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
         },
 
         getCoords: function() {
-            var self = this,
-                tileScale = self.renderer.tileSize * self.renderer.getDrawingScale(),
+            var self = this;
+
+            if (!self.renderer || !self.renderer.camera)
+                return;
+
+            var tileScale = self.renderer.tileSize * self.renderer.getDrawingScale(),
                 offsetX = self.mouse.x % tileScale,
                 offsetY = self.mouse.y % tileScale,
                 x = ((self.mouse.x - offsetX) / tileScale) + self.game.getCamera().gridX,

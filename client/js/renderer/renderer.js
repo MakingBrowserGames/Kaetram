@@ -63,6 +63,19 @@ define(['jquery', './camera', './tile',
             self.load()
         },
 
+        stop: function() {
+            var self = this;
+
+            self.camera = null;
+            self.input = null;
+            self.stopRendering = true;
+
+            self.forEachContext(function(context) {
+                context.fillStyle = '#12100D';
+                context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+            })
+        },
+
         load: function() {
             var self = this;
 
@@ -144,6 +157,9 @@ define(['jquery', './camera', './tile',
         render: function() {
             var self = this;
 
+            if (self.stopRendering)
+                return;
+
             self.clearScreen(self.context);
             self.clearText();
 
@@ -153,20 +169,19 @@ define(['jquery', './camera', './tile',
              * Rendering related draws
              */
 
-            if (!self.stopRendering) {
 
-                self.draw();
+            self.draw();
 
-                self.drawAnimatedTiles();
+            self.drawAnimatedTiles();
 
-                self.drawTargetCell();
+            self.drawTargetCell();
 
-                self.drawSelectedCell();
+            self.drawSelectedCell();
 
-                self.drawEntities(false);
+            self.drawEntities(false);
 
-                self.drawInfos();
-            }
+            self.drawInfos();
+
 
             //self.drawDebugging();
 
@@ -643,7 +658,7 @@ define(['jquery', './camera', './tile',
         drawTargetCell: function() {
             var self = this;
 
-            if (self.mobile || !self.input.targetVisible)
+            if (self.mobile || !self.input.targetVisible || !self.input || !self.camera)
                 return;
 
             var location = self.input.getCoords();
@@ -686,8 +701,12 @@ define(['jquery', './camera', './tile',
         },
 
         forEachVisibleEntity: function(callback) {
-            var self = this,
-                grids = self.entities.grids;
+            var self = this;
+
+            if (!self.entities || !self.camera)
+                return;
+
+            var grids = self.entities.grids;
 
             self.camera.forEachVisiblePosition(function(x, y) {
                 if (!self.map.isOutOfBounds(x, y) && grids.renderingGrid[y][x])
@@ -803,7 +822,12 @@ define(['jquery', './camera', './tile',
         },
 
         setCameraView: function(context) {
-            context.translate(-this.camera.x * this.drawingScale, -this.camera.y * this.drawingScale);
+            var self = this;
+
+            if (!self.camera || self.stopRendering)
+                return;
+
+            context.translate(-self.camera.x * self.drawingScale, -self.camera.y * self.drawingScale);
         },
 
         clearScreen: function(context) {
@@ -811,7 +835,12 @@ define(['jquery', './camera', './tile',
         },
 
         hasRenderedFrame: function() {
-            return this.renderedFrame[0] === this.camera.x && this.renderedFrame[1] === this.camera.y;
+            var self = this;
+
+            if (!self.camera || self.stopRendering || !self.input)
+                return true;
+
+            return self.renderedFrame[0] === self.camera.x && self.renderedFrame[1] === self.camera.y;
         },
 
         saveFrame: function() {
