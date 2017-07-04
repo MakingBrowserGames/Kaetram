@@ -79,6 +79,7 @@ module.exports = World = cls.Class.extend({
         self.map = new Map(self);
         self.map.isReady(function() {
             self.loadGroups();
+
             self.spawnEntities();
         });
         /**
@@ -422,7 +423,7 @@ module.exports = World = cls.Class.extend({
                 return;
             }
 
-            var instance = Utils.generateInstance(isMob ? 2 : (isNpc ? 3 : 4), info.id, position.x);
+            var instance = Utils.generateInstance(isMob ? 2 : (isNpc ? 3 : 4), info.id + entities, position.x + entities, position.y);
 
             if (isMob) {
                 var mob = new Mob(info.id, instance, position.x, position.y);
@@ -451,8 +452,7 @@ module.exports = World = cls.Class.extend({
             entities++;
         });
 
-        log.info('Spawned ' + entities + ' entities!');
-
+        log.info('Spawned ' + Object.keys(self.entities).length + ' entities!');
     },
 
     pushEntities: function(player) {
@@ -463,6 +463,8 @@ module.exports = World = cls.Class.extend({
             return;
 
         entities = _.keys(self.groups[player.group].entities);
+
+        log.info(entities.length);
 
         entities = _.reject(entities, function(instance) {
             return instance === player.instance;
@@ -478,6 +480,9 @@ module.exports = World = cls.Class.extend({
 
     addEntity: function(entity) {
         var self = this;
+
+        if (entity.instance in self.entities)
+            log.info('Entity ' + entity.instance + ' already exists.');
 
         self.entities[entity.instance] = entity;
         self.handleEntityGroup(entity);

@@ -9,6 +9,7 @@ Utils.random = function(range) {
 };
 
 Utils.randomInt = function(min, max) {
+
     return min + Math.floor(Math.random() * (max - min + 1));
 };
 
@@ -20,6 +21,6 @@ Utils.generateClientId = function() {
     return Utils.randomInt(0, 1000000) + Utils.randomInt(0, 40000) + Utils.randomInt(0, 9000);
 };
 
-Utils.generateInstance = function(randomizer, id, modulo) {
-    return '' + randomizer + id + randomizer + Utils.randomInt(0, modulo);
+Utils.generateInstance = function(randomizer, id, modulo, posY) {
+    return '' + randomizer + Utils.randomInt(0, id) + randomizer + Utils.randomInt(0, modulo) + (posY ? posY : 0);
 };

@@ -351,8 +351,14 @@ define(['./renderer/renderer', './utils/storage',
             self.messages.onDespawn(function(id) {
                 var entity = self.entities.get(id);
 
-                if (!entity || entity.type === 'item')
+                if (!entity)
                     return;
+
+                if (entity.type === 'item') {
+                    self.entities.unregisterPosition(entity);
+                    delete self.entities.entities[entity.id];
+                    return;
+                }
 
                 entity.hitPoints = 0;
 
@@ -588,7 +594,6 @@ define(['./renderer/renderer', './utils/storage',
             self.app.showMenu();
             self.app.toggleLogin(false);
             self.app.updateLoader('');
-
             self.app.sendError(null, 'You have been disconnected from the server');
             self.app.statusMessage = null;
 

@@ -25,6 +25,14 @@ module.exports = Inventory = Container.extend({
         self._super(ids, counts, abilities, abilityLevels);
 
         self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Batch, self.slots))
+    },
+
+    add: function(item) {
+        var self = this;
+
+        self._super(item.id, item.count, item.ability, item.abilityLevel);
+
+        self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Add, item.getData()))
     }
 
 });

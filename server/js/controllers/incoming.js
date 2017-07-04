@@ -255,8 +255,10 @@ module.exports = Incoming = cls.Class.extend({
                     id = message.shift(),
                     entity = self.world.getEntityByInstance(id);
 
-                if (entity && entity.type === 'item')
+                if (entity && entity.type === 'item') {
                     self.world.removeItem(entity);
+                    self.player.inventory.add(entity);
+                }
 
                 if (self.world.map.isDoor(posX, posY)) {
                     var destination = self.world.map.getDoorDestination(posX, posY);

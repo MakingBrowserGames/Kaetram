@@ -289,6 +289,23 @@
     "spawnDelay": 35000
   },
 
+  "GreenPirateSkeleton": {
+    "name": "Pirate Skeleton",
+    "id": 16,
+    "drops": {"gold": 1000},
+    "hitPoints": 400,
+    "armour": 8,
+    "weapon": 3,
+    "xp": 150,
+    "level": 11,
+    "aggroRange": 1,
+    "attackRange": 1,
+    "aggressive": true,
+    "attackRate": 900,
+    "movementSpeed": 400,
+    "spawnDelay": 35000
+  },
+
   "BlackWizard": {
     "name": "Dark Wizard",
     "id": 17,
@@ -850,8 +867,8 @@
     "spawnDelay": 35000
   },
 
-  "Livingarmour": {
-    "name": "Living armour",
+  "LivingArmor": {
+    "name": "Living Armour",
     "id": 50,
     "drops": {"whip": 10, "dovakinarcherarmour": 100, "dovakinarmour": 100, "skylightbow": 100, "gold": 690},
     "hitPoints": 340,
@@ -1997,5 +2014,22 @@
     "attackRate": 1100,
     "movementSpeed": 600,
     "spawnDelay": 95000
+  },
+
+  "BrownMouse": {
+    "name": "Brown Mouse",
+    "id": 128,
+    "drops": {"ratarcherarmour": 300, "ratarmour": 300, "gold": 400},
+    "hitPoints": 140,
+    "armour": 1,
+    "weapon": 1,
+    "xp": 40,
+    "level": 22,
+    "aggroRange": 1,
+    "attackRange": 1,
+    "aggressive": false,
+    "attackRate": 1100,
+    "movementSpeed": 400,
+    "spawnDelay": 35000
   }
 }

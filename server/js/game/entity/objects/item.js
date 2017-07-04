@@ -61,6 +61,12 @@ module.exports = Item = Entity.extend({
         }, self.respawnTime);
     },
 
+    getData: function() {
+        var self = this;
+
+        return [self.id, self.count, self.ability, self.abilityLevel];
+    },
+
     getState: function() {
         var self = this,
             state = self._super();
