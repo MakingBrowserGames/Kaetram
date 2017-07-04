@@ -2018,7 +2018,7 @@
 
   "BrownMouse": {
     "name": "Brown Mouse",
-    "id": 128,
+    "id": 129,
     "drops": {"ratarcherarmour": 300, "ratarmour": 300, "gold": 400},
     "hitPoints": 140,
     "armour": 1,
