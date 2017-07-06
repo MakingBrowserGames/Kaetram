@@ -11,10 +11,9 @@ Kaetram To-Do List:
 
 - Review combat and test out PvP
 
-- Loading other information from MySQL
-- Determine what to save to the MySQL
-
 - Load projectiles prior to attacking if necessary.
+
+- Change the notification screen for mobile devices
 
 Finished:
 
@@ -34,6 +33,7 @@ Finished:
 - Add the info manager from TTA ✓
 - Format combat code and smoothen it out ✓
 - Implement range in combat styles ✓
+- MySQL Saving and Loading ✓
 
 
 Reasoning:

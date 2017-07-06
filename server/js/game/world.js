@@ -607,7 +607,7 @@ module.exports = World = cls.Class.extend({
         var self = this;
 
         _.each(self.players, function(player) {
-            self.database.save(player);
+            self.database.creator.save(player);
         })
     },
 

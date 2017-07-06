@@ -1,4 +1,5 @@
-var cls = require('../../../../../lib/class');
+var cls = require('../../../../../lib/class'),
+    Items = require('../../../../../util/items');
 
 module.exports = Slot = cls.Class.extend({
 
@@ -6,19 +7,24 @@ module.exports = Slot = cls.Class.extend({
         var self = this;
 
         self.index = index;
+
         self.id = -1;
         self.count = -1;
         self.ability = -1;
         self.abilityLevel = -1;
+
+        self.string = null;
     },
 
     load: function(id, count, ability, abilityLevel) {
         var self = this;
 
-        self.id = id;
-        self.count = count;
-        self.ability = ability;
-        self.abilityLevel = abilityLevel;
+        self.id = parseInt(id);
+        self.count = parseInt(count);
+        self.ability = parseInt(ability);
+        self.abilityLevel = parseInt(abilityLevel);
+
+        self.string = Items.idToString(self.id);
     },
 
     empty: function() {
@@ -28,6 +34,8 @@ module.exports = Slot = cls.Class.extend({
         self.count = -1;
         self.ability = -1;
         self.abilityLevel = -1;
+
+        self.string = null;
     },
 
     increment: function(amount) {

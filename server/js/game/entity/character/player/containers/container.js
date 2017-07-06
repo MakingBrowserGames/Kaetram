@@ -53,7 +53,7 @@ module.exports = Container = cls.Class.extend({
 
             /**
              * Double checking. This should never be called without
-             * checking outside this class for empty space.
+             * checking the external (subclass) class for empty space.
              */
 
             if (!self.hasSpace())
@@ -76,6 +76,7 @@ module.exports = Container = cls.Class.extend({
                 slot.empty();
             else
                 slot.decrement(count);
+
         } else {
             var slots = self.getSlots(id);
 
@@ -89,7 +90,7 @@ module.exports = Container = cls.Class.extend({
         var self = this;
 
         for (var i = 0; i < self.slots.length; i++)
-            if (self.slots[i] === id)
+            if (self.slots[i].id === id)
                 return self.slots[i];
 
         return null;

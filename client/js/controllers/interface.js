@@ -1,7 +1,6 @@
 /* global log */
 
-define(['../interface/inventory', '../interface/bank',
-        '../interface/quests', '../interface/abilities'], function(Inventory, Bank, Quests, Abilities) {
+define(function() {
 
     return Class.extend({
 
@@ -10,10 +9,6 @@ define(['../interface/inventory', '../interface/bank',
 
             self.game = game;
 
-            self.inventory = new Inventory(game);
-            self.abilities = new Abilities(game);
-            self.quests = new Quests(game);
-            self.bank = new Bank(game);
         },
 
         handle: function(event) {

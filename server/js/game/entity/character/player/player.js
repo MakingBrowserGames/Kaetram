@@ -385,7 +385,6 @@ module.exports = Player = Character.extend({
             if (self.groupCallback)
                 self.groupCallback();
         }
-
     },
 
     movePlayer: function() {
@@ -400,7 +399,10 @@ module.exports = Player = Character.extend({
          */
 
         self.send(new Messages.Movement(Packets.MovementOpcode.Started));
+    },
 
+    save: function() {
+        this.mysql.creator.save(this);
     },
 
     onGroup: function(callback) {

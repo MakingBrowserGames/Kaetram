@@ -24,7 +24,8 @@ Packets = {
     Inventory: 22,
     Bank: 23,
     Ability: 24,
-    Quest: 25
+    Quest: 25,
+    Notification: 26
 };
 
 Packets.IntroOpcode = {
@@ -77,4 +78,9 @@ Packets.InventoryOpcode = {
     Batch: 0,
     Add: 1,
     Remove: 2
+};
+
+Packets.NotificationOpcode = {
+    Ok: 0,
+    YesNo: 1
 };

@@ -498,10 +498,29 @@ define(['./renderer/renderer', './utils/storage',
                 switch (opcode) {
                     case Packets.InventoryOpcode.Batch:
 
-                        log.info(info);
+                        self.interface.inventory.load(info);
+
+                        break;
+
+                    case Packets.InventoryOpcode.Add:
+
+                        self.interface.inventory.add(info.index, info);
+
+                        break;
+
+                    case Packets.InventoryOpcode.Remove:
+
+                        self.interface.inventory.remove(info.index);
 
                         break;
                 }
+
+            });
+
+            self.messages.onNotification(function(opcode, message) {
+
+                log.info(opcode);
+                log.info(message);
 
             });
         },

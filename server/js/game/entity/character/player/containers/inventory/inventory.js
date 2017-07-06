@@ -2,7 +2,8 @@
 
 var Container = require('../container'),
     Messages = require('../../../../../../network/messages'),
-    Packets = require('../../../../../../network/packets');
+    Packets = require('../../../../../../network/packets'),
+    Constants = require('./constants');
 
 module.exports = Inventory = Container.extend({
 
@@ -30,9 +31,18 @@ module.exports = Inventory = Container.extend({
     add: function(item) {
         var self = this;
 
+        if (!self.hasSpace()) {
+            self.owner.send(new Messages.Notification(Packets.NotificationOpcode.Ok, Constants.InventoryFull));
+            return;
+        }
+
         self._super(item.id, item.count, item.ability, item.abilityLevel);
 
-        self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Add, item.getData()))
+        self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Add, item.getData()));
+
+        self.owner.save();
+
+        self.owner.world.removeItem(item);
     }
 
 });

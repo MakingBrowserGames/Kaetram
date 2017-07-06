@@ -17,6 +17,29 @@
     float: left;
 }
 
+#notify {
+    position: absolute;
+    left: 35%;
+    top: 45%;
+}
+
+#exclamation, #question {
+    left: 10%;
+    top: 30%;
+}
+
+#ok {
+    position: absolute;
+    left: 85%;
+    top: 70%;
+}
+
+#cancel {
+    position: absolute;
+    left: 70%;
+    top: 70%;
+}
+
 @media only screen and (min-width: 1501px) {
 
     #buttons {
@@ -165,6 +188,47 @@
         top: 480px;
         background: url('../img/2/skillslots.png') no-repeat;
     }
+
+    #notify {
+        width: 333px;
+        height: 94px;
+        background: url('../img/2/containers.png') -601px 0;
+    }
+
+    #question, #exclamation {
+        position: relative;
+        width: 30px;
+        height: 32px;
+        display: none;
+    }
+
+    #question {
+        background: url('../img/2/containers.png') -699px -94px;
+    }
+
+    #exclamation {
+        background: url('../img/2/containers.png') -669px -94px;
+    }
+
+    #ok {
+        width: 27px;
+        height: 14px;
+        background: url('../img/2/containers.png') -642px -108px;
+    }
+
+    #ok:hover {
+        background: url('../img/2/containers.png') -642px -94px;
+    }
+
+    #cancel {
+        width: 40px;
+        height: 14px;
+        background: url('../img/2/containers.png') -601px -108px;
+    }
+
+    #cancel:hover {
+        background: url('../img/2/containers.png') -601px -94px;
+    }
 }
 
 @media only screen and (max-width: 1000px) {
@@ -239,5 +303,50 @@
         height: 20px;
         top: 240px;
         background: url('../img/1/skillslots.png');
+    }
+
+    #notify {
+        width: 166px;
+        height: 47px;
+        background: url('../img/1/containers.png') -300px 0;
+    }
+
+    #question, #exclamation {
+        position: relative;
+        width: 15px;
+        height: 16px;
+        display: none;
+    }
+
+    #question {
+        background: url('../img/1/containers.png') -349px -47px;
+    }
+
+    #exclamation {
+        background: url('../img/1/containers.png') -334px -47px;
+    }
+
+    #ok {
+        left: 65%;
+        top: 50%;
+        width: 28px;
+        height: 14px;
+        background: url('../img/1/containers.png') -341px -79px;
+    }
+
+    #ok:hover {
+        background: url('../img/1/containers.png') -341px -65px;
+    }
+
+    #cancel {
+        left: 50%;
+        top: 50%;
+        width: 40px;
+        height: 14px;
+        background: url('../img/1/containers.png') -300px -79px;
+    }
+
+    #cancel:hover {
+        background: url('../img/1/containers.png') -300px -65px;
     }
 }

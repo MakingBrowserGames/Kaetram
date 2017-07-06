@@ -136,12 +136,6 @@ module.exports = MySQL = cls.Class.extend({
         });
     },
 
-    save: function(player) {
-        var self = this;
-
-
-    },
-
     loadDatabases: function() {
         var self = this;
 
@@ -155,6 +149,17 @@ module.exports = MySQL = cls.Class.extend({
                 if (self.selectDatabase_callback)
                     self.selectDatabase_callback();
             });
+        });
+    },
+
+    queryData: function(type, database, data) {
+        var self = this;
+
+        self.connection.query(type + ' ' + database + ' SET ?', data, function(error) {
+            if (error)
+                throw error;
+
+            log.info('Successfully updated ' + database);
         });
     },
 

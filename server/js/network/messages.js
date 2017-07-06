@@ -249,3 +249,16 @@ Messages.Quest = Message.extend({
     }
 
 });
+
+Messages.Notification = Message.extend({
+
+    init: function(opcode, message) {
+        this.opcode = opcode;
+        this.message = message;
+    },
+
+    serialize: function() {
+        return [Packets.Notification, this.opcode, this.message];
+    }
+
+});

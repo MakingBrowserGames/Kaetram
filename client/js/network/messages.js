@@ -40,6 +40,7 @@ define(function() {
             self.messages[Packets.Bank] = self.receiveBank;
             self.messages[Packets.Ability] = self.receiveAbility;
             self.messages[Packets.Quest] = self.receiveQuest;
+            self.messages[Packets.Notification] = self.receiveNotification;
         },
 
         handleData: function(data) {
@@ -275,6 +276,15 @@ define(function() {
                 self.questCallback(opcode, info);
         },
 
+        receiveNotification: function(data) {
+            var self = this,
+                opcode = data.shift(),
+                message = data.shift();
+
+            if (self.notificationCallback)
+                self.notificationCallback(opcode, message);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -356,7 +366,11 @@ define(function() {
         },
 
         onQuest: function(callback) {
-            this.questCallback = questcallbac
+            this.questCallback = callback;
+        },
+
+        onNotification: function(callback) {
+            this.notificationCallback = callback;
         }
 
     });

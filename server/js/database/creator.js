@@ -86,7 +86,7 @@ module.exports = Creator = cls.Class.extend({
 
     save: function(player) {
         var self = this,
-            queryKey = player.isNew ? 'INSERT INTO' : 'UPDATE',
+            queryKey = player.isNew ? 'INSERT INTO' : 'UPDATE IGNORE',
             playerData = self.formatData(self.getPlayerData(player), 'data'),
             equipmentData = self.formatData(self.getPlayerData(player), 'equipment');
 
