@@ -134,15 +134,15 @@ define(['./renderer/renderer', './utils/storage',
             self.setMessages(self.socket.messages);
             self.setInput(new Input(self));
 
-            self.app.sendStatus('Loading other mumbo jumbo');
+            self.app.sendStatus('Loading interfaces');
+
+            self.setInterface(new Interface(self));
 
             self.setEntityController(new Entities(self));
 
             self.setInfo(new Info(self));
 
             self.setBubble(new Bubble(self));
-
-            self.setInterface(new Interface(self));
 
             if (!hasWorker)
                 self.loaded = true;
@@ -495,6 +495,8 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onInventory(function(opcode, info) {
 
+                return;
+
                 switch (opcode) {
                     case Packets.InventoryOpcode.Batch:
 
@@ -519,8 +521,19 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onNotification(function(opcode, message) {
 
-                log.info(opcode);
-                log.info(message);
+                switch (opcode) {
+                    case Packets.NotificationOpcode.Ok:
+
+                        self.interface.displayNotify(message);
+
+                        break;
+
+                    case Packets.NotificationOpcode.YesNo:
+
+                        self.interface.displayConfirm(message);
+
+                        break;
+                }
 
             });
         },

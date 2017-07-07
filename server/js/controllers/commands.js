@@ -1,4 +1,8 @@
-var cls = require('../lib/class');
+/* global log */
+
+var cls = require('../lib/class'),
+    Messages = require('../network/messages'),
+    Packets = require('../network/packets');
 
 module.exports = Commands = cls.Class.extend({
 
@@ -27,8 +31,12 @@ module.exports = Commands = cls.Class.extend({
     handlePlayerCommands: function(blocks) {
         var self = this;
 
-        switch(blocks) {
-            case 'togglecamera':
+        switch(blocks.shift()) {
+            case 'notify':
+
+                var type = parseInt(blocks.shift());
+
+                self.player.send(new Messages.Notification(type ? type : 0, 'Testing Text'));
 
                 break;
         }
@@ -36,9 +44,17 @@ module.exports = Commands = cls.Class.extend({
 
     handleModeratorCommands: function(blocks) {
 
+        switch (blocks.shift()) {
+
+        }
+
     },
 
     handleAdminCommands: function(blocks) {
+
+        switch (blocks.shift()) {
+
+        }
 
     }
 

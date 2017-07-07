@@ -464,8 +464,6 @@ module.exports = World = cls.Class.extend({
 
         entities = _.keys(self.groups[player.group].entities);
 
-        log.info(entities.length);
-
         entities = _.reject(entities, function(instance) {
             return instance === player.instance;
         });
