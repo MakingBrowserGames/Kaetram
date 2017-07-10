@@ -47,9 +47,13 @@ module.exports = Container = cls.Class.extend({
         if (!id || count < 0)
             return;
 
-        if (self.contains(id) && Items.isStackable(id))
-            self.getSlot(id).increment(count);
-        else {
+        if (self.contains(id) && Items.isStackable(id)) {
+            var sSlot = self.getSlot(id);
+
+            sSlot.increment(count);
+
+            return sSlot;
+        } else {
 
             /**
              * Double checking. This should never be called without
@@ -59,7 +63,11 @@ module.exports = Container = cls.Class.extend({
             if (!self.hasSpace())
                 return;
 
-            self.slots[self.getEmptySlot()].load(id, count, ability, abilityLevel);
+            var slot = self.slots[self.getEmptySlot()];
+
+            slot.load(id, count, ability, abilityLevel);
+
+            return slot;
         }
     },
 
@@ -80,9 +88,8 @@ module.exports = Container = cls.Class.extend({
         } else {
             var slots = self.getSlots(id);
 
-            _.each(slots, function(slot) {
-                slot.empty();
-            });
+            for (var i = 0; i < count; i++)
+                slots[i].empty();
         }
     },
 

@@ -487,7 +487,8 @@ define(['./renderer/renderer', './utils/storage',
                     self.bubble.setTo(entity);
                 }
 
-                self.input.chatHandler.add(entity, text);
+                if (entity.type === 'player')
+                    self.input.chatHandler.add(entity.username, text);
             });
 
             self.messages.onCommand(function(info) {
@@ -516,9 +517,7 @@ define(['./renderer/renderer', './utils/storage',
                         if (!self.interface.inventory)
                             return;
 
-                        log.info(info.index, info);
-
-                        //self.interface.inventory.add(info.index, info);
+                        self.interface.inventory.add(info);
 
                         break;
 
@@ -546,6 +545,12 @@ define(['./renderer/renderer', './utils/storage',
                     case Packets.NotificationOpcode.YesNo:
 
                         self.interface.displayConfirm(message);
+
+                        break;
+
+                    case Packets.NotificationOpcode.Text:
+
+                        self.chatHandler.add('WORLD', message);
 
                         break;
                 }

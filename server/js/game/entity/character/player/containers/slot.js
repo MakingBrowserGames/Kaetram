@@ -44,6 +44,16 @@ module.exports = Slot = cls.Class.extend({
 
     decrement: function(amount) {
         this.count -= amount;
+    },
+
+    getData: function() {
+        return {
+            index: this.index,
+            string: this.string,
+            count: this.count,
+            ability: this.ability,
+            abilityLevel: this.abilityLevel
+        };
     }
 
 });

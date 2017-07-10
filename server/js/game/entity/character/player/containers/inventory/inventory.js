@@ -49,13 +49,13 @@ module.exports = Inventory = Container.extend({
         var self = this;
 
         if (!self.hasSpace()) {
-            self.owner.send(new Messages.Notification(Packets.NotificationOpcode.Ok, Constants.InventoryFull));
+            self.owner.send(new Messages.Notification(Packets.NotificationOpcode.Text, Constants.InventoryFull));
             return;
         }
 
-        self._super(item.id, item.count, item.ability, item.abilityLevel);
+        var slot = self._super(item.id, item.count, item.ability, item.abilityLevel);
 
-        self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Add, item.getData()));
+        self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Add, slot.getData()));
 
         self.owner.save();
 

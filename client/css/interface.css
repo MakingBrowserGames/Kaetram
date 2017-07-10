@@ -45,8 +45,9 @@
 #inventory {
     background-color: rgba(0, 0, 0, 0.3);
     position: absolute;
-    top: 62%;
+    top: 50%;
     left: 76%;
+    display: none;
 }
 
 #inventory ul {
@@ -62,6 +63,11 @@
 
 .itemSlot {
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+#itemCount {
+    font-family: 'AdvoCut', sans-serif;
+    color: rgba(255, 255, 255, 1);
 }
 
 @media only screen and (min-width: 1501px) {
@@ -262,7 +268,7 @@
 
     #inventory {
         width: 182px;
-        height: 146px;
+        height: 202px;
         border: 2px solid #373737
     }
 
@@ -271,10 +277,20 @@
         height: 32px;
         margin-left: 2px;
         margin-top: 2px;
+        margin-bottom: 14px;
         -webkit-border-radius: 3px;
         -moz-border-radius: 3px;
         border-radius: 3px;
         border: 1px solid #707070;
+    }
+
+    #itemCount {
+        width: 32px;
+        height: 14px;
+        font-size: 12px;
+        text-align: center;
+        margin-left: 2px;
+        margin-top: -14px;
     }
 
 }

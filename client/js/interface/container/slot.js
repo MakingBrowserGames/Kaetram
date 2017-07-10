@@ -31,12 +31,12 @@ define(function() {
             self.abilityLevel = -1;
         },
 
-        increment: function(amount) {
-            this.count += amount;
+        isEmpty: function() {
+            return this.string === null || this.count === -1;
         },
 
-        decrement: function(amount) {
-            this.count -= amount;
+        setCount: function(count) {
+            this.count = count;
         }
 
     });

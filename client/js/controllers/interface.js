@@ -91,6 +91,13 @@ define(['jquery', '../interface/inventory'], function($, Inventory) {
             this.confirm.css('display', 'none');
         },
 
+        hideInventory: function() {
+            var self = this;
+
+            if (self.inventory && self.inventory.isVisible())
+                self.inventory.hide();
+        },
+
         isNotifyVisible: function() {
             return this.notify.css('display') === 'block';
         },

@@ -94,7 +94,8 @@ Packets.InventoryOpcode = {
 
 Packets.NotificationOpcode = {
     Ok: 0,
-    YesNo: 1
+    YesNo: 1,
+    Text: 2
 };
 
 module.exports = Packets;

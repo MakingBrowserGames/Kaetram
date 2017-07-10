@@ -19,13 +19,9 @@ define(['jquery'], function($) {
             self.fadingTimeout = null;
         },
 
-        add: function(entity, text) {
-            var self = this;
-
-            if (entity.type !== 'player')
-                return;
-
-            var element = $('<p style="color: white">' + entity.username + ': ' + text + '</pstyle>');
+        add: function(source, text) {
+            var self = this,
+                element = $('<p style="color: white">' + source + ': ' + text + '</pstyle>');
 
             self.log.append(element);
             self.log.scrollTop(99999);
