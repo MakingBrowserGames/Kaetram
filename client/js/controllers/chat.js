@@ -103,6 +103,8 @@ define(['jquery'], function($) {
             self.input.val('');
             self.input.fadeOut('fast');
             self.input.blur();
+
+            self.game.renderer.focus();
         },
 
         clean: function() {

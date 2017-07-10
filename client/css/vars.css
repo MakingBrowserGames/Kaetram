@@ -176,6 +176,7 @@ body {
 #chat {
     display: none;
     position: absolute;
+    pointer-events: none;
 }
 
 #chat p {

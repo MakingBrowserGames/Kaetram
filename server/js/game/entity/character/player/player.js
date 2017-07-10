@@ -18,7 +18,8 @@ var Character = require('../character'),
     Quests = require('./quests'),
     Inventory = require('./containers/inventory/inventory'),
     Abilities = require('./ability/abilities'),
-    Bank = require('./containers/bank/bank');
+    Bank = require('./containers/bank/bank'),
+    config = require('../../../../../config.json');
 
 module.exports = Player = Character.extend({
 
@@ -87,6 +88,11 @@ module.exports = Player = Character.extend({
 
     loadInventory: function() {
         var self = this;
+
+        if (config.offlineMode) {
+            self.inventory.loadEmpty();
+            return;
+        }
 
         self.mysql.loader.getInventory(self, function(ids, counts, skills, skillLevels) {
             self.inventory.load(ids, counts, skills, skillLevels);

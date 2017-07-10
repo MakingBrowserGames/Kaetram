@@ -1,6 +1,6 @@
 /* global log */
 
-define(['jquery'], function($) {
+define(['jquery', '../interface/inventory'], function($, Inventory) {
 
     return Class.extend({
 
@@ -12,7 +12,22 @@ define(['jquery'], function($) {
             self.notify = $('#notify');
             self.confirm = $('#confirm');
 
+            self.inventory = null;
+
             self.loadNotifications();
+        },
+
+        loadInventory: function(size, data) {
+            var self = this;
+
+            /**
+             * This can be called multiple times and can be used
+             * to completely refresh the inventory.
+             */
+
+            self.inventory = new Inventory(self.game, size);
+
+            self.inventory.load(data);
         },
 
         loadNotifications: function() {

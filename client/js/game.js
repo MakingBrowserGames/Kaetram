@@ -43,6 +43,7 @@ define(['./renderer/renderer', './utils/storage',
             self.time = new Date();
 
             self.pvp = false;
+            self.population = -1;
 
             self.loadRenderer();
             self.loadControllers();
@@ -443,7 +444,7 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onPopulation(function(population) {
-
+                self.population = population;
             });
 
             self.messages.onPoints(function(data) {
@@ -470,7 +471,10 @@ define(['./renderer/renderer', './utils/storage',
                 var id = info.shift(),
                     text = info.shift(),
                     duration = info.shift(),
+                    withBubble = info.shift(),
                     entity = self.entities.get(id);
+
+                //TODO - Add colour control from the server side.
 
                 if (!entity)
                     return;
@@ -478,8 +482,10 @@ define(['./renderer/renderer', './utils/storage',
                 if (!duration)
                     duration = 5000;
 
-                self.bubble.create(id, text, self.time, duration);
-                self.bubble.setTo(entity);
+                if (withBubble) {
+                    self.bubble.create(id, text, self.time, duration);
+                    self.bubble.setTo(entity);
+                }
 
                 self.input.chatHandler.add(entity, text);
             });
@@ -495,22 +501,31 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onInventory(function(opcode, info) {
 
-                return;
-
                 switch (opcode) {
                     case Packets.InventoryOpcode.Batch:
 
-                        self.interface.inventory.load(info);
+                        var inventorySize = info.shift(),
+                            data = info.shift();
+
+                        self.interface.loadInventory(inventorySize, data);
 
                         break;
 
                     case Packets.InventoryOpcode.Add:
 
-                        self.interface.inventory.add(info.index, info);
+                        if (!self.interface.inventory)
+                            return;
+
+                        log.info(info.index, info);
+
+                        //self.interface.inventory.add(info.index, info);
 
                         break;
 
                     case Packets.InventoryOpcode.Remove:
+
+                        if (!self.interface.inventory)
+                            return;
 
                         self.interface.inventory.remove(info.index);
 
@@ -552,9 +567,9 @@ define(['./renderer/renderer', './utils/storage',
 
             self.entities.addEntity(self.player);
 
-            var defaultSprite = self.player.getSpriteName();
+            var defaultSprite = self.getSprite(self.player.getSpriteName());
 
-            self.player.setSprite(self.getSprite(defaultSprite));
+            self.player.setSprite(defaultSprite);
             self.player.idle();
 
             self.socket.send(Packets.Ready, [true]);

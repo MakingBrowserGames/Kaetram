@@ -801,6 +801,14 @@ define(['jquery', './camera', './tile',
             return (rectTwo.left > rectOne.right || rectTwo.right < rectOne.left || rectTwo.top > rectOne.bottom || rectTwo.bottom < rectOne.top);
         },
 
+        focus: function() {
+            var self = this;
+
+            self.forEachContext(function(context) {
+                context.focus();
+            });
+        },
+
         /**
          * Rendering Functions
          */

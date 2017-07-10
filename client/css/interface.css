@@ -22,6 +22,7 @@
     left: 35%;
     top: 45%;
     display: none;
+    pointer-events: auto;
 }
 
 #exclamation, #question {
@@ -39,6 +40,28 @@
     position: absolute;
     left: 70%;
     top: 70%;
+}
+
+#inventory {
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 62%;
+    left: 76%;
+}
+
+#inventory ul {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+#inventory ul li {
+    float: left;
+}
+
+.itemSlot {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 @media only screen and (min-width: 1501px) {
@@ -114,6 +137,12 @@
         top: 720px;
         background: url('../img/3/skillslots.png');
     }
+
+    #inventory {
+        width: 240px;
+        height: 192px;
+    }
+
 }
 
 @media only screen and (max-width: 1500px), only screen and (max-height: 870px) {
@@ -217,7 +246,7 @@
         background: url('../img/2/containers.png') -642px -108px;
     }
 
-    #ok, #done:hover {
+    #ok:hover, #done:hover {
         background: url('../img/2/containers.png') -642px -94px;
     }
 
@@ -230,6 +259,24 @@
     #cancel:hover {
         background: url('../img/2/containers.png') -601px -94px;
     }
+
+    #inventory {
+        width: 182px;
+        height: 146px;
+        border: 2px solid #373737
+    }
+
+    .itemSlot {
+        width: 32px;
+        height: 32px;
+        margin-left: 2px;
+        margin-top: 2px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        border: 1px solid #707070;
+    }
+
 }
 
 @media only screen and (max-width: 1000px) {
@@ -350,4 +397,10 @@
     #cancel:hover {
         background: url('../img/1/containers.png') -371px -65px;
     }
+
+    #inventory {
+        width: 80px;
+        height: 64px;
+    }
+
 }

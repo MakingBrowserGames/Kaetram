@@ -2,10 +2,9 @@ define(['./slot'], function(Slot) {
 
     return Class.extend({
 
-        init: function(game, size) {
+        init: function(size) {
             var self = this;
 
-            self.game = game;
             self.size = size;
 
             self.slots = [];
@@ -34,6 +33,10 @@ define(['./slot'], function(Slot) {
                     return i;
 
             return -1;
+        },
+
+        getImageFormat: function(scale, name) {
+            return 'url("img/' + scale + '/item-' + name + '.png")';
         }
 
     });

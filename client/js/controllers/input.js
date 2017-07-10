@@ -110,6 +110,18 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
 
                             break;
 
+                        case Modules.Keys.One:
+
+                            self.game.interface.displayNotify('Hello');
+
+                            break;
+
+                        case Modules.Keys.Two:
+
+                            self.game.interface.displayConfirm('Hello');
+
+                            break;
+
                         case Modules.Keys.Three:
 
                             self.renderer.camera.center();

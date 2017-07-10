@@ -190,10 +190,12 @@ module.exports = Incoming = cls.Class.extend({
             return;
 
         self.player.ready = true;
-        self.player.sendEquipment();
-        self.player.loadInventory();
+
         self.world.handleEntityGroup(self.player);
         self.world.pushEntities(self.player);
+
+        self.player.sendEquipment();
+        self.player.loadInventory();
     },
 
     handleWho: function(message) {
