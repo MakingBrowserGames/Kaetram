@@ -11,15 +11,21 @@ define(function() {
             self.count = -1;
             self.ability = -1;
             self.abilityLevel = -1;
+
+            self.edible = false;
+            self.equippable = false;
         },
 
-        load: function(string, count, ability, abilityLevel) {
+        load: function(string, count, ability, abilityLevel, edible, equippable) {
             var self = this;
 
             self.string = string;
             self.count = count;
             self.ability = ability;
             self.abilityLevel = abilityLevel;
+
+            self.edible = edible;
+            self.equippable = equippable;
         },
 
         empty: function() {
@@ -29,6 +35,9 @@ define(function() {
             self.count = -1;
             self.ability = -1;
             self.abilityLevel = -1;
+
+            self.edible = false;
+            self.equippable = false;
         },
 
         isEmpty: function() {

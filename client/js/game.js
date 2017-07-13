@@ -173,6 +173,11 @@ define(['./renderer/renderer', './utils/storage',
                 self.app.sendStatus(null);
 
                 self.loaded = true;
+
+                $('#loginNameInput').val('Test');
+                $('#loginPasswordInput').val('123test');
+
+                self.app.login();
             });
         },
 
@@ -550,7 +555,7 @@ define(['./renderer/renderer', './utils/storage',
 
                     case Packets.NotificationOpcode.Text:
 
-                        self.chatHandler.add('WORLD', message);
+                        self.input.chatHandler.add('WORLD', message);
 
                         break;
                 }

@@ -147,6 +147,9 @@ define(['jquery', './camera', './tile',
                     if (self.camera)
                         self.camera.centreOn(self.game.player);
 
+                    if (self.game.interface)
+                        self.game.interface.resize();
+
                     self.renderedFrame[0] = -1;
 
                     self.stopRendering = false;

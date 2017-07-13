@@ -25,6 +25,12 @@ define(['jquery'], function($) {
 
             self.log.append(element);
             self.log.scrollTop(99999);
+
+            if (!self.isActive())
+                self.hideInput();
+
+            self.showChat();
+            self.hideChat();
         },
 
         key: function(data) {
@@ -99,8 +105,6 @@ define(['jquery'], function($) {
             self.input.val('');
             self.input.fadeOut('fast');
             self.input.blur();
-
-            self.game.renderer.focus();
         },
 
         clean: function() {

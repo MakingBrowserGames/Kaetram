@@ -1,6 +1,7 @@
 /* global log */
 
-define(['jquery', '../interface/inventory'], function($, Inventory) {
+define(['jquery', '../interface/inventory',
+        '../interface/profile', '../interface/actions'], function($, Inventory, Profile, Actions) {
 
     return Class.extend({
 
@@ -13,8 +14,18 @@ define(['jquery', '../interface/inventory'], function($, Inventory) {
             self.confirm = $('#confirm');
 
             self.inventory = null;
+            self.profile = null;
+            self.actions = null;
 
             self.loadNotifications();
+            self.loadActions();
+        },
+
+        resize: function() {
+            var self = this;
+
+            if (self.inventory)
+                self.inventory.resize();
         },
 
         loadInventory: function(size, data) {
@@ -28,6 +39,20 @@ define(['jquery', '../interface/inventory'], function($, Inventory) {
             self.inventory = new Inventory(self.game, size);
 
             self.inventory.load(data);
+        },
+
+        loadProfile: function(player) {
+            var self = this;
+
+            if (!self.profile)
+                self.profile = new Profile(player);
+        },
+
+        loadActions: function() {
+            var self = this;
+
+            if (!self.actions)
+                self.actions = new Actions(self);
         },
 
         loadNotifications: function() {
@@ -96,6 +121,13 @@ define(['jquery', '../interface/inventory'], function($, Inventory) {
 
             if (self.inventory && self.inventory.isVisible())
                 self.inventory.hide();
+        },
+
+        hideActions: function() {
+            var self = this;
+
+            if (self.actions && self.actions.isVisible())
+                self.actions.hide();
         },
 
         isNotifyVisible: function() {

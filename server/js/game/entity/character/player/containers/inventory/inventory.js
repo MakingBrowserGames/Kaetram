@@ -3,7 +3,9 @@
 var Container = require('../container'),
     Messages = require('../../../../../../network/messages'),
     Packets = require('../../../../../../network/packets'),
-    Constants = require('./constants');
+    Constants = require('./constants'),
+    _ = require('underscore'),
+    Items = require('../../../../../../util/items');
 
 module.exports = Inventory = Container.extend({
 
@@ -48,7 +50,7 @@ module.exports = Inventory = Container.extend({
     add: function(item) {
         var self = this;
 
-        if (!self.hasSpace()) {
+        if (!self.hasSpace() && !(self.contains(item.id) && Items.isStackable(item.id))) {
             self.owner.send(new Messages.Notification(Packets.NotificationOpcode.Text, Constants.InventoryFull));
             return;
         }
@@ -60,6 +62,15 @@ module.exports = Inventory = Container.extend({
         self.owner.save();
 
         self.owner.world.removeItem(item);
+    },
+
+    check: function() {
+        var self = this;
+
+        _.each(self.slots, function(slot) {
+            if (isNaN(slot.id))
+                slot.empty();
+        })
     }
 
 });

@@ -25,6 +25,8 @@ module.exports = Slot = cls.Class.extend({
         self.abilityLevel = parseInt(abilityLevel);
 
         self.string = Items.idToString(self.id);
+        self.edible = Items.isEdible(self.id);
+        self.equippable = Items.isEquippable(self.string);
     },
 
     empty: function() {

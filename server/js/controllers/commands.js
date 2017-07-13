@@ -36,7 +36,7 @@ module.exports = Commands = cls.Class.extend({
 
                 var type = parseInt(blocks.shift());
 
-                self.player.send(new Messages.Notification(type ? type : 0, 'Testing Text'));
+                self.player.send(new Messages.Notification(2, 'Testing Text'));
 
                 break;
         }

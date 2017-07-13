@@ -22,7 +22,8 @@ define(function() {
 
                 player: {
                     username: '',
-                    password: ''
+                    password: '',
+                    autoLogin: true
                 },
 
                 settings: {

@@ -57,8 +57,6 @@ module.exports = Player = Character.extend({
     load: function(data) {
         var self = this;
 
-        self.setPosition(data.x, data.y);
-
         self.kind = data.kind;
         self.rights = data.rights;
         self.experience = data.experience;
@@ -79,6 +77,7 @@ module.exports = Player = Character.extend({
             ring = data.ring,
             boots = data.boots;
 
+        self.setPosition(data.x, data.y);
         self.setArmour(armour[0], armour[1], armour[2], armour[3]);
         self.setWeapon(weapon[0], weapon[1], weapon[2], weapon[3]);
         self.setPendant(pendant[0], pendant[1], pendant[2], pendant[3]);
@@ -95,7 +94,11 @@ module.exports = Player = Character.extend({
         }
 
         self.mysql.loader.getInventory(self, function(ids, counts, skills, skillLevels) {
+            if (ids.length !== self.inventory.size)
+                self.save();
+
             self.inventory.load(ids, counts, skills, skillLevels);
+            self.inventory.check();
         });
     },
 

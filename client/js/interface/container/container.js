@@ -22,7 +22,7 @@ define(['./slot'], function(Slot) {
              * we just modify the container directly.
              */
 
-            self.slots[index].load(info.string, info.count, info.ability, info.abilityLevel);
+            self.slots[index].load(info.string, info.count, info.ability, info.abilityLevel, info.edible, info.equippable);
         },
 
         getEmptySlot: function() {
