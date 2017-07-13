@@ -531,7 +531,7 @@ define(['./renderer/renderer', './utils/storage',
                         if (!self.interface.inventory)
                             return;
 
-                        self.interface.inventory.remove(info.index);
+                        self.interface.inventory.remove(info);
 
                         break;
                 }
@@ -560,6 +560,19 @@ define(['./renderer/renderer', './utils/storage',
                         break;
                 }
 
+            });
+
+            self.messages.onBlink(function(instance) {
+                var item = self.entities.get(instance);
+
+                log.info(instance);
+
+                if (!item)
+                    return;
+
+                item.blink(150);
+
+                log.info(item);
             });
         },
 

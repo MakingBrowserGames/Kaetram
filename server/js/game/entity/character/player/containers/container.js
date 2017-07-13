@@ -71,26 +71,23 @@ module.exports = Container = cls.Class.extend({
         }
     },
 
-    remove: function(id, count) {
+    remove: function(index, id, count) {
         var self = this;
 
-        if (!id || count < 0 || !self.contains(id))
-            return;
+        if (!id || count < 0 || !self.contains(id) || !self.slots[index] || self.slots[index].id === -1 || self.slots[index].id !== id)
+            return false;
+
+        var slot = self.slots[index];
 
         if (Items.isStackable(id)) {
-            var slot = self.getSlot(id);
-
             if (count >= slot.count)
                 slot.empty();
             else
                 slot.decrement(count);
+        } else
+            slot.empty();
 
-        } else {
-            var slots = self.getSlots(id);
-
-            for (var i = 0; i < count; i++)
-                slots[i].empty();
-        }
+        return true;
     },
 
     getSlot: function(id) {
@@ -101,17 +98,6 @@ module.exports = Container = cls.Class.extend({
                 return self.slots[i];
 
         return null;
-    },
-
-    getSlots: function(id) {
-        var self = this,
-            slots = [];
-
-        for (var i = 0; i < self.slots.length; i++)
-            if (self.slots[i] === id)
-                slots.push(self.slots[i]);
-
-        return slots;
     },
 
     contains: function(id) {

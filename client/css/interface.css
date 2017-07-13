@@ -105,6 +105,47 @@
 
 }
 
+#dropDialog {
+    font-family: 'AdvoCut', sans-serif;
+    font-size: 9px;
+    color: #e3e3e3;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -76px;
+    margin-top: -23px;
+    padding: 5px;
+    background: rgba(45, 45, 45, 0.8);
+    border-radius: 6px 6px 6px 6px;
+    display: none;
+}
+
+#dropCount {
+    font-family: 'AdvoCut', sans-serif;
+}
+
+#dropDialog.active {
+    display: block;
+}
+
+#dropTitle {
+    text-align: center;
+}
+
+#dropAccept, #dropCancel {
+    background: rgba(120, 120, 120, 0.3);
+    cursor: pointer;
+}
+
+#dropAccept:hover, #dropCancel:hover {
+    background: rgba(120, 120, 120, 0.4);
+}
+
+#dropAccept:active, #dropCancel:active {
+    background: rgba(120, 120, 120, 0.4);
+    color: #fcda5c;
+}
+
 @media only screen and (min-width: 1501px) {
 
     #buttons {

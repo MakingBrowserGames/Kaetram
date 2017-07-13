@@ -1,4 +1,4 @@
-/* global log, Detect */
+/* global log, Detect, Packets */
 
 define(['jquery', './container/container'], function($, Container) {
 
@@ -9,6 +9,7 @@ define(['jquery', './container/container'], function($, Container) {
 
             self.game = game;
             self.actions = game.interface.actions;
+
             self.body = $('#inventory');
             self.button = $('#inventoryButton');
             self.action = $('#actionContainer');
@@ -16,7 +17,9 @@ define(['jquery', './container/container'], function($, Container) {
             self.container = new Container(size);
 
             self.activeClass = 'inventory';
+
             self.selectedSlot = null;
+            self.selectedItem = null;
         },
 
         load: function(data) {
@@ -85,14 +88,57 @@ define(['jquery', './container/container'], function($, Container) {
             sSlot.addClass('select');
 
             self.selectedSlot = sSlot;
+            self.selectedItem = slot;
+
+            self.actions.hideDrop();
         },
 
         clickAction: function(event) {
-            var self = this;
+            var self = this,
+                action = event.currentTarget.id;
 
-            log.info(event);
+            if (!self.selectedSlot || !self.selectedItem)
+                return;
 
-            self.actions.removeMisc();
+            switch(action) {
+                case 'eat':
+
+                    break;
+
+                case 'drop':
+                    var item = self.selectedItem;
+
+                    if (item.count > 1)
+                        self.actions.displayDrop('inventory');
+                    else {
+                        self.game.socket.send(Packets.Inventory, [Packets.InventoryOpcode.Remove, item]);
+                        self.clearSelection();
+                    }
+
+                    break;
+
+                case 'dropAccept':
+
+                    var count = $('#dropCount').val();
+
+                    if (isNaN(count) || count < 1)
+                        return;
+
+                    self.game.socket.send(Packets.Inventory, [Packets.InventoryOpcode.Remove, self.selectedItem, count]);
+                    self.actions.hideDrop();
+                    self.clearSelection();
+
+                    break;
+
+                case 'dropCancel':
+
+                    self.actions.hideDrop();
+                    self.clearSelection();
+
+                    break;
+            }
+
+            self.actions.hide();
         },
 
         add: function(info) {
@@ -126,10 +172,15 @@ define(['jquery', './container/container'], function($, Container) {
             if (!item || !slot)
                 return;
 
-            item.find('#slot' + info.index).css('background-image', '');
-            item.find('#itemCount').text('');
+            slot.count -= info.count;
 
-            slot.empty();
+            item.find('#itemCount').text(slot.count);
+
+            if (slot.count < 1) {
+                item.find('#slot' + info.index).css('background-image', '');
+                item.find('#itemCount').text('');
+                slot.empty();
+            }
         },
 
         resize: function() {
@@ -153,6 +204,7 @@ define(['jquery', './container/container'], function($, Container) {
 
             self.selectedSlot.removeClass('select');
             self.selectedSlot = null;
+            self.selectedItem = null;
         },
 
         display: function() {

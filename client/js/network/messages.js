@@ -41,6 +41,7 @@ define(function() {
             self.messages[Packets.Ability] = self.receiveAbility;
             self.messages[Packets.Quest] = self.receiveQuest;
             self.messages[Packets.Notification] = self.receiveNotification;
+            self.messages[Packets.Blink] = self.receiveBlink;
         },
 
         handleData: function(data) {
@@ -285,6 +286,14 @@ define(function() {
                 self.notificationCallback(opcode, message);
         },
 
+        receiveBlink: function(data) {
+            var self = this,
+                instance = data.shift();
+
+            if (self.blinkCallback)
+                self.blinkCallback(instance);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -371,6 +380,10 @@ define(function() {
 
         onNotification: function(callback) {
             this.notificationCallback = callback;
+        },
+
+        onBlink: function(callback) {
+            this.blinkCallback = callback;
         }
 
     });

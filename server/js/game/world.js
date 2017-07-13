@@ -455,6 +455,27 @@ module.exports = World = cls.Class.extend({
         log.info('Spawned ' + Object.keys(self.entities).length + ' entities!');
     },
 
+    dropItem: function(id, count, x, y) {
+        var self = this,
+            instance = Utils.generateInstance(4, id + (Object.keys(self.entities)).length, x, y),
+            item = new Item(id, instance, x, y);
+
+        item.count = count;
+        item.dropped = true;
+
+        self.addItem(item);
+
+        item.despawn();
+
+        item.onBlink(function() {
+            self.pushBroadcast(new Messages.Blink(item.instance));
+        });
+
+        item.onDespawn(function() {
+            self.removeItem(item);
+        });
+    },
+
     pushEntities: function(player) {
         var self = this,
             entities;
@@ -526,7 +547,8 @@ module.exports = World = cls.Class.extend({
     addItem: function(item) {
         var self = this;
 
-        item.onRespawn(self.addItem.bind(self, item));
+        if (item.static)
+            item.onRespawn(self.addItem.bind(self, item));
 
         self.addEntity(item);
         self.items[item.instance] = item;
@@ -573,7 +595,8 @@ module.exports = World = cls.Class.extend({
         self.removeEntity(item);
         self.pushBroadcast(new Messages.Despawn(item.instance));
 
-        item.respawn();
+        if (item.static)
+            item.respawn();
     },
 
     removePlayer: function(player) {

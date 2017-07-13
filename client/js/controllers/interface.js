@@ -126,8 +126,10 @@ define(['jquery', '../interface/inventory',
         hideActions: function() {
             var self = this;
 
-            if (self.actions && self.actions.isVisible())
+            if (self.actions && self.actions.isVisible()) {
                 self.actions.hide();
+                self.actions.hideDrop();
+            }
         },
 
         isNotifyVisible: function() {

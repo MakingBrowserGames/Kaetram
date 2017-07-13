@@ -37,7 +37,8 @@ var Packets = {
     Bank: 23,
     Ability: 24,
     Quest: 25,
-    Notification: 26
+    Notification: 26,
+    Blink: 27
 };
 
 Packets.IntroOpcode = {

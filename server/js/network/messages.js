@@ -263,3 +263,15 @@ Messages.Notification = Message.extend({
     }
 
 });
+
+Messages.Blink = Message.extend({
+
+    init: function(instance) {
+        this.instance = instance;
+    },
+
+    serialize: function () {
+        return [Packets.Blink, this.instance];
+    }
+
+});

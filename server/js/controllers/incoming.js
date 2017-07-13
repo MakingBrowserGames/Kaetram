@@ -8,7 +8,8 @@ var cls = require('../lib/class'),
     _ = require('underscore'),
     Messages = require('../network/messages'),
     sanitizer = require('sanitizer'),
-    Commands = require('./commands');
+    Commands = require('./commands'),
+    Items = require('../util/items');
 
 module.exports = Incoming = cls.Class.extend({
 
@@ -66,6 +67,10 @@ module.exports = Incoming = cls.Class.extend({
 
                 case Packets.Chat:
                     self.handleChat(message);
+                    break;
+
+                case Packets.Inventory:
+                    self.handleInventory(message);
                     break;
 
             }
@@ -423,6 +428,27 @@ module.exports = Incoming = cls.Class.extend({
             self.world.pushToGroup(self.player.group, new Messages.Chat(self.player.instance, text, 7000));
         }
 
+    },
+
+    handleInventory: function(message) {
+        var self = this,
+            opcode = message.shift();
+
+        switch (opcode) {
+            case Packets.InventoryOpcode.Remove:
+                var item = message.shift(),
+                    count;
+
+                if (!item)
+                    return;
+
+                if (item.count > 1)
+                    count = message.shift();
+
+                self.player.inventory.remove(Items.stringToId(item.string), count ? count : item.count, item.index);
+
+                break;
+        }
     }
 
 });

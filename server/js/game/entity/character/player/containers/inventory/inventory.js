@@ -55,13 +55,29 @@ module.exports = Inventory = Container.extend({
             return;
         }
 
-        var slot = self._super(item.id, item.count, item.ability, item.abilityLevel);
+        var slot = self._super(item.id, parseInt(item.count), item.ability, item.abilityLevel);
 
         self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Add, slot.getData()));
 
         self.owner.save();
 
         self.owner.world.removeItem(item);
+    },
+
+    remove: function(id, count, index) {
+        var self = this;
+
+        if (!self._super(index, id, count))
+            return;
+
+        self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Remove, {
+            index: index,
+            count: count
+        }));
+        
+        self.owner.save();
+
+        self.owner.world.dropItem(id, count, self.owner.x, self.owner.y);
     },
 
     check: function() {

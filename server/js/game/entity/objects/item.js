@@ -8,7 +8,7 @@ module.exports = Item = Entity.extend({
         self._super(id, 'item', instance, x, y);
 
         self.static = false;
-        self.fromChest = false;
+        self.dropped = false;
 
         self.count = 1;
         self.ability = 0;
