@@ -112,38 +112,31 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
 
                         case Modules.Keys.One:
 
-                            self.game.interface.displayNotify('Hello');
+                            self.game.interface.profile.setPage(0);
 
                             break;
 
                         case Modules.Keys.Two:
 
-                            self.game.interface.displayConfirm('Hello');
+                            self.game.interface.profile.setPage(1);
 
                             break;
 
                         case Modules.Keys.Three:
 
-                            self.renderer.camera.center();
+                            self.game.interface.profile.setPage(2);
 
                             break;
 
                         case Modules.Keys.Four:
 
-                            self.renderer.camera.decenter();
+                            self.renderer.camera.center();
 
                             break;
 
                         case Modules.Keys.Five:
 
-                            /**
-                             * Testing to see how the current info system holds up.
-                             */
-
-                            self.game.renderer.forEachVisibleEntity(function(entity) {
-                                self.game.bubble.create(entity.id, 'Hello humans.', self.game.time, 5000);
-                                self.game.bubble.setTo(entity);
-                            });
+                            self.renderer.camera.decenter();
 
                             break;
 

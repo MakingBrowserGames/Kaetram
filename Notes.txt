@@ -13,8 +13,6 @@ Kaetram To-Do List:
 
 - Load projectiles prior to attacking if necessary.
 
-- Change the notification screen for mobile devices
-
 Finished:
 
 - Convert the getPlayerData(player) method from MySQL to be directly inputted into query(``, {}); ✓
@@ -34,6 +32,8 @@ Finished:
 - Format combat code and smoothen it out ✓
 - Implement range in combat styles ✓
 - MySQL Saving and Loading ✓
+- Change the notification screen for mobile devices ✓
+- Inventory Container ✓
 
 
 Reasoning:

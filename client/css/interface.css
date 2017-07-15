@@ -101,10 +101,6 @@
     cursor: pointer;
 }
 
-#charInfo {
-
-}
-
 #dropDialog {
     font-family: 'AdvoCut', sans-serif;
     font-size: 9px;
@@ -144,6 +140,17 @@
 #dropAccept:active, #dropCancel:active {
     background: rgba(120, 120, 120, 0.4);
     color: #fcda5c;
+}
+
+#profileDialog {
+    top: 11%;
+    left: 72%;
+
+    display: none;
+    position: absolute;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 
 @media only screen and (min-width: 1501px) {
@@ -419,8 +426,25 @@
         border: 2px solid #707070;
     }
 
-    #charInfo {
+    #profileDialog, .page {
+        width: 248px;
+        height: 434px;
+        position: absolute;
+    }
 
+    #statePage {
+        background: url('../img/2/characterdialogsheet.png') 0 0;
+        display: block;
+    }
+
+    #skillPage {
+        background: url('../img/2/characterdialogsheet.png') -248px 0;
+        display: none;
+    }
+
+    #settingsPage {
+        background: url('../img/2/characterdialogsheet.png') -496px 0;
+        display: none;
     }
 
 }

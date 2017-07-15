@@ -565,14 +565,10 @@ define(['./renderer/renderer', './utils/storage',
             self.messages.onBlink(function(instance) {
                 var item = self.entities.get(instance);
 
-                log.info(instance);
-
                 if (!item)
                     return;
 
                 item.blink(150);
-
-                log.info(item);
             });
         },
 
@@ -604,6 +600,8 @@ define(['./renderer/renderer', './utils/storage',
             self.zoning = new Zoning(self);
 
             self.updater.setSprites(self.entities.sprites);
+
+            self.interface.loadProfile();
         },
 
         setPlayerMovement: function(direction) {

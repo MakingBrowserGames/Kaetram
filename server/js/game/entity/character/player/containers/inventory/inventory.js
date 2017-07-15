@@ -74,7 +74,7 @@ module.exports = Inventory = Container.extend({
             index: index,
             count: count
         }));
-        
+
         self.owner.save();
 
         self.owner.world.dropItem(id, count, self.owner.x, self.owner.y);

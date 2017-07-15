@@ -1,7 +1,7 @@
 /* global log */
 
 define(['jquery', '../interface/inventory',
-        '../interface/profile', '../interface/actions'], function($, Inventory, Profile, Actions) {
+        '../interface/profile/profile', '../interface/actions'], function($, Inventory, Profile, Actions) {
 
     return Class.extend({
 
@@ -41,11 +41,11 @@ define(['jquery', '../interface/inventory',
             self.inventory.load(data);
         },
 
-        loadProfile: function(player) {
+        loadProfile: function() {
             var self = this;
 
             if (!self.profile)
-                self.profile = new Profile(player);
+                self.profile = new Profile(self.game);
         },
 
         loadActions: function() {
