@@ -52,7 +52,7 @@ define(['jquery', './container/container'], function($, Container) {
             }
 
             self.button.click(function(event) {
-                self.button.toggleClass('active');
+                self.game.interface.hideAll();
 
                 if (self.isVisible())
                     self.hide();
@@ -102,6 +102,10 @@ define(['jquery', './container/container'], function($, Container) {
 
             switch(action) {
                 case 'eat':
+                case 'wield':
+
+                    self.game.socket.send(Packets.Inventory, [Packets.InventoryOpcode.Select, self.selectedItem.index]);
+                    self.clearSelection();
 
                     break;
 
@@ -150,7 +154,7 @@ define(['jquery', './container/container'], function($, Container) {
                 return;
 
             if (slot.isEmpty())
-                slot.load(info.string, info.count, info.ability, info.abilityLevel);
+                slot.load(info.string, info.count, info.ability, info.abilityLevel, info.edible, info.equippable);
 
             slot.setCount(info.count);
 
@@ -208,11 +212,16 @@ define(['jquery', './container/container'], function($, Container) {
         },
 
         display: function() {
-            this.body.fadeIn('fast');
+            var self = this;
+
+            self.body.fadeIn('fast');
+            self.button.addClass('active');
         },
 
         hide: function() {
             var self = this;
+
+            self.button.removeClass('active');
 
             self.body.fadeOut('slow');
             self.button.removeClass('active');

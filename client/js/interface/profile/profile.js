@@ -23,10 +23,15 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
 
             self.button.click(function() {
 
+                self.game.interface.hideAll();
+
                 if (self.isVisible())
                     self.hide();
                 else
                     self.show();
+
+                if (!self.activePage.loaded)
+                    self.activePage.load();
 
             });
 
@@ -35,6 +40,14 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
             self.settings = new Settings(self.game);
 
             self.pages.push(self.state, self.skill, self.settings);
+
+            self.activePage = self.state;
+        },
+
+        resize: function() {
+            var self = this;
+
+            _.each(self.pages, function(page) { page.resize(); });
         },
 
         setPage: function(index) {

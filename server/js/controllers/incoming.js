@@ -448,6 +448,14 @@ module.exports = Incoming = cls.Class.extend({
                 self.player.inventory.remove(Items.stringToId(item.string), count ? count : item.count, item.index);
 
                 break;
+
+            case Packets.InventoryOpcode.Select:
+                var index = message.shift();
+
+                log.info(index);
+
+
+                break;
         }
     }
 

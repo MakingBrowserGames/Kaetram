@@ -262,6 +262,71 @@
         margin-top: -21px;
     }
 
+    #actionContainer {
+        width: 192px;
+        height: 96px;
+    }
+
+    .actionButton {
+        width: 192px;
+        height: 48px;
+        border-radius: 9px;
+        border: 3px solid #707070;
+    }
+
+    #profileDialog, .page {
+        width: 372px;
+        height: 651px;
+        position: absolute;
+    }
+
+    #statePage {
+        background: url('../img/3/characterdialogsheet.png') 0 0;
+        display: block;
+    }
+
+    #skillPage {
+        background: url('../img/3/characterdialogsheet.png') -372px 0;
+        display: none;
+    }
+
+    #settingsPage {
+        background: url('../img/3/characterdialogsheet.png') -744px 0;
+        display: none;
+    }
+
+    .profileSlot {
+        background-position: 0 0;
+        position: absolute;
+        width: 48px;
+        height: 45px;
+    }
+
+    #weaponSlot {
+        left: 12px;
+        top: 360px;
+    }
+
+    #armourSlot {
+        left: 312px;
+        top: 360px;
+    }
+
+    #pendantSlot {
+        left: 162px;
+        top: 234px;
+    }
+
+    #ringSlot {
+        left: 81px;
+        top: 516px;
+    }
+
+    #bootsSlot {
+        left: 246px;
+        top: 519px;
+    }
+
 }
 
 @media only screen and (max-width: 1500px), only screen and (max-height: 870px) {
@@ -447,6 +512,65 @@
         display: none;
     }
 
+
+    .profileSlot {
+        background-position: 0 0;
+        position: absolute;
+        width: 32px;
+        height: 30px;
+    }
+
+    .profileInfo {
+        position: absolute;
+        width: 184px;
+        height: 24px;
+        line-height: 24px;
+        font-family: 'AdvoCut', sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        text-shadow: 1px 1px #808080;
+        text-align: center;
+        left: 45px;
+    }
+
+    #weaponSlot {
+        left: 8px;
+        top: 240px;
+        background-position: 0 -2px;
+    }
+
+    #armourSlot {
+        left: 208px;
+        top: 240px;
+    }
+
+    #pendantSlot {
+        left: 108px;
+        top: 156px;
+    }
+
+    #ringSlot {
+        left: 54px;
+        top: 344px;
+    }
+
+    #bootsSlot {
+        left: 164px;
+        top: 346px;
+    }
+
+    #profileName {
+        top: 16px;
+    }
+
+    #profileLevel {
+        top: 58px;
+    }
+
+    #profileExperience {
+        top: 100px;
+    }
+
 }
 
 @media only screen and (max-width: 1000px) {
@@ -601,6 +725,71 @@
         text-align: center;
         margin-left: 1px;
         margin-top: -7px;
+    }
+
+    #actionContainer {
+        width: 64px;
+        height: 32px;
+    }
+
+    .actionButton {
+        width: 64px;
+        height: 16px;
+        border-radius: 3px;
+        border: 1px solid #707070;
+    }
+
+    #profileDialog, .page {
+        width: 124px;
+        height: 217px;
+        position: absolute;
+    }
+
+    #statePage {
+        background: url('../img/1/characterdialogsheet.png') 0 0;
+        display: block;
+    }
+
+    #skillPage {
+        background: url('../img/1/characterdialogsheet.png') -124px 0;
+        display: none;
+    }
+
+    #settingsPage {
+        background: url('../img/1/characterdialogsheet.png') -248px 0;
+        display: none;
+    }
+
+    .profileSlot {
+        background-position: 0 0;
+        position: absolute;
+        width: 16px;
+        height: 15px;
+    }
+
+    #weaponSlot {
+        left: 4px;
+        top: 120px;
+    }
+
+    #armourSlot {
+        left: 104px;
+        top: 120px;
+    }
+
+    #pendantSlot {
+        left: 54px;
+        top: 78px;
+    }
+
+    #ringSlot {
+        left: 27px;
+        top: 172px;
+    }
+
+    #bootsSlot {
+        left: 82px;
+        top: 173px;
     }
 
 }

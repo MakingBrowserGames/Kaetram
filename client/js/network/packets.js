@@ -78,7 +78,8 @@ Packets.NetworkOpcode = {
 Packets.InventoryOpcode = {
     Batch: 0,
     Add: 1,
-    Remove: 2
+    Remove: 2,
+    Select: 3
 };
 
 Packets.NotificationOpcode = {

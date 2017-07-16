@@ -57,7 +57,7 @@ module.exports = Inventory = Container.extend({
 
         var slot = self._super(item.id, parseInt(item.count), item.ability, item.abilityLevel);
 
-        self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Add, slot.getData()));
+        self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Add, slot));
 
         self.owner.save();
 

@@ -26,6 +26,9 @@ define(['jquery', '../interface/inventory',
 
             if (self.inventory)
                 self.inventory.resize();
+
+            if (self.profile)
+                self.profile.resize();
         },
 
         loadInventory: function(size, data) {
@@ -87,6 +90,19 @@ define(['jquery', '../interface/inventory',
 
                 self.hideConfirm();
             });
+        },
+
+        hideAll: function() {
+            var self = this;
+
+            if (self.inventory)
+                self.inventory.hide();
+
+            if (self.actions)
+                self.actions.hide();
+
+            if (self.profile)
+                self.profile.hide();
         },
 
         displayNotify: function(message) {

@@ -239,6 +239,8 @@ define(['./renderer/renderer', './utils/storage',
                         for (var i = 0; i < info.length; i++)
                             self.player.setEquipment(i, info[i]);
 
+                        self.interface.loadProfile();
+
                         break;
 
                     case Packets.EquipmentOpcode.Equip:
@@ -246,10 +248,13 @@ define(['./renderer/renderer', './utils/storage',
                             data = info.shift();
 
                         self.player.setEquipment(equipmentType, data);
+
                         break;
 
                     case Packets.EquipmentOpcode.Unequip:
+
                         self.player.unequip(info.shift());
+
                         break;
                 }
 
@@ -601,7 +606,6 @@ define(['./renderer/renderer', './utils/storage',
 
             self.updater.setSprites(self.entities.sprites);
 
-            self.interface.loadProfile();
         },
 
         setPlayerMovement: function(direction) {

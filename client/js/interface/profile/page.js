@@ -1,3 +1,5 @@
+/* global log */
+
 define(['jquery'], function($) {
 
     return Class.extend({
@@ -6,6 +8,8 @@ define(['jquery'], function($) {
             var self = this;
 
             self.body = $(element);
+
+            self.loaded = false;
         },
 
         show: function() {
@@ -18,6 +22,21 @@ define(['jquery'], function($) {
 
         isVisible: function() {
             return this.body.css('display') === 'block';
+        },
+
+        load: function() {
+            log.info('Uninitialized.');
+        },
+
+        resize: function() {
+            log.info('Uninitialized.');
+        },
+
+        getImageFormat: function(scale, name) {
+            if (!name || name === 'null')
+                return '';
+
+            return 'url("img/' + scale + '/item-' + name + '.png")';
         }
 
     });

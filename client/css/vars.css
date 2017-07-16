@@ -331,7 +331,10 @@ body {
         font-size: 15px;
         padding: 6px 0;
     }
-    
+
+    .stroke {
+        text-shadow:3px 3px 0 #373737, 3px -3px 0 #373737, 0 3px 0 #373737, 3px 0 0 #373737, -3px 3px 0 #373737, -3px -3px 0 #373737, 0 -3px 0 #373737, 0 3px 0 #373737, -3px 0 0 #373737;
+    }
 }
 
 @media only screen and (max-width: 1500px), only screen and (max-height: 870px) {
@@ -458,6 +461,10 @@ body {
         padding: 4px 0;
     }
 
+    .stroke {
+        text-shadow:2px 2px 0 #373737, 2px -2px 0 #373737, 0 2px 0 #373737, 2px 0 0 #373737, -2px 2px 0 #373737, -2px -2px 0 #373737, 0 -2px 0 #373737, 0 2px 0 #373737, -2px 0 0 #373737;
+    }
+
 }
 
 @media only screen and (max-width: 1000px) {
@@ -577,6 +584,10 @@ body {
     #talk .input {
         font-size: 5px;
         padding: 2px 0;
+    }
+
+    .stroke {
+        text-shadow:1px 1px 0 #373737, 1px -1px 0 #373737, 0 1px 0 #373737, 1px 0 0 #373737, -1px 1px 0 #373737, -1px -1px 0 #373737, 0 -1px 0 #373737, 0 1px 0 #373737, -1px 0 0 #373737;
     }
 
 }
