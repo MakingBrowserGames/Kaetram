@@ -231,9 +231,11 @@ define(['./renderer/renderer', './utils/storage',
                 self.postLoad();
             });
 
-            self.messages.onEquipment(function(equipType, info) {
+            self.messages.onEquipment(function(opcode, info) {
+                log.info(opcode);
+                log.info(info);
 
-                switch (equipType) {
+                switch (opcode) {
                     case Packets.EquipmentOpcode.Batch:
 
                         for (var i = 0; i < info.length; i++)
@@ -245,9 +247,13 @@ define(['./renderer/renderer', './utils/storage',
 
                     case Packets.EquipmentOpcode.Equip:
                         var equipmentType = info.shift(),
-                            data = info.shift();
+                            name = info.shift(),
+                            string = info.shift(),
+                            count = info.shift(),
+                            ability = info.shift(),
+                            abilityLevel = info.shift();
 
-                        self.player.setEquipment(equipmentType, data);
+                        self.player.setEquipment(equipmentType, [name, string, count, ability, abilityLevel]);
 
                         break;
 

@@ -170,30 +170,30 @@ define(['../character', './equipment/armour', './equipment/weapon',
             return this.gridY;
         },
 
-        setEquipment: function(type, data) {
+        setEquipment: function(type, info) {
             var self = this,
-                name = data.shift(),
-                string = data.shift(),
-                count = data.shift(),
-                skill = data.shift(),
-                skillLevel = data.shift();
+                name = info.shift(),
+                string = info.shift(),
+                count = info.shift(),
+                ability = info.shift(),
+                abilityLevel = info.shift();
 
             switch (type) {
                 case Modules.Equipment.Armour:
 
                     if (!self.armour)
-                        self.armour = new Armour(name, string, count, skill, skillLevel);
+                        self.armour = new Armour(name, string, count, ability, abilityLevel);
                     else
-                        self.armour.update(name, string, count, skill, skillLevel);
+                        self.armour.update(name, string, count, ability, abilityLevel);
 
                     break;
 
                 case Modules.Equipment.Weapon:
 
                     if (!self.weapon)
-                        self.weapon = new Weapon(name, string, count, skill, skillLevel);
+                        self.weapon = new Weapon(name, string, count, ability, abilityLevel);
                     else
-                        self.weapon.update(name, string, count, skill, skillLevel);
+                        self.weapon.update(name, string, count, ability, abilityLevel);
 
                     if (string.includes('bow'))
                         self.weapon.ranged = true;
@@ -203,30 +203,29 @@ define(['../character', './equipment/armour', './equipment/weapon',
                 case Modules.Equipment.Pendant:
 
                     if (!self.pendant)
-                        self.pendant = new Pendant(name, string, count, skill, skillLevel);
+                        self.pendant = new Pendant(name, string, count, ability, abilityLevel);
                     else
-                        self.pendant.update(name, string, count, skill, skillLevel);
+                        self.pendant.update(name, string, count, ability, abilityLevel);
 
                     break;
 
                 case Modules.Equipment.Ring:
 
                     if (!self.ring)
-                        self.ring = new Ring(name, string, count, skill, skillLevel);
+                        self.ring = new Ring(name, string, count, ability, abilityLevel);
                     else
-                        self.ring.update(name, string, count, skill, skillLevel);
+                        self.ring.update(name, string, count, ability, abilityLevel);
 
                     break;
 
                 case Modules.Equipment.Boots:
 
                     if (!self.boots)
-                        self.boots = new Boots(name, string, count, skill, skillLevel);
+                        self.boots = new Boots(name, string, count, ability, abilityLevel);
                     else
-                        self.boots.update(name, string, count, skill, skillLevel);
+                        self.boots.update(name, string, count, ability, abilityLevel);
 
                     break;
-
 
             }
         },

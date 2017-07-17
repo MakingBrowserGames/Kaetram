@@ -40,6 +40,17 @@ module.exports = Equipment = cls.Class.extend({
 
     getData: function() {
         return [Items.idToName(this.id), Items.idToString(this.id), this.count, this.ability, this.abilityLevel];
+    },
+
+    getItem: function() {
+        return {
+            name: this.name,
+            string: Items.idToString(this.id),
+            id: this.id,
+            count: this.count,
+            ability: this.ability,
+            abilityLevel: this.abilityLevel
+        }
     }
 
 });

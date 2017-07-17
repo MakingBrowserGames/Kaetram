@@ -225,6 +225,7 @@ define(['jquery', './container/container'], function($, Container) {
 
             self.body.fadeOut('slow');
             self.button.removeClass('active');
+            self.clearSelection();
         },
 
         getScale: function() {

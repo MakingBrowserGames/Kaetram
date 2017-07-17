@@ -66,6 +66,27 @@ Items.isArmour = function(string) {
     return false;
 };
 
+Items.isPendant = function(string) {
+    if (string in Items.Data)
+        return Items.Data[string].type === 'pendant';
+
+    return false;
+};
+
+Items.isRing = function(string) {
+    if (string in Items.Data)
+        return Items.Data[string].type === 'ring';
+
+    return false;
+};
+
+Items.isBoots = function(string) {
+    if (string in Items.Data)
+        return Items.Data[string].type === 'boots';
+
+    return false;
+};
+
 Items.isStackable = function(id) {
     return id === 190 || id === 191 || id === 192 || id === 193 || id === 195 || id === 199 || id === 202;
 };

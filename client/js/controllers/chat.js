@@ -12,11 +12,22 @@ define(['jquery'], function($) {
             self.chat = $('#chat');
             self.log = $('#chatLog');
             self.input = $('#chatInput');
+            self.button = $('#chatButton');
 
             self.visible = false;
 
             self.fadingDuration = 5000;
             self.fadingTimeout = null;
+
+            self.load();
+        },
+
+        load: function() {
+            var self = this;
+
+            self.button.click(function() {
+                self.key(Modules.Keys.Enter);
+            });
         },
 
         add: function(source, text) {
@@ -58,6 +69,7 @@ define(['jquery'], function($) {
         toggle: function() {
             var self = this;
 
+            log.info('toggly');
             self.clean();
 
             if (self.visible && !self.isActive())
@@ -82,6 +94,8 @@ define(['jquery'], function($) {
         showInput: function() {
             var self = this;
 
+            self.button.addClass('active');
+
             self.input.fadeIn('fast');
             self.input.val('');
             self.input.focus();
@@ -101,6 +115,8 @@ define(['jquery'], function($) {
 
         hideInput: function() {
             var self = this;
+
+            self.button.removeClass('active');
 
             self.input.val('');
             self.input.fadeOut('fast');

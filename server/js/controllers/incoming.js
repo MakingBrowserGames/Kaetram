@@ -445,15 +445,34 @@ module.exports = Incoming = cls.Class.extend({
                 if (item.count > 1)
                     count = message.shift();
 
-                self.player.inventory.remove(Items.stringToId(item.string), count ? count : item.count, item.index);
+                var id = Items.stringToId(item.string);
+
+                self.player.inventory.remove(id, count ? count : item.count, item.index);
+
+                self.world.dropItem(id, count, self.player.x, self.player.y);
 
                 break;
 
             case Packets.InventoryOpcode.Select:
-                var index = message.shift();
+                var index = message.shift(),
+                    slot = self.player.inventory.slots[index],
+                    string = slot.string,
+                    sCount = slot.count,
+                    ability = slot.ability,
+                    abilityLevel = slot.abilityLevel;
 
-                log.info(index);
+                if (!slot)
+                    return;
 
+                if (slot.equippable) {
+
+                    self.player.inventory.remove(Items.stringToId(slot.string), slot.count, slot.index);
+
+                    self.player.equip(string, sCount, ability, abilityLevel);
+
+                } else if (slot.edible) {
+
+                }
 
                 break;
         }

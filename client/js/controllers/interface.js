@@ -68,7 +68,7 @@ define(['jquery', '../interface/inventory',
              * Simple warning dialogue
              */
 
-            ok.click(function(event) {
+            ok.click(function() {
                 log.info(self.notify.className);
 
                 self.hideNotify();
@@ -79,13 +79,13 @@ define(['jquery', '../interface/inventory',
              * Confirmation dialogues
              */
 
-            cancel.click(function(event) {
+            cancel.click(function() {
                 log.info(self.confirm.className);
 
                 self.hideConfirm();
             });
 
-            done.click(function(event) {
+            done.click(function() {
                 log.info(self.confirm.className);
 
                 self.hideConfirm();
@@ -112,7 +112,7 @@ define(['jquery', '../interface/inventory',
                 return;
 
             self.notify.css('display', 'block');
-
+            self.notify.text(message);
         },
 
         displayConfirm: function(message) {
@@ -122,6 +122,7 @@ define(['jquery', '../interface/inventory',
                 return;
 
             self.confirm.css('display', 'block');
+            self.confirm.text(message);
         },
 
         hideNotify: function() {
@@ -130,22 +131,6 @@ define(['jquery', '../interface/inventory',
 
         hideConfirm: function() {
             this.confirm.css('display', 'none');
-        },
-
-        hideInventory: function() {
-            var self = this;
-
-            if (self.inventory && self.inventory.isVisible())
-                self.inventory.hide();
-        },
-
-        hideActions: function() {
-            var self = this;
-
-            if (self.actions && self.actions.isVisible()) {
-                self.actions.hide();
-                self.actions.hideDrop();
-            }
         },
 
         isNotifyVisible: function() {

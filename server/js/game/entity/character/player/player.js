@@ -146,39 +146,75 @@ module.exports = Player = Character.extend({
         self.send(new Messages.Welcome(info));
     },
 
-    equip: function(type, id, count, ability, abilityLevel) {
-        var self = this;
+    equip: function(string, count, ability, abilityLevel) {
+        var self = this,
+            data = Items.getData(string),
+            type, id;
+
+        if (!data || data === 'null')
+            return;
+
+        if (Items.isArmour(string))
+            type = Modules.Equipment.Armour;
+        else if (Items.isWeapon(string))
+            type = Modules.Equipment.Weapon;
+        else if (Items.isPendant(string))
+            type = Modules.Equipment.Pendant;
+        else if (Items.isRing(string))
+            type = Modules.Equipment.Ring;
+        else if (Items.isBoots(string))
+            type = Modules.Equipment.Boots;
+
+        id = Items.stringToId(string);
+
+        log.info('Equipping: ' + string);
+        log.info(self.weapon);
 
         switch(type) {
             case Modules.Equipment.Armour:
+
+                if (self.hasArmour())
+                    self.inventory.add(self.armour.getItem());
 
                 self.setArmour(id, count, ability, abilityLevel);
                 break;
 
             case Modules.Equipment.Weapon:
 
+                if (self.hasWeapon())
+                    self.inventory.add(self.weapon.getItem());
 
                 self.setWeapon(id, count, ability, abilityLevel);
                 break;
 
             case Modules.Equipment.Pendant:
 
+                if (self.hasPendant())
+                    self.inventory.add(self.pendant.getItem());
 
                 self.setPendant(id, count, ability, abilityLevel);
                 break;
 
             case Modules.Equipment.Ring:
 
+                if (self.hasRing())
+                    self.inventory.add(self.ring.getItem());
 
                 self.setRing(id, count, ability, abilityLevel);
                 break;
 
             case Modules.Equipment.Boots:
 
+                if (self.hasBoots())
+                    self.inventory.add(self.boots.getItem());
 
                 self.setBoots(id, count, ability, abilityLevel);
                 break;
         }
+
+        self.send(new Messages.Equipment(Packets.EquipmentOpcode.Equip, [type, Items.idToName(id), string, count, ability, abilityLevel]));
+
+        self.save();
     },
 
     applyDamage: function(damage) {
@@ -211,9 +247,7 @@ module.exports = Player = Character.extend({
         if (!id)
             return;
 
-        //TODO - Don't forget to change this
-
-        self.weapon = new Weapon(Items.idToString(87), 87, count, ability, abilityLevel);
+        self.weapon = new Weapon(Items.idToString(id), id, count, ability, abilityLevel);
 
         if (self.weapon.ranged)
             self.attackRange = 7;
@@ -278,24 +312,24 @@ module.exports = Player = Character.extend({
      * Getters
      */
 
-    getArmour: function() {
-        return this.armour;
+    hasArmour: function() {
+        return this.armour && this.armour.name !== 'null' && this.armour.id !== -1;
     },
 
-    getWeapon: function() {
-        return this.weapon;
+    hasWeapon: function() {
+        return this.weapon && this.weapon.name !== 'null' && this.weapon.id !== -1;
     },
 
-    getPendant: function() {
-        return this.pendant;
+    hasPendant: function() {
+        return this.pendant && this.pendant.name !== 'null' && this.pendant.id !== -1;
     },
 
-    getRing: function() {
-        return this.ring;
+    hasRing: function() {
+        return this.ring && this.ring.name !== 'null' && this.ring.id !== -1;
     },
 
-    getBoots: function() {
-        return this.boots;
+    hasBoots: function() {
+        return this.boots && this.boots.name !== 'null' && this.boots.id !== -1;
     },
 
     getState: function() {

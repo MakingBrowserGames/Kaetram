@@ -215,10 +215,7 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
             player.go(position.x, position.y);
 
             if (self.game.interface)
-                self.game.interface.hideInventory();
-
-            if (self.game.interface)
-                self.game.interface.hideActions();
+                self.game.interface.hideAll();
         },
 
         updateCursor: function() {
