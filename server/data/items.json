@@ -1155,7 +1155,7 @@
   "ManaFlask": {
     "id": 191,
     "type": "object",
-    "name": "Mana Flask [+45 MP]",
+    "name": "Mana Flask [+35 MP]",
     "storeCount": 10,
     "price": 200
   },
@@ -1171,7 +1171,7 @@
   "BigFlask": {
     "id":193,
     "type":"object",
-    "name":"Big Flask [+35% HP]",
+    "name":"Big Flask [+350 HP]",
     "storeCount": 10,
     "price": 600
   },

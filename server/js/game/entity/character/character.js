@@ -43,6 +43,15 @@ module.exports = Character = Entity.extend({
             self.hitCallback(attacker);
     },
 
+    heal: function(amount) {
+        var self = this;
+
+        self.setHitPoints(self.hitPoints + amount);
+
+        if (self.hitPoints > self.maxHitPoints)
+            self.hitPoints = self.maxHitPoints;
+    },
+
     getProjectile: function() {
         return Modules.Projectiles.Arrow;
     },
@@ -89,6 +98,15 @@ module.exports = Character = Entity.extend({
         this.potentialTarget = potentialTarget;
     },
 
+    setHitPoints: function(hitPoints) {
+        var self = this;
+
+        self.hitPoints = hitPoints;
+
+        if (self.hitPointsCallback)
+            self.hitPointsCallback();
+    },
+
     removeTarget: function() {
         var self = this;
 
@@ -124,6 +142,10 @@ module.exports = Character = Entity.extend({
 
     onHit: function(callback) {
         this.hitCallback = callback;
+    },
+
+    onHealthChange: function(callback) {
+        this.hitPointsCallback = callback;
     }
 
 });

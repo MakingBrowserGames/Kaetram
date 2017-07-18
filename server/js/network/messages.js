@@ -6,6 +6,7 @@ var cls = require('../lib/class'),
 module.exports = Messages;
 
 Messages.Handshake = Message.extend({
+
     init: function(clientId, devClient) {
         this.clientId = clientId;
         this.devClient = devClient;
@@ -17,6 +18,7 @@ Messages.Handshake = Message.extend({
 });
 
 Messages.Welcome = Message.extend({
+
     init: function(data) {
         this.data = data; //array of info
     },
@@ -27,6 +29,7 @@ Messages.Welcome = Message.extend({
 });
 
 Messages.Spawn = Message.extend({
+
     init: function(entity) {
         this.entity = entity;
     },
@@ -37,6 +40,7 @@ Messages.Spawn = Message.extend({
 });
 
 Messages.List = Message.extend({
+
     init: function(list) {
         this.list = list;
     },
@@ -44,6 +48,18 @@ Messages.List = Message.extend({
     serialize: function() {
         return [Packets.List, this.list];
     }
+});
+
+Messages.Sync = Message.extend({
+
+    init: function(data) {
+        this.data = data;
+    },
+
+    serialize: function() {
+        return [Packets.Sync, this.data];
+    }
+
 });
 
 Messages.Equipment = Message.extend({
@@ -56,10 +72,6 @@ Messages.Equipment = Message.extend({
     serialize: function() {
         return [Packets.Equipment, this.opcode, this.equipmentData];
     }
-
-});
-
-Messages.Drop = Message.extend({
 
 });
 

@@ -464,13 +464,19 @@ module.exports = Incoming = cls.Class.extend({
                 if (!slot)
                     return;
 
+                id = Items.stringToId(slot.string);
+
                 if (slot.equippable) {
 
-                    self.player.inventory.remove(Items.stringToId(slot.string), slot.count, slot.index);
+                    self.player.inventory.remove(id, slot.count, slot.index);
 
                     self.player.equip(string, sCount, ability, abilityLevel);
 
                 } else if (slot.edible) {
+
+                    self.player.inventory.remove(id, 1, slot.index);
+
+                    self.player.eat(id);
 
                 }
 

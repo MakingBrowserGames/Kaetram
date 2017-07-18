@@ -327,6 +327,47 @@
         top: 519px;
     }
 
+    #profileName {
+        top: 24px;
+    }
+
+    #profileLevel {
+        top: 87px;
+    }
+
+    #profileExperience {
+        top: 150px;
+    }
+
+    #previous, #next {
+        background-image: url('../img/3/characterdialogsheet.png');
+        position: absolute;
+        left: initial;
+        top: 0;
+        width: 63px;
+        height: 51px;
+    }
+
+    #previous {
+        left: 0;
+        background-position: -240px -651px;
+    }
+
+    #previous.enabled {
+        background-position: -240px -702px;
+        cursor: pointer;
+    }
+
+    #next {
+        left: 63px;
+        background-position: -303px -702px;
+    }
+
+    #next.enabled {
+        background-position: -303px -651px;
+        cursor: pointer;
+    }
+
 }
 
 @media only screen and (max-width: 1500px), only screen and (max-height: 870px) {
@@ -571,6 +612,35 @@
         top: 100px;
     }
 
+    #previous, #next {
+        background-image: url('../img/2/characterdialogsheet.png');
+        position: absolute;
+        left: initial;
+        top: 0;
+        width: 42px;
+        height: 34px;
+    }
+
+    #previous {
+        left: 0;
+        background-position: 0 -446px;
+    }
+
+    #previous.enabled {
+        background-position: 0 -480px;
+        cursor: pointer;
+    }
+
+    #next {
+        left: 42px;
+        background-position: -42px -480px;
+    }
+
+    #next.enabled {
+        background-position: -42px -446px;
+        cursor: pointer;
+    }
+
 }
 
 @media only screen and (max-width: 1000px) {
@@ -790,6 +860,47 @@
     #bootsSlot {
         left: 82px;
         top: 173px;
+    }
+
+    #profileName {
+        top: 8px;
+    }
+
+    #profileLevel {
+        top: 29px;
+    }
+
+    #profileExperience {
+        top: 50px;
+    }
+
+    #previous, #next {
+        background-image: url('../img/1/characterdialogsheet.png');
+        position: absolute;
+        left: initial;
+        top: 0;
+        width: 21px;
+        height: 17px;
+    }
+
+    #previous {
+        left: 0;
+        background-position: -80px -217px;
+    }
+
+    #previous.enabled {
+        background-position: -80px -234px;
+        cursor: pointer;
+    }
+
+    #next {
+        left: 21px;
+        background-position: -101px -234px;
+    }
+
+    #next.enabled {
+        background-position: -101px -217px;
+        cursor: pointer;
     }
 
 }

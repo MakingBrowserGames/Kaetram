@@ -7,7 +7,7 @@ Packets = {
     Who: 5,
     Equipment: 6,
     Ready: 7,
-    Drop: 8,
+    Sync: 8,
     Movement: 9,
     Teleport: 10,
     Request: 11,

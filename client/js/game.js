@@ -287,6 +287,12 @@ define(['./renderer/renderer', './utils/storage',
                 self.socket.send(Packets.Who, newIds);
             });
 
+            self.messages.onSync(function(data) {
+                var entity = self.entities.get(data.id);
+
+
+            });
+
             self.messages.onMovement(function(data) {
                 var opcode = data.shift(),
                     info = data.shift();

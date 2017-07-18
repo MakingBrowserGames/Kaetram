@@ -99,4 +99,30 @@ Items.isEquippable = function(string) {
     return Items.isArmour(string) || Items.isWeapon(string);
 };
 
+Items.healsHealth = function(id) {
+    return id === 190 || id === 192 || id === 193;
+};
+
+Items.healsMana = function(id) {
+    return id === 191;
+};
+
+Items.getHealingFactor = function(id) {
+    if (id === 190)
+        return 100;
+    else if (id === 192)
+        return 200;
+    else if (id === 193)
+        return 350;
+
+    return -1;
+};
+
+Items.getManaFactor = function(id) {
+    if (id === 191)
+        return 35;
+
+    return -1;
+};
+
 module.exports = Items;

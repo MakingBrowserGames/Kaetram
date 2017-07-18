@@ -11,6 +11,9 @@ define(function() {
          *
          * This class should not have any complex functionality, its main
          * role is to provide organization for packets and increase readability
+         *
+         * Please respect the order of the Packets Enum and arrange functions
+         * accordingly.
          */
 
         init: function(app) {
@@ -25,6 +28,7 @@ define(function() {
             self.messages[Packets.Spawn] = self.receiveSpawn;
             self.messages[Packets.Equipment] = self.receiveEquipment;
             self.messages[Packets.List] = self.receiveEntityList;
+            self.messages[Packets.Sync] = self.receiveSync;
             self.messages[Packets.Movement] = self.receiveMovement;
             self.messages[Packets.Teleport] = self.receiveTeleport;
             self.messages[Packets.Despawn] = self.receiveDespawn;
@@ -153,6 +157,13 @@ define(function() {
 
             if (self.entityListCallback)
                 self.entityListCallback(data);
+        },
+
+        receiveSync: function(data) {
+            var self = this;
+
+            if (self.syncCallback)
+                self.syncCallback(data);
         },
 
         receiveMovement: function(data) {
@@ -316,6 +327,10 @@ define(function() {
 
         onEntityList: function(callback) {
             this.entityListCallback = callback;
+        },
+
+        onSync: function(callback) {
+            this.syncCallback = callback;
         },
 
         onMovement: function(callback) {

@@ -9,6 +9,10 @@ module.exports = Points = cls.Class.extend({
         self.maxPoints = maxPoints;
     },
 
+    heal: function(amount) {
+        this.setPoints(this.points + amount);
+    },
+
     increment: function(amount) {
         this.points += amount;
     },
@@ -18,7 +22,12 @@ module.exports = Points = cls.Class.extend({
     },
 
     setPoints: function(points) {
-        this.points = points;
+        var self = this;
+
+        self.points = points;
+
+        if (self.points > self.maxPoints)
+            self.points = self.maxPoints;
     },
 
     setMaxPoints: function(maxPoints) {

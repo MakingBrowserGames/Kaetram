@@ -146,6 +146,17 @@ module.exports = Player = Character.extend({
         self.send(new Messages.Welcome(info));
     },
 
+    eat: function(id) {
+        var self = this;
+
+        if (Items.healsHealth(id))
+            self.hitPoints.heal(Items.getHealingFactor(id));
+        else if (Items.healsMana(id))
+            self.mana.heal(Items.getManaFactor(id));
+
+        self.sync();
+    },
+
     equip: function(string, count, ability, abilityLevel) {
         var self = this,
             data = Items.getData(string),
@@ -166,9 +177,6 @@ module.exports = Player = Character.extend({
             type = Modules.Equipment.Boots;
 
         id = Items.stringToId(string);
-
-        log.info('Equipping: ' + string);
-        log.info(self.weapon);
 
         switch(type) {
             case Modules.Equipment.Armour:
@@ -390,6 +398,30 @@ module.exports = Player = Character.extend({
 
         self.x = 46;
         self.y = 88;
+    },
+
+    sync: function() {
+        var self = this;
+
+        /**
+         * Function to be used for syncing up health,
+         * mana, exp, and other variables
+         */
+
+        if (!self.hitPoints || !self.mana)
+            return;
+
+        var info = {
+            id: self.instance,
+            hitPoints: self.hitPoints.getHitPoints(),
+            maxHitPoints: self.hitPoints.getMaxHitPoints(),
+            mana: self.mana.getMana(),
+            maxMana: self.mana.getMaxMana(),
+            experience: self.experience,
+            level: self.level
+        };
+
+        self.world.pushBroadcast(new Messages.Sync(info));
     },
 
     stopMovement: function(force) {
