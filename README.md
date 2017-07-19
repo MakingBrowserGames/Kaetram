@@ -14,9 +14,12 @@ Currently Finished:
 * Re-arranged CSS accordingly
 * Sprite loading done properly (without massive amounts of hardcoding)
 * Entity movement (pathfinding)
-* Add door system
+* Added door system
 * Entity spawning
 * Inventory System
+* Player information interface
+* Experience and Item Drop system
+* Full cross-platform capabilities
 * Combat System --- STILL IN PROGRESS
 
 To-Do:
