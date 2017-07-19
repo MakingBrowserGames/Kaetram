@@ -46,6 +46,8 @@ define(function() {
             self.messages[Packets.Quest] = self.receiveQuest;
             self.messages[Packets.Notification] = self.receiveNotification;
             self.messages[Packets.Blink] = self.receiveBlink;
+            self.messages[Packets.Heal] = self.receiveHeal;
+            self.messages[Packets.Experience] = self.receiveExperience;
         },
 
         handleData: function(data) {
@@ -163,7 +165,7 @@ define(function() {
             var self = this;
 
             if (self.syncCallback)
-                self.syncCallback(data);
+                self.syncCallback(data.shift());
         },
 
         receiveMovement: function(data) {
@@ -217,7 +219,10 @@ define(function() {
         },
 
         receivePopulation: function(data) {
+            var self = this;
 
+            if (self.populationCallback)
+                self.populationCallback(data.shift());
         },
 
         receivePoints: function(data) {
@@ -303,6 +308,20 @@ define(function() {
 
             if (self.blinkCallback)
                 self.blinkCallback(instance);
+        },
+
+        receiveHeal: function(data) {
+            var self = this;
+
+            if (self.healCallback)
+                self.healCallback(data.shift());
+        },
+
+        receiveExperience: function(data) {
+            var self = this;
+
+            if (self.experienceCallback)
+                self.experienceCallback(data.shift());
         },
 
         /**
@@ -399,6 +418,14 @@ define(function() {
 
         onBlink: function(callback) {
             this.blinkCallback = callback;
+        },
+
+        onHeal: function(callback) {
+            this.healCallback = callback;
+        },
+
+        onExperience: function(callback) {
+            this.experienceCallback = callback;
         }
 
     });

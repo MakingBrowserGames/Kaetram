@@ -61,6 +61,15 @@ define(['jquery', '../page'], function($, Page) {
                 self.forEachSlot(function(slot) { slot.css('background-size', '600%'); });
         },
 
+        update: function() {
+            var self = this;
+
+            self.level.text(self.player.level);
+            self.experience.text(self.player.experience);
+
+            self.loadSlots();
+        },
+
         forEachSlot: function(callback) {
             _.each(this.slots, function(slot) {
                 callback(slot);

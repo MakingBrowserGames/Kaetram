@@ -19,7 +19,11 @@ var Modules = {
 
     Hits: {
         Damage: 0,
-        Poison: 1
+        Poison: 1,
+        Heal: 2,
+        Mana: 3,
+        Experience: 4,
+        LevelUp: 5
     },
 
     Projectiles: {

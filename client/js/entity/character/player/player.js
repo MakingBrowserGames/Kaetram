@@ -1,4 +1,4 @@
-/* global Modules */
+/* global Modules, log */
 
 define(['../character', './equipment/armour', './equipment/weapon',
         './equipment/pendant', './equipment/boots', './equipment/ring'],
@@ -195,8 +195,7 @@ define(['../character', './equipment/armour', './equipment/weapon',
                     else
                         self.weapon.update(name, string, count, ability, abilityLevel);
 
-                    if (string.includes('bow'))
-                        self.weapon.ranged = true;
+                    self.weapon.ranged = string.includes('bow');
 
                     break;
 

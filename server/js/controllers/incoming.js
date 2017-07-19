@@ -369,6 +369,9 @@ module.exports = Incoming = cls.Class.extend({
 
                 attacker.combat.attack(target);
 
+                if (target.combat.isAttacked())
+                    target.combat.addAttacker(attacker);
+
                 break;
         }
     },

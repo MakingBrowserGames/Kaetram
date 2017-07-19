@@ -171,7 +171,23 @@ module.exports = World = cls.Class.extend({
         self.pushToAdjacentGroups(target.group, new Messages.Points(target.instance, target.getHitPoints(), null));
 
         if (target.hitPoints < 1) {
-            attacker.combat.stop();
+
+            target.combat.forEachAttacker(function(attacker) {
+
+                attacker.combat.stop();
+
+                /**
+                 * Why do we check here for entity type here?
+                 *
+                 * It is well built to implement special abilities in the future
+                 * such as when a player dies - all the nearby attackers have a
+                 * wanted level on them or have some inflicted damage.
+                 */
+
+                if (target.type === 'mob')
+                    attacker.addExperience(Mobs.getXp(target.id));
+
+            });
 
             self.pushToAdjacentGroups(target.group, new Messages.Despawn(target.instance));
             self.handleDeath(target);
@@ -183,8 +199,18 @@ module.exports = World = cls.Class.extend({
         var self = this;
 
         if (character.type === 'mob') {
+            var deathX = character.x,
+                deathY = character.y;
+
             self.removeEntity(character);
+
             character.destroy();
+
+            var drop = character.getDrop();
+
+            if (drop)
+                self.dropItem(drop.id, drop.count, deathX, deathY);
+
         } else if (character.type === 'player') {
             //TODO - Handle player death here...
         }
@@ -432,6 +458,9 @@ module.exports = World = cls.Class.extend({
 
                 mob.onRespawn(function() {
                     mob.dead = false;
+
+                    mob.refresh();
+
                     self.addMob(mob);
                 });
 
@@ -508,6 +537,7 @@ module.exports = World = cls.Class.extend({
 
         if (entity instanceof Character)
             entity.getCombat().setWorld(self);
+
     },
 
     addPlayer: function(player) {
@@ -628,7 +658,7 @@ module.exports = World = cls.Class.extend({
         var self = this;
 
         _.each(self.players, function(player) {
-            self.database.creator.save(player);
+            player.save();
         })
     },
 

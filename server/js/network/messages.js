@@ -287,3 +287,27 @@ Messages.Blink = Message.extend({
     }
 
 });
+
+Messages.Heal = Message.extend({
+
+    init: function(info) {
+        this.info = info;
+    },
+
+    serialize: function() {
+        return [Packets.Heal, this.info];
+    }
+
+});
+
+Messages.Experience = Message.extend({
+
+    init: function(info) {
+        this.info = info;
+    },
+
+    serialize: function() {
+        return [Packets.Experience, this.info];
+    }
+
+});

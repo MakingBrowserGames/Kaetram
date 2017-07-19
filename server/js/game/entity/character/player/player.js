@@ -146,15 +146,53 @@ module.exports = Player = Character.extend({
         self.send(new Messages.Welcome(info));
     },
 
-    eat: function(id) {
+    addExperience: function(exp) {
         var self = this;
 
-        if (Items.healsHealth(id))
-            self.hitPoints.heal(Items.getHealingFactor(id));
-        else if (Items.healsMana(id))
-            self.mana.heal(Items.getManaFactor(id));
+        self.experience += exp;
+        self.level = Formulas.expToLevel(self.experience);
+
+        self.world.pushBroadcast(new Messages.Experience({
+            id: self.instance,
+            amount: exp,
+            level: self.level
+        }));
 
         self.sync();
+    },
+
+    eat: function(id) {
+        var self = this,
+            type, amount;
+
+        if (Items.healsHealth(id)) {
+            type = 'health';
+            amount = Items.getHealingFactor(id);
+
+            self.hitPoints.heal(amount);
+
+        } else if (Items.healsMana(id)) {
+            type = 'mana';
+            amount = Items.getManaFactor(id);
+
+            self.mana.heal(amount);
+        }
+
+        if (!type || !amount)
+            return;
+
+        /**
+         * Send the new points data, then signal
+         * the client to show healing.
+         */
+
+        self.sync();
+
+        self.world.pushBroadcast(new Messages.Heal({
+            id: self.instance,
+            type: type,
+            amount: amount
+        }));
     },
 
     equip: function(string, count, ability, abilityLevel) {
@@ -231,6 +269,10 @@ module.exports = Player = Character.extend({
 
     getHitPoints: function() {
         return this.hitPoints.getHitPoints();
+    },
+
+    getMaxHitPoints: function() {
+        return this.hitPoints.getMaxHitPoints();
     },
 
     /**
@@ -340,6 +382,14 @@ module.exports = Player = Character.extend({
         return this.boots && this.boots.name !== 'null' && this.boots.id !== -1;
     },
 
+    hasMaxHitPoints: function() {
+        return this.hitPoints.getHitPoints() >= this.hitPoints.getMaxHitPoints();
+    },
+
+    hasMaxMana: function() {
+        return this.mana.getMana() >= this.mana.getMaxMana();
+    },
+
     getState: function() {
         var self = this;
 
@@ -422,6 +472,8 @@ module.exports = Player = Character.extend({
         };
 
         self.world.pushBroadcast(new Messages.Sync(info));
+
+        self.save();
     },
 
     stopMovement: function(force) {

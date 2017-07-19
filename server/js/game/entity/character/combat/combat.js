@@ -73,6 +73,10 @@ module.exports = Combat = cls.Class.extend({
 
         }, 1000);
 
+        self.healLoop = setInterval(function() {
+            self.parseHealing();
+        }, 1000);
+
         self.started = true;
     },
 
@@ -93,12 +97,15 @@ module.exports = Combat = cls.Class.extend({
         self.started = false;
 
         self.cleanTimeout = setTimeout(function() {
-            if (new Date().getTime() - self.lastHit > 10000 && self.character.type === 'mob') {
+            if (new Date().getTime() - self.lastHit > 7000 && self.character.type === 'mob') {
                 self.forget();
                 self.character.removeTarget();
                 self.sendToSpawn();
+
+                clearTimeout(self.cleanTimeout);
+                self.cleanTimeout = null;
             }
-        }, 20000);
+        }, 1000);
     },
 
     parseAttack: function() {
@@ -143,6 +150,28 @@ module.exports = Combat = cls.Class.extend({
             if (attacker)
                 self.follow(self.character, attacker);
         }
+    },
+
+    parseHealing: function() {
+        var self = this;
+
+        if (self.character.isDead() || self.character.hasMaxHitPoints() || self.character.hasTarget() || self.isAttacked())
+            return;
+
+        var isPlayer = self.character.type === 'player';
+
+        if (isPlayer) {
+            self.character.hitPoints.heal(1);
+            self.character.mana.heal(1);
+        } else
+            self.character.heal(1);
+
+        self.world.pushBroadcast(new Messages.Sync({
+            hitPoints: self.character.getHitPoints(),
+            maxHitPoints: self.character.getMaxHitPoints(),
+            mana: isPlayer ? self.character.mana.getMana() : null,
+            maxMana: isPlayer ? self.character.mana.getMaxMana() : null
+        }));
     },
 
     attack: function(target) {

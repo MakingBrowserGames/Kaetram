@@ -228,7 +228,7 @@ define(['jquery', './camera', './tile',
                 var factor = self.mobile ? 2 : 1;
 
                 self.textContext.save();
-                self.textContext.font = '20px AdvoCut';
+                self.textContext.font = '24px AdvoCut';
                 self.setCameraView(self.textContext);
                 self.textContext.globalAlpha = info.opacity;
                 self.drawText('' + info.text, Math.floor((info.x + 8) * factor), Math.floor(info.y * factor), true, info.fill, info.stroke);

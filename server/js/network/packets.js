@@ -38,7 +38,10 @@ var Packets = {
     Ability: 24,
     Quest: 25,
     Notification: 26,
-    Blink: 27
+    Blink: 27,
+    Heal: 28,
+    Experience: 29,
+    Death: 30
 };
 
 Packets.IntroOpcode = {

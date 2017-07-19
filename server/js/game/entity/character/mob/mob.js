@@ -1,5 +1,8 @@
 var Character = require('../character'),
-    Mobs = require('../../../../util/mobs');
+    Mobs = require('../../../../util/mobs'),
+    _ = require('underscore'),
+    Utils = require('../../../../util/utils'),
+    Items = require('../../../../util/items');
 
 module.exports = Mob = Character.extend({
 
@@ -14,6 +17,8 @@ module.exports = Mob = Character.extend({
 
         self.respawnDelay = self.data.spawnDelay;
 
+        self.level = self.data.level;
+
         self.armourLevel = self.data.armour;
         self.weaponLevel = self.data.weapon;
         self.attackRange = self.data.attackRange;
@@ -25,6 +30,46 @@ module.exports = Mob = Character.extend({
         self.dead = false;
         self.boss = false;
         self.static = false;
+    },
+
+    refresh: function() {
+        var self = this;
+
+        self.hitPoints = self.data.hitPoints;
+        self.maxHitPoints = self.data.hitPoints;
+    },
+
+    getDrop: function() {
+        var self = this;
+
+        if (!self.data.drops)
+            return;
+
+        var min = 0,
+            percent = 0,
+            random = Utils.randomInt(0, 1000);
+
+        for (var drop in self.data.drops)
+            if (self.data.drops.hasOwnProperty(drop)) {
+                var chance = self.data.drops[drop];
+
+                min = percent;
+                percent += chance;
+
+                if (random >= min && random < percent) {
+                    var count = 1;
+
+                    if (drop === 'gold')
+                        count = Utils.randomInt(1, self.level * (Math.floor(Math.pow(2, self.level / 7) / (self.level / 4))));
+
+                    return {
+                        id: Items.stringToId(drop),
+                        count: count
+                    }
+                }
+            }
+
+        return null;
     },
 
     canAggro: function(player) {

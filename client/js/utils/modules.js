@@ -23,7 +23,11 @@ Modules = {
 
     Hits: {
         Damage: 0,
-        Poison: 1
+        Poison: 1,
+        Heal: 2,
+        Mana: 3,
+        Experience: 4,
+        LevelUp: 5
     },
 
     Equipment: {
@@ -81,14 +85,19 @@ Modules = {
             stroke: 'rgb(50, 120, 50)'
         },
 
+        'mana': {
+            fill: 'rgb(73, 94, 228)',
+            stroke: 'rgb(56, 63, 133)'
+        },
+
         'health': {
             fill: 'white',
             stroke: '#373737'
         },
 
         'exp': {
-            fill: 'rgb(80, 80, 255)',
-            stroke: 'rgb(50, 50, 255)'
+            fill: 'rgb(80, 180, 255)',
+            stroke: 'rgb(50, 180, 255)'
         },
 
         'poison': {

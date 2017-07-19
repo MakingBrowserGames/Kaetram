@@ -44,6 +44,12 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
             self.activePage = self.state;
         },
 
+        update: function() {
+            var self = this;
+
+            _.each(self.pages, function(page) { page.update(); });
+        },
+
         resize: function() {
             var self = this;
 

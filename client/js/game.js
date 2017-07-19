@@ -232,8 +232,6 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onEquipment(function(opcode, info) {
-                log.info(opcode);
-                log.info(info);
 
                 switch (opcode) {
                     case Packets.EquipmentOpcode.Batch:
@@ -254,6 +252,8 @@ define(['./renderer/renderer', './utils/storage',
                             abilityLevel = info.shift();
 
                         self.player.setEquipment(equipmentType, [name, string, count, ability, abilityLevel]);
+
+                        self.interface.profile.update();
 
                         break;
 
@@ -290,7 +290,25 @@ define(['./renderer/renderer', './utils/storage',
             self.messages.onSync(function(data) {
                 var entity = self.entities.get(data.id);
 
+                if (!entity || entity.type !== 'player')
+                    return;
 
+                if (data.hitPoints) {
+                    entity.hitPoints = data.hitPoints;
+                    entity.maxHitPoints = data.maxHitPoints;
+                }
+
+                if (data.mana) {
+                    entity.mana = data.mana;
+                    entity.maxMana = data.maxMana;
+                }
+
+                if (data.experience) {
+                    entity.experience = data.experience;
+                    entity.level = data.level;
+                }
+
+                self.interface.profile.update();
             });
 
             self.messages.onMovement(function(data) {
@@ -326,8 +344,6 @@ define(['./renderer/renderer', './utils/storage',
 
                         if (!followee || !follower)
                             return;
-
-                        log.info(isRanged + ' ' + attackRange);
 
                         follower.follow(followee);
 
@@ -428,8 +444,6 @@ define(['./renderer/renderer', './utils/storage',
                         break;
 
                     case Packets.CombatOpcode.Finish:
-
-                        log.info('finishing combat..?');
 
                         if (target) {
                             target.removeTarget();
@@ -586,6 +600,42 @@ define(['./renderer/renderer', './utils/storage',
                     return;
 
                 item.blink(150);
+            });
+
+            self.messages.onHeal(function(info) {
+                var entity = self.entities.get(info.id);
+
+                if (!entity)
+                    return;
+
+                switch (info.type) {
+                    case 'health':
+
+                        self.info.create(Modules.Hits.Heal, [info.amount], entity.x, entity.y);
+
+                        break;
+
+                    case 'mana':
+
+                        self.info.create(Modules.Hits.Mana, [info.amount], entity.x, entity.y);
+
+                        break;
+                }
+
+                entity.triggerHealthBar();
+            });
+
+            self.messages.onExperience(function(info) {
+                var entity = self.entities.get(info.id);
+
+                if (!entity || entity.type !== 'player')
+                    return;
+
+                if (entity.level !== info.level)
+                    self.info.create(Modules.Hits.LevelUp, null, entity.x, entity.y);
+                else
+                    self.info.create(Modules.Hits.Experience, [info.amount], entity.x, entity.y);
+
             });
         },
 

@@ -52,10 +52,6 @@ module.exports = Character = Entity.extend({
             self.hitPoints = self.maxHitPoints;
     },
 
-    getProjectile: function() {
-        return Modules.Projectiles.Arrow;
-    },
-
     isRanged: function() {
         return this.attackRange > 1;
     },
@@ -74,6 +70,10 @@ module.exports = Character = Entity.extend({
 
     getHitPoints: function() {
         return this.hitPoints;
+    },
+
+    getMaxHitPoints: function() {
+        return this.getMaxHitPoints();
     },
 
     setPosition: function(x, y) {
@@ -105,6 +105,18 @@ module.exports = Character = Entity.extend({
 
         if (self.hitPointsCallback)
             self.hitPointsCallback();
+    },
+
+    getProjectile: function() {
+        return Modules.Projectiles.Arrow;
+    },
+
+    getDrop: function() {
+        return null;
+    },
+
+    hasMaxHitPoints: function() {
+        return this.hitPoints >= this.maxHitPoints;
     },
 
     removeTarget: function() {

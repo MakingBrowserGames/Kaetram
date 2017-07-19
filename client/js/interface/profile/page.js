@@ -32,6 +32,10 @@ define(['jquery'], function($) {
             log.info('Uninitialized.');
         },
 
+        update: function() {
+            log.info('Uninitialized.');
+        },
+
         getImageFormat: function(scale, name) {
             if (!name || name === 'null')
                 return '';
