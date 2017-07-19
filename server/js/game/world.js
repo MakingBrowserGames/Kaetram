@@ -42,13 +42,30 @@ module.exports = World = cls.Class.extend({
         self.packets = {};
         self.groups = {};
 
+        self.logging = [];
+
         self.loadedGroups = false;
 
         self.ready = false;
 
         self.onPlayerConnection(function(connection) {
+            var remoteAddress = connection.socket.conn.remoteAddress;
+
+            if (self.logging.indexOf(remoteAddress) > -1) {
+                connection.sendUTF8('malform');
+                connection.close();
+
+                setTimeout(function() {
+                    self.removeLogging(remoteAddress);
+                }, 20000);
+
+                return;
+            }
+
             var clientId = Utils.generateClientId(),
                 player = new Player(self, self.database, connection, clientId);
+
+            self.logging.push(remoteAddress);
 
             self.addToPackets(player);
 
@@ -641,6 +658,14 @@ module.exports = World = cls.Class.extend({
         delete self.packets[player.instance];
 
         self.populationCallback(self.playerCount - 1);
+    },
+
+    removeLogging: function(remoteAddress) {
+        var self = this,
+            index = self.logging.indexOf(remoteAddress);
+
+        if (index > -1)
+            self.logging.splice(index, 1);
     },
 
     playerInWorld: function(username) {

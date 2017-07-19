@@ -166,8 +166,8 @@
 
     #chatButton {
         position: relative;
-        width: 14px;
-        height: 15px;
+        width: 42px;
+        height: 45px;
         background: url('../img/3/maintwo.png') no-repeat -588px -942px;
     }
 
@@ -181,8 +181,8 @@
 
     #soundButton {
         position: relative;
-        width: 14px;
-        height: 15px;
+        width: 42px;
+        height: 45px;
         background: url('../img/3/main.png') no-repeat -378px -942px;
     }
 
@@ -196,8 +196,8 @@
 
     #inventoryButton {
         position: relative;
-        width: 14px;
-        height: 15px;
+        width: 42px;
+        height: 45px;
         background: url('../img/3/main.png') no-repeat -588px -942px;
     }
 
@@ -211,8 +211,8 @@
 
     #profileButton {
         position: relative;
-        width: 14px;
-        height: 15px;
+        width: 42px;
+        height: 45px;
         background: url('../img/3/main.png') no-repeat -714px -942px;
     }
 
@@ -304,6 +304,19 @@
         position: absolute;
         width: 48px;
         height: 45px;
+    }
+
+    .profileInfo {
+        position: absolute;
+        width: 276px;
+        height: 36px;
+        line-height: 36px;
+        font-family: 'AdvoCut', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+        text-shadow: 1px 1px #808080;
+        text-align: center;
+        left: 72px;
     }
 
     #weaponSlot {
@@ -853,6 +866,19 @@
         position: absolute;
         width: 16px;
         height: 15px;
+    }
+
+    .profileInfo {
+        position: absolute;
+        width: 92px;
+        height: 12px;
+        line-height: 12px;
+        font-family: 'AdvoCut', sans-serif;
+        font-size: 6px;
+        font-weight: bold;
+        text-shadow: 1px 1px #808080;
+        text-align: center;
+        left: 24px;
     }
 
     #weaponSlot {

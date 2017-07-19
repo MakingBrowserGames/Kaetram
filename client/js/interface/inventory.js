@@ -192,10 +192,13 @@ define(['jquery', './container/container'], function($, Container) {
                 list = self.getList();
 
             for (var i = 0; i < list.length; i++) {
-                var item = $(list[i]).find('#slot' + i);
+                var item = $(list[i]).find('#slot' + i),
+                    slot = self.container.slots[i];
 
                 if (self.game.app.isMobile())
                     item.css('background-size', '600%');
+                else
+                    item.css('background-image', self.container.getImageFormat(self.getScale(), slot.string));
             }
 
         },

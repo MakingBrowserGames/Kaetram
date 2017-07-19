@@ -48,6 +48,7 @@ define(function() {
             self.messages[Packets.Blink] = self.receiveBlink;
             self.messages[Packets.Heal] = self.receiveHeal;
             self.messages[Packets.Experience] = self.receiveExperience;
+            self.messages[Packets.Death] = self.receiveDeath;
         },
 
         handleData: function(data) {
@@ -111,6 +112,12 @@ define(function() {
 
                 case 'invalidlogin':
                     self.app.sendError(null, 'You have entered the wrong username or password.');
+                    break;
+
+                case 'malform':
+                    self.app.game.disconnect(true);
+
+                    self.app.sendError(null, 'Client has experienced a malfunction (stop trying to bypass stuff).');
                     break;
 
                 default:
@@ -324,6 +331,13 @@ define(function() {
                 self.experienceCallback(data.shift());
         },
 
+        receiveDeath: function(data) {
+            var self = this;
+
+            if (self.deathCallback)
+                self.deathCallback(data.shift());
+        },
+
         /**
          * Universal Callbacks
          */
@@ -426,6 +440,10 @@ define(function() {
 
         onExperience: function(callback) {
             this.experienceCallback = callback;
+        },
+
+        onDeath: function(callback) {
+            this.deathCallback = callback;
         }
 
     });

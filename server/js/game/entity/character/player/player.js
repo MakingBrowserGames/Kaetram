@@ -52,6 +52,8 @@ module.exports = Player = Character.extend({
         self.bank = new Bank(self, 100);
         self.quests = new Quests(self);
         self.abilities = new Abilities(self);
+
+        self.introduced = false;
     },
 
     load: function(data) {

@@ -28,7 +28,8 @@ Packets = {
     Notification: 26,
     Blink: 27,
     Heal: 28,
-    Experience: 29
+    Experience: 29,
+    Death: 30
 };
 
 Packets.IntroOpcode = {

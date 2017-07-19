@@ -311,3 +311,15 @@ Messages.Experience = Message.extend({
     }
 
 });
+
+Messages.Death = Message.extend({
+
+    init: function(id) {
+        this.id = id;
+    },
+
+    serialize: function() {
+        return [Packets.Death, this.id];
+    }
+
+});

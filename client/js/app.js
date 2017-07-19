@@ -20,8 +20,8 @@ define(['jquery'], function($) {
 
             self.intro = $('#intro');
 
-            self.loginButton = $('.login');
-            self.registerButton = $('.createNew');
+            self.loginButton = $('#login');
+            self.registerButton = $('#newCharacter');
             self.helpButton = $('#helpButton');
             self.loading = $('.loader');
 
@@ -31,6 +31,7 @@ define(['jquery'], function($) {
             self.game = null;
 
             self.parchmentAnimating = false;
+            self.loggingIn = false;
 
             self.sendStatus('Initializing the main app');
 
@@ -115,7 +116,7 @@ define(['jquery'], function($) {
         login: function() {
             var self = this;
 
-            if (!self.game || !self.game.loaded || self.statusMessage || !self.verifyForm())
+            if (self.loggingIn || !self.game || !self.game.loaded || self.statusMessage || !self.verifyForm())
                 return;
 
             self.toggleLogin(true);
@@ -388,10 +389,21 @@ define(['jquery'], function($) {
                 self.loginButton.fadeOut('slow');
                 self.registerButton.fadeOut('slow');
                 self.loading.removeAttr('hidden');
+
+                self.loginButton.addClass('disabled');
+                self.registerButton.addClass('disabled');
+
+                self.loggingIn = true;
+
             } else {
                 self.loginButton.fadeIn('slow');
                 self.registerButton.fadeIn('slow');
                 self.loading.attr('hidden', true);
+
+                self.loginButton.removeClass('disabled');
+                self.registerButton.removeClass('disabled');
+
+                self.loggingIn = false;
             }
         },
 

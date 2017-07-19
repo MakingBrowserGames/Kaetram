@@ -173,11 +173,6 @@ define(['./renderer/renderer', './utils/storage',
                 self.app.sendStatus(null);
 
                 self.loaded = true;
-
-                $('#loginNameInput').val('Test');
-                $('#loginPasswordInput').val('123test');
-
-                self.app.login();
             });
         },
 
@@ -222,6 +217,8 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onWelcome(function(data) {
+
+                log.info('Welcome? wtf?');
 
                 self.player.load(data);
 
@@ -637,6 +634,17 @@ define(['./renderer/renderer', './utils/storage',
                     self.info.create(Modules.Hits.Experience, [info.amount], entity.x, entity.y);
 
             });
+
+            self.messages.onDeath(function(id) {
+                if (id === self.player.id) {
+
+                } else {
+                    var entity = self.entities.get(id);
+
+                    if (!entity)
+                        return;
+                }
+            });
         },
 
         postLoad: function() {
@@ -708,7 +716,7 @@ define(['./renderer/renderer', './utils/storage',
             this.input.handle(inputType, data);
         },
 
-        handleDisconnection: function() {
+        handleDisconnection: function(noError) {
             var self = this;
 
             /**
@@ -726,10 +734,13 @@ define(['./renderer/renderer', './utils/storage',
             self.unload();
 
             self.app.showMenu();
-            self.app.toggleLogin(false);
-            self.app.updateLoader('');
-            self.app.sendError(null, 'You have been disconnected from the server');
-            self.app.statusMessage = null;
+
+            if (noError) {
+                self.app.toggleLogin(false);
+                self.app.updateLoader('');
+                self.app.sendError(null, 'You have been disconnected from the server');
+                self.app.statusMessage = null;
+            }
 
             self.loadRenderer();
             self.loadControllers();
