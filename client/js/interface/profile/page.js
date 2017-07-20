@@ -13,7 +13,7 @@ define(['jquery'], function($) {
         },
 
         show: function() {
-            this.body.fadeIn('fast');
+            this.body.fadeIn('slow');
         },
 
         hide: function() {

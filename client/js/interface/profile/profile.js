@@ -12,7 +12,11 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
             self.body = $('#profileDialog');
             self.button = $('#profileButton');
 
+            self.next = $('#next');
+            self.previous = $('#previous');
+
             self.activePage = null;
+            self.activeIndex = 0;
             self.pages = [];
 
             self.load();
@@ -35,6 +39,20 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
 
             });
 
+            self.next.click(function() {
+                if (self.activeIndex + 1 < self.pages.length)
+                    self.setPage(self.activeIndex + 1);
+                else
+                    self.next.removeClass('enabled');
+            });
+
+            self.previous.click(function() {
+                if (self.activeIndex > 0)
+                    self.setPage(self.activeIndex - 1);
+                else
+                    self.previous.removeClass('enabled');
+            });
+
             self.state = new State(self.game);
             self.skill = new Skill(self.game);
             self.settings = new Settings(self.game);
@@ -42,6 +60,9 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
             self.pages.push(self.state, self.skill, self.settings);
 
             self.activePage = self.state;
+
+            if (self.activeIndex === 0 && self.activeIndex !== self.pages.length)
+                self.next.addClass('enabled');
         },
 
         update: function() {
@@ -68,14 +89,24 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
             page.show();
 
             self.activePage = page;
+            self.activeIndex = index;
+
+            if (self.activeIndex + 1 === self.pages.length)
+                self.next.removeClass('enabled');
+            else if (self.activeIndex === 0)
+                self.previous.removeClass('enabled');
+            else {
+                self.previous.addClass('enabled');
+                self.next.addClass('enabled');
+            }
         },
 
         show: function() {
-            this.body.fadeIn('fast');
+            this.body.fadeIn('slow');
         },
 
         hide: function() {
-            this.body.fadeOut('slow');
+            this.body.fadeOut('fast');
         },
 
         isVisible: function() {

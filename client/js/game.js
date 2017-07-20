@@ -5,10 +5,10 @@ define(['./renderer/renderer', './utils/storage',
         './renderer/updater', './controllers/entities', './controllers/input',
         './entity/character/player/playerhandler', './utils/pathfinder',
         './controllers/zoning', './controllers/info', './controllers/bubble',
-        './controllers/interface',
+        './controllers/interface', './controllers/audio',
         './utils/modules', './network/packets'],
         function(Renderer, LocalStorage, Map, Socket, Player, Updater,
-                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info, Bubble, Interface) {
+                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info, Bubble, Interface, Audio) {
 
     return Class.extend({
 
@@ -32,6 +32,7 @@ define(['./renderer/renderer', './utils/storage',
             self.zoning = null;
             self.info = null;
             self.interface = null;
+            self.audio = null;
 
             self.player = null;
 
@@ -145,6 +146,8 @@ define(['./renderer/renderer', './utils/storage',
 
             self.setBubble(new Bubble(self));
 
+            self.setAudio(new Audio(self));
+
             if (!hasWorker)
                 self.loaded = true;
         },
@@ -217,8 +220,6 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onWelcome(function(data) {
-
-                log.info('Welcome? wtf?');
 
                 self.player.load(data);
 
@@ -850,6 +851,11 @@ define(['./renderer/renderer', './utils/storage',
         setInterface: function(intrface) {
             if (!this.interface)
                 this.interface = intrface;
+        },
+
+        setAudio: function(audio) {
+            if (!this.audio)
+                this.audio = audio;
         }
 
     });

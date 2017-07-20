@@ -69,6 +69,11 @@ Modules = {
         T: 84
     },
 
+    AudioTypes: {
+        Music: 0,
+        SFX: 1
+    },
+
     DamageColours: {
         'received': {
             fill: 'rgb(255, 50, 50)',

@@ -103,6 +103,9 @@ define(['jquery', '../interface/inventory',
 
             if (self.profile)
                 self.profile.hide();
+
+            if (self.game.input && self.game.input.chatHandler && self.game.input.chatHandler.input.is(':visible'))
+                self.game.input.chatHandler.hideInput();
         },
 
         displayNotify: function(message) {

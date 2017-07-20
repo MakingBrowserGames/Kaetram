@@ -29,11 +29,12 @@ define(function() {
                 settings: {
                     music: 100,
                     sfx: 100,
+                    brightness: 100,
+                    soundEnabled: true,
                     animateTiles: true,
                     centerCamera: true,
                     showNames: true,
-                    showLevels: true,
-                    brightness: 100
+                    showLevels: true
                 }
             }
         },
@@ -73,7 +74,7 @@ define(function() {
         },
 
         getSettings: function() {
-            return this.data.settings;
+            return this.data ? this.data.settings : null;
         }
 
     });

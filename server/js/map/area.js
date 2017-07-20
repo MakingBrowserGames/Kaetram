@@ -42,7 +42,6 @@ module.exports = Area = cls.Class.extend({
 
         if (index > -1)
             self.entities.splice(index, 1);
-
     },
 
     isFull: function() {

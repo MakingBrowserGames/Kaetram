@@ -155,6 +155,27 @@
 
 #navigator {
     position: absolute;
+    top: 89%;
+    left: 37%;
+}
+
+#sliders {
+    position: absolute;
+    float: right;
+    right: 10%;
+    top: 15%;
+}
+
+#texts {
+    font-family: 'AdvoCut', sans-serif;
+    position: absolute;
+    float: left;
+    left: 10%;
+    top: 15%;
+}
+
+#sfx {
+    position: absolute;
 }
 
 @media only screen and (min-width: 1501px) {
@@ -357,8 +378,6 @@
     }
 
     #navigator {
-        left: 360px;
-        top: 876px;
         width: 126px;
         height: 102px;
     }
@@ -374,22 +393,36 @@
 
     #previous {
         left: 0;
-        background-position: -240px -651px;
+        background-position: 0 -669px;
     }
 
     #previous.enabled {
-        background-position: -240px -702px;
+        background-position: 0 -720px;
         cursor: pointer;
     }
 
     #next {
         left: 63px;
-        background-position: -303px -702px;
+        background-position: -63px -720px;
     }
 
     #next.enabled {
-        background-position: -303px -651px;
+        background-position: -63px -669px;
         cursor: pointer;
+    }
+
+    #sliders {
+        width: 120px;
+        height: 60px;
+    }
+
+    #texts {
+        width: 180px;
+        height: 300px;
+    }
+
+    #sfx {
+        top: 60px;
     }
 
 }
@@ -637,8 +670,6 @@
     }
 
     #navigator {
-        left: 240px;
-        top: 584px;
         width: 84px;
         height: 68px;
     }
@@ -670,6 +701,25 @@
     #next.enabled {
         background-position: -42px -446px;
         cursor: pointer;
+    }
+
+    #sliders {
+        width: 80px;
+        height: 40px;
+    }
+
+    #texts {
+        width: 120px;
+        height: 200px;
+        font-size: 16px;
+    }
+
+    #texts p {
+        margin-bottom: 26px;
+    }
+
+    #sfx {
+        top: 40px;
     }
 
 }
@@ -919,8 +969,6 @@
     }
 
     #navigator {
-        left: 120px;
-        top: 292px;
         width: 42px;
         height: 34px;
     }
@@ -936,22 +984,36 @@
 
     #previous {
         left: 0;
-        background-position: -80px -217px;
+        background-position: 0 -223px;
     }
 
     #previous.enabled {
-        background-position: -80px -234px;
+        background-position: 0 -240px;
         cursor: pointer;
     }
 
     #next {
         left: 21px;
-        background-position: -101px -234px;
+        background-position: -21px -240px;
     }
 
     #next.enabled {
-        background-position: -101px -217px;
+        background-position: -21px -223px;
         cursor: pointer;
+    }
+
+    #sliders {
+        width: 40px;
+        height: 20px;
+    }
+
+    #texts {
+        width: 60px;
+        height: 100px;
+    }
+
+    #sfx {
+        top: 20px;
     }
 
 }

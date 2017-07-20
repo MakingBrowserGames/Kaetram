@@ -112,29 +112,11 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
 
                         case Modules.Keys.One:
 
-                            self.game.interface.profile.setPage(0);
-
-                            break;
-
-                        case Modules.Keys.Two:
-
-                            self.game.interface.profile.setPage(1);
-
-                            break;
-
-                        case Modules.Keys.Three:
-
-                            self.game.interface.profile.setPage(2);
-
-                            break;
-
-                        case Modules.Keys.Four:
-
                             self.renderer.camera.center();
 
                             break;
 
-                        case Modules.Keys.Five:
+                        case Modules.Keys.Two:
 
                             self.renderer.camera.decenter();
 

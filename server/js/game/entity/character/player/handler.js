@@ -33,6 +33,8 @@ module.exports = Handler = cls.Class.extend({
                         entity.combat.begin(self.player);
                 }
             });
+
+
         });
 
         self.player.onGroup(function() {
