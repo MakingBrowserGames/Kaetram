@@ -10,8 +10,10 @@ define(function() {
             self.game = game;
 
             self.audibles = {};
+            self.format = 'ogg';
 
             self.song = null;
+            self.songName = null;
 
             self.load();
         },
@@ -113,34 +115,25 @@ define(function() {
         play: function(type, name) {
             var self = this;
 
-            if (!self.isEnabled() || !type || !name || !self.fileExists(name))
+            if (!self.isEnabled() || !self.fileExists(name))
                 return;
 
+            log.info('playing??');
 
             switch(type) {
                 case Modules.AudioTypes.Music:
 
-                    self.fadeOut();
-
-                    if (!self.music[name]) {
-                        self.parse('audio/music', name, 2);
-
-                        log.info(self.audibles[name]);
-
-                        var music = self.audibles[name][0];
-
-                        music.loop = true;
-
-                        music.addEventListener('ended', function() {
-                            music.play();
-                        }, false);
-                    }
+                    self.fadeOut(self.song);
 
                     var song = self.get(name);
 
-                    song.sound.volume = 1;
+                    if (!song)
+                        return;
+                    
+                    song.volume = self.getMusicVolume();
+                    song.play();
 
-                    song.sound.play();
+                    self.song = song;
 
                     break;
 
@@ -154,24 +147,64 @@ define(function() {
                     if (!sound)
                         return;
 
+                    sound.volume = self.getSFXVolume();
+
+                    sound.play();
 
                     break;
             }
         },
 
+        update: function() {
+            var self = this;
+
+            if (!self.isEnabled())
+                return;
+
+            var song = self.getMusic(self.songName);
+
+            if (song && !(self.song && self.song.name === song.name)) {
+                if (self.game.renderer.mobile)
+                    self.reset(self.song);
+                else
+                    self.fadeSongOut();
+
+                if (song.name in self.music && !self.music[song.name]) {
+                    self.parse('audio/music/', song.name, 1);
+
+                    var music = self.audibles[song.name][0];
+
+                    music.loop = true;
+                    music.addEventListener('ended', function() {
+                        music.play();
+                    }, false);
+                }
+
+                self.play(Modules.AudioTypes.Music, song.name);
+
+            } else {
+
+                if (self.game.renderer.mobile)
+                    self.reset(self.song);
+                else
+                    self.fadeSongOut();
+            }
+
+        },
+
         fadeIn: function(song) {
             var self = this;
 
-            if (!song || song.sound.fadingIn)
+            if (!song || song.fadingIn)
                 return;
 
             self.clearFadeOut(song);
 
-            song.sound.fadingIn = setInterval(function() {
-                song.sound.volume += 0.02;
+            song.fadingIn = setInterval(function() {
+                song.volume += 0.02;
 
-                if (song.sound.volume >= 0.98) {
-                    song.sound.volume = 1;
+                if (song.volume >= self.getMusicVolume() - 0.02) {
+                    song.volume = self.getMusicVolume();
                     self.clearFadeIn(song);
                 }
 
@@ -181,37 +214,74 @@ define(function() {
         fadeOut: function(song, callback) {
             var self = this;
 
-            if (!song || song.sound.fadingOut)
+            if (!song || song.fadingOut)
                 return;
+
+            log.info('fading song');
+            log.info(song);
 
             self.clearFadeIn(song);
 
-            song.sound.fadingOut = setInterval(function() {
-                song.sound.volume -= 0.02;
+            song.fadingOut = setInterval(function() {
+                song.volume -= 0.02;
 
-                if (song.sound.volume <= 0.02) {
-                    song.sound.volume = 0;
+                if (song.volume <= 0.02) {
+                    song.volume = 0;
 
                     self.clearFadeOut(song);
 
-                    callback(song);
+                    if (callback)
+                        callback(song);
                 }
 
             }, 100);
         },
 
+        fadeSongOut: function() {
+            var self = this;
+
+            if (!self.song)
+                return;
+
+            self.fadeOut(self.song, function(song) { self.reset(song); });
+
+            self.song = null;
+        },
+
         clearFadeIn: function(song) {
-            if (song.sound.fadingIn) {
-                clearInterval(song.sound.fadingIn);
-                song.sound.fadingIn = null;
+            if (song.fadingIn) {
+                clearInterval(song.fadingIn);
+                song.fadingIn = null;
             }
         },
 
         clearFadeOut: function(song) {
-            if (song.sound.fadingOut) {
-                clearInterval(song.sound.fadingOut);
-                song.sound.fadingOut = null;
+            if (song.fadingOut) {
+                clearInterval(song.fadingOut);
+                song.fadingOut = null;
             }
+        },
+
+        reset: function(song) {
+            var self = this;
+
+            if (!song || !song.sound || !song.readyState > 0)
+                return;
+
+            song.pause();
+            song.currentTime = 0;
+        },
+
+        stop: function() {
+            var self = this;
+
+            if (!self.song)
+                return;
+
+            self.fadeOut(self.song, function() {
+                self.reset(self.song);
+                self.song = null;
+            });
         },
 
         fileExists: function(name) {
@@ -222,7 +292,7 @@ define(function() {
             var self = this;
 
             if (!self.audibles[name])
-                return;
+                return null;
 
             var audible = _.detect(self.audibles[name], function(audible) {
                 return audible.ended || audible.paused;
@@ -236,19 +306,30 @@ define(function() {
             return audible;
         },
 
+        getMusic: function(name) {
+            return {
+                sound: this.get(name),
+                name: name
+            }
+        },
+
+        setSongVolume: function(volume) {
+            this.song.volume = volume;
+        },
+
         getSFXVolume: function() {
-            return this.game.storage.data.settings.sfx;
+            return this.game.storage.data.settings.sfx / 100;
         },
 
         getMusicVolume: function() {
-            return this.game.storage.data.settings.music;
+            return this.game.storage.data.settings.music / 100;
         },
 
         isEnabled: function() {
             var self = this;
 
             if (!self.game.storage || !self.game.storage.data || !self.game.storage.data.settings)
-                return false;
+                return true;
 
             return this.game.storage.data.settings.soundEnabled;
         }

@@ -687,6 +687,10 @@ module.exports = World = cls.Class.extend({
         })
     },
 
+    getMusicAreas: function() {
+        return this.map.areas['Music'].musicAreas;
+    },
+
     onPopulationUpdate: function(callback) {
         this.populationCallback = callback;
     },

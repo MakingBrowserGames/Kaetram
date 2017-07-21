@@ -49,6 +49,8 @@ define(function() {
             self.messages[Packets.Heal] = self.receiveHeal;
             self.messages[Packets.Experience] = self.receiveExperience;
             self.messages[Packets.Death] = self.receiveDeath;
+            self.messages[Packets.Audio] = self.receiveAudio;
+
         },
 
         handleData: function(data) {
@@ -338,6 +340,13 @@ define(function() {
                 self.deathCallback(data.shift());
         },
 
+        receiveAudio: function(data) {
+            var self = this;
+
+            if (self.audioCallback)
+                self.audioCallback(data.shift());
+        },
+
         /**
          * Universal Callbacks
          */
@@ -444,6 +453,10 @@ define(function() {
 
         onDeath: function(callback) {
             this.deathCallback = callback;
+        },
+
+        onAudio: function(callback) {
+            this.audioCallback = callback;
         }
 
     });

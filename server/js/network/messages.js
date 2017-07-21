@@ -323,3 +323,15 @@ Messages.Death = Message.extend({
     }
 
 });
+
+Messages.Audio = Message.extend({
+
+    init: function(song) {
+        this.song = song;
+    },
+
+    serialize: function() {
+        return [Packets.Audio, this.song];
+    }
+
+});

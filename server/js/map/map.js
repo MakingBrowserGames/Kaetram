@@ -1,4 +1,4 @@
-/* global module */
+/* global module, log */
 
 var cls = require('../lib/class'),
     map = require('../../data/map/world_server.json'),
@@ -60,13 +60,13 @@ module.exports = Map = cls.Class.extend({
          * self.areas = {
          *      pvpAreas = {
          *          allPvpAreas
-         *      }
+         *      },
          *
          *      musicAreas = {
          *          allMusicAreas
-         *      }
+         *      },
          *
-         *      etc...
+         *      ...
          * }
          */
 

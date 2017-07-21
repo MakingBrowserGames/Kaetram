@@ -20,21 +20,8 @@ module.exports = Handler = cls.Class.extend({
         self.player.onMovement(function(x, y) {
             self.player.checkGroups();
 
-            var group = self.world.groups[self.player.group];
-
-            if (!group)
-                return;
-
-            _.each(group.entities, function(entity) {
-                if (entity && entity.type === 'mob') {
-                    var aggro = entity.canAggro(self.player);
-
-                    if (aggro)
-                        entity.combat.begin(self.player);
-                }
-            });
-
-
+            self.detectAggro();
+            self.detectMusic();
         });
 
         self.player.onGroup(function() {
@@ -45,6 +32,31 @@ module.exports = Handler = cls.Class.extend({
         self.player.connection.onClose(function() {
             self.world.removePlayer(self.player);
         });
+    },
+
+    detectAggro: function() {
+        var self = this,
+            group = self.world.groups[self.player.group];
+
+        if (!group)
+            return;
+
+        _.each(group.entities, function(entity) {
+            if (entity && entity.type === 'mob') {
+                var aggro = entity.canAggro(self.player);
+
+                if (aggro)
+                    entity.combat.begin(self.player);
+            }
+        });
+    },
+
+    detectMusic: function() {
+        var self = this,
+            musicArea = _.detect(self.world.getMusicAreas(), function(area) { return area.contains(self.player.x, self.player.y); });
+
+        if (self.player.currentSong !== musicArea.id)
+            self.player.updateMusic(musicArea.id);
     }
 
 });

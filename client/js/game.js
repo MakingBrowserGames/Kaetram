@@ -101,6 +101,9 @@ define(['./renderer/renderer', './utils/storage',
             self.zoning = null;
             self.info = null;
             self.interface = null;
+
+            self.audio.stop();
+            self.audio = null;
         },
 
         loadRenderer: function() {
@@ -646,6 +649,13 @@ define(['./renderer/renderer', './utils/storage',
                         return;
                 }
             });
+
+            self.messages.onAudio(function(song) {
+                self.audio.songName = song;
+
+                self.audio.update();
+            });
+
         },
 
         postLoad: function() {

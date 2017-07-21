@@ -8,6 +8,8 @@ define(['jquery', '../page'], function($, Page) {
             self._super('#settingsPage');
 
             self.game = game;
+            self.audio = game.audio;
+            self.storage = game.storage;
 
             self.volume = $('#volume');
             self.sfx = $('#sfx');
@@ -18,12 +20,21 @@ define(['jquery', '../page'], function($, Page) {
         load: function() {
             var self = this;
 
-            self.volume.on('input', function() {
+            self.volume.value = self.storage.data.settings.music;
+            self.sfx.value = self.storage.data.settings.sfx;
 
+            self.volume.on('input', function() {
+                self.audio.song.volume = this.value / 100;
             });
 
-            self.sfx.on('input', function() {
+            self.volume.change(function() {
+                self.storage.data.settings.music = this.value;
+                self.storage.save();
+            });
 
+            self.sfx.change(function() {
+                self.storage.data.settings.sfx = this.value;
+                self.storage.save();
             });
 
         }

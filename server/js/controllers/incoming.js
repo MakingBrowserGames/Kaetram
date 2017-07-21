@@ -218,6 +218,8 @@ module.exports = Incoming = cls.Class.extend({
         self.player.loadInventory();
 
         self.cleanSocket();
+
+        self.player.handler.detectMusic();
     },
 
     handleWho: function(message) {

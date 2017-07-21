@@ -54,6 +54,7 @@ module.exports = Player = Character.extend({
         self.abilities = new Abilities(self);
 
         self.introduced = false;
+        self.currentSong = null;
     },
 
     load: function(data) {
@@ -263,6 +264,14 @@ module.exports = Player = Character.extend({
         self.send(new Messages.Equipment(Packets.EquipmentOpcode.Equip, [type, Items.idToName(id), string, count, ability, abilityLevel]));
 
         self.save();
+    },
+
+    updateMusic: function(song) {
+        var self = this;
+
+        self.currentSong = song;
+
+        self.send(new Messages.Audio(song));
     },
 
     applyDamage: function(damage) {

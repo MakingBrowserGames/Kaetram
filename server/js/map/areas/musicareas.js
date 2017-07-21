@@ -1,4 +1,4 @@
-/* global module */
+/* global module, log */
 
 var cls = require('../../lib/class'),
     _ = require('underscore'),

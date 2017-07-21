@@ -13,7 +13,12 @@ define(function() {
         },
 
         load: function() {
-            this.data = storage.data ? this.create() : JSON.parse(storage.getItem(name));
+            var self = this;
+
+            if (storage.data)
+                self.data = JSON.parse(storage.getItem(name));
+            else
+                self.data = self.create();
         },
 
         create: function() {
@@ -36,7 +41,7 @@ define(function() {
                     showNames: true,
                     showLevels: true
                 }
-            }
+            };
         },
 
         save: function() {
