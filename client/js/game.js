@@ -1,4 +1,4 @@
-/* global Class, log, Packets, Modules, _ */
+/* global Class, log, Packets, Modules, Detect, _ */
 
 define(['./renderer/renderer', './utils/storage',
         './map/map', './network/socket', './entity/character/player/player',
@@ -331,8 +331,6 @@ define(['./renderer/renderer', './utils/storage',
                         if (forced)
                             entity.stop(true);
 
-                        log.info(teleport);
-
                         self.moveCharacter(entity, x, y);
 
                         break;
@@ -394,11 +392,16 @@ define(['./renderer/renderer', './utils/storage',
                 if (!entity)
                     return;
 
+                entity.dead = true;
+
                 if (entity.type === 'item') {
                     self.entities.unregisterPosition(entity);
                     delete self.entities.entities[entity.id];
                     return;
                 }
+
+                if (self.player.getDistance(entity) < 5)
+                    self.audio.play(Modules.AudioTypes.SFX, 'kill' + Math.floor(Math.random() * 2 + 1));
 
                 entity.hitPoints = 0;
 
@@ -430,17 +433,24 @@ define(['./renderer/renderer', './utils/storage',
 
                         var hitData = data.shift(),
                             damage = hitData.shift(),
-                            type = hitData.shift();
+                            type = hitData.shift(),
+                            isPlayer = target.id === self.player.id;
 
                         if (type === Modules.Hits.Damage) {
                             attacker.lookAt(target);
                             attacker.performAction(attacker.orientation, Modules.Actions.Attack);
 
-                            self.info.create(type, [damage, target.id === self.player.id], target.x, target.y);
+                            if (attacker.id === self.player.id && damage > 0)
+                                self.audio.play(Modules.AudioTypes.SFX, 'hit' + Math.floor(Math.random() * 2 + 1));
+
+                            self.info.create(type, [damage, isPlayer], target.x, target.y);
                         }
 
                         attacker.triggerHealthBar();
                         target.triggerHealthBar();
+
+                        if (isPlayer && damage > 0)
+                            self.audio.play(Modules.AudioTypes.SFX, 'hurt');
 
                         break;
 
@@ -522,6 +532,8 @@ define(['./renderer/renderer', './utils/storage',
                 if (withBubble) {
                     self.bubble.create(id, text, self.time, duration);
                     self.bubble.setTo(entity);
+
+                    self.audio.play(Modules.AudioTypes.SFX, 'npctalk');
                 }
 
                 if (entity.type === 'player')
@@ -653,7 +665,23 @@ define(['./renderer/renderer', './utils/storage',
             self.messages.onAudio(function(song) {
                 self.audio.songName = song;
 
+                if (Detect.isSafari() && !self.audio.song)
+                    return;
+
                 self.audio.update();
+            });
+
+            self.messages.onNPC(function(opcode, info) {
+
+                switch(opcode) {
+                    case Packets.NPCOpcode.Talk:
+                        var text = info;
+
+                        
+
+                        break;
+                }
+
             });
 
         },

@@ -1,3 +1,5 @@
+/* global log */
+
 define(['jquery', '../page'], function($, Page) {
 
     return Page.extend({
@@ -20,25 +22,46 @@ define(['jquery', '../page'], function($, Page) {
         load: function() {
             var self = this;
 
-            self.volume.value = self.storage.data.settings.music;
-            self.sfx.value = self.storage.data.settings.sfx;
+            self.volume.val(self.getMusicLevel());
+            self.sfx.val(self.getSFXLevel());
+
+            self.game.app.updateRange(self.volume);
+            self.game.app.updateRange(self.sfx);
 
             self.volume.on('input', function() {
                 self.audio.song.volume = this.value / 100;
             });
 
             self.volume.change(function() {
-                self.storage.data.settings.music = this.value;
-                self.storage.save();
+                self.setMusicLevel(this.value);
             });
 
             self.sfx.change(function() {
-                self.storage.data.settings.sfx = this.value;
-                self.storage.save();
+                self.setSFXLevel(this.value);
             });
+        },
 
+        setMusicLevel: function(musicLevel) {
+            var self = this;
+
+            self.storage.data.settings.music = musicLevel;
+            self.storage.save();
+        },
+
+        setSFXLevel: function(sfxLevel) {
+            var self = this;
+
+            self.storage.data.settings.sfx = sfxLevel;
+            self.storage.save();
+        },
+
+        getMusicLevel: function() {
+            return this.storage.data.settings.music;
+        },
+
+        getSFXLevel: function() {
+            return this.storage.data.settings.sfx;
         }
-
     });
 
 });

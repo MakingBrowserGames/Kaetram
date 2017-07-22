@@ -55,7 +55,7 @@ module.exports = Handler = cls.Class.extend({
         var self = this,
             musicArea = _.detect(self.world.getMusicAreas(), function(area) { return area.contains(self.player.x, self.player.y); });
 
-        if (self.player.currentSong !== musicArea.id)
+        if (musicArea && self.player.currentSong !== musicArea.id)
             self.player.updateMusic(musicArea.id);
     }
 

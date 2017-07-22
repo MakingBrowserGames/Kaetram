@@ -112,14 +112,7 @@ define(['jquery'], function($) {
             });
 
             $('input[type="range"]').on('input', function() {
-                var val = ($(this).val() - $(this).attr('min')) / ($(this).attr('max') - $(this).attr('min'));
-
-                $(this).css('background-image',
-                    '-webkit-gradient(linear, left top, right top, '
-                    + 'color-stop(' + val + ', #4d4d4d), '
-                    + 'color-stop(' + val + ', #C5C5C5)'
-                    + ')'
-                );
+                self.updateRange($(this));
             });
 
         },
@@ -416,6 +409,18 @@ define(['jquery'], function($) {
 
                 self.loggingIn = false;
             }
+        },
+
+        updateRange: function(obj) {
+            var self = this,
+                val = (obj.val() - obj.attr('min')) / (obj.attr('max') - obj.attr('min'));
+
+            obj.css('background-image',
+                '-webkit-gradient(linear, left top, right top, '
+                + 'color-stop(' + val + ', #4d4d4d), '
+                + 'color-stop(' + val + ', #C5C5C5)'
+                + ')'
+            );
         },
 
         updateOrientation: function() {

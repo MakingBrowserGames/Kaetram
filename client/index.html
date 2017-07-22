@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
 
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <meta property="og:title" content="Kaetram">
     <meta property="og:type" content="game">
@@ -48,8 +51,8 @@
                     </h1>
 
                     <form method="get" accept-charset="utf-8">
-                        <input type="text" id="loginNameInput" class="stroke" name="player-name" placeholder="Username" maxlength="32" autofocus>
-                        <input type="password" id="loginPasswordInput" class="stroke" name="player-password" placeholder="Password" maxlength="64">
+                        <input type="text" id="loginNameInput" class="stroke" name="player-name" placeholder="Username" maxlength="32" autocomplete="off" autofocus>
+                        <input type="password" id="loginPasswordInput" class="stroke" name="player-password" placeholder="Password" maxlength="64" autocomplete="off">
                     </form>
 
                     <div id="login"></div>
@@ -68,10 +71,10 @@
 
 
                     <form method="get" accept-charset="utf-8">
-                        <input type="text" id="registerNameInput" class="stroke" name="player-name" placeholder="Username" maxlength="32">
-                        <input type="password" id="registerPasswordInput" class="stroke" name="player-password" placeholder="Password" maxlength="64">
-                        <input type="password" id="registerPasswordConfirmationInput" class="stroke" name="player-password2" placeholder="Confirm Password" maxlength="64">
-                        <input type="email" id="registerEmailInput" class="stroke" name="player-email" placeholder="Email Address" maxlength="64">
+                        <input type="text" id="registerNameInput" class="stroke" name="player-name" placeholder="Username" maxlength="32" autocomplete="off">
+                        <input type="password" id="registerPasswordInput" class="stroke" name="player-password" placeholder="Password" maxlength="64" autocomplete="off">
+                        <input type="password" id="registerPasswordConfirmationInput" class="stroke" name="player-password2" placeholder="Confirm Password" maxlength="64" autocomplete="off">
+                        <input type="email" id="registerEmailInput" class="stroke" name="player-email" placeholder="Email Address" maxlength="64" autocomplete="off">
                     </form>
 
                     <div class="login">

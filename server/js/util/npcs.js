@@ -19,5 +19,12 @@ NPCs.idToName = function(id) {
     return null;
 };
 
+NPCs.getText = function(id) {
+
+    if (id in NPCs.Ids)
+        return NPCs.Ids[id].text;
+
+    return null;
+};
 
 module.exports = NPCs;

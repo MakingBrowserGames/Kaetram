@@ -253,6 +253,10 @@ define(['../character', './equipment/armour', './equipment/weapon',
                     self.boots = null;
                     break;
             }
+        },
+
+        getDistance: function(entity) {
+            return this._super(entity);
         }
 
     });

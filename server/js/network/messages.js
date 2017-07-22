@@ -335,3 +335,16 @@ Messages.Audio = Message.extend({
     }
 
 });
+
+Messages.NPC = Message.extend({
+
+    init: function(opcode, info) {
+        this.opcode = opcode;
+        this.info = info;
+    },
+
+    serialize: function() {
+        return [Packets.NPC, this.opcode, this.info];
+    }
+
+});

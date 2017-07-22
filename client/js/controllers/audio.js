@@ -1,4 +1,4 @@
-/* global log, _, Modules */
+/* global log, _, Detect, Modules */
 
 define(function() {
 
@@ -10,7 +10,7 @@ define(function() {
             self.game = game;
 
             self.audibles = {};
-            self.format = 'ogg';
+            self.format = 'mp3';
 
             self.song = null;
             self.songName = null;
@@ -90,14 +90,16 @@ define(function() {
 
             }, false);
 
-            sound.addEventListener('error', function(e) {
-                log.error('The audible: ' + name + ' could not be loaded.');
+            sound.addEventListener('error', function() {
+                log.error('The audible: ' + name + ' could not be loaded - unsupported extension?');
+
                 self.audibles[name] = null;
             }, false);
 
             sound.preload = 'auto';
             sound.autobuffer = true;
             sound.src = fullPath;
+
             sound.load();
 
             self.audibles[name] = [sound];
@@ -118,20 +120,23 @@ define(function() {
             if (!self.isEnabled() || !self.fileExists(name))
                 return;
 
-            log.info('playing??');
-
             switch(type) {
                 case Modules.AudioTypes.Music:
 
-                    self.fadeOut(self.song);
+                    self.fadeOut(self.song, function() {
+                        self.reset(self.song);
+                    });
 
                     var song = self.get(name);
 
                     if (!song)
                         return;
                     
-                    song.volume = self.getMusicVolume();
+                    song.volume = 0;
+
                     song.play();
+
+                    self.fadeIn(song);
 
                     self.song = song;
 
@@ -217,18 +222,13 @@ define(function() {
             if (!song || song.fadingOut)
                 return;
 
-            log.info('fading song');
-            log.info(song);
-
             self.clearFadeIn(song);
 
             song.fadingOut = setInterval(function() {
-                song.volume -= 0.02;
+                song.volume -= 0.08;
 
-                if (song.volume <= 0.02) {
+                if (song.volume <= 0.08) {
                     song.volume = 0;
-
-                    self.clearFadeOut(song);
 
                     if (callback)
                         callback(song);
@@ -263,10 +263,10 @@ define(function() {
         },
 
         reset: function(song) {
-            var self = this;
-
-            if (!song || !song.sound || !song.readyState > 0)
+            if (!song || !song.readyState > 0)
                 return;
+
+            log.info('I am dumb, I reset.');
 
             song.pause();
             song.currentTime = 0;

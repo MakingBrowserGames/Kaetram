@@ -236,6 +236,26 @@ input[type='range']::-webkit-slider-thumb:active {
     background-color: #fcda5c;
 }
 
+audio,
+video {
+    display: inline-block;
+}
+/**
+ * Add the correct display in iOS 4-7.
+ */
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+button,
+html [type="button"],
+[type="reset"],
+[type="submit"] {
+    -webkit-appearance: button;
+    /* 2 */
+}
+
 @media only screen and (min-width: 1501px) {
 
     #parchment h1, #loadCharacter h1, #createCharacter h1, #about h1 {

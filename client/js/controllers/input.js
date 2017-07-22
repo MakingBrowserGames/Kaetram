@@ -1,4 +1,4 @@
-/* global Modules, log, _, Packets */
+/* global Modules, log, _, Detect, Packets */
 
 define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat) {
 
@@ -122,6 +122,12 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
 
                             break;
 
+                        case Modules.Keys.Three:
+
+                            self.game.audio.song.play();
+
+                            break;
+
                         case Modules.Keys.Enter:
 
                             self.chatHandler.toggle();
@@ -198,6 +204,9 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
 
             if (self.game.interface)
                 self.game.interface.hideAll();
+
+            if (!self.game.audio.song && Detect.isSafari())
+                self.game.audio.update();
         },
 
         updateCursor: function() {

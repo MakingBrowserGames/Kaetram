@@ -73,7 +73,7 @@ module.exports = Character = Entity.extend({
     },
 
     getMaxHitPoints: function() {
-        return this.getMaxHitPoints();
+        return this.maxHitPoints;
     },
 
     setPosition: function(x, y) {

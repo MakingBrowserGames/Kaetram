@@ -9,7 +9,8 @@ var cls = require('../lib/class'),
     Messages = require('../network/messages'),
     sanitizer = require('sanitizer'),
     Commands = require('./commands'),
-    Items = require('../util/items');
+    Items = require('../util/items'),
+    Npcs = require('../util/npcs');
 
 module.exports = Incoming = cls.Class.extend({
 
@@ -347,8 +348,17 @@ module.exports = Incoming = cls.Class.extend({
         switch (opcode) {
 
             case Packets.TargetOpcode.Talk:
+                var npc = self.world.getEntityByInstance(instance);
 
+                if (!npc)
+                    return;
 
+                var text = Npcs.getText(npc.id);
+
+                if (!text)
+                    return;
+
+                self.player.send(new Messages.NPC(Packets.NPCOpcode.Talk, text));
 
                 break;
 

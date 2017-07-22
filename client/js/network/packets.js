@@ -30,7 +30,8 @@ Packets = {
     Heal: 28,
     Experience: 29,
     Death: 30,
-    Audio: 31
+    Audio: 31,
+    NPC: 32
 };
 
 Packets.IntroOpcode = {
@@ -90,4 +91,11 @@ Packets.NotificationOpcode = {
     Ok: 0,
     YesNo: 1,
     Text: 2
+};
+
+Packets.NPCOpcode = {
+    Talk: 0,
+    Store: 1,
+    Bank: 2,
+    Enchant: 3
 };

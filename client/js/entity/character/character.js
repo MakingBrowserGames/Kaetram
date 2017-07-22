@@ -442,6 +442,10 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
                 self.moveCallback();
         },
 
+        getDistance: function(entity) {
+            return this._super(entity);
+        },
+
         setName: function(name) {
             this._super(name);
         },

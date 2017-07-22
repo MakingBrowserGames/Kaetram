@@ -10,12 +10,13 @@
 
   "Villager": {
     "id": 2,
-    "name": "Bulk Bogan"
+    "name": "Joneses",
+    "text": ["Hello Vilaalger", " I name Joneses."]
   },
 
   "BeachNpc": {
     "id": 3,
-    "name": "Randy"
+    "name": "Bubba"
   },
 
   "Agent": {

@@ -86,8 +86,6 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
             if (page.isVisible())
                 return;
 
-            page.show();
-
             self.activePage = page;
             self.activeIndex = index;
 
@@ -99,6 +97,8 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
                 self.previous.addClass('enabled');
                 self.next.addClass('enabled');
             }
+
+            page.show();
         },
 
         show: function() {

@@ -649,15 +649,16 @@ module.exports = World = cls.Class.extend({
     removePlayer: function(player) {
         var self = this;
 
-        self.removeEntity(player);
         self.pushToAdjacentGroups(player.group, new Messages.Despawn(player.instance));
+
+        self.populationCallback(self.playerCount - 1);
+
+        self.removeEntity(player);
 
         self.cleanCombat(player);
 
         delete self.players[player.instance];
         delete self.packets[player.instance];
-
-        self.populationCallback(self.playerCount - 1);
     },
 
     removeLogging: function(remoteAddress) {
