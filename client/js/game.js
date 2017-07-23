@@ -652,14 +652,11 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onDeath(function(id) {
-                if (id === self.player.id) {
+                var entity = self.entities.get(id),
+                    isPlayer = entity.id === self.player.id;
 
-                } else {
-                    var entity = self.entities.get(id);
 
-                    if (!entity)
-                        return;
-                }
+
             });
 
             self.messages.onAudio(function(song) {
@@ -673,11 +670,30 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onNPC(function(opcode, info) {
 
+                log.info(opcode);
+                log.info(info);
+
                 switch(opcode) {
                     case Packets.NPCOpcode.Talk:
-                        var text = info;
+                        var npc = self.entities.get(info.id),
+                            messages = info.text;
 
-                        
+                        if (!npc || !messages)
+                            return;
+
+                        var message = npc.talk(messages);
+
+                        self.bubble.create(info.id, message, self.time, 5000);
+                        self.bubble.setTo(npc);
+
+                        var sound = 'npc';
+
+                        if (!message) {
+                            sound = 'npc-end';
+                            self.bubble.destroy(info.id);
+                        }
+
+                        self.audio.play(Modules.AudioTypes.SFX, sound);
 
                         break;
                 }

@@ -6,6 +6,24 @@ define(['../character'], function(Character) {
             var self = this;
 
             self._super(id, kind);
+
+            self.index = 0;
+        },
+
+        talk: function(messages) {
+            var self = this,
+                count = messages.length,
+                message;
+
+            if (self.index > count)
+                self.index = 0;
+
+            if (self.index < count)
+                message = messages[self.index];
+
+            self.index++;
+
+            return message;
         },
 
         idle: function() {

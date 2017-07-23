@@ -358,7 +358,10 @@ module.exports = Incoming = cls.Class.extend({
                 if (!text)
                     return;
 
-                self.player.send(new Messages.NPC(Packets.NPCOpcode.Talk, text));
+                self.player.send(new Messages.NPC(Packets.NPCOpcode.Talk, {
+                    id: instance,
+                    text: text
+                }));
 
                 break;
 
