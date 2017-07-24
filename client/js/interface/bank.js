@@ -6,6 +6,8 @@ define(['jquery', './container/container'], function($, Container) {
             var self = this;
 
             self.game = game;
+            self.player = game.player;
+
             self.body = $('#bank');
 
             self.container = new Container(size);

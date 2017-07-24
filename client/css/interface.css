@@ -178,6 +178,21 @@
     position: absolute;
 }
 
+#info {
+    position: absolute;
+    width: 100%;
+    height: 8%;
+    top: 78%;
+    text-align: center;
+}
+
+#checkMarks {
+    position: absolute;
+    float: right;
+    right: 10%;
+    top: 30%;
+}
+
 @media only screen and (min-width: 1501px) {
 
     #buttons {
@@ -413,12 +428,17 @@
 
     #sliders {
         width: 120px;
-        height: 60px;
+        height: 90px;
     }
 
     #texts {
-        width: 180px;
+        width: 240px;
         height: 300px;
+        font-size: 24px;
+    }
+
+    #texts p {
+        margin-bottom: 39px;
     }
 
     #sfx {
@@ -705,7 +725,12 @@
 
     #sliders {
         width: 80px;
-        height: 40px;
+        height: 60px;
+    }
+
+    #checkMarks {
+        width: 80px;
+        height: 140px;
     }
 
     #texts {
@@ -720,6 +745,45 @@
 
     #sfx {
         top: 40px;
+    }
+
+    .check {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background: url('../img/2/characterdialogsheet.png') -220px -481px;
+    }
+    
+    .check:hover {
+        background-position: -238px -481px;
+    }
+    
+    .check:active {
+        background-position: -256px -481px;
+    }
+
+    .check.active {
+        background-position: -274px -481px;
+    }
+    
+    .check.active:hover {
+        background-position: -292px -481px;
+    }
+
+    #soundCheck, #cameraCheck, #debugCheck {
+        left: 50%;
+    }
+
+    #soundCheck {
+        top: 20px;
+    }
+
+    #cameraCheck {
+        top: 60px;
+    }
+
+    #debugCheck {
+        top: 110px;
     }
 
 }
@@ -1004,12 +1068,18 @@
 
     #sliders {
         width: 40px;
-        height: 20px;
+        height: 30px;
     }
 
     #texts {
         width: 60px;
         height: 100px;
+        font-size: 8px;
+        top: 18%
+    }
+
+    #texts p {
+        margin-bottom: 6px;
     }
 
     #sfx {

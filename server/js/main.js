@@ -86,6 +86,7 @@ function Main() {
     shutdownHook.on('ShutdownStarted', function(e) {
         saveAll(worlds);
     });
+
 }
 
 function loadParser() {

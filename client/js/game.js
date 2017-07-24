@@ -141,8 +141,6 @@ define(['./renderer/renderer', './utils/storage',
 
             self.app.sendStatus('Loading interfaces');
 
-            self.setInterface(new Interface(self));
-
             self.setEntityController(new Entities(self));
 
             self.setInfo(new Info(self));
@@ -150,6 +148,8 @@ define(['./renderer/renderer', './utils/storage',
             self.setBubble(new Bubble(self));
 
             self.setAudio(new Audio(self));
+
+            self.setInterface(new Interface(self));
 
             if (!hasWorker)
                 self.loaded = true;
@@ -337,9 +337,7 @@ define(['./renderer/renderer', './utils/storage',
 
                     case Packets.MovementOpcode.Follow:
                         var follower = self.entities.get(info.shift()),
-                            followee = self.entities.get(info.shift()),
-                            isRanged = info.shift(),
-                            attackRange = info.shift();
+                            followee = self.entities.get(info.shift());
 
                         if (!followee || !follower)
                             return;
@@ -656,7 +654,6 @@ define(['./renderer/renderer', './utils/storage',
                     isPlayer = entity.id === self.player.id;
 
 
-
             });
 
             self.messages.onAudio(function(song) {
@@ -669,9 +666,6 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onNPC(function(opcode, info) {
-
-                log.info(opcode);
-                log.info(info);
 
                 switch(opcode) {
                     case Packets.NPCOpcode.Talk:

@@ -38,6 +38,7 @@ define(function() {
                     soundEnabled: true,
                     animateTiles: true,
                     centerCamera: true,
+                    debug: false,
                     showNames: true,
                     showLevels: true
                 }

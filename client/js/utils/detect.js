@@ -56,7 +56,7 @@ Detect.iOSVersion = function() {
     if(window.MSStream){
         // There is some iOS in Windows Phone...
         // https://msdn.microsoft.com/en-us/library/hh869301(v=vs.85).aspx
-        return false;
+        return '';
     }
     var match = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/),
         version;
@@ -70,7 +70,16 @@ Detect.iOSVersion = function() {
         return parseFloat(version.join('.'));
     }
 
-    return false;
+    return '';
+};
+
+Detect.androidVersion = function() {
+    var userAgent = navigator.userAgent.split('Android'), version;
+
+    if (userAgent.length > 1)
+        version = userAgent[1].split(';')[0];
+
+    return version;
 };
 
 Detect.isAppleDevice = function() {

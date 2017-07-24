@@ -15,6 +15,8 @@ define(function() {
             self.song = null;
             self.songName = null;
 
+            self.enabled = false;
+
             self.load();
         },
 
@@ -266,8 +268,6 @@ define(function() {
             if (!song || !song.readyState > 0)
                 return;
 
-            log.info('I am dumb, I reset.');
-
             song.pause();
             song.currentTime = 0;
         },
@@ -326,12 +326,7 @@ define(function() {
         },
 
         isEnabled: function() {
-            var self = this;
-
-            if (!self.game.storage || !self.game.storage.data || !self.game.storage.data.settings)
-                return true;
-
-            return this.game.storage.data.settings.soundEnabled;
+            return this.game.storage.data.settings.soundEnabled || this.enabled;
         }
 
     });

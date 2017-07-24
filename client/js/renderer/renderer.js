@@ -59,6 +59,7 @@ define(['jquery', './camera', './tile',
             self.selectedCellVisible = false;
 
             self.stopRendering = false;
+            self.debugging = false;
 
             self.load()
         },
@@ -112,7 +113,7 @@ define(['jquery', './camera', './tile',
 
             self.loadSizes();
 
-            if (self.firefox)
+            if (self.firefox || parseFloat(Detect.androidVersion()) < 6.0 || parseFloat(Detect.iOSVersion() < 9.0))
                 self.camera.centered = false;
         },
 
@@ -185,8 +186,7 @@ define(['jquery', './camera', './tile',
 
             self.drawInfos();
 
-
-            //self.drawDebugging();
+            self.drawDebugging();
 
             self.restoreAll();
 
@@ -238,6 +238,9 @@ define(['jquery', './camera', './tile',
 
         drawDebugging: function() {
             var self = this;
+
+            if (!self.debugging)
+                return;
 
             self.drawFPS();
 

@@ -1,4 +1,4 @@
-/* global log */
+/* global log, Detect */
 
 define(['jquery', '../page'], function($, Page) {
 
@@ -15,6 +15,12 @@ define(['jquery', '../page'], function($, Page) {
 
             self.volume = $('#volume');
             self.sfx = $('#sfx');
+
+            self.info = $('#info');
+
+            self.soundCheck = $('#soundCheck');
+            self.cameraCheck = $('#cameraCheck');
+            self.debugCheck = $('#debugCheck');
 
             self.load();
         },
@@ -39,6 +45,59 @@ define(['jquery', '../page'], function($, Page) {
             self.sfx.change(function() {
                 self.setSFXLevel(this.value);
             });
+
+            self.soundCheck.click(function() {
+                var active = self.soundCheck.hasClass('active');
+
+                if (active) {
+                    self.audio.enabled = true;
+
+                    self.audio.reset(self.audio.song);
+                    self.audio.song = null;
+                } else
+                    self.audio.update();
+
+                self.soundCheck.toggleClass('active');
+
+                self.setSound(active);
+            });
+
+            self.cameraCheck.click(function() {
+                var active = self.cameraCheck.hasClass('active');
+
+                self.game.renderer.camera.centered = active;
+
+                self.cameraCheck.toggleClass('active');
+
+                self.setCamera(active);
+            });
+
+            self.debugCheck.click(function() {
+                var active = self.debugCheck.hasClass('active');
+
+                self.debugCheck.toggleClass('active');
+
+                self.game.renderer.debugging = active;
+
+                self.setDebug(active);
+            });
+
+            if (self.audio.isEnabled())
+                self.soundCheck.addClass('active');
+
+            if (self.game.renderer.camera.centered)
+                self.cameraCheck.addClass('active');
+
+            if (self.game.renderer.debugging)
+                self.debugCheck.addClass('active');
+
+            if (!self.game.renderer.mobile)
+                return;
+
+            if (Detect.isAppleDevice())
+                self.info.text('iOS Version: ' + parseFloat(Detect.iOSVersion()));
+            else if (Detect.isAndroid())
+                self.info.text('Android Version: ' + parseFloat(Detect.androidVersion()));
         },
 
         setMusicLevel: function(musicLevel) {
@@ -52,6 +111,27 @@ define(['jquery', '../page'], function($, Page) {
             var self = this;
 
             self.storage.data.settings.sfx = sfxLevel;
+            self.storage.save();
+        },
+
+        setSound: function(state) {
+            var self = this;
+
+            self.storage.data.settings.soundEnabled = state;
+            self.storage.save();
+        },
+
+        setCamera: function(state) {
+            var self = this;
+
+            self.storage.data.settings.centerCamera = state;
+            self.storage.save();
+        },
+
+        setDebug: function(state) {
+            var self = this;
+
+            self.storage.data.settings.debug = state;
             self.storage.save();
         },
 
