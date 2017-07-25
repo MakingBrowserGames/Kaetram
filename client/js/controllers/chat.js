@@ -96,9 +96,7 @@ define(['jquery'], function($) {
 
             self.fadingTimeout = setTimeout(function() {
 
-                log.info('trying to hide.');
                 if (!self.isActive()) {
-                    log.info('hiding');
                     self.chat.fadeOut('slow');
 
                     self.visible = false;

@@ -447,6 +447,11 @@
         top: 108px;
     }
 
+    #checkMarks {
+        width: 120px;
+        height: 210px;
+    }
+
     #texts {
         width: 240px;
         height: 300px;
@@ -1150,15 +1155,20 @@
         top: 36px;
     }
 
+    #checkMarks {
+        width: 40px;
+        height: 70px;
+    }
+
     #texts {
         width: 60px;
         height: 100px;
         font-size: 8px;
-        top: 18%
+        top: 15%
     }
 
     #texts p {
-        margin-bottom: 10px;
+        margin-bottom: 9px;
     }
 
     .check {
@@ -1185,23 +1195,23 @@
     }
 
     #cameraCheck {
-        top: 17px;
+        top: 15px;
     }
 
     #debugCheck {
-        top: 35px;
+        top: 33px;
     }
 
     #animateCheck {
-        top: 52px;
+        top: 50px;
     }
 
     #nameCheck {
-        top: 70px;
+        top: 68px;
     }
 
     #levelCheck {
-        top: 87px;
+        top: 84px;
     }
 
 }

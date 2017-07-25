@@ -177,6 +177,10 @@ define(['./entityhandler'], function(EntityHandler) {
             return false;
         },
 
+        hasPath: function() {
+            return false;
+        },
+
         onReady: function(callback) {
             this.readyCallback = callback;
         },

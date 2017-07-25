@@ -21,11 +21,11 @@ define(['jquery', './camera', './tile',
             self.textContext = textCanvas.getContext('2d');
             self.cursorContext = cursor.getContext('2d');
 
-            self.context.mozImageSmoothingEnabled = false;
-            self.backContext.mozImageSmoothingEnabled = false;
-            self.foreContext.mozImageSmoothingEnabled = false;
-            self.textContext.mozImageSmoothingEnabled = true;
-            self.cursorContext.mozImageSmoothingEnabled = false;
+            self.context.imageSmoothingEnabled = false;
+            self.backContext.imageSmoothingEnabled = false;
+            self.foreContext.imageSmoothingEnabled = false;
+            self.textContext.imageSmoothingEnabled = true;
+            self.cursorContext.imageSmoothingEnabled = false;
 
             self.contexts = [self.backContext, self.foreContext, self.context];
             self.canvases = [self.background, self.entities, self.foreground, self.textCanvas, self.cursor];
@@ -88,7 +88,7 @@ define(['jquery', './camera', './tile',
             self.drawingScale = self.getDrawingScale();
 
             self.forEachContext(function(context) {
-                context.mozImageSmoothingEnabled = false;
+                context.imageSmoothingEnabled = false;
             });
         },
 
@@ -117,8 +117,11 @@ define(['jquery', './camera', './tile',
 
             self.loadSizes();
 
-            if (self.firefox || parseFloat(Detect.androidVersion()) < 6.0 || parseFloat(Detect.iOSVersion() < 9.0))
+            if (self.firefox || parseFloat(Detect.androidVersion()) < 6.0 || parseFloat(Detect.iOSVersion() < 9.0)) {
                 self.camera.centered = false;
+                self.game.storage.data.settings.centerCamera = false;
+                self.game.storage.save();
+            }
         },
 
         resize: function() {

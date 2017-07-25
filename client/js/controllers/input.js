@@ -154,6 +154,10 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
                 case Modules.Keys.A:
                 case Modules.Keys.S:
                 case Modules.Keys.D:
+                case Modules.Keys.Up:
+                case Modules.Keys.Down:
+                case Modules.Keys.Left:
+                case Modules.Keys.Right:
                     self.getPlayer().direction = null;
                     break;
             }

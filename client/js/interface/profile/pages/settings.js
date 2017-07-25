@@ -20,6 +20,7 @@ define(['jquery', '../page'], function($, Page) {
             self.brightness = $('#brightness');
 
             self.info = $('#info');
+            self.soundButton = $('#soundButton');
 
             self.soundCheck = $('#soundCheck');
             self.cameraCheck = $('#cameraCheck');
@@ -82,9 +83,33 @@ define(['jquery', '../page'], function($, Page) {
                     self.audio.song = null;
 
                     self.soundCheck.removeClass('active');
+                    self.soundButton.addClass('active');
                 } else {
                     self.audio.update();
+
                     self.soundCheck.addClass('active');
+                    self.soundButton.removeClass('active');
+                }
+            });
+
+            self.soundButton.click(function() {
+                var isActive = self.soundButton.hasClass('active');
+
+                self.audio.toggle();
+
+                self.setSound(isActive);
+
+                if (isActive) {
+                    self.audio.update();
+
+                    self.soundCheck.addClass('active');
+                    self.soundButton.removeClass('active');
+                } else {
+                    self.audio.reset(self.audio.song);
+                    self.audio.song = null;
+
+                    self.soundCheck.removeClass('active');
+                    self.soundButton.addClass('active');
                 }
             });
 
@@ -142,8 +167,11 @@ define(['jquery', '../page'], function($, Page) {
             });
 
 
-            if (self.getSound())
+            if (self.getSound()) {
                 self.soundCheck.addClass('active');
+                self.soundButton.removeClass('active');
+            } else
+                self.soundButton.addClass('active');
 
             if (self.getCamera())
                 self.cameraCheck.addClass('active');
@@ -171,14 +199,6 @@ define(['jquery', '../page'], function($, Page) {
                 self.renderer.drawLevels = false;
 
             self.loaded = true;
-
-            if (!self.renderer.mobile)
-                return;
-
-            if (Detect.isAppleDevice())
-                self.info.text('iOS Version: ' + parseFloat(Detect.iOSVersion()));
-            else if (Detect.isAndroid())
-                self.info.text('Android Version: ' + parseFloat(Detect.androidVersion()));
         },
 
         setMusicLevel: function(musicLevel) {
