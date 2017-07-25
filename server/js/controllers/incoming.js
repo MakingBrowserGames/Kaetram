@@ -428,10 +428,7 @@ module.exports = Incoming = cls.Class.extend({
                 if (target.combat.started || target.isDead() || target.type !== 'mob')
                     return;
 
-                target.combat.start();
-                target.setTarget(projectile.owner);
-                target.combat.addAttacker(projectile.owner);
-                target.combat.attack(projectile.owner);
+                target.begin(projectile.owner);
 
                 break;
         }

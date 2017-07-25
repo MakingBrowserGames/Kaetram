@@ -13,6 +13,9 @@ Kaetram To-Do List:
 - Combat Formula improvements
 
 
+- Fix keyboard movement while attacking
+
+
 
 Finished:
 

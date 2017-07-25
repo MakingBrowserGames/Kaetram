@@ -179,7 +179,7 @@ module.exports = World = cls.Class.extend({
     handleDamage: function(attacker, target, damage) {
         var self = this;
 
-        if (!attacker || !target || !damage)
+        if (!attacker || !target || isNaN(damage))
             return;
 
         target.hit(attacker);
