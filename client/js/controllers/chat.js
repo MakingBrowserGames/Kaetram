@@ -18,16 +18,6 @@ define(['jquery'], function($) {
 
             self.fadingDuration = 5000;
             self.fadingTimeout = null;
-
-            self.load();
-        },
-
-        load: function() {
-            var self = this;
-
-            self.button.click(function() {
-                self.key(Modules.Keys.Enter);
-            });
         },
 
         add: function(source, text) {
@@ -40,7 +30,6 @@ define(['jquery'], function($) {
             if (!self.isActive())
                 self.hideInput();
 
-            self.showChat();
             self.hideChat();
         },
 
@@ -69,7 +58,6 @@ define(['jquery'], function($) {
         toggle: function() {
             var self = this;
 
-            log.info('toggly');
             self.clean();
 
             if (self.visible && !self.isActive())
@@ -99,6 +87,8 @@ define(['jquery'], function($) {
             self.input.fadeIn('fast');
             self.input.val('');
             self.input.focus();
+
+            self.clean();
         },
 
         hideChat: function() {
@@ -106,9 +96,13 @@ define(['jquery'], function($) {
 
             self.fadingTimeout = setTimeout(function() {
 
-                self.chat.fadeOut('slow');
+                log.info('trying to hide.');
+                if (!self.isActive()) {
+                    log.info('hiding');
+                    self.chat.fadeOut('slow');
 
-                self.visible = false;
+                    self.visible = false;
+                }
 
             }, self.fadingDuration);
         },
@@ -121,21 +115,20 @@ define(['jquery'], function($) {
             self.input.val('');
             self.input.fadeOut('fast');
             self.input.blur();
+
+            self.hideChat();
         },
 
         clean: function() {
             var self = this;
 
-            if (self.fadingTimeout) {
-                clearTimeout(self.fadingTimeout);
-                self.fadingTimeout = null;
-            }
+            clearTimeout(self.fadingTimeout);
+            self.fadingTimeout = null;
         },
 
         isActive: function() {
             return this.input.is(':focus');
         }
-
     });
 
 });
