@@ -59,9 +59,13 @@ define(['jquery', './camera', './tile',
             self.selectedCellVisible = false;
 
             self.stopRendering = false;
+            self.animateTiles = true;
             self.debugging = false;
+            self.brightness = 100;
+            self.drawNames = true;
+            self.drawLevels = true;
 
-            self.load()
+            self.load();
         },
 
         stop: function() {
@@ -173,7 +177,6 @@ define(['jquery', './camera', './tile',
              * Rendering related draws
              */
 
-
             self.draw();
 
             self.drawAnimatedTiles();
@@ -210,7 +213,7 @@ define(['jquery', './camera', './tile',
                 var isHighTile = self.map.isHighTile(id),
                     context = isHighTile ? self.foreContext : self.backContext;
 
-                if (!self.map.isAnimatedTile(id))
+                if (!self.map.isAnimatedTile(id) || !self.animateTiles)
                     self.drawTile(context, id, self.tileset, self.tileset.width / self.tileSize, self.map.width, index);
 
             });
@@ -254,6 +257,9 @@ define(['jquery', './camera', './tile',
             var self = this;
 
             self.setCameraView(self.context);
+
+            if (!self.animateTiles)
+                return;
 
             self.forEachAnimatedTile(function(tile) {
                 self.drawTile(self.context, tile.id, self.tileset, self.tileset.width / self.tileSize, self.map.width, tile.index);
@@ -394,7 +400,7 @@ define(['jquery', './camera', './tile',
         drawName: function(entity) {
             var self = this;
 
-            if (entity.type !== 'player' || entity.hidden)
+            if (entity.type !== 'player' || entity.hidden || (!self.drawNames && !self.drawLevels))
                 return;
 
             var colour = entity.wanted ? 'red' : 'white',
@@ -411,7 +417,13 @@ define(['jquery', './camera', './tile',
             self.textContext.save();
             self.setCameraView(self.textContext);
             self.textContext.font = '14px AdvoCut';
-            self.drawText(entity.username, (entity.x + 8) * factor, (entity.y - 10) * factor, true, colour);
+
+            if (self.drawNames)
+                self.drawText(entity.username, (entity.x + 8) * factor, (entity.y - (self.drawLevels ? 20 : 10)) * factor, true, colour);
+
+            if (self.drawLevels)
+                self.drawText('Level ' + entity.level, (entity.x + 8) * factor, (entity.y - 10) * factor, true, colour);
+
             self.textContext.restore();
         },
 
@@ -571,8 +583,12 @@ define(['jquery', './camera', './tile',
         },
 
         updateAnimatedTiles: function() {
-            var self = this,
-                newTiles = [];
+            var self = this;
+
+            if (!self.animateTiles)
+                return;
+
+            var newTiles = [];
 
             self.forEachVisibleTile(function(id, index) {
                 /**
@@ -864,6 +880,15 @@ define(['jquery', './camera', './tile',
                 self.renderedFrame[0] = self.camera.x;
                 self.renderedFrame[1] = self.camera.y;
             }
+        },
+
+        adjustBrightness: function(level) {
+            var self = this;
+
+            if (level < 0 || level > 100)
+                return;
+
+            $('#textCanvas').css('background', 'rgba(0, 0, 0, ' + (0.5 - level / 200) + ')');
         },
 
         /**

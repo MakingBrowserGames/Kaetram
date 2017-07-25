@@ -168,6 +168,8 @@ define(function() {
             if (!self.isEnabled())
                 return;
 
+            log.info('updating?');
+
             var song = self.getMusic(self.songName);
 
             if (song && !(self.song && self.song.name === song.name)) {
@@ -286,6 +288,10 @@ define(function() {
 
         fileExists: function(name) {
             return (name in this.music) || (name in this.sounds);
+        },
+
+        toggle: function() {
+            this.enabled = !this.enabled;
         },
 
         get: function(name) {

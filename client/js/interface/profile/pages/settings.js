@@ -12,15 +12,23 @@ define(['jquery', '../page'], function($, Page) {
             self.game = game;
             self.audio = game.audio;
             self.storage = game.storage;
+            self.renderer = game.renderer;
+            self.camera = game.renderer.camera;
 
             self.volume = $('#volume');
             self.sfx = $('#sfx');
+            self.brightness = $('#brightness');
 
             self.info = $('#info');
 
             self.soundCheck = $('#soundCheck');
             self.cameraCheck = $('#cameraCheck');
             self.debugCheck = $('#debugCheck');
+            self.animateCheck = $('#animateCheck');
+            self.nameCheck = $('#nameCheck');
+            self.levelCheck = $('#levelCheck');
+
+            self.loaded = false;
 
             self.load();
         },
@@ -28,14 +36,26 @@ define(['jquery', '../page'], function($, Page) {
         load: function() {
             var self = this;
 
+            if (self.loaded)
+                return;
+
             self.volume.val(self.getMusicLevel());
             self.sfx.val(self.getSFXLevel());
+            self.brightness.val(self.getBrightness());
 
             self.game.app.updateRange(self.volume);
             self.game.app.updateRange(self.sfx);
+            self.game.app.updateRange(self.brightness);
+
+            self.renderer.adjustBrightness(self.getBrightness());
 
             self.volume.on('input', function() {
-                self.audio.song.volume = this.value / 100;
+                if (self.audio.song)
+                    self.audio.song.volume = this.value / 100;
+            });
+
+            self.brightness.on('input', function() {
+                self.renderer.adjustBrightness(this.value);
             });
 
             self.volume.change(function() {
@@ -46,30 +66,39 @@ define(['jquery', '../page'], function($, Page) {
                 self.setSFXLevel(this.value);
             });
 
+            self.brightness.change(function() {
+                self.setBrightness(this.value);
+            });
+
             self.soundCheck.click(function() {
-                var active = self.soundCheck.hasClass('active');
+                var isActive = self.soundCheck.hasClass('active');
 
-                if (active) {
-                    self.audio.enabled = true;
+                self.audio.toggle();
 
+                self.setSound(!isActive);
+
+                if (isActive) {
                     self.audio.reset(self.audio.song);
                     self.audio.song = null;
-                } else
+
+                    self.soundCheck.removeClass('active');
+                } else {
                     self.audio.update();
-
-                self.soundCheck.toggleClass('active');
-
-                self.setSound(active);
+                    self.soundCheck.addClass('active');
+                }
             });
 
             self.cameraCheck.click(function() {
                 var active = self.cameraCheck.hasClass('active');
 
-                self.game.renderer.camera.centered = active;
+                if (active)
+                    self.renderer.camera.decenter();
+                else
+                    self.renderer.camera.center();
 
                 self.cameraCheck.toggleClass('active');
 
-                self.setCamera(active);
+                self.setCamera(!active);
             });
 
             self.debugCheck.click(function() {
@@ -77,21 +106,73 @@ define(['jquery', '../page'], function($, Page) {
 
                 self.debugCheck.toggleClass('active');
 
-                self.game.renderer.debugging = active;
+                self.renderer.debugging = !active;
 
-                self.setDebug(active);
+                self.setDebug(!active);
             });
 
-            if (self.audio.isEnabled())
+            self.animateCheck.click(function() {
+                var active = self.animateCheck.hasClass('active');
+
+                self.animateCheck.toggleClass('active');
+
+                self.renderer.animateTiles = !active;
+
+                self.setAnimate(!active);
+            });
+
+            self.nameCheck.click(function() {
+                var active = self.nameCheck.hasClass('active');
+
+                self.nameCheck.toggleClass('active');
+
+                self.renderer.drawNames = !active;
+
+                self.setName(!active);
+            });
+
+            self.levelCheck.click(function() {
+                var active = self.levelCheck.hasClass('active');
+
+                self.levelCheck.toggleClass('active');
+
+                self.renderer.drawLevels = !active;
+
+                self.setName(!active);
+            });
+
+
+            if (self.getSound())
                 self.soundCheck.addClass('active');
 
-            if (self.game.renderer.camera.centered)
+            if (self.getCamera())
                 self.cameraCheck.addClass('active');
+            else
+                self.camera.centered = false;
 
-            if (self.game.renderer.debugging)
+            if (self.getDebug()) {
                 self.debugCheck.addClass('active');
+                self.renderer.debugging = true;
+            }
 
-            if (!self.game.renderer.mobile)
+            if (self.getAnimatedTiles())
+                self.animateCheck.addClass('active');
+            else
+                self.renderer.animateTiles = false;
+
+            if (self.getName())
+                self.nameCheck.addClass('active');
+            else
+                self.renderer.drawNames = false;
+
+            if (self.getLevel())
+                self.levelCheck.addClass('active');
+            else
+                self.renderer.drawLevels = false;
+
+            self.loaded = true;
+
+            if (!self.renderer.mobile)
                 return;
 
             if (Detect.isAppleDevice())
@@ -111,6 +192,13 @@ define(['jquery', '../page'], function($, Page) {
             var self = this;
 
             self.storage.data.settings.sfx = sfxLevel;
+            self.storage.save();
+        },
+
+        setBrightness: function(brightness) {
+            var self = this;
+
+            self.storage.data.settings.brightness = brightness;
             self.storage.save();
         },
 
@@ -135,13 +223,64 @@ define(['jquery', '../page'], function($, Page) {
             self.storage.save();
         },
 
+        setAnimate: function(state) {
+            var self = this;
+
+            self.storage.data.settings.animateTiles = state;
+            self.storage.save();
+        },
+
+        setName: function(state) {
+            var self = this;
+
+            self.storage.data.settings.showNames = state;
+            self.storage.save();
+        },
+
+        setLevel: function(state) {
+            var self = this;
+
+            self.storage.data.settings.showLevels = state;
+            self.storage.save();
+        },
+
         getMusicLevel: function() {
             return this.storage.data.settings.music;
         },
 
         getSFXLevel: function() {
             return this.storage.data.settings.sfx;
+        },
+
+        getBrightness: function() {
+            return this.storage.data.settings.brightness;
+        },
+
+        getSound: function() {
+            return this.storage.data.settings.soundEnabled;
+        },
+
+        getCamera: function() {
+            return this.storage.data.settings.centerCamera;
+        },
+
+        getDebug: function() {
+            return this.storage.data.settings.debug;
+        },
+
+        getAnimatedTiles: function() {
+            return this.storage.data.settings.animateTiles;
+        },
+
+        getName: function() {
+            return this.storage.data.settings.showNames;
+        },
+
+        getLevel: function() {
+            return this.storage.data.settings.showLevels;
         }
+
+
     });
 
 });

@@ -394,6 +394,9 @@ module.exports = Incoming = cls.Class.extend({
                 var attacker = self.world.getEntityByInstance(message.shift()),
                     target = self.world.getEntityByInstance(message.shift());
 
+                if (!target || !attacker)
+                    return;
+
                 attacker.setTarget(target);
 
                 attacker.combat.start();
@@ -401,7 +404,7 @@ module.exports = Incoming = cls.Class.extend({
 
                 attacker.combat.attack(target);
 
-                if (target.combat.isAttacked())
+                if (target.combat && target.combat.isAttacked())
                     target.combat.addAttacker(attacker);
 
                 break;

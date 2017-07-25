@@ -139,7 +139,7 @@ define(['./renderer/renderer', './utils/storage',
             self.setMessages(self.socket.messages);
             self.setInput(new Input(self));
 
-            self.app.sendStatus('Loading interfaces');
+            self.app.sendStatus('Loading controllers');
 
             self.setEntityController(new Entities(self));
 
@@ -151,8 +151,10 @@ define(['./renderer/renderer', './utils/storage',
 
             self.setInterface(new Interface(self));
 
-            if (!hasWorker)
+            if (!hasWorker) {
+                self.app.sendStatus(null);
                 self.loaded = true;
+            }
         },
 
         loadMap: function() {

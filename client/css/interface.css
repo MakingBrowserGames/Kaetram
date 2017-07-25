@@ -174,10 +174,6 @@
     top: 15%;
 }
 
-#sfx {
-    position: absolute;
-}
-
 #info {
     position: absolute;
     width: 100%;
@@ -190,7 +186,15 @@
     position: absolute;
     float: right;
     right: 10%;
-    top: 30%;
+    top: 40%;
+}
+
+#volume, #sfx, #brightness {
+    position: absolute;
+}
+
+#soundCheck, #cameraCheck, #debugCheck, #animateCheck, #nameCheck, #levelCheck {
+    left: 50%;
 }
 
 @media only screen and (min-width: 1501px) {
@@ -431,6 +435,18 @@
         height: 90px;
     }
 
+    #volume {
+        top: 3px;
+    }
+
+    #sfx {
+        top: 54px;
+    }
+
+    #brightness {
+        top: 108px;
+    }
+
     #texts {
         width: 240px;
         height: 300px;
@@ -438,11 +454,50 @@
     }
 
     #texts p {
-        margin-bottom: 39px;
+        margin-bottom: 30px;
     }
 
-    #sfx {
-        top: 60px;
+    .check {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background: url('../img/3/characterdialogsheet.png') -330px -723px;
+    }
+
+    .check:hover {
+        background-position: -357px -723px;
+    }
+
+    .check:active {
+        background-position: -384px -723px;
+    }
+
+    .check.active {
+        background-position: -411px -723px;
+    }
+
+    .check.active:hover {
+        background-position: -438px -723px;
+    }
+
+    #cameraCheck {
+        top: 51px;
+    }
+
+    #debugCheck {
+        top: 105px;
+    }
+
+    #animateCheck {
+        top: 156px;
+    }
+
+    #nameCheck {
+        top: 210px;
+    }
+
+    #levelCheck {
+        top: 261px;
     }
 
 }
@@ -725,7 +780,19 @@
 
     #sliders {
         width: 80px;
-        height: 60px;
+        height: 90px;
+    }
+
+    #volume {
+        top: 2px;
+    }
+
+    #sfx {
+        top: 36px;
+    }
+
+    #brightness {
+        top: 72px;
     }
 
     #checkMarks {
@@ -740,11 +807,7 @@
     }
 
     #texts p {
-        margin-bottom: 26px;
-    }
-
-    #sfx {
-        top: 40px;
+        margin-bottom: 20px;
     }
 
     .check {
@@ -770,20 +833,24 @@
         background-position: -292px -481px;
     }
 
-    #soundCheck, #cameraCheck, #debugCheck {
-        left: 50%;
-    }
-
-    #soundCheck {
-        top: 20px;
-    }
-
     #cameraCheck {
-        top: 60px;
+        top: 34px;
     }
 
     #debugCheck {
-        top: 110px;
+        top: 70px;
+    }
+
+    #animateCheck {
+        top: 104px;
+    }
+
+    #nameCheck {
+        top: 140px;
+    }
+
+    #levelCheck {
+        top: 174px;
     }
 
 }
@@ -1071,6 +1138,18 @@
         height: 30px;
     }
 
+    #volume {
+        top: 1px;
+    }
+
+    #sfx {
+        top: 18px;
+    }
+
+    #brightness {
+        top: 36px;
+    }
+
     #texts {
         width: 60px;
         height: 100px;
@@ -1079,11 +1158,50 @@
     }
 
     #texts p {
-        margin-bottom: 6px;
+        margin-bottom: 10px;
     }
 
-    #sfx {
-        top: 20px;
+    .check {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: url('../img/1/characterdialogsheet.png') -110px -241px;
+    }
+
+    .check:hover {
+        background-position: -119px -241px;
+    }
+
+    .check:active {
+        background-position: -128px -241px;
+    }
+
+    .check.active {
+        background-position: -137px -241px;
+    }
+
+    .check.active:hover {
+        background-position: -146px -241px;
+    }
+
+    #cameraCheck {
+        top: 17px;
+    }
+
+    #debugCheck {
+        top: 35px;
+    }
+
+    #animateCheck {
+        top: 52px;
+    }
+
+    #nameCheck {
+        top: 70px;
+    }
+
+    #levelCheck {
+        top: 87px;
     }
 
 }
