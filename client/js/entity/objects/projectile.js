@@ -91,6 +91,10 @@ define(['../entity'], function(Entity) {
             self.destY = y;
         },
 
+        hasPath: function() {
+            return false;
+        },
+
         updateAngle: function() {
             this.angle = Math.atan2(this.destY - this.y, this.destX - this.x) * (180 / Math.PI) - 90;
         },

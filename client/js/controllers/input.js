@@ -124,7 +124,7 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
 
                         case Modules.Keys.Three:
 
-                            self.game.audio.song.play();
+                            self.game.app.body.addClass('death');
 
                             break;
 
@@ -345,18 +345,6 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
 
         getPlayer: function() {
             return this.game.player;
-        },
-
-        onKey: function(callback) {
-            this.keyCallback = callback;
-        },
-
-        onRightClick: function(callback) {
-            this.rightClickCallback = callback;
-        },
-
-        onLeftClick: function(callback) {
-            this.leftClickCallback = callback;
         }
 
     });

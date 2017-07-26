@@ -203,7 +203,7 @@ define(['jquery'], function($) {
         getTileAnimationDelay: function(id) {
             var properties = this.animated[id + 1];
 
-            return properties.d ? properties.d : 100;
+            return properties.d ? properties.d : 150;
         },
 
         onReady: function(callback) {

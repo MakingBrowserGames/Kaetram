@@ -239,6 +239,9 @@ module.exports = Incoming = cls.Class.extend({
         var self = this,
             opcode = message.shift();
 
+        if (!self.player || self.player.dead)
+            return;
+
         switch (opcode) {
             case Packets.MovementOpcode.Request:
                 var requestX = message.shift(),
@@ -350,7 +353,7 @@ module.exports = Incoming = cls.Class.extend({
             case Packets.TargetOpcode.Talk:
                 var npc = self.world.getEntityByInstance(instance);
 
-                if (!npc)
+                if (!npc || npc.dead)
                     return;
 
                 var text = Npcs.getText(npc.id);
@@ -369,7 +372,7 @@ module.exports = Incoming = cls.Class.extend({
 
                 var target = self.world.getEntityByInstance(instance);
 
-                if (!target)
+                if (!target || target.dead)
                     return;
 
                 self.world.pushToAdjacentGroups(target.group, new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
@@ -394,7 +397,7 @@ module.exports = Incoming = cls.Class.extend({
                 var attacker = self.world.getEntityByInstance(message.shift()),
                     target = self.world.getEntityByInstance(message.shift());
 
-                if (!target || !attacker)
+                if (!target || target.dead || !attacker || attacker.dead)
                     return;
 
                 attacker.setTarget(target);
@@ -420,7 +423,7 @@ module.exports = Incoming = cls.Class.extend({
                 var projectile = self.world.getEntityByInstance(message.shift()),
                     target = self.world.getEntityByInstance(message.shift());
 
-                if (!target || !projectile)
+                if (!target || target.dead || !projectile)
                     return;
 
                 self.world.handleDamage(projectile.owner, target, projectile.damage);

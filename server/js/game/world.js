@@ -228,9 +228,8 @@ module.exports = World = cls.Class.extend({
             if (drop)
                 self.dropItem(drop.id, drop.count, deathX, deathY);
 
-        } else if (character.type === 'player') {
-            //TODO - Handle player death here...
-        }
+        } else if (character.type === 'player')
+            character.die();
     },
 
     createProjectile: function(dynamic, info) {
@@ -622,10 +621,6 @@ module.exports = World = cls.Class.extend({
 
         self.removeFromGroups(entity);
     },
-
-    /**
-     * @param {{combat: Combat}} entity
-     */
 
     cleanCombat: function(entity) {
         entity.combat.stop();

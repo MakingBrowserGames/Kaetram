@@ -21,6 +21,7 @@ define(['jquery'], function($) {
             self.intro = $('#intro');
 
             self.loginButton = $('#login');
+            self.createButton = $('#createButton');
             self.registerButton = $('#newCharacter');
             self.helpButton = $('#helpButton');
             self.loading = $('.loader');
@@ -44,6 +45,10 @@ define(['jquery'], function($) {
             var self = this;
 
             self.loginButton.click(function() {
+                self.login();
+            });
+
+            self.createButton.click(function() {
                 self.login();
             });
 
@@ -162,6 +167,10 @@ define(['jquery'], function($) {
             self.body.removeClass('game');
             self.body.removeClass('started');
             self.body.addClass('intro');
+        },
+
+        showDeath: function() {
+
         },
 
         openScroll: function(origin, destination) {

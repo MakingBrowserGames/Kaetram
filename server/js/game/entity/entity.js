@@ -20,6 +20,8 @@ module.exports = Entity = cls.Class.extend({
 
         self.combat = null;
 
+        self.dead = false;
+
         self.recentGroups = [];
     },
 

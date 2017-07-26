@@ -655,7 +655,10 @@ define(['./renderer/renderer', './utils/storage',
                 var entity = self.entities.get(id),
                     isPlayer = entity.id === self.player.id;
 
+                if (!isPlayer)
+                    return;
 
+                self.app.body.addClass('death');
             });
 
             self.messages.onAudio(function(song) {

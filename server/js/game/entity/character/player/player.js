@@ -266,6 +266,21 @@ module.exports = Player = Character.extend({
         self.save();
     },
 
+    die: function() {
+        var self = this;
+
+        self.dead = true;
+
+        if (self.deathCallback)
+            self.deathCallback();
+
+        self.world.cleanCombat(self);
+
+        self.pushToAdjacentGroups(self.group, new Messages.Despawn(self.instance));
+
+        self.send(new Messages.Death(self.instance));
+    },
+
     updateMusic: function(song) {
         var self = this;
 
@@ -553,6 +568,10 @@ module.exports = Player = Character.extend({
 
     onHit: function(callback) {
         this.hitCallback = callback;
+    },
+
+    onDeath: function(callback) {
+        this.deathCallback = callback;
     }
 
 });

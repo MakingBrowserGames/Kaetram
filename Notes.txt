@@ -1,20 +1,19 @@
 Kaetram To-Do List:
 
-- Begin moving all CSS to Sass
 - Directly download map data from the server.
 - Save player orientation upon logout.
-- Centre properly inside buildings
 - Review combat and test out PvP
 - Load projectiles prior to attacking if necessary.
 - Handle Player death
 - Multi-combat smoothening
-- Drop Rates improvements?
-- Multi-page profile
 - Combat Formula improvements
 
-
-- Fix keyboard movement while attacking
-
+- Add experience bar under abilities
+- Fix animation speed
+- Move container down on mobile
+- Fix combat initialization delay
+- Slow down fire animation
+- Implement quick actions - for hotkey
 
 
 Finished:
@@ -39,6 +38,9 @@ Finished:
 - Change the notification screen for mobile devices ✓
 - Inventory Container ✓
 - Get proper button interfaces for "Login," "New Character" and "Back." ✓
+- Multi-page profile ✓
+- Drops ✓
+- Fix keyboard movement while attacking ✓
 
 
 Reasoning:
