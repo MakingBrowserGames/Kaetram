@@ -21,10 +21,13 @@ define(['jquery'], function($) {
             self.intro = $('#intro');
 
             self.loginButton = $('#login');
-            self.createButton = $('#createButton');
+            self.createButton = $('#play');
             self.registerButton = $('#newCharacter');
             self.helpButton = $('#helpButton');
+            self.cancelButton = $('#cancelButton');
             self.loading = $('.loader');
+
+            self.rememberMe = $('#rememberMe');
 
             self.loginFields = [];
             self.registerFields = [];
@@ -54,6 +57,21 @@ define(['jquery'], function($) {
 
             self.registerButton.click(function() {
                 self.openScroll('loadCharacter', 'createCharacter');
+            });
+
+            self.cancelButton.click(function() {
+                self.openScroll('createCharacter', 'loadCharacter');
+            });
+
+            self.rememberMe.click(function() {
+                if (!self.game || !self.game.storage)
+                    return;
+
+                var active = self.rememberMe.hasClass('active');
+
+                self.rememberMe.toggleClass('active');
+
+                self.game.storage.toggleRemember(!active);
             });
 
             window.scrollTo(0, 1);
@@ -271,12 +289,12 @@ define(['jquery'], function($) {
                     }
 
                     if (registerPasswordConfirmation.val() !== registerPassword.val()) {
-                        self.sendError(registerPasswordConfirmation, 'Please ensure the two passwords match!');
+                        self.sendError(registerPasswordConfirmation, 'The passwords do not match!');
                         return false;
                     }
 
                     if (!email.val() || !self.verifyEmail(email.val())) {
-                        self.sendError(email, 'You must enter a valid email to register.');
+                        self.sendError(email, 'An email is required!');
                         return false;
                     }
 
@@ -398,26 +416,32 @@ define(['jquery'], function($) {
 
             self.revertLoader();
 
+            self.toggleTyping(toggle);
+
+            self.loggingIn = toggle;
+
             if (toggle) {
-                self.loginButton.fadeOut('slow');
-                self.registerButton.fadeOut('slow');
                 self.loading.removeAttr('hidden');
 
                 self.loginButton.addClass('disabled');
                 self.registerButton.addClass('disabled');
 
-                self.loggingIn = true;
-
             } else {
-                self.loginButton.fadeIn('slow');
-                self.registerButton.fadeIn('slow');
                 self.loading.attr('hidden', true);
 
                 self.loginButton.removeClass('disabled');
                 self.registerButton.removeClass('disabled');
-
-                self.loggingIn = false;
             }
+        },
+
+        toggleTyping: function(state) {
+            var self = this;
+
+            if (self.loginFields)
+                _.each(self.loginFields, function(field) { field.prop('readonly', state); });
+
+            if (self.registerFields)
+                _.each(self.registerFields, function(field) { field.prop('readOnly', state); })
         },
 
         updateRange: function(obj) {

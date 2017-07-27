@@ -400,12 +400,11 @@ module.exports = Incoming = cls.Class.extend({
                 if (!target || target.dead || !attacker || attacker.dead)
                     return;
 
-                attacker.setTarget(target);
-
                 attacker.combat.start();
-                attacker.setTarget(target);
 
                 attacker.combat.attack(target);
+
+                attacker.setTarget(target);
 
                 if (target.combat && target.combat.isAttacked())
                     target.combat.addAttacker(attacker);

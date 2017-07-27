@@ -276,8 +276,6 @@ module.exports = Player = Character.extend({
 
         self.world.cleanCombat(self);
 
-        self.pushToAdjacentGroups(self.group, new Messages.Despawn(self.instance));
-
         self.send(new Messages.Death(self.instance));
     },
 

@@ -28,7 +28,8 @@ define(function() {
                 player: {
                     username: '',
                     password: '',
-                    autoLogin: true
+                    autoLogin: false,
+                    rememberMe: false
                 },
 
                 settings: {
@@ -53,6 +54,13 @@ define(function() {
         clear: function() {
             storage.removeItem(name);
             this.data = this.create();
+        },
+
+        toggleRemember: function(toggle) {
+            var self = this;
+
+            self.data.player.rememberMe = toggle;
+            self.save();
         },
 
         setPlayer: function(option, value) {

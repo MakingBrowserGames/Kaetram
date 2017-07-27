@@ -17,7 +17,7 @@
   "localDebug": false,
   "worlds": 1,
   "maxPlayers": 200,
-  "gver": 1,
+  "gver": 2,
   "updateTime": 200,
 
   "forceCollisions": false

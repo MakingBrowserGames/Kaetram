@@ -114,6 +114,8 @@ body {
 .validation-summary {
     margin: .5em;
     min-height: 1em;
+    position: absolute;
+    left: 33%;
 }
 
 .validation-error {
@@ -206,12 +208,35 @@ body {
     top: 65%;
 }
 
+#continue, #cancelButton, #play {
+    top: 70%;
+}
+
 #login {
     left: 15%;
 }
 
+#cancelButton {
+    left: 10%;
+}
+
 #newCharacter {
     left: 60%;
+}
+
+#play {
+    left: 65%;
+}
+
+#rememberMe {
+    top: 57%;
+    left: 22%;
+}
+
+#rememberMeText {
+    position: absolute;
+    top: 57%;
+    left: 24%;
 }
 
 input[type="range"] {
@@ -386,7 +411,7 @@ html [type="button"],
         text-shadow:3px 3px 0 #373737, 3px -3px 0 #373737, 0 3px 0 #373737, 3px 0 0 #373737, -3px 3px 0 #373737, -3px -3px 0 #373737, 0 -3px 0 #373737, 0 3px 0 #373737, -3px 0 0 #373737;
     }
 
-    #login, #newCharacter {
+    #login, #newCharacter, #continue, #cancelButton, #play {
         position: absolute;
         width: 306px;
         height: 81px;
@@ -423,6 +448,64 @@ html [type="button"],
 
     #newCharacter.disabled {
         background-position: -618px -261px;
+    }
+
+    #continue {
+        background-position: -1242px 0;
+    }
+
+    #continue:hover {
+        background-position: -1242px -87px;
+    }
+
+    #continue:active {
+        background-position: -1242px -174px;
+    }
+
+    #continue.disabled {
+        background-position: -1242px -261px;
+    }
+
+    #cancelButton {
+        background-position: -933px 0;
+    }
+
+    #cancelButton:hover {
+        background-position: -933px -87px;
+    }
+
+    #cancelButton:active {
+        background-position: -933px -174px;
+    }
+
+    #cancelButton.disabled {
+        background-position: -933px -261px;
+    }
+
+    #play {
+        background-position: 0 0;
+    }
+
+    #play:hover {
+        background-position: 0 -87px;
+    }
+
+    #play:active {
+        background-position: 0 -174px;
+    }
+
+    #play.disabled {
+        background-position: 0 -261px;
+    }
+
+    #rememberMeText {
+        width: 150px;
+        height: 24px;
+        font-size: 20px;
+    }
+
+    .validation-summary {
+        width: 384px;
     }
 
     input[type="range"] {
@@ -563,7 +646,7 @@ html [type="button"],
         text-shadow:2px 2px 0 #373737, 2px -2px 0 #373737, 0 2px 0 #373737, 2px 0 0 #373737, -2px 2px 0 #373737, -2px -2px 0 #373737, 0 -2px 0 #373737, 0 2px 0 #373737, -2px 0 0 #373737;
     }
 
-    #login, #newCharacter {
+    #login, #newCharacter, #continue, #cancelButton, #play {
         position: absolute;
         width: 204px;
         height: 54px;
@@ -600,6 +683,64 @@ html [type="button"],
 
     #newCharacter.disabled {
         background-position: -412px -174px;
+    }
+
+    #continue {
+        background-position: -828px 0;
+    }
+
+    #continue:hover {
+        background-position: -828px -58px;
+    }
+
+    #continue:active {
+        background-position: -828px -116px;
+    }
+
+    #continue.disabled {
+        background-position: -828px -174px;
+    }
+
+    #cancelButton {
+        background-position: -622px 0;
+    }
+
+    #cancelButton:hover {
+        background-position: -622px -58px;;
+    }
+
+    #cancelButton:active {
+        background-position: -622px -116px;
+    }
+
+    #cancelButton.disabled {
+        background-position: -622px -174px;
+    }
+
+    #play {
+        background-position: 0 0;
+    }
+
+    #play:hover {
+        background-position: 0 -58px;
+    }
+
+    #play:active {
+        background-position: 0 -116px;
+    }
+
+    #play.disabled {
+        background-position: 0 -174px;
+    }
+
+    #rememberMeText {
+        width: 100px;
+        height: 15px;
+        font-size: 15px;
+    }
+
+    .validation-summary {
+        width: 256px;
     }
 
     input[type="range"] {
@@ -694,7 +835,7 @@ html [type="button"],
     }
 
     .validation-error, .status {
-        font-size: 11px;
+        font-size: 8px;
     }
 
     #bubbles {
@@ -735,7 +876,7 @@ html [type="button"],
         text-shadow:1px 1px 0 #373737, 1px -1px 0 #373737, 0 1px 0 #373737, 1px 0 0 #373737, -1px 1px 0 #373737, -1px -1px 0 #373737, 0 -1px 0 #373737, 0 1px 0 #373737, -1px 0 0 #373737;
     }
 
-    #login, #newCharacter {
+    #login, #newCharacter, #continue, #cancelButton, #play {
         position: absolute;
         width: 102px;
         height: 27px;
@@ -772,6 +913,64 @@ html [type="button"],
 
     #newCharacter.disabled {
         background-position: -206px -87px;
+    }
+
+    #continue {
+        background-position: -414px 0;
+    }
+    
+    #continue:hover {
+        background-position: -414px -29px;
+    }
+    
+    #continue:active {
+        background-position: -414px -58px;
+    }
+    
+    #continue.disabled {
+        background-position: -414px -87px;
+    }
+
+    #cancelButton {
+        background-position: -311px 0;
+    }
+    
+    #cancelButton:hover {
+        background-position: -311px -29px;;
+    }
+
+    #cancelButton:active {
+        background-position: -311px -58px;
+    }
+    
+    #cancelButton.disabled {
+        background-position: -311px -87px;
+    }
+    
+    #play {
+        background-position: 0 0;
+    }
+    
+    #play:hover {
+        background-position: 0 -29px;
+    }
+    
+    #play:active {
+        background-position: 0 -58px;
+    }
+    
+    #play.disabled {
+        background-position: 0 -87px;
+    }
+
+    #rememberMeText {
+        width: 50px;
+        height: 8px;
+        font-size: 8px;
+    }
+
+    .validation-summary {
+        width: 128px;
     }
 
     input[type="range"] {

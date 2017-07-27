@@ -182,12 +182,13 @@ module.exports = World = cls.Class.extend({
         if (!attacker || !target || isNaN(damage))
             return;
 
-        target.hit(attacker);
+        attacker.hit(target);
+
         target.applyDamage(damage);
 
         self.pushToAdjacentGroups(target.group, new Messages.Points(target.instance, target.getHitPoints(), null));
 
-        if (target.hitPoints < 1) {
+        if (target.getHitPoints() < 1) {
 
             target.combat.forEachAttacker(function(attacker) {
 

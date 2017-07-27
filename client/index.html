@@ -51,9 +51,12 @@
                     </h1>
 
                     <form method="get" accept-charset="utf-8">
-                        <input type="text" id="loginNameInput" class="stroke" name="player-name" placeholder="Username" maxlength="32" autocomplete="off" autofocus>
-                        <input type="password" id="loginPasswordInput" class="stroke" name="player-password" placeholder="Password" maxlength="64" autocomplete="off">
+                        <input type="text" id="loginNameInput" class="stroke" name="player-name" placeholder="Username" maxlength="32" autocomplete="off" readonly autofocus>
+                        <input type="password" id="loginPasswordInput" class="stroke" name="player-password" placeholder="Password" maxlength="64" readonly autocomplete="off">
                     </form>
+
+                    <div id="rememberMe" class="check"></div>
+                    <div id="rememberMeText">Remember Me</div>
 
                     <div id="login"></div>
                     <div id="newCharacter"></div>
@@ -77,15 +80,11 @@
                         <input type="email" id="registerEmailInput" class="stroke" name="player-email" placeholder="Email Address" maxlength="64" autocomplete="off">
                     </form>
 
-                    <div id="createButton" class="login">
-                        <span class="link">Create</span>
-                    </div>
+                    <div id="play"></div>
 
                     <p></p>
 
-                    <div class="cancel">
-                        <span class="link">Cancel</span>
-                    </div>
+                    <div id="cancelButton"></div>
 
                     <div class="validation-summary"></div>
 

@@ -151,6 +151,8 @@ define(['./renderer/renderer', './utils/storage',
 
             self.setInterface(new Interface(self));
 
+            self.implementStorage();
+
             if (!hasWorker) {
                 self.app.sendStatus(null);
                 self.loaded = true;
@@ -221,6 +223,16 @@ define(['./renderer/renderer', './utils/storage',
                         pass = loginInfo[1].val();
 
                     self.socket.send(Packets.Intro, [Packets.IntroOpcode.Login, name, pass]);
+
+                    if (self.hasRemember()) {
+                        self.storage.data.player.username = name;
+                        self.storage.data.player.password = pass;
+                    } else {
+                        self.storage.data.player.username = '';
+                        self.storage.data.player.password = '';
+                    }
+
+                    self.storage.save();
                 }
             });
 
@@ -732,6 +744,26 @@ define(['./renderer/renderer', './utils/storage',
 
         },
 
+        implementStorage: function() {
+            var self = this,
+                loginName = $('#loginNameInput'),
+                loginPassword = $('#loginPasswordInput');
+
+            loginName.prop('readonly', false);
+            loginPassword.prop('readonly', false);
+
+            if (!self.hasRemember())
+                return;
+
+            if (self.getStorageUsername() !== '')
+                loginName.val(self.getStorageUsername());
+
+            if (self.getStoragePassword() !== '')
+                loginPassword.val(self.getStoragePassword());
+
+            $('#rememberMe').addClass('active');
+        },
+
         setPlayerMovement: function(direction) {
             this.player.direction = direction;
         },
@@ -790,14 +822,15 @@ define(['./renderer/renderer', './utils/storage',
             self.app.showMenu();
 
             if (noError) {
-                self.app.toggleLogin(false);
-                self.app.updateLoader('');
                 self.app.sendError(null, 'You have been disconnected from the server');
                 self.app.statusMessage = null;
             }
 
             self.loadRenderer();
             self.loadControllers();
+
+            self.app.toggleLogin(false);
+            self.app.updateLoader('');
         },
 
         resize: function() {
@@ -807,9 +840,7 @@ define(['./renderer/renderer', './utils/storage',
         },
 
         createPlayer: function() {
-            var self = this;
-
-            self.player = new Player();
+            this.player = new Player();
         },
 
         getScaleFactor: function() {
@@ -845,6 +876,18 @@ define(['./renderer/renderer', './utils/storage',
 
                 return items[_.keys(items)[0]];
             }
+        },
+
+        getStorageUsername: function() {
+            return this.storage.data.player.username;
+        },
+
+        getStoragePassword: function() {
+            return this.storage.data.player.password;
+        },
+
+        hasRemember: function() {
+            return this.storage.data.player.rememberMe;
         },
 
         setRenderer: function(renderer) {
