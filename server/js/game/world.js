@@ -182,7 +182,9 @@ module.exports = World = cls.Class.extend({
         if (!attacker || !target || isNaN(damage))
             return;
 
-        attacker.hit(target);
+        //Stop screwing with this - it's so the target retaliates.
+
+        target.hit(attacker);
 
         target.applyDamage(damage);
 
@@ -225,6 +227,8 @@ module.exports = World = cls.Class.extend({
             character.destroy();
 
             var drop = character.getDrop();
+
+            log.info(drop);
 
             if (drop)
                 self.dropItem(drop.id, drop.count, deathX, deathY);

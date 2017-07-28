@@ -70,10 +70,23 @@ define(function() {
                     self.socket.send(Packets.Target, [self.player.target.type === 'mob' ? Packets.TargetOpcode.Attack : Packets.TargetOpcode.Talk, self.player.target.id]);
                     self.player.lookAt(self.player.target);
                 }
+
+                self.input.setPassiveTarget();
             });
 
             self.player.onBeforeStep(function() {
                 self.entities.unregisterPosition(self.player);
+
+                if (!self.isAttackable())
+                    return;
+
+                if (self.player.isRanged()) {
+                    if (self.player.getDistance(self.player.target) < 7)
+                        self.player.stop();
+                } else {
+                    self.input.selectedX = self.player.target.gridX;
+                    self.input.selectedY = self.player.target.gridY;
+                }
             });
 
             self.player.onStep(function() {
@@ -82,9 +95,6 @@ define(function() {
 
                 if (!self.camera.centered)
                     self.checkBounds();
-
-                if (self.player.hasTarget() && self.player.getDistance(self.player.target) < 7 && self.player.isRanged() && self.isAttackable())
-                    self.player.stop();
 
                 self.socket.send(Packets.Movement, [Packets.MovementOpcode.Step, self.player.gridX, self.player.gridY]);
             });

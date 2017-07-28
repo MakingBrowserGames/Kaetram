@@ -154,6 +154,22 @@ define(['./entityhandler'], function(EntityHandler) {
             return x > y ? x : y;
         },
 
+        getCoordDistance: function(toX, toY) {
+            var self = this,
+                x = Math.abs(self.gridX - toX),
+                y = Math.abs(self.gridY - toY);
+
+            return x > y ? x : y;
+        },
+
+        inAttackRadius: function(entity) {
+            return entity && this.getDistance(entity) < 2 && !(this.gridX !== entity.gridX && this.gridY !== entity.gridY);
+        },
+
+        inExtraAttackRadius: function(entity) {
+            return entity && this.getDistance(entity) < 3 && !(this.gridX !== entity.gridX && this.gridY !== entity.gridY);
+        },
+
         getAnimationByName: function(name) {
             if (name in this.animations)
                 return this.animations[name];

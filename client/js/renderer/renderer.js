@@ -504,7 +504,7 @@ define(['jquery', './camera', './tile',
                 posY = self.input.selectedY;
 
             if (self.mobile)
-                self.drawCellHighlight(posX, posY, 'rgb(51, 255, 0)');
+                self.drawCellHighlight(posX, posY, self.input.mobileTargetColour);
             else {
                 var tD = self.input.getTargetData();
 

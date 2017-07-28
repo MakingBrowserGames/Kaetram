@@ -21,10 +21,10 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
             self.cursor = null;
             self.newCursor = null;
 
+            self.targetData = null;
             self.targetColour = null;
             self.newTargetColour = null;
-
-            self.targetData = null;
+            self.mobileTargetColour = 'rgba(51, 255, 0)';
 
             self.cursors = {};
 
@@ -46,7 +46,7 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
              * cell spinner sprite (only on desktop)
              */
 
-            self.targetAnimation = new Animation('idle_down', 4, 0, 16, 16);
+            self.targetAnimation = new Animation('move', 4, 0, 16, 16);
             self.targetAnimation.setSpeed(50);
 
             self.chatHandler = new Chat(self.game);
@@ -174,6 +174,8 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
             var self = this,
                 player = self.getPlayer();
 
+            self.setPassiveTarget();
+
             /**
              * It can be really annoying having the chat open
              * on mobile, and it is far harder to control.
@@ -188,6 +190,8 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
             var entity = self.game.getEntityAt(position.x, position.y);
 
             if (entity) {
+                self.setAttackTarget();
+
                 if (entity.type !== 'item')
                     player.setTarget(entity);
 
@@ -297,6 +301,20 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
                 self.newCursor = cursor;
             else
                 log.error('Cursor: ' + cursor + ' could not be found.');
+        },
+
+        setAttackTarget: function() {
+            var self = this;
+
+            self.targetAnimation.setRow(1);
+            self.mobileTargetColour = 'rgb(255, 51, 0)';
+        },
+
+        setPassiveTarget: function() {
+            var self = this;
+
+            self.targetAnimation.setRow(0);
+            self.mobileTargetColour = 'rgb(51, 255, 0)';
         },
 
         getCoords: function() {

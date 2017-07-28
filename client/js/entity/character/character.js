@@ -84,6 +84,8 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
             self.following = true;
 
+            if (self.getCoordDistance(character.gridX))
+
             self.setTarget(character);
             self.move(character.gridX, character.gridY);
         },

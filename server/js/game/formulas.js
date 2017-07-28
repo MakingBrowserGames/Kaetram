@@ -15,15 +15,6 @@ Formulas.getDamage = function(attacker, target) {
         targetArmourLevel = target.armour ? target.armour.getDefense() : target.armourLevel,
         usingRange = attacker.weapon ? attacker.weapon.isRanged() : attacker.isRanged();
 
-    if (weaponLevel < 1)
-        weaponLevel = 1;
-
-    if (attackerArmourLevel < 1)
-        attackerArmourLevel = 1;
-
-    if (targetArmourLevel < 1)
-        targetArmourLevel = 1;
-
     /**
      * Set the baseline damage
      */

@@ -66,6 +66,10 @@ define(function() {
             this.speed = speed;
         },
 
+        setRow: function(row) {
+            this.row = row;
+        },
+
         readyToAnimate: function(time) {
             return (time - this.lastTime) > this.speed;
         },
