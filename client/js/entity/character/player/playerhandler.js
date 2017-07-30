@@ -27,6 +27,9 @@ define(function() {
             var self = this;
 
             self.player.onRequestPath(function(x, y) {
+                if (self.player.dead)
+                    return null;
+
                 var ignores = [self.player];
 
                 if (self.player.hasTarget())

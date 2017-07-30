@@ -340,22 +340,21 @@ define(['jquery', './camera', './tile',
             if (entity instanceof Character && !entity.dead && entity.hasWeapon()) {
                 var weapon = self.entities.getSprite(entity.weapon.getString());
 
-                if (!weapon)
-                    return;
+                if (weapon) {
+                    if (!weapon.loaded)
+                        weapon.load();
 
-                if (!weapon.loaded)
-                    weapon.load();
+                    var weaponAnimationData = weapon.animationData[animation.name],
+                        index = frame.index < weaponAnimationData.length ? frame.index : frame.index % weaponAnimationData.length,
+                        weaponX = weapon.width * index * self.drawingScale,
+                        weaponY = weapon.height * animation.row * self.drawingScale,
+                        weaponWidth = weapon.width * self.drawingScale,
+                        weaponHeight = weapon.height * self.drawingScale;
 
-                var weaponAnimationData = weapon.animationData[animation.name],
-                    index = frame.index < weaponAnimationData.length ? frame.index : frame.index % weaponAnimationData.length,
-                    weaponX = weapon.width * index * self.drawingScale,
-                    weaponY = weapon.height * animation.row * self.drawingScale,
-                    weaponWidth = weapon.width * self.drawingScale,
-                    weaponHeight = weapon.height * self.drawingScale;
-
-                self.context.drawImage(weapon.image, weaponX, weaponY, weaponWidth, weaponHeight,
-                    weapon.offsetX * self.drawingScale, weapon.offsetY * self.drawingScale,
-                    weaponWidth, weaponHeight);
+                    self.context.drawImage(weapon.image, weaponX, weaponY, weaponWidth, weaponHeight,
+                        weapon.offsetX * self.drawingScale, weapon.offsetY * self.drawingScale,
+                        weaponWidth, weaponHeight);
+                }
             }
 
             if (entity instanceof Item) {
@@ -424,7 +423,7 @@ define(['jquery', './camera', './tile',
             if (self.drawNames && entity !== 'player')
                 self.drawText(entity.username, (entity.x + 8) * factor, (entity.y - (self.drawLevels ? 20 : 10)) * factor, true, colour);
 
-            if (self.drawLevels && entity instanceof Character)
+            if (self.drawLevels && (entity.type === 'mob' || entity.type === 'player'))
                 self.drawText('Level ' + entity.level, (entity.x + 8) * factor, (entity.y - 10) * factor, true, colour);
 
             self.textContext.restore();

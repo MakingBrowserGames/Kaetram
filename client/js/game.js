@@ -418,6 +418,7 @@ define(['./renderer/renderer', './utils/storage',
                 entity.hitPoints = 0;
 
                 entity.setSprite(self.getSprite('death'));
+
                 entity.animate('death', 120, 1, function() {
                     self.entities.unregisterPosition(entity);
                     delete self.entities.entities[entity.id];
@@ -428,6 +429,9 @@ define(['./renderer/renderer', './utils/storage',
                 var opcode = data.shift(),
                     attacker = self.entities.get(data.shift()),
                     target = self.entities.get(data.shift());
+
+                if (!target || !attacker)
+                    return;
 
                 switch (opcode) {
                     case Packets.CombatOpcode.Initiate:
@@ -664,15 +668,16 @@ define(['./renderer/renderer', './utils/storage',
             });
 
             self.messages.onDeath(function(id) {
-                var entity = self.entities.get(id),
-                    isPlayer = entity.id === self.player.id;
+                var entity = self.entities.get(id);
 
-                if (!isPlayer)
+                if (!entity || id !== self.player.id)
                     return;
 
                 self.audio.play(Modules.AudioTypes.SFX, 'death');
 
                 self.player.dead = true;
+                self.player.removeTarget();
+                self.player.orientation = Modules.Orientation.Down;
 
                 self.app.body.addClass('death');
             });
@@ -720,11 +725,20 @@ define(['./renderer/renderer', './utils/storage',
                     log.error('Player id mismatch.');
                     return;
                 }
+
                 self.player.setGridPosition(x, y);
 
                 self.entities.addEntity(self.player);
 
                 self.renderer.camera.centreOn(self.player);
+
+                self.player.currentAnimation = null;
+
+                self.player.setSprite(self.getSprite(self.player.getSpriteName()));
+
+                self.player.idle();
+
+                self.player.dead = false;
             });
 
         },

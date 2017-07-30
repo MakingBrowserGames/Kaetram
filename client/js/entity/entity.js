@@ -132,6 +132,9 @@ define(['./entityhandler'], function(EntityHandler) {
 
             self.currentAnimation = anim;
 
+            if (self.kind === 0)
+                log.info(self.currentAnimation);
+
             if (name.substr(0, 3) === 'atk')
                 self.currentAnimation.reset();
 

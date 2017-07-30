@@ -125,7 +125,13 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
 
                         case Modules.Keys.Three:
 
-                            self.game.app.body.addClass('death');
+                            self.game.app.body.toggleClass('death');
+
+                            break;
+
+                        case Modules.Keys.Four:
+
+                            self.getPlayer().triggerHealthBar();
 
                             break;
 

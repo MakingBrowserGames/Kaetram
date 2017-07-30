@@ -285,6 +285,15 @@ module.exports = Player = Character.extend({
         self.send(new Messages.Audio(song));
     },
 
+    revertPoints: function() {
+        var self = this;
+
+        self.hitPoints.setHitPoints(self.hitPoints.getMaxHitPoints());
+        self.mana.setMana(self.mana.getMaxMana());
+
+        self.sync();
+    },
+
     applyDamage: function(damage) {
         this.hitPoints.decrement(damage);
     },
@@ -361,6 +370,9 @@ module.exports = Player = Character.extend({
 
     setPosition: function(x, y) {
         var self = this;
+
+        if (self.dead)
+            return;
 
         self._super(x, y);
 

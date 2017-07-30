@@ -135,7 +135,7 @@ define(['../character', './equipment/armour', './equipment/weapon',
         },
 
         getSpriteName: function() {
-            return this.sprite ? this.sprite : 'clotharmor';
+            return this.armour ? this.armour.string : 'clotharmor';
         },
 
         setGridPosition: function(x, y) {

@@ -119,7 +119,7 @@ module.exports = Combat = cls.Class.extend({
             if (self.queue.hasQueue())
                 self.hit(self.character, self.character.target, self.queue.getHit());
 
-            if (!self.character.target.isDead())
+            if (self.character.target && !self.character.target.isDead())
                 self.attack(self.character.target);
 
             self.lastAction = new Date();

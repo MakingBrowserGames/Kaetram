@@ -196,7 +196,8 @@ module.exports = World = cls.Class.extend({
 
                 attacker.removeTarget();
 
-                attacker.combat.stop();
+                self.pushToAdjacentGroups(target.group, new Messages.Combat(Packets.CombatOpcode.Finish, [attacker.instance, target.instance]));
+
 
                 /**
                  * Why do we check here for entity type here?

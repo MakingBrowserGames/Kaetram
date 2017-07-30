@@ -168,8 +168,6 @@ define(function() {
             if (!self.isEnabled())
                 return;
 
-            log.info('updating?');
-
             var song = self.getMusic(self.songName);
 
             if (song && !(self.song && self.song.name === song.name)) {
@@ -229,6 +227,7 @@ define(function() {
             self.clearFadeIn(song);
 
             song.fadingOut = setInterval(function() {
+
                 song.volume -= 0.08;
 
                 if (song.volume <= 0.08) {
@@ -236,6 +235,8 @@ define(function() {
 
                     if (callback)
                         callback(song);
+
+                    clearInterval(song.fadingOut);
                 }
 
             }, 100);

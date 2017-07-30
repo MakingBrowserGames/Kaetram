@@ -431,7 +431,7 @@ module.exports = Incoming = cls.Class.extend({
 
                 self.world.handleDamage(projectile.owner, target, projectile.damage);
 
-                if (target.combat.started || target.isDead() || target.type !== 'mob')
+                if (target.combat.started || target.dead || target.type !== 'mob')
                     return;
 
                 target.begin(projectile.owner);
@@ -539,6 +539,10 @@ module.exports = Incoming = cls.Class.extend({
 
         self.world.pushToAdjacentGroups(self.player.group, new Messages.Spawn(self.player), self.player.instance);
         self.player.send(new Messages.Respawn(self.player.instance, self.player.x, self.player.y));
+
+        self.player.revertPoints();
+
+
     },
 
     cleanSocket: function() {

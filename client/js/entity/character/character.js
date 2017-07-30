@@ -242,6 +242,9 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
                     path = self.requestPathfinding(x, y);
 
+                    if (!path)
+                        return;
+
                     self.newDestination = null;
 
                     if (path.length < 2)
@@ -298,7 +301,7 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
              * dimension
              */
 
-            if (path.length < 2)
+            if (!path || path.length < 2)
                 return;
 
             self.path = path;
