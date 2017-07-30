@@ -1,6 +1,6 @@
 /* global Modules, log, _, Detect, Packets */
 
-define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat) {
+define(['jquery', '../entity/animation', './chat', './overlay'], function($, Animation, Chat, Overlay) {
 
     return Class.extend({
 
@@ -50,6 +50,7 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
             self.targetAnimation.setSpeed(50);
 
             self.chatHandler = new Chat(self.game);
+            self.overlay = new Overlay(self);
         },
 
         loadCursors: function() {
@@ -239,10 +240,13 @@ define(['jquery', '../entity/animation', './chat'], function($, Animation, Chat)
             var position = self.getCoords(),
                 entity = self.game.getEntityAt(position.x, position.y);
 
+            self.overlay.update(entity);
+
             if (!entity || (entity.id === self.getPlayer().id)) {
                 self.setCursor(self.cursors['hand']);
                 self.hovering = null;
             } else {
+
                 switch (entity.type) {
                     case 'item':
                         self.setCursor(self.cursors['loot']);

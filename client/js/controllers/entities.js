@@ -142,11 +142,14 @@ define(['../renderer/grids', '../entity/objects/chest',
                     var mob = new Mob(id, kind),
                         hitPoints = info.shift(),
                         maxHitPoints = info.shift(),
-                        attackRange = info.shift();
+                        attackRange = info.shift(),
+                        mLevel = info.shift();
 
                     mob.setHitPoints(hitPoints);
                     mob.setMaxHitPoints(maxHitPoints);
                     mob.attackRange = attackRange;
+
+                    mob.level = mLevel;
 
                     entity = mob;
 

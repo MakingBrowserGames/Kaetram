@@ -51,6 +51,7 @@ define(function() {
             self.messages[Packets.Death] = self.receiveDeath;
             self.messages[Packets.Audio] = self.receiveAudio;
             self.messages[Packets.NPC] = self.receiveNPC;
+            self.messages[Packets.Respawn] = self.receiveRespawn;
 
         },
 
@@ -357,6 +358,16 @@ define(function() {
                 self.npcCallback(opcode, info);
         },
 
+        receiveRespawn: function(data) {
+            var self = this,
+                id = data.shift(),
+                x = data.shift(),
+                y = data.shift();
+
+            if (self.respawnCallback)
+                self.respawnCallback(id, x, y);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -471,6 +482,10 @@ define(function() {
 
         onNPC: function(callback) {
             this.npcCallback = callback;
+        },
+
+        onRespawn: function(callback) {
+            this.respawnCallback = callback;
         }
 
     });

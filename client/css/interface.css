@@ -198,9 +198,37 @@
 }
 
 #attackInfo {
+    display: none;
     position: absolute;
     left: 40%;
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+#attackInfo .image {
+    position: absolute;
+}
+
+#attackInfo .name, #attackInfo .health {
+    position: absolute;
+    text-align: center;
+    font-family: 'AdvoCut', sans-serif;
+    color: white;
+}
+
+#attackInfo .name {
+    left: 24%;
+    overflow: hidden;
+}
+
+#attackInfo .details {
+    overflow: hidden;
+    text-align: center;
+    font-family: 'AdvoCut', sans-serif;
+    color: white;
+}
+
+#attackInfo .health {
+    left: 23%;
 }
 
 @media only screen and (min-width: 1501px) {
@@ -877,7 +905,7 @@
     #attackInfo .image {
         width: 32px;
         height: 32px;
-        border: 1px solid #373737;
+        border: 2px solid #373737;
         margin-left: 6px;
         margin-top: 8px;
         overflow: hidden;
@@ -886,12 +914,30 @@
         -webkit-border-radius: 8px;
     }
 
-    #attackInfo .details {
+    #attackInfo .name {
+        width: 146px;
+        height: 18px;
+    }
 
+    #attackInfo .details {
+        width: 146px;
+        height: 14px;
+        float: right;
+        margin-right: 6px;
+        margin-top: 18px;
     }
 
     #attackInfo .health {
-
+        width: 146px;
+        height: 12px;
+        margin-top: 32px;
+        border: 1px solid #373737;
+        border-radius: 4px;
+        background: red;
+        transition: .5s width ease;
+        -o-transition: .5s width ease;
+        -moz-transition: .5s width ease;
+        -webkit-transition: .5s width ease;
     }
 
 

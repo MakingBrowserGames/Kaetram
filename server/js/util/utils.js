@@ -8,6 +8,10 @@ Utils.random = function(range) {
     return Math.floor(Math.random() * range);
 };
 
+Utils.randomRange = function(min, max) {
+    return min + (Math.random() * (max - min));
+};
+
 Utils.randomInt = function(min, max) {
 
     return min + Math.floor(Math.random() * (max - min + 1));

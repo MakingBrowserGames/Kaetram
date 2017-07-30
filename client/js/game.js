@@ -412,7 +412,7 @@ define(['./renderer/renderer', './utils/storage',
                     return;
                 }
 
-                if (self.player.getDistance(entity) < 5)
+                if (entity.id !== self.player.id && self.player.getDistance(entity) < 5)
                     self.audio.play(Modules.AudioTypes.SFX, 'kill' + Math.floor(Math.random() * 2 + 1));
 
                 entity.hitPoints = 0;
@@ -670,6 +670,10 @@ define(['./renderer/renderer', './utils/storage',
                 if (!isPlayer)
                     return;
 
+                self.audio.play(Modules.AudioTypes.SFX, 'death');
+
+                self.player.dead = true;
+
                 self.app.body.addClass('death');
             });
 
@@ -709,6 +713,18 @@ define(['./renderer/renderer', './utils/storage',
                         break;
                 }
 
+            });
+
+            self.messages.onRespawn(function(id, x, y) {
+                if (id !== self.player.id) {
+                    log.error('Player id mismatch.');
+                    return;
+                }
+                self.player.setGridPosition(x, y);
+
+                self.entities.addEntity(self.player);
+
+                self.renderer.camera.centreOn(self.player);
             });
 
         },
@@ -831,6 +847,15 @@ define(['./renderer/renderer', './utils/storage',
 
             self.app.toggleLogin(false);
             self.app.updateLoader('');
+        },
+
+        respawn: function() {
+            var self = this;
+
+            self.audio.play(Modules.AudioTypes.SFX, 'revive');
+            self.app.body.removeClass('death');
+
+            self.socket.send(Packets.Respawn, [self.player.id]);
         },
 
         resize: function() {

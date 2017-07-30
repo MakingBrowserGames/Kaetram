@@ -348,3 +348,17 @@ Messages.NPC = Message.extend({
     }
 
 });
+
+Messages.Respawn = Message.extend({
+
+    init: function(instance, x, y) {
+        this.instance = instance;
+        this.x = x;
+        this.y = y;
+    },
+
+    serialize: function() {
+        return [Packets.Respawn, this.instance, this.x, this.y];
+    }
+
+});

@@ -194,6 +194,8 @@ module.exports = World = cls.Class.extend({
 
             target.combat.forEachAttacker(function(attacker) {
 
+                attacker.removeTarget();
+
                 attacker.combat.stop();
 
                 /**
@@ -201,7 +203,7 @@ module.exports = World = cls.Class.extend({
                  *
                  * It is well built to implement special abilities in the future
                  * such as when a player dies - all the nearby attackers have a
-                 * wanted level on them or have some inflicted damage.
+                 * wanted level on them or have some inflicted amage.
                  */
 
                 if (target.type === 'mob')

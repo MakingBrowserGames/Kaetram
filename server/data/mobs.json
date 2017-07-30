@@ -22,7 +22,7 @@
     "drops": {"flask": 500},
     "hitPoints": 20,
     "armour": 0,
-    "weapon": 1,
+    "weapon": 0,
     "xp": 11,
     "level": 2,
     "aggroRange": 1,

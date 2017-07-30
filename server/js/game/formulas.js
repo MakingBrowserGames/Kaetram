@@ -13,27 +13,28 @@ Formulas.getDamage = function(attacker, target) {
         weaponLevel = attacker.weapon ? attacker.weapon.getLevel() : attacker.weaponLevel,
         attackerArmourLevel = attacker.armour ? attacker.armour.getDefense() : attacker.armourLevel,
         targetArmourLevel = target.armour ? target.armour.getDefense() : target.armourLevel,
-        usingRange = attacker.weapon ? attacker.weapon.isRanged() : attacker.isRanged();
+        usingRange = attacker.weapon ? attacker.weapon.isRanged() : attacker.isRanged(),
+        isPlayer = attacker.type === 'player';
 
     /**
      * Set the baseline damage
      */
 
-    damage = (attacker.level * (Utils.random(0.45, 2.175)));
+    damage = (attacker.level + (isPlayer ? Utils.randomInt(0, 6) : 1)) * Utils.randomRange(0.45, 2.1875);
 
     /**
      * Take in consideration weapon level & armour
      */
 
-    damage += (weaponLevel * (2.125 + (Utils.random(0.1, 1.25))) * (usingRange ? Utils.random(0.75, 1.15) : 2.15 + Utils.random(2.1, 4.2)));
-    damage += (attackerArmourLevel * (Utils.random(0.15, 0.35)));
+    damage += (weaponLevel * (2.125 + (Utils.randomRange(0.1, 1.25))) * (usingRange ? Utils.randomRange(0.75, 1.15) : 2.15 + Utils.randomRange(2.1, 4.2)));
+    damage += (attackerArmourLevel * (Utils.randomRange(0.15, 0.35)));
 
     /**
      * Handle damage absorption
      * TODO - Improve upon this when pendants, rings and boots are added into the game
      */
 
-    damageAbsorbed = target.level + Utils.random(0, targetArmourLevel) * (0.55 + Utils.random(-0.35, 0.05));
+    damageAbsorbed = target.level + Utils.randomRange(0, targetArmourLevel) * (0.55 + Utils.randomRange(-0.35, 0.05));
 
     damage = Math.round(damage);
     damageAbsorbed = Math.round(damageAbsorbed);

@@ -74,6 +74,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleInventory(message);
                     break;
 
+                case Packets.Respawn:
+                    self.handleRespawn(message);
+                    break;
+
             }
 
         });
@@ -519,6 +523,22 @@ module.exports = Incoming = cls.Class.extend({
 
                 break;
         }
+    },
+
+    handleRespawn: function(message) {
+        var self = this,
+            instance = message.shift();
+
+        if (self.player.instance !== instance)
+            return;
+
+        var spawn = self.player.getSpawn();
+
+        self.player.dead = false;
+        self.player.setPosition(spawn.x, spawn.y);
+
+        self.world.pushToAdjacentGroups(self.player.group, new Messages.Spawn(self.player), self.player.instance);
+        self.player.send(new Messages.Respawn(self.player.instance, self.player.x, self.player.y));
     },
 
     cleanSocket: function() {

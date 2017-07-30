@@ -27,6 +27,8 @@ define(['jquery'], function($) {
             self.cancelButton = $('#cancelButton');
             self.loading = $('.loader');
 
+            self.respawn = $('#respawn');
+
             self.rememberMe = $('#rememberMe');
 
             self.loginFields = [];
@@ -72,6 +74,13 @@ define(['jquery'], function($) {
                 self.rememberMe.toggleClass('active');
 
                 self.game.storage.toggleRemember(!active);
+            });
+
+            self.respawn.click(function() {
+                if (!self.game || !self.game.player || !self.game.player.dead)
+                    return;
+
+                self.game.respawn();
             });
 
             window.scrollTo(0, 1);

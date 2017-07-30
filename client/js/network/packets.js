@@ -31,7 +31,8 @@ Packets = {
     Experience: 29,
     Death: 30,
     Audio: 31,
-    NPC: 32
+    NPC: 32,
+    Respawn: 33
 };
 
 Packets.IntroOpcode = {

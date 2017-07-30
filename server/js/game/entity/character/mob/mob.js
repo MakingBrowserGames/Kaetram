@@ -127,7 +127,7 @@ module.exports = Mob = Character.extend({
         var self = this,
             base = self._super();
 
-        base.push(self.hitPoints, self.maxHitPoints, self.attackRange);
+        base.push(self.hitPoints, self.maxHitPoints, self.attackRange, self.level);
 
         return base;
     },

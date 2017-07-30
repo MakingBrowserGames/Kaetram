@@ -516,6 +516,7 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
         onMove: function(callback) {
             this.moveCallback = callback;
         }
+
     });
 
 });

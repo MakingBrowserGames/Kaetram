@@ -403,7 +403,7 @@ define(['jquery', './camera', './tile',
         drawName: function(entity) {
             var self = this;
 
-            if (entity.type !== 'player' || entity.hidden || (!self.drawNames && !self.drawLevels))
+            if (entity.hidden || (!self.drawNames && !self.drawLevels))
                 return;
 
             var colour = entity.wanted ? 'red' : 'white',
@@ -421,10 +421,10 @@ define(['jquery', './camera', './tile',
             self.setCameraView(self.textContext);
             self.textContext.font = '14px AdvoCut';
 
-            if (self.drawNames)
+            if (self.drawNames && entity !== 'player')
                 self.drawText(entity.username, (entity.x + 8) * factor, (entity.y - (self.drawLevels ? 20 : 10)) * factor, true, colour);
 
-            if (self.drawLevels)
+            if (self.drawLevels && entity instanceof Character)
                 self.drawText('Level ' + entity.level, (entity.x + 8) * factor, (entity.y - 10) * factor, true, colour);
 
             self.textContext.restore();

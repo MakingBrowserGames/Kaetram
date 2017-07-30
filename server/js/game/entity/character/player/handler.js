@@ -24,6 +24,10 @@ module.exports = Handler = cls.Class.extend({
             self.detectMusic();
         });
 
+        self.player.onDeath(function() {
+            log.info('Whoop de doo I died.')
+        });
+
         self.player.onGroup(function() {
             self.world.handleEntityGroup(self.player);
             self.world.pushEntities(self.player);

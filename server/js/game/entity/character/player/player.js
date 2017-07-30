@@ -274,8 +274,6 @@ module.exports = Player = Character.extend({
         if (self.deathCallback)
             self.deathCallback();
 
-        self.world.cleanCombat(self);
-
         self.send(new Messages.Death(self.instance));
     },
 
@@ -440,6 +438,20 @@ module.exports = Player = Character.extend({
         return this.connection.socket.conn.remoteAddress;
     },
 
+    getSpawn: function() {
+        var self = this;
+
+        /**
+         * Here we will implement functions from quests and
+         * other special events and determine a spawn point.
+         */
+
+        return {
+            x: 27,
+            y: 90
+        }
+    },
+
     isMuted: function() {
         var self = this,
             time = new Date().getTime();
@@ -449,6 +461,10 @@ module.exports = Player = Character.extend({
 
     isRanged: function() {
         return this.weapon && this.weapon.isRanged();
+    },
+
+    isDead: function() {
+        return this.hitPoints.getHitPoints() < 1 || this.dead;
     },
 
     /**
