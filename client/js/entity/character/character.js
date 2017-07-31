@@ -477,7 +477,12 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
         },
 
         setHitPoints: function(hitPoints) {
-            this.hitPoints = hitPoints;
+            var self = this;
+
+            self.hitPoints = hitPoints;
+
+            if (self.hitPointsCallback)
+                self.hitPointsCallback(self.hitPoints);
         },
 
         setMaxHitPoints: function (maxHitPoints) {
@@ -518,6 +523,10 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
 
         onMove: function(callback) {
             this.moveCallback = callback;
+        },
+
+        onHitPoints: function(callback) {
+            this.hitPointsCallback = callback;
         }
 
     });

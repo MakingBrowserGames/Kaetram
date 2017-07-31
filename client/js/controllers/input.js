@@ -246,8 +246,6 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
             var position = self.getCoords(),
                 entity = self.game.getEntityAt(position.x, position.y);
 
-            self.overlay.update(entity);
-
             if (!entity || (entity.id === self.getPlayer().id)) {
                 self.setCursor(self.cursors['hand']);
                 self.hovering = null;

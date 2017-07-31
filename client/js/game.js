@@ -598,6 +598,29 @@ define(['./renderer/renderer', './utils/storage',
 
             });
 
+            self.messages.onBank(function(opcode, info) {
+                switch(opcode) {
+
+                    case Packets.BankOpcode.Batch:
+
+                        var bankSize = info.shift(),
+                            data = info.shift();
+
+                        self.interface.loadBank(bankSize, data);
+
+                        break;
+
+
+                    case Packets.BankOpcode.Add:
+
+                        break;
+
+                    case Packets.BankOpcode.Remove:
+
+                        break;
+                }
+            });
+
             self.messages.onNotification(function(opcode, message) {
 
                 switch (opcode) {
@@ -714,6 +737,10 @@ define(['./renderer/renderer', './utils/storage',
                         }
 
                         self.audio.play(Modules.AudioTypes.SFX, sound);
+
+                        break;
+
+                    case Packets.NPCOpcode.Bank:
 
                         break;
                 }

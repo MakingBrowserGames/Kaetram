@@ -204,10 +204,6 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-#attackInfo .image {
-    position: absolute;
-}
-
 #attackInfo .name, #attackInfo .health {
     position: absolute;
     text-align: center;
@@ -216,7 +212,7 @@
 }
 
 #attackInfo .name {
-    left: 24%;
+    width: 100%;
     overflow: hidden;
 }
 
@@ -225,10 +221,12 @@
     text-align: center;
     font-family: 'AdvoCut', sans-serif;
     color: white;
+    width: 100%;
 }
 
 #attackInfo .health {
-    left: 23%;
+    width: 90%;
+    left: 5%;
 }
 
 @media only screen and (min-width: 1501px) {
@@ -537,6 +535,30 @@
 
     #levelCheck {
         top: 261px;
+    }
+
+    #attackInfo {
+        width: 300px;
+        height: 75px;
+        top: 12px;
+        border-bottom-left-radius: 24px;
+        border-bottom-right-radius: 24px;
+        border: 6px solid #373737;
+    }
+
+    #attackInfo .details {
+        margin-top: 27px;
+    }
+
+    #attackInfo .health {
+        height: 18px;
+        border: 3px solid #373737;
+        border-radius: 6px;
+        background: red;
+        transition: .5s width ease;
+        -o-transition: .5s width ease;
+        -moz-transition: .5s width ease;
+        -webkit-transition: .5s width ease;
     }
 
 }
@@ -901,36 +923,12 @@
         border: 4px solid #373737;
     }
 
-
-    #attackInfo .image {
-        width: 32px;
-        height: 32px;
-        border: 2px solid #373737;
-        margin-left: 6px;
-        margin-top: 8px;
-        overflow: hidden;
-        border-radius: 8px;
-        -moz-border-radius: 8px;
-        -webkit-border-radius: 8px;
-    }
-
-    #attackInfo .name {
-        width: 146px;
-        height: 18px;
-    }
-
     #attackInfo .details {
-        width: 146px;
-        height: 14px;
-        float: right;
-        margin-right: 6px;
         margin-top: 18px;
     }
 
     #attackInfo .health {
-        width: 146px;
         height: 12px;
-        margin-top: 32px;
         border: 1px solid #373737;
         border-radius: 4px;
         background: red;
@@ -939,7 +937,6 @@
         -moz-transition: .5s width ease;
         -webkit-transition: .5s width ease;
     }
-
 
 }
 
@@ -1295,6 +1292,30 @@
 
     #levelCheck {
         top: 84px;
+    }
+
+    #attackInfo {
+        width: 100px;
+        height: 25px;
+        top: 4px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        border: 2px solid #373737;
+    }
+
+    #attackInfo .details {
+        margin-top: 9px;
+    }
+
+    #attackInfo .health {
+        height: 6px;
+        border: 1px solid #373737;
+        border-radius: 2px;
+        background: red;
+        transition: .5s width ease;
+        -o-transition: .5s width ease;
+        -moz-transition: .5s width ease;
+        -webkit-transition: .5s width ease;
     }
 
 }

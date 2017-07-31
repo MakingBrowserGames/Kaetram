@@ -1,7 +1,7 @@
 /* global log */
 
 define(['jquery', '../interface/inventory',
-        '../interface/profile/profile', '../interface/actions'], function($, Inventory, Profile, Actions) {
+        '../interface/profile/profile', '../interface/actions', '../interfaces/bank'], function($, Inventory, Profile, Actions, Bank) {
 
     return Class.extend({
 
@@ -42,6 +42,19 @@ define(['jquery', '../interface/inventory',
             self.inventory = new Inventory(self.game, size);
 
             self.inventory.load(data);
+        },
+
+        loadBank: function(size, data) {
+            var self = this;
+
+            /**
+             * Similar structure as the inventory, just that it
+             * has two containers. The bank and the inventory.
+             */
+
+            self.bank = new Bank(self.game, self.inventory.container, size);
+
+            self.bank.load(data);
         },
 
         loadProfile: function() {

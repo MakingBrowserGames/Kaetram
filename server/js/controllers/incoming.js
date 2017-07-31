@@ -360,6 +360,13 @@ module.exports = Incoming = cls.Class.extend({
                 if (!npc || npc.dead)
                     return;
 
+                switch(npc.id) {
+                    case 43:
+                        self.player.send(new Messages.NPC(Packets.NPCOpcode.Bank, {}));
+                        return;
+                }
+
+
                 var text = Npcs.getText(npc.id);
 
                 if (!text)

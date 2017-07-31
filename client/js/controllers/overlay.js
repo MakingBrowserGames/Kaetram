@@ -10,7 +10,7 @@ define(['jquery'], function($) {
 
             self.attackInfo = $('#attackInfo');
 
-            self.image = self.attackInfo.find('.image');
+            self.image = self.attackInfo.find('.image div');
             self.name = self.attackInfo.find('.name');
             self.details = self.attackInfo.find('.details');
             self.health = self.attackInfo.find('.health');
@@ -20,7 +20,7 @@ define(['jquery'], function($) {
             var self = this;
 
             if (!entity) {
-                if (self.isVisible())
+                if (self.isVisible() && !self.input.getPlayer().hasTarget())
                     self.hide();
 
                 self.hovering = null;
@@ -36,13 +36,20 @@ define(['jquery'], function($) {
 
             if (self.hasHealth())
                 self.details.html(entity.hitPoints + ' / ' + entity.maxHitPoints);
-            else
-                self.details.html('HUrp de durp, it is item.');
 
-            self.image.width = entity.sprite.width;
-            self.image.height = entity.sprite.height;
+            self.hovering.onHitPoints(function(hitPoints) {
+                if (hitPoints < 1)
+                    self.hide();
+                else
+                    self.details.html(hitPoints + ' / ' + self.hovering.maxHitPoints);
+            });
+        },
 
+        clean: function() {
+            var self = this;
 
+            self.details.html('');
+            self.hovering = null;
         },
 
         hasHealth: function() {
