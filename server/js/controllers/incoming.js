@@ -221,6 +221,7 @@ module.exports = Incoming = cls.Class.extend({
 
         self.player.sendEquipment();
         self.player.loadInventory();
+        self.player.loadBank();
 
         self.cleanSocket();
 

@@ -20,7 +20,7 @@ Currently Finished:
 * Player information interface
 * Experience and Item Drop system
 * Full cross-platform capabilities
-* Combat System --- STILL IN PROGRESS
+* Combat System --- Requires minor tweaks
 
 To-Do:
 

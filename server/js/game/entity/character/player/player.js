@@ -49,7 +49,7 @@ module.exports = Player = Character.extend({
         self.handler = new Handler(self);
 
         self.inventory = new Inventory(self, 20);
-        self.bank = new Bank(self, 100);
+        self.bank = new Bank(self, 30);
         self.quests = new Quests(self);
         self.abilities = new Abilities(self);
 
@@ -102,6 +102,23 @@ module.exports = Player = Character.extend({
 
             self.inventory.load(ids, counts, skills, skillLevels);
             self.inventory.check();
+        });
+    },
+
+    loadBank: function() {
+        var self = this;
+
+        if (config.offlineMode) {
+            self.inventory.loadEmpty();
+            return;
+        }
+
+        self.mysql.loader.getBank(self, function(ids, counts, skills, skillLevels) {
+            if (ids.length !== self.bank.size)
+                self.save();
+
+            self.bank.load(ids, counts, skills, skillLevels);
+            self.bank.check();
         });
     },
 
@@ -262,6 +279,7 @@ module.exports = Player = Character.extend({
         }
 
         self.send(new Messages.Equipment(Packets.EquipmentOpcode.Equip, [type, Items.idToName(id), string, count, ability, abilityLevel]));
+        self.sync();
 
         self.save();
     },
@@ -316,10 +334,7 @@ module.exports = Player = Character.extend({
         if (!id)
             return;
 
-        if (self.armour)
-            self.armour.update();
-        else
-            self.armour = new Armour(Items.idToString(id), id, count, ability, abilityLevel);
+        self.armour = new Armour(Items.idToString(id), id, count, ability, abilityLevel);
     },
 
     setWeapon: function(id, count, ability, abilityLevel) {
@@ -520,10 +535,12 @@ module.exports = Player = Character.extend({
             mana: self.mana.getMana(),
             maxMana: self.mana.getMaxMana(),
             experience: self.experience,
-            level: self.level
+            level: self.level,
+            armour: self.armour.getString(),
+            weapon: self.weapon.getData()
         };
 
-        self.world.pushBroadcast(new Messages.Sync(info));
+        self.world.pushToAdjacentGroups(self.group, new Messages.Sync(info), self.instance);
 
         self.save();
     },

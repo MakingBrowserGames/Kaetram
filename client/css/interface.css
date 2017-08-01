@@ -229,6 +229,21 @@
     left: 5%;
 }
 
+#bank {
+    display: none;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+}
+
+#bankContainer {
+    float: right;
+}
+
+#bankInventoryContainer {
+    float: left;
+}
+
 @media only screen and (min-width: 1501px) {
 
     #buttons {
@@ -936,6 +951,27 @@
         -o-transition: .5s width ease;
         -moz-transition: .5s width ease;
         -webkit-transition: .5s width ease;
+    }
+
+    #bank {
+        width: 600px;
+        height: 334px;
+    }
+
+    #bankContainer, #bankInventoryContainer {
+        background: url('../img/2/bank.png');
+    }
+
+    #bankContainer {
+        width: 342px;
+        height: 334px;
+        background-position: -263px 0;
+    }
+
+    #bankInventoryContainer {
+        width: 258px;
+        height: 254px;
+        background-position: 0 0;
     }
 
 }

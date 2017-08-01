@@ -22,6 +22,19 @@ module.exports = Loader = cls.Class.extend({
             callback(info.ids.split(' '), info.counts.split(' '), info.abilities.split(' '), info.abilityLevels.split(' '));
 
         });
+    },
+
+    getBank: function(player, callback) {
+        var self = this;
+
+        self.mysql.connection.query('SELECT * FROM `player_bank` WHERE `player_bank`.`username`=' + "'" + player.username + "'", function(error, rows, fields) {
+            var info = rows.shift();
+
+            if (info.username !== player.username)
+                log.info('Mismatch whilst retrieving bank data for: ' + player.username);
+
+            callback(info.ids.split(' '), info.counts.split(' '), info.abilities.split(' '), info.abilityLevels.split(' '));
+        });
     }
 
 });

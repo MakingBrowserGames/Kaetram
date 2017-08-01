@@ -186,6 +186,9 @@ define(['../character', './equipment/armour', './equipment/weapon',
                     else
                         self.armour.update(name, string, count, ability, abilityLevel);
 
+                    if (self.updateArmourCallback)
+                        self.updateArmourCallback(string);
+
                     break;
 
                 case Modules.Equipment.Weapon:
@@ -255,8 +258,21 @@ define(['../character', './equipment/armour', './equipment/weapon',
             }
         },
 
+        tempBlink: function() {
+            var self = this;
+
+            self.blink(90);
+
+            if (!self.tempBlinkTimeout)
+                self.tempBlinkTimeout = setTimeout(function() { self.stopBlinking(); }, 500);
+        },
+
         getDistance: function(entity) {
             return this._super(entity);
+        },
+
+        onUpdateArmour: function(callback) {
+            this.updateArmourCallback = callback;
         }
 
     });

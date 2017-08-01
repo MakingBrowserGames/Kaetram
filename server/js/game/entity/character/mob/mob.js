@@ -14,6 +14,7 @@ module.exports = Mob = Character.extend({
         self.data = Mobs.Ids[self.id];
         self.hitPoints = self.data.hitPoints;
         self.maxHitPoints = self.data.hitPoints;
+        self.drops = self.data.drops;
 
         self.respawnDelay = self.data.spawnDelay;
 
@@ -42,16 +43,16 @@ module.exports = Mob = Character.extend({
     getDrop: function() {
         var self = this;
 
-        if (!self.data.drops)
-            return;
+        if (!self.drops)
+            return null;
 
         var min = 0,
             percent = 0,
             random = Utils.randomInt(0, 1000);
 
-        for (var drop in self.data.drops)
-            if (self.data.drops.hasOwnProperty(drop)) {
-                var chance = self.data.drops[drop];
+        for (var drop in self.drops)
+            if (self.drops.hasOwnProperty(drop)) {
+                var chance = self.drops[drop];
 
                 min = percent;
                 percent += chance;

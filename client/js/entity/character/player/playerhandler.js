@@ -114,6 +114,10 @@ define(function() {
                 if (self.camera.centered)
                     self.camera.centreOn(self.player);
             });
+
+            self.player.onUpdateArmour(function(armourName) {
+                self.player.setSprite(self.game.getSprite(armourName));
+            });
         },
 
         isAttackable: function() {

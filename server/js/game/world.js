@@ -231,8 +231,6 @@ module.exports = World = cls.Class.extend({
 
             var drop = character.getDrop();
 
-            log.info(drop);
-
             if (drop)
                 self.dropItem(drop.id, drop.count, deathX, deathY);
 

@@ -8,9 +8,7 @@ var cls = require('../../../../../lib/class'),
 module.exports = Container = cls.Class.extend({
 
     /**
-     * Why split bank and inventory into two
-     * classes with a similar functionality
-     * when we have our lord and saviour - OOP Programming.
+     * TODO: Add a limit of 2^31 - 1 for stackable items.
      */
 
     init: function(type, owner, size) {
@@ -38,6 +36,10 @@ module.exports = Container = cls.Class.extend({
 
         for (var i = 0; i < self.slots.length; i++)
             self.slots[i].load(ids[i], counts[i], abilities[i], abilityLevels[i]);
+
+    },
+
+    loadEmpty: function() {
 
     },
 
@@ -122,6 +124,15 @@ module.exports = Container = cls.Class.extend({
                 return i;
 
         return -1;
+    },
+
+    check: function() {
+        var self = this;
+
+        _.each(self.slots, function(slot) {
+            if (isNaN(slot.id))
+                slot.empty();
+        });
     },
 
     getArray: function() {

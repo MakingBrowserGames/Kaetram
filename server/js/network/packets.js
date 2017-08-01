@@ -100,6 +100,12 @@ Packets.InventoryOpcode = {
     Select: 3
 };
 
+Packets.BankOpcode = {
+    Batch: 0,
+    Add: 1,
+    Remove: 2
+};
+
 Packets.NotificationOpcode = {
     Ok: 0,
     YesNo: 1,

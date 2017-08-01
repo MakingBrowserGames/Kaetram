@@ -76,15 +76,6 @@ module.exports = Inventory = Container.extend({
         }));
 
         self.owner.save();
-    },
-
-    check: function() {
-        var self = this;
-
-        _.each(self.slots, function(slot) {
-            if (isNaN(slot.id))
-                slot.empty();
-        })
     }
 
 });

@@ -25,8 +25,11 @@ Items.idToName = function(id) {
 };
 
 Items.stringToId = function(name) {
+
     if (name in Items.Data)
         return Items.Data[name].id;
+    else
+        log.error('Item: ' + name + ' not found in the database.');
 
     return 'null';
 };

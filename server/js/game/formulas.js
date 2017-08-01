@@ -20,7 +20,7 @@ Formulas.getDamage = function(attacker, target) {
      * Set the baseline damage
      */
 
-    damage = (attacker.level + (isPlayer ? Utils.randomInt(0, 6) : 1)) * Utils.randomRange(0.45, 2.1875);
+    damage = (attacker.level + (isPlayer ? Utils.randomInt(0, 9) : Utils.randomInt(-5, 2))) * Utils.randomRange(0.45, 2.1875);
 
     /**
      * Take in consideration weapon level & armour
@@ -34,7 +34,7 @@ Formulas.getDamage = function(attacker, target) {
      * TODO - Improve upon this when pendants, rings and boots are added into the game
      */
 
-    damageAbsorbed = target.level + Utils.randomRange(0, targetArmourLevel) * (0.55 + Utils.randomRange(-0.35, 0.05));
+    damageAbsorbed = target.level + Utils.randomRange(0, targetArmourLevel) * (1.15 + Utils.randomRange(-0.35, 0.05));
 
     damage = Math.round(damage);
     damageAbsorbed = Math.round(damageAbsorbed);

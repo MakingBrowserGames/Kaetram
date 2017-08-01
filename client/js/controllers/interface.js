@@ -1,7 +1,7 @@
 /* global log */
 
 define(['jquery', '../interface/inventory',
-        '../interface/profile/profile', '../interface/actions', '../interfaces/bank'], function($, Inventory, Profile, Actions, Bank) {
+        '../interface/profile/profile', '../interface/actions', '../interface/bank'], function($, Inventory, Profile, Actions, Bank) {
 
     return Class.extend({
 

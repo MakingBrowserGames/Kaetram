@@ -323,6 +323,12 @@ define(['./renderer/renderer', './utils/storage',
                     entity.level = data.level;
                 }
 
+                if (data.armour)
+                    entity.setSprite(self.getSprite(data.armour));
+
+                if (data.weapon)
+                    entity.setEquipment(Modules.Equipment.Weapon, data.weapon);
+
                 self.interface.profile.update();
             });
 
@@ -607,6 +613,8 @@ define(['./renderer/renderer', './utils/storage',
                             data = info.shift();
 
                         self.interface.loadBank(bankSize, data);
+
+                        log.info('Received bank boi.');
 
                         break;
 
