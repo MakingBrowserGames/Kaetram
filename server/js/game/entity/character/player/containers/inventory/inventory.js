@@ -71,7 +71,7 @@ module.exports = Inventory = Container.extend({
             return;
 
         self.owner.send(new Messages.Inventory(Packets.InventoryOpcode.Remove, {
-            index: index,
+            index: parseInt(index),
             count: count
         }));
 

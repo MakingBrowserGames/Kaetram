@@ -73,7 +73,8 @@ define(['../renderer/grids', '../entity/objects/chest',
                     var pType = info.shift(),
                         attacker = self.get(info.shift()),
                         target = self.get(info.shift()),
-                        damage = info.shift();
+                        damage = info.shift(),
+                        pName = info.shift();
 
                     if (!attacker || !target)
                         return;
@@ -85,7 +86,7 @@ define(['../renderer/grids', '../entity/objects/chest',
                     projectile.setStart(attacker.x, attacker.y);
                     projectile.setTarget(target);
 
-                    projectile.setSprite(self.getSprite('projectile-pinearrow'));
+                    projectile.setSprite(self.getSprite(pName));
                     projectile.setAnimation('travel', 60);
 
                     projectile.angled = true;

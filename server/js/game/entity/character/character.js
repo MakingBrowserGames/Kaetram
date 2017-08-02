@@ -111,6 +111,10 @@ module.exports = Character = Entity.extend({
         return Modules.Projectiles.Arrow;
     },
 
+    getProjectileName: function() {
+        return 'projectile-pinearrow';
+    },
+
     getDrop: function() {
         return null;
     },

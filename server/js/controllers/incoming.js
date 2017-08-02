@@ -74,6 +74,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleInventory(message);
                     break;
 
+                case Packets.Bank:
+                    self.handleBank(message);
+                    break;
+
                 case Packets.Respawn:
                     self.handleRespawn(message);
                     break;
@@ -533,6 +537,37 @@ module.exports = Incoming = cls.Class.extend({
         }
     },
 
+    handleBank: function(message) {
+        var self = this,
+            opcode = message.shift();
+
+        /*if (!self.player.bank.open)
+            return;*/
+
+        switch (opcode) {
+            case Packets.BankOpcode.Select:
+                var type = message.shift(),
+                    index = message.shift(),
+                    isBank = type === 'bank';
+
+                if (isBank) {
+                    var bankSlot = self.player.bank.slots[index];
+
+                    self.player.inventory.add(bankSlot);
+                    //self.player.inventory.addItem(bankSlot.id, bankSlot.count, bankSlot.ability, bankSlot.abilityLevel);
+                    self.player.bank.remove(bankSlot.id, bankSlot.count, index);
+
+                } else {
+                    var inventorySlot = self.player.inventory.slots[index];
+
+                    self.player.bank.add(inventorySlot.id, inventorySlot.count, inventorySlot.ability, inventorySlot.abilityLevel);
+                    self.player.inventory.remove(inventorySlot.id, inventorySlot.count, index);
+                }
+
+                break;
+        }
+    },
+
     handleRespawn: function(message) {
         var self = this,
             instance = message.shift();
@@ -549,8 +584,6 @@ module.exports = Incoming = cls.Class.extend({
         self.player.send(new Messages.Respawn(self.player.instance, self.player.x, self.player.y));
 
         self.player.revertPoints();
-
-
     },
 
     cleanSocket: function() {

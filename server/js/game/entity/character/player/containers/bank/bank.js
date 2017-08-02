@@ -9,6 +9,8 @@ module.exports = Slot = Container.extend({
     init: function(owner, size) {
         var self = this;
 
+        self.open = false;
+
         self._super('Bank', owner, size);
     },
 
@@ -37,20 +39,19 @@ module.exports = Slot = Container.extend({
         self.load(ids, counts, abilities, abilityLevels);
     },
 
-    add: function(item) {
+    add: function(id, count, ability, abilityLevel) {
         var self = this;
 
-        if (!self.hasSpace() && !(self.contains(item.id) && Items.isStackable(item.id))) {
-            self.owner.send(new Messages.Notification(Packets.NotificationOpcode.Text, 'You do not have enough space in your bank.'))
+        if (!self.hasSpace() && !(self.contains(id) && Items.isStackable(id))) {
+            self.owner.send(new Messages.Notification(Packets.NotificationOpcode.Text, 'You do not have enough space in your bank.'));
             return;
         }
 
-        var slot = self._super(item.id, parseInt(item.count), item.ability, item.abilityLevel);
+        var slot = self._super(id, parseInt(count), ability, abilityLevel);
 
         self.owner.send(new Messages.Bank(Packets.BankOpcode.Add, slot));
 
         self.owner.save();
-        self.owner.world.removeItem(item);
     },
 
     remove: function(id, count, index) {
@@ -60,7 +61,7 @@ module.exports = Slot = Container.extend({
             return;
 
         self.owner.send(new Messages.Bank(Packets.BankOpcode.Remove, {
-            index: index,
+            index: parseInt(index),
             count: count
         }));
 

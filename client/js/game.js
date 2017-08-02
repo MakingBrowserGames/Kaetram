@@ -590,6 +590,11 @@ define(['./renderer/renderer', './utils/storage',
 
                         self.interface.inventory.add(info);
 
+                        if (!self.interface.bank)
+                            return;
+
+                        self.interface.bank.addInventory(info);
+
                         break;
 
                     case Packets.InventoryOpcode.Remove:
@@ -598,6 +603,11 @@ define(['./renderer/renderer', './utils/storage',
                             return;
 
                         self.interface.inventory.remove(info);
+
+                        if (!self.interface.bank)
+                            return;
+
+                        self.interface.bank.removeInventory(info);
 
                         break;
                 }
@@ -614,16 +624,21 @@ define(['./renderer/renderer', './utils/storage',
 
                         self.interface.loadBank(bankSize, data);
 
-                        log.info('Received bank boi.');
-
                         break;
 
 
                     case Packets.BankOpcode.Add:
 
+                        if (!self.interface.bank)
+                            return;
+
+                        self.interface.bank.add(info);
+
                         break;
 
                     case Packets.BankOpcode.Remove:
+
+                        self.interface.bank.remove(info);
 
                         break;
                 }
@@ -691,9 +706,12 @@ define(['./renderer/renderer', './utils/storage',
                 if (!entity || entity.type !== 'player')
                     return;
 
-                if (entity.level !== info.level)
+                entity.experience = info.experience;
+
+                if (entity.level !== info.level) {
+                    entity.level = info.level;
                     self.info.create(Modules.Hits.LevelUp, null, entity.x, entity.y);
-                else
+                } else if (entity.id === self.player.id)
                     self.info.create(Modules.Hits.Experience, [info.amount], entity.x, entity.y);
 
             });

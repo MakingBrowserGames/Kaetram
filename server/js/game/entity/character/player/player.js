@@ -49,7 +49,7 @@ module.exports = Player = Character.extend({
         self.handler = new Handler(self);
 
         self.inventory = new Inventory(self, 20);
-        self.bank = new Bank(self, 30);
+        self.bank = new Bank(self, 72);
         self.quests = new Quests(self);
         self.abilities = new Abilities(self);
 
@@ -172,13 +172,12 @@ module.exports = Player = Character.extend({
         self.experience += exp;
         self.level = Formulas.expToLevel(self.experience);
 
-        self.world.pushBroadcast(new Messages.Experience({
+        self.world.pushToAdjacentGroups(self.group, new Messages.Experience({
             id: self.instance,
             amount: exp,
+            experience: self.experience,
             level: self.level
         }));
-
-        self.sync();
     },
 
     eat: function(id) {
@@ -280,8 +279,6 @@ module.exports = Player = Character.extend({
 
         self.send(new Messages.Equipment(Packets.EquipmentOpcode.Equip, [type, Items.idToName(id), string, count, ability, abilityLevel]));
         self.sync();
-
-        self.save();
     },
 
     die: function() {

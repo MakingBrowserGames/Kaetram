@@ -27,7 +27,12 @@ var Modules = {
     },
 
     Projectiles: {
-        Arrow: 0
+        Arrow: 0,
+        Boulder: 1,
+        FireBall: 2,
+        IceBall: 3,
+        Terror: 4,
+        Tornado: 5
     },
 
     Abilities: {

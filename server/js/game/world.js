@@ -263,8 +263,6 @@ module.exports = World = cls.Class.extend({
 
             self.addProjectile(projectile);
 
-        } else {
-
         }
 
         return projectile;
