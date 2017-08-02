@@ -15,7 +15,7 @@ define(function() {
             self.song = null;
             self.songName = null;
 
-            self.enabled = false;
+            self.enabled = true;
 
             self.load();
         },
@@ -291,10 +291,6 @@ define(function() {
             return (name in this.music) || (name in this.sounds);
         },
 
-        toggle: function() {
-            this.enabled = !this.enabled;
-        },
-
         get: function(name) {
             var self = this;
 
@@ -333,7 +329,7 @@ define(function() {
         },
 
         isEnabled: function() {
-            return this.game.storage.data.settings.soundEnabled || this.enabled;
+            return this.game.storage.data.settings.soundEnabled && this.enabled;
         }
 
     });

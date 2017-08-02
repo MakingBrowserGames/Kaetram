@@ -49,7 +49,7 @@ module.exports = Player = Character.extend({
         self.handler = new Handler(self);
 
         self.inventory = new Inventory(self, 20);
-        self.bank = new Bank(self, 72);
+        self.bank = new Bank(self, 56);
         self.quests = new Quests(self);
         self.abilities = new Abilities(self);
 

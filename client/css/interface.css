@@ -65,7 +65,7 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-#itemCount {
+.itemCount {
     font-family: 'AdvoCut', sans-serif;
     color: rgba(255, 255, 255, 1);
 }
@@ -246,12 +246,12 @@
 
 #bankSlots {
     position: absolute;
-    top: 12%;
+    top: 9%;
 }
 
 #bankInventorySlots {
     position: absolute;
-    top: 10%;
+    top: 13%;
     left: 6%;
 }
 
@@ -259,7 +259,7 @@
     float: left;
 }
 
-.bankSlot div {
+.bankImage {
     width: 100%;
     height: 100%;
 }
@@ -364,7 +364,7 @@
         border: 3px solid #fcda5c;
     }
 
-    #itemCount {
+    .itemCount {
         width: 48px;
         height: 21px;
         font-size: 18px;
@@ -596,6 +596,45 @@
         -webkit-transition: .5s width ease;
     }
 
+    #bank {
+        width: 900px;
+        height: 501px;
+    }
+
+    #bankContainer, #bankInventoryContainer {
+        background: url('../img/3/bank.png');
+    }
+
+    #bankContainer {
+        width: 513px;
+        height: 501px;
+        background-position: -396px 0;
+    }
+
+    #bankSlots {
+        width: 432px;
+        height: 360px;
+        left: 429px;
+    }
+
+    #bankInventoryContainer {
+        width: 387px;
+        height: 381px;
+        background-position: 0 0;
+    }
+
+    #bankInventorySlots {
+        width: 288px;
+        height: 240px;
+    }
+
+    .bankSlot {
+        width: 48px;
+        height: 45px;
+        background: url(../img/3/containers.png) -900px -516px;
+    }
+
+
 }
 
 @media only screen and (max-width: 1500px), only screen and (max-height: 870px) {
@@ -739,7 +778,7 @@
         border: 2px solid #fcda5c;
     }
 
-    #itemCount {
+    .itemCount {
         width: 32px;
         height: 14px;
         font-size: 12px;
@@ -991,7 +1030,7 @@
     #bankSlots {
         width: 288px;
         height: 240px;
-        left: 285px;
+        left: 286px;
     }
 
     #bankInventoryContainer {
@@ -1158,7 +1197,7 @@
         border: 1px solid #fcda5c;
     }
 
-    #itemCount {
+    .itemCount {
         width: 16px;
         height: 7px;
         font-size: 6px;
@@ -1389,6 +1428,44 @@
         -o-transition: .5s width ease;
         -moz-transition: .5s width ease;
         -webkit-transition: .5s width ease;
+    }
+
+    #bank {
+        width: 300px;
+        height: 167px;
+    }
+
+    #bankContainer, #bankInventoryContainer {
+        background: url('../img/1/bank.png');
+    }
+
+    #bankContainer {
+        width: 171px;
+        height: 167px;
+        background-position: -132px 0;
+    }
+
+    #bankSlots {
+        width: 144px;
+        height: 120px;
+        left: 143px;
+    }
+
+    #bankInventoryContainer {
+        width: 129px;
+        height: 127px;
+        background-position: 0 0;
+    }
+
+    #bankInventorySlots {
+        width: 96px;
+        height: 80px;
+    }
+
+    .bankSlot {
+        width: 16px;
+        height: 15px;
+        background: url(../img/1/containers.png) -300px -172px;
     }
 
 }

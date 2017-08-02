@@ -20,7 +20,7 @@ Formulas.getDamage = function(attacker, target) {
      * Set the baseline damage
      */
 
-    damage = (attacker.level + (isPlayer ? Utils.randomInt(0, 9) : Utils.randomInt(-5, 2))) * Utils.randomRange(0.45, 2.1875);
+    damage = attacker.level * Utils.randomRange(0.45, 2.1875) + (isPlayer ? Utils.randomInt(0, 9) : Utils.randomInt(-5, 2));
 
     /**
      * Take in consideration weapon level & armour

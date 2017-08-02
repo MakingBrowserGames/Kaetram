@@ -46,7 +46,7 @@ define(['jquery', './container/container'], function($, Container) {
                 var itemSlotList = $('<li></li>');
 
                 itemSlotList.append(itemSlot);
-                itemSlotList.append('<div id="itemCount">' + (item.count > 1 ? item.count : '') + '</div>');
+                itemSlotList.append('<div id="itemCount' + i + '" class="itemCount">' + (item.count > 1 ? item.count : '') + '</div>');
 
                 list.append(itemSlotList);
             }
@@ -165,7 +165,7 @@ define(['jquery', './container/container'], function($, Container) {
             if (self.game.app.isMobile())
                 cssSlot.css('background-size', '600%');
 
-            item.find('#itemCount').text(slot.count > 1 ? slot.count : '');
+            item.find('#itemCount' + info.index).text(slot.count > 1 ? slot.count : '');
         },
 
         remove: function(info) {
@@ -178,11 +178,11 @@ define(['jquery', './container/container'], function($, Container) {
 
             slot.count -= info.count;
 
-            item.find('#itemCount').text(slot.count);
+            item.find('#itemCount' + info.index).text(slot.count);
 
             if (slot.count < 1) {
                 item.find('#slot' + info.index).css('background-image', '');
-                item.find('#itemCount').text('');
+                item.find('#itemCount' + info.index).text('');
                 slot.empty();
             }
         },

@@ -95,18 +95,18 @@ define(['jquery', '../page'], function($, Page) {
             self.soundButton.click(function() {
                 var isActive = self.soundButton.hasClass('active');
 
-                self.audio.toggle();
-
                 self.setSound(isActive);
 
                 if (isActive) {
                     self.audio.update();
+                    self.audio.enabled = true;
 
                     self.soundCheck.addClass('active');
                     self.soundButton.removeClass('active');
                 } else {
                     self.audio.reset(self.audio.song);
                     self.audio.song = null;
+                    self.audio.enabled = false;
 
                     self.soundCheck.removeClass('active');
                     self.soundButton.addClass('active');

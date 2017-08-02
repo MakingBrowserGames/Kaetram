@@ -28,7 +28,12 @@ define(['jquery', './container/container'], function($, Container) {
 
                 self.container.setSlot(i, item);
 
-                var image = $('<div></div>');
+                slot.css({
+                    'margin-right': (2 * self.getScale()) + 'px',
+                    'margin-bottom': (4 * self.getScale()) + 'px'
+                });
+
+                var image = $('<div id="bankImage' + i + '" class="bankImage"></div>');
 
                 if (item.string)
                     image.css('background-image', self.container.getImageFormat(self.getDrawingScale(), item.string));
@@ -37,7 +42,17 @@ define(['jquery', './container/container'], function($, Container) {
                     self.click('bank', event);
                 });
 
+                if (self.game.app.isMobile())
+                    image.css('background-size', '600%');
+
                 slot.append(image);
+                slot.append('<div id="bankItemCount' + i + '" class="itemCount">' + (item.count > 1 ? item.count : '') + '</div>');
+
+                slot.find('#bankItemCount' + i).css({
+                    'font-size': (4 * self.getScale()) + 'px',
+                    'margin-top': '0',
+                    'margin-left': '0'
+                });
 
                 var bankListItem = $('<li></li>');
 
@@ -52,10 +67,10 @@ define(['jquery', './container/container'], function($, Container) {
 
                 iSlot.css({
                     'margin-right': (3 * self.getScale()) + 'px',
-                    'margin-top': (6 * self.getScale()) + 'px'
+                    'margin-bottom': (6 * self.getScale()) + 'px'
                 });
 
-                var slotImage = $('<div></div>');
+                var slotImage = $('<div id="inventoryImage' + j + '" class="bankImage"></div>');
 
                 if (iItem.string)
                     slotImage.css('background-image', self.container.getImageFormat(self.getDrawingScale(), iItem.string));
@@ -64,7 +79,16 @@ define(['jquery', './container/container'], function($, Container) {
                     self.click('inventory', event);
                 });
 
+                if (self.game.app.isMobile())
+                    slotImage.css('background-size', '600%');
+
                 iSlot.append(slotImage);
+                iSlot.append('<div id="inventoryItemCount' + j + '" class="itemCount">' + (iItem.count > 1 ? iItem.count : '') + '</div>');
+
+                iSlot.find('#inventoryItemCount' + j).css({
+                    'margin-top': '0',
+                    'margin-left': '0'
+                });
 
                 var inventoryListItem = $('<li></li>');
 
@@ -72,6 +96,51 @@ define(['jquery', './container/container'], function($, Container) {
 
                 inventoryList.append(inventoryListItem);
             }
+        },
+
+        resize: function() {
+            var self = this,
+                bankList = self.getBankList(),
+                inventoryList = self.getInventoryList();
+
+            for (var i = 0; i < bankList.length; i++) {
+                var bankSlot = $(bankList[i]).find('#bankSlot' + i),
+                    image = bankSlot.find('#bankImage' + i),
+                    slot = self.container.slots[i];
+
+                bankSlot.css({
+                    'margin-right': (2 * self.getScale()) + 'px',
+                    'margin-bottom': (4 * self.getScale()) + 'px'
+                });
+
+                bankSlot.find('#bankItemCount' + i).css({
+                    'font-size': (4 * self.getScale()) + 'px',
+                    'margin-top': '0',
+                    'margin-left': '0'
+                });
+
+                if (self.game.app.isMobile())
+                    image.css('background-size', '600%');
+                else
+                    image.css('background-image', self.container.getImageFormat(self.getDrawingScale(), slot.string));
+            }
+
+            for (var j = 0; j < inventoryList.length; j++) {
+                var inventorySlot = $(inventoryList[j]).find('#bankInventorySlot' + j),
+                    iImage = inventorySlot.find('#inventoryImage' + j),
+                    iSlot = self.inventoryContainer.slots[j];
+
+                inventorySlot.css({
+                    'margin-right': (3 * self.getScale()) + 'px',
+                    'margin-bottom': (6 * self.getScale()) + 'px'
+                });
+
+                if (self.game.app.isMobile())
+                    iImage.css('background-size', '600%');
+                else
+                    iImage.css('background-image', self.container.getImageFormat(self.getDrawingScale(), iSlot.string));
+            }
+
         },
 
         click: function(type, event) {
@@ -95,10 +164,17 @@ define(['jquery', './container/container'], function($, Container) {
 
             slot.setCount(info.count);
 
-            var cssSlot = item.find('#bankSlot' + info.index).find('div');
+            var bankSlot = item.find('#bankSlot' + info.index),
+                cssSlot = bankSlot.find('#bankImage' + info.index),
+                count = bankSlot.find('#bankItemCount' + info.index);
 
             cssSlot.css('background-image', self.container.getImageFormat(self.getDrawingScale(), info.string));
 
+            if (self.game.app.isMobile())
+                cssSlot.css('background-size', '600%');
+
+            if (slot.count > 1)
+                count.text(slot.count)
         },
 
         remove: function(info) {
@@ -112,7 +188,11 @@ define(['jquery', './container/container'], function($, Container) {
             slot.count -= info.count;
             
             if (slot.count < 1) {
-                item.find('#bankSlot' + info.index).find('div').css('background-image', '');
+                var divItem = item.find('#bankSlot' + info.index);
+
+                divItem.find('#bankImage' + info.index).css('background-image', '');
+                divItem.find('#bankItemCount' + info.index).text('');
+
                 slot.empty();
             }
         },
@@ -124,9 +204,17 @@ define(['jquery', './container/container'], function($, Container) {
             if (!item)
                 return;
             
-            var slot = item.find('#bankInventorySlot' + info.index).find('div');
+            var slot = item.find('#bankInventorySlot' + info.index),
+                image = slot.find('#inventoryImage' + info.index);
             
-            slot.css('background-image', self.container.getImageFormat(self.getDrawingScale(), info.string));
+            image.css('background-image', self.container.getImageFormat(self.getDrawingScale(), info.string));
+
+            if (self.game.app.isMobile())
+                image.css('background-size', '600%');
+
+            if (info.count > 1)
+                slot.find('#inventoryItemCount' + info.index).text(info.count);
+
         },
 
         removeInventory: function(info) {
@@ -136,9 +224,22 @@ define(['jquery', './container/container'], function($, Container) {
             if (!item)
                 return;
 
-            var slot = item.find('#bankInventorySlot' + info.index).find('div');
+            var slot = item.find('#bankInventorySlot' + info.index);
 
-            slot.css('background-image', '');
+            slot.find('#inventoryImage' + info.index).css('background-image', '');
+            slot.find('#inventoryItemCount' + info.index).text('');
+        },
+
+        display: function() {
+            this.body.fadeIn('slow');
+        },
+
+        hide: function() {
+            this.body.fadeOut('fast');
+        },
+
+        isVisible: function() {
+            return this.body.css('display') === 'block';
         },
 
         getDrawingScale: function() {

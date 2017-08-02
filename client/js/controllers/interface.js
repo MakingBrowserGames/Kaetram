@@ -29,6 +29,9 @@ define(['jquery', '../interface/inventory',
 
             if (self.profile)
                 self.profile.resize();
+
+            if (self.bank)
+                self.bank.resize();
         },
 
         loadInventory: function(size, data) {
@@ -119,6 +122,9 @@ define(['jquery', '../interface/inventory',
 
             if (self.game.input && self.game.input.chatHandler && self.game.input.chatHandler.input.is(':visible'))
                 self.game.input.chatHandler.hideInput();
+
+            if (self.bank)
+                self.bank.hide();
         },
 
         displayNotify: function(message) {

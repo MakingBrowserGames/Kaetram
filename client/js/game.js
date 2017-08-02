@@ -410,6 +410,9 @@ define(['./renderer/renderer', './utils/storage',
                 if (!entity)
                     return;
 
+                if (entity.hasPath())
+                    entity.stop();
+
                 entity.dead = true;
 
                 if (entity.type === 'item') {
@@ -767,7 +770,7 @@ define(['./renderer/renderer', './utils/storage',
                         break;
 
                     case Packets.NPCOpcode.Bank:
-
+                        self.interface.bank.display();
                         break;
                 }
 

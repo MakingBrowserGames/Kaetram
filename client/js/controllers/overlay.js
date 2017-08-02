@@ -27,15 +27,22 @@ define(['jquery'], function($) {
                 return;
             }
 
+            log.info('entity exists');
+
             if (!self.isVisible())
                 self.display();
 
             self.hovering = entity;
 
-            self.name.html(entity.name);
+            self.name.html(entity.type === 'player' ? entity.username : entity.name);
 
-            if (self.hasHealth())
+            if (self.hasHealth()) {
+                self.health.css('display', 'block');
                 self.details.html(entity.hitPoints + ' / ' + entity.maxHitPoints);
+            } else {
+                self.health.css('display', 'none');
+                self.details.html('');
+            }
 
             self.hovering.onHitPoints(function(hitPoints) {
                 if (hitPoints < 1)
