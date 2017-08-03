@@ -238,7 +238,7 @@ module.exports = Player = Character.extend({
         switch(type) {
             case Modules.Equipment.Armour:
 
-                if (self.hasArmour())
+                if (self.hasArmour() && self.armour.id !== 114)
                     self.inventory.add(self.armour.getItem());
 
                 self.setArmour(id, count, ability, abilityLevel);
@@ -514,7 +514,7 @@ module.exports = Player = Character.extend({
         self.y = 88;
     },
 
-    sync: function() {
+    sync: function(all) {
         var self = this;
 
         /**
@@ -537,7 +537,7 @@ module.exports = Player = Character.extend({
             weapon: self.weapon.getData()
         };
 
-        self.world.pushToAdjacentGroups(self.group, new Messages.Sync(info), self.instance);
+        self.world.pushToAdjacentGroups(self.group, new Messages.Sync(info), all ? null : self.instance);
 
         self.save();
     },

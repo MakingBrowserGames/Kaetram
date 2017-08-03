@@ -1496,6 +1496,31 @@
     "attack":0,
     "name":"Sword"
 
+  },
+
+  "Banana": {
+    "id": 249,
+    "type": "object"
+  },
+
+  "Watermelon": {
+    "id": 250,
+    "type": "object"
+  },
+
+  "Apple": {
+    "id": 251,
+    "type": "object"
+  },
+
+  "Orange": {
+    "id": 252,
+    "type": "object"
+  },
+
+  "Women": {
+    "type": "object"
   }
+
 }
 

@@ -428,10 +428,8 @@ define(['./renderer/renderer', './utils/storage',
 
                 entity.setSprite(self.getSprite('death'));
 
-                if (self.player.hasTarget() && self.player.target.id === entity.id) {
+                if (self.player.hasTarget() && self.player.target.id === entity.id)
                     self.player.removeTarget();
-                    self.input.updateCursor();
-                }
 
                 entity.animate('death', 120, 1, function() {
                     self.entities.unregisterPosition(entity);

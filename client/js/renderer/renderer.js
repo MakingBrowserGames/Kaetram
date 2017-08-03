@@ -426,6 +426,9 @@ define(['jquery', './camera', './tile',
             if (self.drawLevels && (entity.type === 'mob' || entity.type === 'player'))
                 self.drawText('Level ' + entity.level, (entity.x + 8) * factor, (entity.y - 10) * factor, true, colour);
 
+            if (entity.type === 'item' && entity.count > 1)
+                self.drawText(entity.count, (entity.x + 8) * factor, (entity.y - 10) * factor, true, colour);
+
             self.textContext.restore();
         },
 

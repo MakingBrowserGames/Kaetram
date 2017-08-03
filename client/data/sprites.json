@@ -10585,6 +10585,62 @@
   },
 
   {
+    "id": "item-orange",
+    "width": 16,
+    "height": 16,
+    "animations": {
+      "idle": {
+        "length": 6,
+        "row": 0
+      }
+    },
+    "offsetX": 0,
+    "offsetY": 0
+  },
+
+  {
+    "id": "item-watermelon",
+    "width": 16,
+    "height": 16,
+    "animations": {
+      "idle": {
+        "length": 6,
+        "row": 0
+      }
+    },
+    "offsetX": 0,
+    "offsetY": 0
+  },
+
+  {
+    "id": "item-apple",
+    "width": 16,
+    "height": 16,
+    "animations": {
+      "idle": {
+        "length": 6,
+        "row": 0
+      }
+    },
+    "offsetX": 0,
+    "offsetY": 0
+  },
+
+  {
+    "id": "item-banana",
+    "width": 16,
+    "height": 16,
+    "animations": {
+      "idle": {
+        "length": 6,
+        "row": 0
+      }
+    },
+    "offsetX": 0,
+    "offsetY": 0
+  },
+
+  {
     "id": "mantis",
     "width": 42,
     "height": 42,

@@ -1,6 +1,4 @@
-var cls = require('../../../../../lib/class'),
-    Shard = require('./shard');
-
+var cls = require('../../../../../lib/class');
 module.exports = Enchant = cls.Class.extend({
 
     /**
@@ -23,10 +21,9 @@ module.exports = Enchant = cls.Class.extend({
         var self = this;
 
         self.player = player;
-        self.shards = new Shard(shards);
     },
 
-    enchant: function(id) {
+    enchant: function(item) {
         var self = this;
 
 

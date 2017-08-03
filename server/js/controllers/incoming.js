@@ -42,6 +42,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleWho(message);
                     break;
 
+                case Packets.Equipment:
+                    self.handleEquipment(message);
+                    break;
+
                 case Packets.Movement:
                     self.handleMovement(message);
                     break;
@@ -242,6 +246,81 @@ module.exports = Incoming = cls.Class.extend({
                 self.player.send(new Messages.Spawn(entity));
 
         });
+    },
+
+    handleEquipment: function(message) {
+        var self = this,
+            opcode = message.shift();
+
+        log.info(opcode);
+
+        switch (opcode) {
+
+            case Packets.EquipmentOpcode.Unequip:
+                var type = message.shift();
+
+                if (!self.player.inventory.hasSpace()) {
+                    self.player.send(new Messages.Notification(Packets.NotificationOpcode.Text, 'You do not have enough space in your inventory.'));
+                    return;
+                }
+
+                log.info(type);
+
+                switch (type) {
+                    case 'weapon':
+
+                        if (!self.player.hasWeapon())
+                            return;
+
+                        self.player.inventory.add(self.player.weapon.getItem());
+                        self.player.setWeapon(-1, -1, -1, -1);
+
+                        break;
+
+                    case 'armour':
+                        if (self.player.hasArmour() && self.player.armour.id === 114)
+                            return;
+
+                        self.player.inventory.add(self.player.armour.getItem());
+                        self.player.setArmour(114, 1, -1, -1);
+
+                        break;
+
+                    case 'pendant':
+
+                        if (!self.player.hasPendant())
+                            return;
+
+                        self.player.inventory.add(self.player.pendant.getItem());
+                        self.player.setPendant(-1, -1, -1, -1);
+
+                        break;
+
+                    case 'ring':
+
+                        if (!self.player.hasRing())
+                            return;
+
+                        self.player.inventory.add(self.player.ring.getItem());
+                        self.player.setRing(-1, -1, -1, -1);
+
+                        break;
+
+                    case 'boots':
+
+                        if (!self.player.hasBoots())
+                            return;
+
+                        self.player.inventory.add(self.player.boots.getItem());
+                        self.player.setBoots(-1, -1, -1, -1);
+
+                        break;
+                }
+
+                self.player.sync(true);
+
+                break;
+        }
     },
 
     handleMovement: function(message) {

@@ -46,6 +46,27 @@ define(['jquery', '../page'], function($, Page) {
             self.loadSlots();
 
             self.loaded = true;
+
+            self.weaponSlot.click(function() {
+                self.game.socket.send(Packets.Equipment, [Packets.EquipmentOpcode.Unequip, 'weapon']);
+            });
+
+            self.armourSlot.click(function() {
+                self.game.socket.send(Packets.Equipment, [Packets.EquipmentOpcode.Unequip, 'armour']);
+            });
+
+            self.pendantSlot.click(function() {
+                self.game.socket.send(Packets.Equipment, [Packets.EquipmentOpcode.Unequip, 'pendant']);
+            });
+
+            self.ringSlot.click(function() {
+                self.game.socket.send(Packets.Equipment, [Packets.EquipmentOpcode.Unequip, 'ring']);
+            });
+
+            self.bootsSlot.click(function() {
+                self.game.socket.send(Packets.Equipment, [Packets.EquipmentOpcode.Unequip, 'boots']);
+            });
+
         },
 
         loadSlots: function() {
