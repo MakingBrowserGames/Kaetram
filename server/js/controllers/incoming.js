@@ -258,10 +258,8 @@ module.exports = Incoming = cls.Class.extend({
                     playerX = message.shift(),
                     playerY = message.shift();
 
-                if (playerX !== self.player.x || playerY !== self.player.y) {
-                    log.info('[Request] Player not in sync..');
+                if (playerX !== self.player.x || playerY !== self.player.y)
                     return;
-                }
 
                 self.player.guessPosition(requestX, requestY);
 

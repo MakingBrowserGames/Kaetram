@@ -131,7 +131,12 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
 
                         case Modules.Keys.Four:
 
-                            self.getPlayer().triggerHealthBar();
+                            self.game.renderer.forEachVisibleEntity(function(entity) {
+                                log.info(self.game.pointer.pointers);
+
+                                self.game.pointer.create(entity.id, Modules.Pointers.Entity);
+                                self.game.pointer.setToEntity(entity);
+                            });
 
                             break;
 

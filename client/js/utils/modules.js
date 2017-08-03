@@ -109,5 +109,11 @@ Modules = {
             fill: 'rgb(66, 183, 77)',
             stroke: 'rgb(50, 120 , 50)'
         }
+    },
+
+    Pointers: {
+        Entity: 0,
+        Position: 1,
+        Relative: 2
     }
 };

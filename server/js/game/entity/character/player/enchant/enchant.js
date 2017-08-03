@@ -29,7 +29,7 @@ module.exports = Enchant = cls.Class.extend({
     enchant: function(id) {
         var self = this;
 
-        
+
     }
 
 });

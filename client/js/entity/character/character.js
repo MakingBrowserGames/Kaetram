@@ -215,7 +215,6 @@ define(['../entity', '../../utils/transition'], function(Entity, Transition) {
             if (self.step % 2 === 0 && self.secondStepCallback)
                 self.secondStepCallback();
 
-
             self.prevGridX = self.gridX;
             self.prevGridY = self.gridY;
 

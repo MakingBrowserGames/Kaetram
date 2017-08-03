@@ -5,10 +5,10 @@ define(['./renderer/renderer', './utils/storage',
         './renderer/updater', './controllers/entities', './controllers/input',
         './entity/character/player/playerhandler', './utils/pathfinder',
         './controllers/zoning', './controllers/info', './controllers/bubble',
-        './controllers/interface', './controllers/audio',
+        './controllers/interface', './controllers/audio', './controllers/pointer',
         './utils/modules', './network/packets'],
         function(Renderer, LocalStorage, Map, Socket, Player, Updater,
-                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info, Bubble, Interface, Audio) {
+                 Entities, Input, PlayerHandler, Pathfinder, Zoning, Info, Bubble, Interface, Audio, Pointer) {
 
     return Class.extend({
 
@@ -146,6 +146,8 @@ define(['./renderer/renderer', './utils/storage',
             self.setInfo(new Info(self));
 
             self.setBubble(new Bubble(self));
+
+            self.setPointer(new Pointer(self));
 
             self.setAudio(new Audio(self));
 
@@ -410,14 +412,12 @@ define(['./renderer/renderer', './utils/storage',
                 if (!entity)
                     return;
 
-                if (entity.hasPath())
-                    entity.stop();
-
                 entity.dead = true;
 
+                entity.stop();
+
                 if (entity.type === 'item') {
-                    self.entities.unregisterPosition(entity);
-                    delete self.entities.entities[entity.id];
+                    self.entities.removeItem(entity);
                     return;
                 }
 
@@ -427,6 +427,11 @@ define(['./renderer/renderer', './utils/storage',
                 entity.hitPoints = 0;
 
                 entity.setSprite(self.getSprite('death'));
+
+                if (self.player.hasTarget() && self.player.target.id === entity.id) {
+                    self.player.removeTarget();
+                    self.input.updateCursor();
+                }
 
                 entity.animate('death', 120, 1, function() {
                     self.entities.unregisterPosition(entity);
@@ -1037,6 +1042,11 @@ define(['./renderer/renderer', './utils/storage',
         setBubble: function(bubble) {
             if (!this.bubble)
                 this.bubble = bubble;
+        },
+
+        setPointer: function(pointer) {
+            if (!this.pointer)
+                this.pointer = pointer;
         },
 
         setInterface: function(intrface) {

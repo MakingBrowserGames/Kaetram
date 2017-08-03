@@ -227,6 +227,7 @@
 #attackInfo .health {
     width: 90%;
     left: 5%;
+    overflow: hidden;
 }
 
 #bank {

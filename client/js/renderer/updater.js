@@ -234,6 +234,9 @@ define(['../entity/character/character'], function(Character) {
         updateBubbles: function() {
             if (this.game.bubble)
                 this.game.bubble.update(this.game.time);
+
+            if (this.game.pointer)
+                this.game.pointer.update();
         },
 
         setSprites: function(sprites) {

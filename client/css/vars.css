@@ -141,6 +141,14 @@ body {
     margin-top: 6px;
 }
 
+.pointer {
+    display: inline-block;
+    position: absolute;
+    pointer-events: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
 .bubble {
     background: rgba(45, 45, 45, 0.7);
     padding: 3px 10px 0 10px;

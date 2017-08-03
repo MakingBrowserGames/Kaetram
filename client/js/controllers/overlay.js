@@ -27,8 +27,6 @@ define(['jquery'], function($) {
                 return;
             }
 
-            log.info('entity exists');
-
             if (!self.isVisible())
                 self.display();
 
@@ -37,18 +35,27 @@ define(['jquery'], function($) {
             self.name.html(entity.type === 'player' ? entity.username : entity.name);
 
             if (self.hasHealth()) {
-                self.health.css('display', 'block');
+                self.health.css({
+                    'display': 'block',
+                    'width': Math.ceil(entity.hitPoints / entity.maxHitPoints * 100) - 10 + '%'
+                });
+
                 self.details.html(entity.hitPoints + ' / ' + entity.maxHitPoints);
             } else {
                 self.health.css('display', 'none');
                 self.details.html('');
             }
 
+            if (self.hovering.type === 'npc' || self.hovering.type === 'item')
+                return;
+
             self.hovering.onHitPoints(function(hitPoints) {
                 if (hitPoints < 1)
                     self.hide();
-                else
+                else {
+                    self.health.css('width', Math.ceil(hitPoints / self.hovering.maxHitPoints * 100) + '%');
                     self.details.html(hitPoints + ' / ' + self.hovering.maxHitPoints);
+                }
             });
         },
 

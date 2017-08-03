@@ -234,6 +234,7 @@ module.exports = World = cls.Class.extend({
             if (drop)
                 self.dropItem(drop.id, drop.count, deathX, deathY);
 
+
         } else if (character.type === 'player')
             character.die();
     },

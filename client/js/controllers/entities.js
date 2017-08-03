@@ -47,11 +47,6 @@ define(['../renderer/grids', '../entity/objects/chest',
                 self.sprites.updateSprites();
         },
 
-        clean: function() {
-            var self = this;
-
-        },
-
         create: function(type, info) {
             var self = this,
                 id = info.shift(),
@@ -269,23 +264,6 @@ define(['../renderer/grids', '../entity/objects/chest',
             if (!(entity instanceof Item && entity.dropped) && !self.renderer.isPortableDevice())
                 entity.fadeIn(self.game.time);
 
-            /**
-             * Original TTA only initialized the callback when the device
-             * was a mobile. But here we initialize it regardless, and only
-             * pass necessary information if it is not a computer-sized device.
-             * This way it fits in perfectly with the resizing functionality.
-             */
-
-            entity.onDirty(function(e) {
-                if (!self.game.renderer.isPortableDevice())
-                    return;
-
-                if (self.game.renderer.camera && e && e.gridX && e.gridY && !self.game.renderer.camera.isVisiblePosition(e.gridX, e.gridY)) {
-                    e.dirtyRect = self.renderer.getEntityBounds(e);
-                    self.renderer.checkDirty(e);
-                }
-            });
-
         },
 
         removeItem: function(item) {
@@ -330,10 +308,9 @@ define(['../renderer/grids', '../entity/objects/chest',
 
             self.grids.addToRenderingGrid(entity, entity.gridX, entity.gridY);
 
-            if (entity.nextGridX >= 0 && entity.nextGridY) {
+            if (entity.nextGridX > -1 && entity.nextGridY > -1) {
                 self.grids.entityGrid[entity.nextGridY][entity.nextGridX][entity.id] = entity;
 
-                //TODO - Remove this after all pathing is done
                 if (!(entity instanceof Player))
                     self.grids.pathingGrid[entity.nextGridY][entity.nextGridX] = 1;
             }
