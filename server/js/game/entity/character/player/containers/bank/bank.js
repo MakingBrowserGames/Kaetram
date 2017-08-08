@@ -22,23 +22,6 @@ module.exports = Slot = Container.extend({
         self.owner.send(new Messages.Bank(Packets.BankOpcode.Batch, [self.size, self.slots]));
     },
 
-    loadEmpty: function() {
-        var self = this,
-            ids = [],
-            counts = [],
-            abilities = [],
-            abilityLevels = [];
-
-        for (var i = 0; i < self.size; i++) {
-            ids.push(-1);
-            counts.push(-1);
-            abilities.push(-1);
-            abilityLevels.push(-1);
-        }
-
-        self.load(ids, counts, abilities, abilityLevels);
-    },
-
     add: function(id, count, ability, abilityLevel) {
         var self = this;
 

@@ -276,7 +276,15 @@ define(['./renderer/renderer', './utils/storage',
 
                     case Packets.EquipmentOpcode.Unequip:
 
-                        self.player.unequip(info.shift());
+                        var type = info.shift();
+
+                        self.player.unequip(type);
+
+                        if (type === 'armour')
+                            self.player.setSprite(self.getSprite(self.player.getSpriteName()));
+
+
+                        self.interface.profile.update();
 
                         break;
                 }

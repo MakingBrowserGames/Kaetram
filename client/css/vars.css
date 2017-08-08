@@ -289,6 +289,16 @@ html [type="button"],
     /* 2 */
 }
 
+#about p {
+    width: 50%;
+    margin-left: 10%;
+    margin-top: 5%;
+}
+
+#close-about {
+    margin-top: 20%;
+}
+
 @media only screen and (min-width: 1501px) {
 
     #parchment h1, #loadCharacter h1, #createCharacter h1, #about h1 {
@@ -762,6 +772,10 @@ html [type="button"],
         border-radius: 4px;
         height: 15px;
         width: 10px;
+    }
+
+    #about h1 {
+        font-size: 26px;
     }
 }
 

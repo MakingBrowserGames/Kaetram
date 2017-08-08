@@ -252,8 +252,6 @@ module.exports = Incoming = cls.Class.extend({
         var self = this,
             opcode = message.shift();
 
-        log.info(opcode);
-
         switch (opcode) {
 
             case Packets.EquipmentOpcode.Unequip:
@@ -263,8 +261,6 @@ module.exports = Incoming = cls.Class.extend({
                     self.player.send(new Messages.Notification(Packets.NotificationOpcode.Text, 'You do not have enough space in your inventory.'));
                     return;
                 }
-
-                log.info(type);
 
                 switch (type) {
                     case 'weapon':
@@ -317,7 +313,8 @@ module.exports = Incoming = cls.Class.extend({
                         break;
                 }
 
-                self.player.sync(true);
+                self.player.send(new Messages.Equipment(Packets.EquipmentOpcode.Unequip, [type]));
+                self.player.sync();
 
                 break;
         }

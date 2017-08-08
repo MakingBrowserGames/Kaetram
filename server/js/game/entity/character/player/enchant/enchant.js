@@ -9,11 +9,7 @@ module.exports = Enchant = cls.Class.extend({
      * When the player has 10 or more shards, they can be taken to an enchantment table
      * to convert them into higher tier shards.
      *
-     * Tier 1 - Damage boost (1-5)
-     * Tier 2 - Damage boost (1-10 & 10% for special ability or special ability level up)
-     * Tier 3 - Damage boost (1-15% & 15% for special ability or special ability level up)
-     * Tier 4 - Damage boost (1-25% & 20% for special ability or special ability level up)
-     * Tier 5 - Damage boost (1-40% & 25% for special ability or special ability level up)
+
      */
 
 

@@ -31,6 +31,10 @@ define(['jquery'], function($) {
 
             self.rememberMe = $('#rememberMe');
 
+            self.about = $('#toggle-about');
+            self.credits = $('#toggle-credits');
+            self.git = $('#toggle-git');
+
             self.loginFields = [];
             self.registerFields = [];
 
@@ -63,6 +67,27 @@ define(['jquery'], function($) {
 
             self.cancelButton.click(function() {
                 self.openScroll('createCharacter', 'loadCharacter');
+            });
+
+            self.parchment.click(function() {
+                if (self.parchment.hasClass('about') || self.parchment.hasClass('credits') || self.parchment.hasClass('git')) {
+
+                    self.parchment.removeClass('about credits git');
+                    self.displayScroll('loadCharacter');
+
+                }
+            });
+
+            self.about.click(function() {
+                self.displayScroll('about');
+            });
+
+            self.credits.click(function() {
+                self.displayScroll('credits');
+            });
+
+            self.git.click(function() {
+                self.displayScroll('git');
             });
 
             self.rememberMe.click(function() {
@@ -203,7 +228,7 @@ define(['jquery'], function($) {
         openScroll: function(origin, destination) {
             var self = this;
 
-            if (!destination)
+            if (!destination || self.loggingIn)
                 return;
 
             self.cleanErrors();

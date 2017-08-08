@@ -90,6 +90,13 @@ Items.isBoots = function(string) {
     return false;
 };
 
+Items.getType = function(id) {
+    if (id in Items.Ids)
+        return Items.Ids[id].type;
+
+    return null;
+};
+
 Items.isStackable = function(id) {
     return id === 190 || id === 191 || id === 192 || id === 193 || id === 195 || id === 199 || id === 202;
 };

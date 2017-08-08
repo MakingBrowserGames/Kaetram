@@ -9,11 +9,11 @@ Kaetram To-Do List:
 - Combat Formula improvements
 
 - Add experience bar under abilities
-- Fix animation speed
 - Move container down on mobile
 - Fix combat initialization delay
-- Slow down fire animation
 - Implement quick actions - for hotkey
+
+- Add close button to interfaces
 
 
 Finished:

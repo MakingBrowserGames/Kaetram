@@ -19,7 +19,8 @@ var Character = require('../character'),
     Inventory = require('./containers/inventory/inventory'),
     Abilities = require('./ability/abilities'),
     Bank = require('./containers/bank/bank'),
-    config = require('../../../../../config.json');
+    config = require('../../../../../config.json'),
+    Utils = require('../../../../util/utils');
 
 module.exports = Player = Character.extend({
 
@@ -278,7 +279,68 @@ module.exports = Player = Character.extend({
         }
 
         self.send(new Messages.Equipment(Packets.EquipmentOpcode.Equip, [type, Items.idToName(id), string, count, ability, abilityLevel]));
+
         self.sync();
+    },
+
+    /**
+     * Tier 1 - Damage boost (1-5%)
+     * Tier 2 - Damage boost (1-10% & 10% for special ability or special ability level up)
+     * Tier 3 - Damage boost (1-15% & 15% for special ability or special ability level up)
+     * Tier 4 - Damage boost (1-25% & 20% for special ability or special ability level up)
+     * Tier 5 - Damage boost (1-40% & 25% for special ability or special ability level up)
+     */
+
+    enchant: function(item, shard) {
+        var self = this;
+
+        if (!item || !shard)
+            return;
+
+        var type = Items.getType(item.id);
+
+        if (type === 'object' || type === 'craft')
+            return;
+
+        var ability = Utils.randomInt(0, 100) < 5 * shard.tier;
+
+        item.count = Utils.randomInt(1, shard.tier < 5 ? 5 * shard.tier : 35);
+
+        if (shard.tier !== 1 && ability) {
+
+            if (item.ability && item.abilityLevel < 5) {
+                item.abilityLevel++;
+
+                log.info(item);
+
+                return;
+            }
+
+            switch (type) {
+                case 'weapon':
+
+                    item.ability = Utils.randomInt(0, 1);
+
+                    break;
+
+                case 'weaponarcher':
+
+                    item.ability = Utils.randomInt(3, 4);
+
+                    break;
+
+                case 'armour':
+                case 'armorarcher':
+
+                    item.ability = Modules.Enchantment.Splash;
+
+                    break;
+
+            }
+
+        }
+
+        log.info(item);
     },
 
     die: function() {
@@ -595,7 +657,12 @@ module.exports = Player = Character.extend({
     },
 
     save: function() {
-        this.mysql.creator.save(this);
+        var self = this;
+
+        if (config.offlineMode)
+            return;
+
+        self.mysql.creator.save(self);
     },
 
     onGroup: function(callback) {

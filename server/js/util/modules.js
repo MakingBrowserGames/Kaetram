@@ -42,6 +42,20 @@ var Modules = {
         Tornado: 3,
         Run: 4,
         Call: 5
+    },
+
+    Enchantment: {
+        Bloodsucking: 0,
+        Critical: 1,
+        Splash: 2,
+        Explosive: 3,
+        Stun: 4
+    },
+
+    Trade: {
+        Started: 0,
+        Accepted: 1,
+        Finished: 2
     }
 
 };

@@ -236,24 +236,24 @@ define(['../character', './equipment/armour', './equipment/weapon',
             var self = this;
 
             switch (type) {
-                case Modules.Equipment.Armour:
-                    self.armour = null;
+                case 'armour':
+                    self.armour.update('Cloth Armour', 'clotharmor', 1, -1, -1);
                     break;
 
-                case Modules.Equipment.Weapon:
-                    self.weapon = null;
+                case 'weapon':
+                    self.weapon.update(null, null, -1, -1, -1);
                     break;
 
-                case Modules.Equipment.Pendant:
-                    self.pendant = null;
+                case 'pendant':
+                    self.pendant.update(null, null, -1, -1, -1);
                     break;
 
-                case Modules.Equipment.Ring:
-                    self.ring = null;
+                case 'ring':
+                    self.ring.update(null, null, -1, -1, -1);
                     break;
 
-                case Modules.Equipment.Boots:
-                    self.boots = null;
+                case 'boots':
+                    self.boots.update(null, null, -1, -1, -1);
                     break;
             }
         },

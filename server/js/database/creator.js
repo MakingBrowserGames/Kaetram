@@ -16,7 +16,6 @@ module.exports = Creator = cls.Class.extend({
 
         self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_data (' +
             'username varchar(64),' +
-            'password varchar(64),' +
             'email varchar(64),' +
             'x int,' +
             'y int,' +
@@ -104,7 +103,6 @@ module.exports = Creator = cls.Class.extend({
             case 'data':
                 formattedData = {
                     username: data.username,
-                    password: data.password,
                     email: data.email,
                     x: data.x,
                     y: data.y,
@@ -144,7 +142,6 @@ module.exports = Creator = cls.Class.extend({
     getPlayerData: function(player) {
         return {
             username: player.username,
-            password: player.password,
             email: player.email ? player.email : 'null',
             x: player.x ? player.x : -1,
             y: player.y ? player.y : -1,

@@ -375,139 +375,139 @@
     "id":61,
     "defense":2,
     "type":"armorarcher",
-    "name":"Leather Archer Armor"
+    "name":"Leather Archer Armour"
   },
   "MailarcherArmor": {
     "id":62,
     "defense":3,
     "type":"armorarcher",
-    "name":"Mail Archer Armor"
+    "name":"Mail Archer Armour"
   },
   "PlatearcherArmor": {
     "id":63,
     "defense":4,
     "type":"armorarcher",
-    "name":"Plate Archer Armor"
+    "name":"Plate Archer Armour"
   },
   "RedarcherArmor": {
     "id":64,
     "defense":5,
     "type":"armorarcher",
-    "name":"Red Archer Armor"
+    "name":"Red Archer Armour"
   },
   "GoldenarcherArmor": {
     "id":65,
     "defense":6,
     "type":"armorarcher",
-    "name":"Golden Archer Armor"
+    "name":"Golden Archer Armour"
   },
   "GreenarcherArmor": {
     "id":66,
     "defense":7,
     "type":"armorarcher",
-    "name":"Green Archer Armor"
+    "name":"Green Archer Armour"
   },
   "GreenwingarcherArmor": {
     "id":67,
     "defense":8,
     "type":"armorarcher",
-    "name":"Green Wing Archer Armor"
+    "name":"Green Wing Archer Armour"
   },
   "GuardarcherArmor": {
     "id":68,
     "defense":9,
     "type":"armorarcher",
-    "name":"Guard Archer Armor"
+    "name":"Guard Archer Armour"
   },
   "RedguardarcherArmor": {
     "id":69,
     "defense":10,
     "type":"armorarcher",
-    "name":"Red Guard Archer Armor"
+    "name":"Red Guard Archer Armour"
   },
   "WhitearcherArmor": {
     "id":70,
     "defense":11,
     "type":"armorarcher",
-    "name":"White Archer Armor"
+    "name":"White Archer Armour"
   },
   "RatarcherArmor": {
     "id":71,
     "defense":12,
     "type":"armorarcher",
-    "name":"Rat Archer Armor"
+    "name":"Rat Archer Armour"
   },
   "PiratearcherArmor": {
     "id":72,
     "defense":13,
     "type":"armorarcher",
-    "name":"Pirate Archer Armor"
+    "name":"Pirate Archer Armour"
   },
   "CheoliarcherArmor": {
     "id":73,
     "defense":14,
     "type":"armorarcher",
-    "name":"Cheolia Archer Armor"
+    "name":"Cheolia Archer Armour"
   },
   "DovakinarcherArmor": {
     "id":74,
     "defense":15,
     "type":"armorarcher",
-    "name":"Dovakina Archer Armor"
+    "name":"Dovakina Archer Armour"
   },
   "GbwingarcherArmor": {
     "id":75,
     "defense":16,
     "type":"armorarcher",
-    "name":"GbwingarcherArmor"
+    "name":"GbwingarcherArmour"
   },
   "RedwingarcherArmor": {
     "id":76,
     "defense":17,
     "type":"armorarcher",
-    "name":"Red Wing Archer Armor"
+    "name":"Red Wing Archer Armour"
   },
   "SnowfoxarcherArmor": {
     "id":77,
     "defense":18,
     "type":"armorarcher",
-    "name":"Snow Fox Archer Armor"
+    "name":"Snow Fox Archer Armour"
   },
   "WolfarcherArmor": {
     "id":78,
     "defense":26,
     "type":"armorarcher",
-    "name":"Wolf Archer Armor"
+    "name":"Wolf Archer Armour"
   },
   "BluewingarcherArmor": {
     "id":79,
     "defense":20,
     "type":"armorarcher",
-    "name":"Blue Wing Archer Armor"
+    "name":"Blue Wing Archer Armour"
   },
   "FallenarcherArmor": {
     "id":80,
     "defense":21,
     "type":"armorarcher",
-    "name":"Fallen Archer Armor"
+    "name":"Fallen Archer Armour"
   },
   "CrystalarcherArmor": {
     "id":81,
     "defense":22,
     "type":"armorarcher",
-    "name":"Crystal Archer Armor"
+    "name":"Crystal Archer Armour"
   },
   "LegolasArmor": {
     "id":82,
     "defense":23,
     "type":"armorarcher",
-    "name":"Legolas Armor"
+    "name":"Legolas Armour"
   },
   "AdhererarcherArmor": {
     "id":83,
     "defense":24,
     "type":"armorarcher",
-    "name":"Adherer Archer Armor"
+    "name":"Adherer Archer Armour"
   },
   "ArcherschoolUniform": {
     "id":84,
@@ -696,157 +696,157 @@
     "id":114,
     "defense":1,
     "type":"armor",
-    "name":"Cloth Armor"
+    "name":"Cloth Armour"
   },
   "LeatherArmor": {
     "id":115,
     "defense":2,
     "type":"armor",
-    "name":"Leather Armor"
+    "name":"Leather Armour"
   },
   "MailArmor": {
     "id":116,
     "defense":3,
     "type":"armor",
-    "name":"Mail Armor"
+    "name":"Mail Armour"
   },
   "PlateArmor": {
     "id":117,
     "defense":4,
     "type":"armor",
-    "name":"Steel Armor"
+    "name":"Steel Armour"
   },
   "RedArmor": {
     "id":118,
     "defense":5,
     "type":"armor",
-    "name":"Ruby Armor"
+    "name":"Ruby Armour"
   },
   "GoldenArmor": {
     "id":119,
     "defense":6,
     "type":"armor",
-    "name":"Golden Armor"
+    "name":"Golden Armour"
   },
   "GreenArmor": {
     "id":120,
     "defense":7,
     "type":"armor",
-    "name":"Green Armor"
+    "name":"Green Armour"
   },
   "GreenWingArmor": {
     "id":121,
     "defense":8,
     "type":"armor",
-    "name":"Green Wing Armor"
+    "name":"Green Wing Armour"
   },
   "GuardArmor": {
     "id":122,
     "defense":9,
     "type":"armor",
-    "name":"Guard Armor"
+    "name":"Guard Armour"
   },
   "RedGuardArmor": {
     "id":123,
     "defense":10,
     "type":"armor",
-    "name":"Red Guard Armor"
+    "name":"Red Guard Armour"
   },
   "WhiteArmor": {
     "id":124,
     "defense":11,
     "type":"armor",
-    "name":"White Armor"
+    "name":"White Armour"
   },
   "RatArmor": {
     "id":125,
     "defense":12,
     "type":"armor",
-    "name":"Rat Armor"
+    "name":"Rat Armour"
   },
   "BluepirateArmor": {
     "id":126,
     "defense":13,
     "type":"armor",
-    "name":"Blue Pirate Armor"
+    "name":"Blue Pirate Armour"
   },
   "CheoliArmor": {
     "id":127,
     "defense":14,
     "type":"armor",
-    "name":"Cheoli Armor"
+    "name":"Cheoli Armour"
   },
   "DovakinArmor": {
     "id":128,
     "defense":15,
     "type":"armor",
-    "name":"Dovakin Armor"
+    "name":"Dovakin Armour"
   },
   "GbwingArmor": {
     "id":129,
     "defense":16,
     "type":"armor",
-    "name":"GB Wing Armor"
+    "name":"GB Wing Armour"
   },
   "RedwingArmor": {
     "id":130,
     "defense":17,
     "type":"armor",
-    "name":"Red Wing Armor"
+    "name":"Red Wing Armour"
   },
   "SnowfoxArmor": {
     "id":131,
     "defense":18,
     "type":"armor",
-    "name":"Snow Fox Armor"
+    "name":"Snow Fox Armour"
   },
   "WolfArmor": {
     "id":132,
     "defense":34,
     "type":"armor",
-    "name":"Wolf Armor"
+    "name":"Wolf Armour"
   },
   "BluewingArmor": {
     "id":133,
     "defense":20,
     "type":"armor",
-    "name":"Blue Wing Armor"
+    "name":"Blue Wing Armour"
   },
   "ThiefArmor": {
     "id":134,
     "defense":21,
     "type":"armor",
-    "name":"Thief Armor"
+    "name":"Thief Armour"
   },
   "NinjaArmor": {
     "id":135,
     "defense":22,
     "type":"armor",
-    "name":"Ninja Armor"
+    "name":"Ninja Armour"
   },
   "DragonArmor": {
     "id":136,
     "defense":48,
     "type":"armor",
-    "name":"Dragon Armor"
+    "name":"Dragon Armour"
   },
   "FallenArmor": {
     "id":137,
     "defense":24,
     "type":"armor",
-    "name":"Fallen Armor"
+    "name":"Fallen Armour"
   },
   "PaladinArmor": {
     "id":138,
     "defense":25,
     "type":"armor",
-    "name":"Paladin Armor"
+    "name":"Paladin Armour"
   },
   "CrystalArmor": {
     "id":139,
     "defense":23,
     "type":"armor",
-    "name":"Crystal Armor"
+    "name":"Crystal Armour"
   },
   "AdhererRobe": {
     "id":140,
@@ -858,13 +858,13 @@
     "id":141,
     "defense":28,
     "type":"armor",
-    "name":"Frost Armor"
+    "name":"Frost Armour"
   },
   "GayArmor": {
     "id":142,
     "defense":29,
     "type":"armor",
-    "name":"Gay Armor"
+    "name":"Gay Armour"
   },
   "SchoolUniform": {
     "id":143,
@@ -882,7 +882,7 @@
     "id":145,
     "defense":37,
     "type":"armor",
-    "name":"Region Armor"
+    "name":"Region Armour"
   },
   "GhostRider": {
     "id":146,
@@ -900,13 +900,13 @@
     "id":148,
     "defense":35,
     "type":"armor",
-    "name":"Rabbit Armor"
+    "name":"Rabbit Armour"
   },
   "PortalArmor": {
     "id":149,
     "defense":36,
     "type":"armor",
-    "name":"Portal Armor"
+    "name":"Portal Armour"
   },
   "PirateKing": {
     "id":150,
@@ -918,79 +918,79 @@
     "id":151,
     "defense":38,
     "type":"armor",
-    "name":"Sea Dragon Armor"
+    "name":"Sea Dragon Armour"
   },
   "ShadowregionArmor": {
     "id":152,
     "defense":39,
     "type":"armor",
-    "name":"Shadow Region Armor"
+    "name":"Shadow Region Armour"
   },
   "EnelArmor": {
     "id":153,
     "defense":50,
     "type":"armor",
-    "name":"Enel Armor"
+    "name":"Enel Armour"
   },
   "MiniseadragonArmor": {
     "id":154,
     "defense":41,
     "type":"armor",
-    "name":"Mini Sea Dragon Armor"
+    "name":"Mini Sea Dragon Armour"
   },
   "HuniArmor": {
     "id":155,
     "defense":42,
     "type":"armor",
-    "name":"Huni Armor"
+    "name":"Huni Armour"
   },
   "DamboArmor": {
     "id":156,
     "defense":43,
     "type":"armor",
-    "name":"Dambo Armor"
+    "name":"Dambo Armour"
   },
   "SquidArmor": {
     "id":157,
     "defense":44,
     "type":"armor",
-    "name":"Squid Armor"
+    "name":"Squid Armour"
   },
   "BeeArmor": {
     "id":158,
     "defense":45,
     "type":"armor",
-    "name":"Bee Armor"
+    "name":"Bee Armour"
   },
   "BluedamboArmor": {
     "id":159,
     "defense":46,
     "type":"armor",
-    "name":"Blue Dambo Armor"
+    "name":"Blue Dambo Armour"
   },
   "RudolfArmor": {
     "id":160,
     "defense":47,
     "type":"armor",
-    "name":"Rudolf Armor"
+    "name":"Rudolf Armour"
   },
   "ChristmasArmor": {
     "id":161,
     "defense":48,
     "type":"armor",
-    "name":"Christmas Armor"
+    "name":"Christmas Armour"
   },
   "RobocopArmor": {
     "id":162,
     "defense":49,
     "type":"armor",
-    "name":"Robocop Armor"
+    "name":"Robocop Armour"
   },
   "PinkcockroachArmor": {
     "id":163,
     "defense":50,
     "type":"armor",
-    "name":"Pink Cockroach Armor"
+    "name":"Pink Cockroach Armour"
   },
   "CockroachSuit": {
     "id":164,
@@ -1002,37 +1002,37 @@
     "id":165,
     "defense":52,
     "type":"armor",
-    "name":"Dinosaur Armor"
+    "name":"Dinosaur Armour"
   },
   "CatArmor": {
     "id":166,
     "defense":18,
     "type":"armor",
-    "name":"Cat Armor"
+    "name":"Cat Armour"
   },
   "SnowmanArmor": {
     "id":167,
     "defense":54,
     "type":"armor",
-    "name":"Snowman Armor"
+    "name":"Snowman Armour"
   },
   "BeetleArmor": {
     "id":168,
     "defense":55,
     "type":"armor",
-    "name":"Beetle Armor"
+    "name":"Beetle Armour"
   },
   "HongcheolArmor": {
     "id":169,
     "defense":56,
     "type":"armor",
-    "name":"Hongcheol Armor"
+    "name":"Hongcheol Armour"
   },
   "TigerArmor": {
     "id":170,
     "defense":49,
     "type":"armor",
-    "name":"Tiger Armor"
+    "name":"Tiger Armour"
   },
   "WizardRobe": {
     "id":171,
@@ -1044,31 +1044,31 @@
     "id": 172,
     "defense": 25,
     "type":"armor",
-    "name":"Iron Knight Armor"
+    "name":"Iron Knight Armour"
   },
   "EvilArmor": {
     "id":173,
     "defense":60,
     "type":"armor",
-    "name":"Evil Armor"
+    "name":"Evil Armour"
   },
   "GreendamboArmor": {
     "id":174,
     "defense":61,
     "type":"armor",
-    "name":"Green Dambo Armor"
+    "name":"Green Dambo Armour"
   },
   "ReddamboArmor": {
     "id":175,
     "defense":62,
     "type":"armor",
-    "name":"Red Dambo Armor"
+    "name":"Red Dambo Armour"
   },
   "DevilkazyaArmor": {
     "id":176,
     "defense":63,
     "type":"armor",
-    "name":"Devil Kazya Armor"
+    "name":"Devil Kazya Armour"
   },
   "BridalMask": {
     "id":177,
@@ -1080,19 +1080,19 @@
     "id":178,
     "defense":65,
     "type":"armor",
-    "name":"Black Spider Armor"
+    "name":"Black Spider Armour"
   },
   "FrogArmor": {
     "id":179,
     "defense":66,
     "type":"armor",
-    "name":"Frog Armor"
+    "name":"Frog Armour"
   },
   "BearseonbiArmor": {
     "id":180,
     "defense":67,
     "type":"armor",
-    "name":"Bearseonbi Armor"
+    "name":"Bearseonbi Armour"
   },
   "RainbowApro": {
     "id":181,
@@ -1104,44 +1104,44 @@
     "id":182,
     "defense":69,
     "type":"armor",
-    "name":"Coke Armor"
+    "name":"Coke Armour"
   },
   "FriedpotatoArmor": {
     "id":183,
     "defense":70,
     "type":"armor",
-    "name":"Fried Potato Armor"
+    "name":"Fried Potato Armour"
   },
   "BurgerArmor": {
     "id":184,
     "defense":71,
     "type":"armor",
-    "name":"Burger Armor"
+    "name":"Burger Armour"
   },
   "RadishArmor": {
     "id":185,
     "defense":72,
     "type":"armor",
-    "name":"Radish Armor"
+    "name":"Radish Armour"
   },
   "HalloweenJKArmor": {
     "id":186,
     "defense":73,
     "type":"armor",
-    "name":"Halloween JK Armor"
+    "name":"Halloween JK Armour"
   },
   "FrankensteinArmor": {
     "id":188,
     "defense":74,
     "type":"armor",
-    "name":"Frankenstein Armor"
+    "name":"Frankenstein Armour"
   },
 
   "AdminArmor": {
     "id":189,
     "defense":75,
     "type":"armor",
-    "name":"Admin Armor"
+    "name":"Admin Armour"
   },
 
   "Flask": {
@@ -1500,26 +1500,62 @@
 
   "Banana": {
     "id": 249,
-    "type": "object"
+    "type": "object",
+    "name": "Banana"
   },
 
   "Watermelon": {
     "id": 250,
-    "type": "object"
+    "type": "object",
+    "name": "Watermelon"
   },
 
   "Apple": {
     "id": 251,
-    "type": "object"
+    "type": "object",
+    "name": "Apple"
   },
 
   "Orange": {
     "id": 252,
-    "type": "object"
+    "type": "object",
+    "name": "Orange"
   },
 
-  "Women": {
-    "type": "object"
+  "Shardt1": {
+    "id": 253,
+    "type": "object",
+    "name": "Shard - Tier 1"
+  },
+
+  "Shardt2": {
+    "id": 254,
+    "type": "object",
+    "name": "Shard - Tier 2"
+  },
+
+  "Shardt3": {
+    "id": 255,
+    "type": "object",
+    "name": "Shard - Tier 3"
+  },
+
+  "Shardt4": {
+    "id": 256,
+    "type": "object",
+    "name": "Shard - Tier 4"
+  },
+
+  "Shardt5": {
+    "id": 257,
+    "type": "object",
+    "name": "Shard - Tier 5"
+  },
+
+  "Ghost": {
+    "id": 258,
+    "type": "armor",
+    "name": "Ghost"
   }
 
 }

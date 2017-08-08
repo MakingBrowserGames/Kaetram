@@ -9,6 +9,7 @@ module.exports = Commands = cls.Class.extend({
     init: function(player) {
         var self = this;
 
+        self.world = player.world;
         self.player = player;
     },
 
@@ -19,19 +20,21 @@ module.exports = Commands = cls.Class.extend({
         if (blocks.length < 1)
             return;
 
-        self.handlePlayerCommands(blocks);
+        var command = blocks.shift();
+
+        self.handlePlayerCommands(command, blocks);
 
         if (self.player.rights > 0)
-            self.handleModeratorCommands(blocks);
+            self.handleModeratorCommands(command, blocks);
 
         if (self.player.rights > 1)
-            self.handleAdminCommands(blocks);
+            self.handleAdminCommands(command, blocks);
     },
 
-    handlePlayerCommands: function(blocks) {
+    handlePlayerCommands: function(command, blocks) {
         var self = this;
 
-        switch(blocks.shift()) {
+        switch(command) {
             case 'notify':
 
                 var type = parseInt(blocks.shift());
@@ -42,18 +45,41 @@ module.exports = Commands = cls.Class.extend({
         }
     },
 
-    handleModeratorCommands: function(blocks) {
+    handleModeratorCommands: function(command, blocks) {
+        var self = this;
 
-        switch (blocks.shift()) {
+        switch (command) {
 
         }
 
     },
 
-    handleAdminCommands: function(blocks) {
+    handleAdminCommands: function(command, blocks) {
+        var self = this;
 
-        switch (blocks.shift()) {
+        switch (command) {
+            case 'spawn':
 
+
+
+                break;
+
+            case 'drop':
+
+                var id = blocks.shift();
+
+                if (!id)
+                    return;
+
+                self.world.dropItem(id, 1, self.player.x, self.player.y);
+
+                break;
+
+            case 'ghost':
+
+                self.player.equip('ghost', 1, -1, -1);
+
+                break;
         }
 
     }

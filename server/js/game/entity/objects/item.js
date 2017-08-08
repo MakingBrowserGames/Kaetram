@@ -9,10 +9,12 @@ module.exports = Item = Entity.extend({
 
         self.static = false;
         self.dropped = false;
+        self.shard = false;
 
         self.count = 1;
         self.ability = 0;
         self.abilityLevel = 0;
+        self.tier = 1;
 
         self.respawnTime = 30000;
         self.despawnDuration = 4000;
