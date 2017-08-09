@@ -119,7 +119,7 @@ define(function() {
                     break;
 
                 case 'malform':
-                    self.app.game.disconnect(true);
+                    self.app.game.handleDisconnection(true);
 
                     self.app.sendError(null, 'Client has experienced a malfunction (stop trying to bypass stuff).');
                     break;

@@ -939,6 +939,15 @@ define(['./renderer/renderer', './utils/storage',
             self.socket.send(Packets.Respawn, [self.player.id]);
         },
 
+        tradeWith: function(player) {
+            var self = this;
+
+            if (!player || player.id === self.player.id)
+                return;
+
+            log.info(self.player.id + ' trading with ' + player.id);
+        },
+
         resize: function() {
             var self = this;
 

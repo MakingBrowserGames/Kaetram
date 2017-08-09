@@ -79,6 +79,12 @@
     cursor: hand;
 }
 
+#pActions {
+    background-color: rgba(0, 0, 0, 0.1);
+    position: absolute;
+    display: none;
+}
+
 .actionButton {
     background-color: rgba(0, 0, 0, 0.3);
     font-family: 'AdvoCut', sans-serif;
@@ -263,6 +269,34 @@
 .bankImage {
     width: 100%;
     height: 100%;
+}
+
+#enchant {
+    position: absolute;
+    display: none;
+    top: 10%;
+    left: 60%;
+}
+
+#trade {
+    position: absolute;
+    display: none;
+    top: 10%;
+    left: 20%;
+}
+
+#tradePlayerContainer, #tradeOPlayerContainer {
+    position: relative;
+    float: left;
+    top: 24%;
+}
+
+#tradePlayerContainer {
+    left: 5%;
+}
+
+#tradeOPlayerContainer {
+    left: 12.5%;
 }
 
 @media only screen and (min-width: 1501px) {
@@ -793,6 +827,11 @@
         height: 64px;
     }
 
+    #pActions {
+        width: 128px;
+        height: 64px;
+    }
+
     .actionButton {
         width: 128px;
         height: 32px;
@@ -1049,6 +1088,23 @@
         width: 32px;
         height: 30px;
         background: url(../img/2/containers.png) -600px -344px;
+    }
+
+    #enchant {
+        width: 258px;
+        height: 310px;
+        background: url('../img/2/containers.png') 0 0;
+    }
+
+    #trade {
+        width: 500px;
+        height: 339px;
+        background: url(../img/2/trade.png) 0 0;
+    }
+
+    #tradePlayerContainer, #tradeOPlayerContainer {
+        width: 206px;
+        height: 186px;
     }
 
 }

@@ -12,6 +12,11 @@ define(['jquery'], function($) {
             self.body = $('#actionContainer');
             self.drop = $('#dropDialog');
             self.dropInput = $('#dropCount');
+
+            self.pBody = $('#pActions');
+            self.follow = $('#follow');
+            self.trade = $('#tradeAction');
+
             self.activeClass = null;
 
             self.miscButton = null;
@@ -91,8 +96,37 @@ define(['jquery'], function($) {
             this.body.fadeIn('fast');
         },
 
+        showPlayerActions: function(player, mouseX, mouseY) {
+            var self = this;
+
+            if (!player)
+                return;
+
+            self.pBody.fadeIn('fast');
+            self.pBody.css({
+                'left': mouseX - (self.pBody.width() / 2) + 'px',
+                'top': mouseY + (self.pBody.height() / 2) + 'px'
+            });
+
+            self.follow.click(function() {
+                self.getPlayer().follow(player);
+
+                self.hidePlayerActions();
+            });
+
+            self.trade.click(function() {
+                self.getGame().tradeWith(player);
+
+                self.hidePlayerActions();
+            });
+        },
+
         hide: function() {
             this.body.fadeOut('slow');
+        },
+
+        hidePlayerActions: function() {
+            this.pBody.fadeOut('fast');
         },
 
         displayDrop: function(activeClass) {
@@ -117,6 +151,14 @@ define(['jquery'], function($) {
 
         getButtons: function() {
             return this.body.find('ul').find('li');
+        },
+
+        getGame: function() {
+            return this.interface.game;
+        },
+
+        getPlayer: function() {
+            return this.interface.game.player;
         },
 
         isVisible: function() {

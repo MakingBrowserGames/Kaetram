@@ -204,6 +204,11 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
             if (entity) {
                 self.setAttackTarget();
 
+                if (entity.type === 'player') {
+                    self.getActions().showPlayerActions(entity, self.mouse.x, self.mouse.y);
+                    return;
+                }
+
                 if (entity.type !== 'item')
                     player.setTarget(entity);
 
@@ -219,6 +224,8 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
                 }
             } else
                 player.removeTarget();
+
+            self.getActions().hidePlayerActions();
 
             player.go(position.x, position.y);
 
@@ -378,6 +385,10 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
 
         getPlayer: function() {
             return this.game.player;
+        },
+
+        getActions: function() {
+            return this.game.interface.actions;
         }
 
     });

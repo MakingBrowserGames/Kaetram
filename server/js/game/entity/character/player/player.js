@@ -375,6 +375,14 @@ module.exports = Player = Character.extend({
         this.hitPoints.decrement(damage);
     },
 
+    getMana: function() {
+        return this.mana.getMana();
+    },
+
+    getMaxMana: function() {
+        return this.mana.getMaxMana();
+    },
+
     getHitPoints: function() {
         return this.hitPoints.getHitPoints();
     },
