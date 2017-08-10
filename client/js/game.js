@@ -945,7 +945,7 @@ define(['./renderer/renderer', './utils/storage',
             if (!player || player.id === self.player.id)
                 return;
 
-            log.info(self.player.id + ' trading with ' + player.id);
+            self.socket.send(Packets.Trade, [Packets.TradeOpcode.Request, player.id]);
         },
 
         resize: function() {

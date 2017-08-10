@@ -56,6 +56,7 @@ module.exports = Player = Character.extend({
 
         self.introduced = false;
         self.currentSong = null;
+        self.acceptedTrade = false;
     },
 
     load: function(data) {

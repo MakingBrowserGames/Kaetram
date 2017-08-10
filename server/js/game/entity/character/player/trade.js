@@ -32,44 +32,21 @@ module.exports = Trade = cls.Class.extend({
     },
 
     select: function(instance, slot) {
-        var self = this;
 
-        if (instance === self.player.instance) {
-            var item = self.player.inventory.slots[slot],
-                index = self.player.indexOf(item);
-
-            if (index > -1)
-                self.playerItems.splice(index, 1);
-            else
-                self.playerItems.push(item);
-
-        } else if (instance === self.oPlayer.instance) {
-            var oItem = self.oPlayer.inventory.slots[slot],
-                oIndex = self.oPlayerItems.indexOf(oItem);
-
-            if (oIndex > -1)
-                self.oPlayerItems.splice(oIndex, 1);
-            else
-                self.oPlayerItems.push(oItem);
-        }
     },
 
     accept: function() {
         var self = this;
 
-        switch (self.state) {
-            case Modules.Trade.Started:
 
-                break;
-
-            case Modules.Trade.Accepted:
-
-                break;
-        }
     },
 
     decline: function() {
 
+    },
+
+    isStarted: function() {
+        return this.state !== null;
     }
 
 });

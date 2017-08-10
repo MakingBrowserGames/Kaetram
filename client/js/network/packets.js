@@ -32,7 +32,8 @@ Packets = {
     Death: 30,
     Audio: 31,
     NPC: 32,
-    Respawn: 33
+    Respawn: 33,
+    Trade: 34
 };
 
 Packets.IntroOpcode = {
@@ -106,4 +107,10 @@ Packets.NPCOpcode = {
     Store: 1,
     Bank: 2,
     Enchant: 3
+};
+
+Packets.TradeOpcode = {
+    Request: 1,
+    Accept: 2,
+    Decline: 3
 };

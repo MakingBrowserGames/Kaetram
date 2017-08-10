@@ -86,6 +86,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleRespawn(message);
                     break;
 
+                case Packets.Trade:
+                    self.handleTrade(message);
+                    break;
+
             }
 
         });
@@ -658,6 +662,31 @@ module.exports = Incoming = cls.Class.extend({
         self.player.send(new Messages.Respawn(self.player.instance, self.player.x, self.player.y));
 
         self.player.revertPoints();
+    },
+
+    handleTrade: function(message) {
+        var self = this,
+            opcode = message.shift(),
+            oPlayer = self.world.getEntityByInstance(message.shift());
+
+        if (!oPlayer || !opcode)
+            return;
+
+        switch (opcode) {
+            case Packets.TradeOpcode.Request:
+
+                
+
+                break;
+
+            case Packets.TradeOpcode.Accept:
+
+                break;
+
+            case Packets.TradeOpcode.Decline:
+
+                break;
+        }
     },
 
     cleanSocket: function() {
