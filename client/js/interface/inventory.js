@@ -235,6 +235,10 @@ define(['jquery', './container/container'], function($, Container) {
             return this.game.renderer.getDrawingScale();
         },
 
+        getSize: function() {
+            return this.container.size;
+        },
+
         getList: function() {
             return $('#inventory').find('ul').find('li');
         },

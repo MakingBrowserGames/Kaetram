@@ -87,7 +87,7 @@ module.exports = Mob = Character.extend({
     canAggro: function(player) {
         var self = this;
 
-        if (self.hasTarget() || !self.aggressive)
+        if (self.hasTarget() || !self.aggressive || Math.floor(self.level * 1.5) < player.level)
             return false;
 
         return self.isNear(player, self.aggroRange);

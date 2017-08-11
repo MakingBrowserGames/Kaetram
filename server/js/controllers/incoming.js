@@ -199,6 +199,7 @@ module.exports = Incoming = cls.Class.extend({
 
                 try {
                     data = JSON.parse(body);
+
                 } catch (e) {
                     log.info('Could not decipher API message');
                     self.cleanSocket();
@@ -447,6 +448,10 @@ module.exports = Incoming = cls.Class.extend({
                     case 43:
                         self.player.send(new Messages.NPC(Packets.NPCOpcode.Bank, {}));
                         return;
+
+                    case 42:
+                        self.player.send(new Messages.NPC(Packets.NPCOpcode.Enchant, {}));
+                        break;
                 }
 
 
@@ -675,7 +680,7 @@ module.exports = Incoming = cls.Class.extend({
         switch (opcode) {
             case Packets.TradeOpcode.Request:
 
-                
+
 
                 break;
 

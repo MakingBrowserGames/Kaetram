@@ -1,7 +1,8 @@
 /* global log */
 
 define(['jquery', '../interface/inventory',
-        '../interface/profile/profile', '../interface/actions', '../interface/bank'], function($, Inventory, Profile, Actions, Bank) {
+        '../interface/profile/profile', '../interface/actions',
+        '../interface/bank', '../interface/enchant'], function($, Inventory, Profile, Actions, Bank, Enchant) {
 
     return Class.extend({
 
@@ -16,6 +17,7 @@ define(['jquery', '../interface/inventory',
             self.inventory = null;
             self.profile = null;
             self.actions = null;
+            self.enchant = null;
 
             self.loadNotifications();
             self.loadActions();
@@ -32,6 +34,9 @@ define(['jquery', '../interface/inventory',
 
             if (self.bank)
                 self.bank.resize();
+
+            if (self.enchant)
+                self.enchant.resize();
         },
 
         loadInventory: function(size, data) {
@@ -58,6 +63,8 @@ define(['jquery', '../interface/inventory',
             self.bank = new Bank(self.game, self.inventory.container, size);
 
             self.bank.load(data);
+
+            self.loadEnchant();
         },
 
         loadProfile: function() {
@@ -72,6 +79,13 @@ define(['jquery', '../interface/inventory',
 
             if (!self.actions)
                 self.actions = new Actions(self);
+        },
+
+        loadEnchant: function() {
+            var self = this;
+
+            if (!self.enchant)
+                self.enchant = new Enchant(self, self);
         },
 
         loadNotifications: function() {

@@ -50,11 +50,13 @@ define(['jquery'], function($) {
                 return;
 
             self.hovering.onHitPoints(function(hitPoints) {
-                if (hitPoints < 1)
-                    self.hide();
-                else {
-                    self.health.css('width', Math.ceil(hitPoints / self.hovering.maxHitPoints * 100) + '%');
-                    self.details.html(hitPoints + ' / ' + self.hovering.maxHitPoints);
+                if (self.hovering) {
+                    if (hitPoints < 1)
+                        self.hide();
+                    else {
+                        self.health.css('width', Math.ceil(hitPoints / self.hovering.maxHitPoints * 100) + '%');
+                        self.details.html(hitPoints + ' / ' + self.hovering.maxHitPoints);
+                    }
                 }
             });
         },

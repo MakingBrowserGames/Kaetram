@@ -653,7 +653,8 @@ module.exports = World = cls.Class.extend({
 
         self.populationCallback(self.playerCount - 1);
 
-        player.save();
+        if (player.ready)
+            player.save();
 
         self.removeEntity(player);
 

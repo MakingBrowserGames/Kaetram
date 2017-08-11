@@ -247,7 +247,7 @@
     float: right;
 }
 
-#bankInventoryContainer {
+#bankInventoryContainer, #enchantContainer {
     float: left;
 }
 
@@ -256,10 +256,14 @@
     top: 9%;
 }
 
-#bankInventorySlots {
+.inventorySlots {
     position: absolute;
     top: 13%;
     left: 6%;
+}
+
+#enchantInventorySlots {
+    left: 13%;
 }
 
 .bankSlot {
@@ -274,8 +278,8 @@
 #enchant {
     position: absolute;
     display: none;
-    top: 10%;
-    left: 60%;
+    top: 15%;
+    left: 37%;
 }
 
 #trade {
@@ -640,6 +644,10 @@
         background: url('../img/3/bank.png');
     }
 
+    #enchantContainer {
+        background: url('../img/3/containers.png');
+    }
+
     #bankContainer {
         width: 513px;
         height: 501px;
@@ -652,13 +660,13 @@
         left: 429px;
     }
 
-    #bankInventoryContainer {
+    #bankInventoryContainer, #enchantContainer {
         width: 387px;
         height: 381px;
         background-position: 0 0;
     }
 
-    #bankInventorySlots {
+    .inventorySlots {
         width: 288px;
         height: 240px;
     }
@@ -668,7 +676,6 @@
         height: 45px;
         background: url(../img/3/containers.png) -900px -516px;
     }
-
 
 }
 
@@ -1061,6 +1068,10 @@
         background: url('../img/2/bank.png');
     }
 
+    #enchantContainer {
+        background: url('../img/2/containers.png');
+    }
+
     #bankContainer {
         width: 342px;
         height: 334px;
@@ -1073,13 +1084,13 @@
         left: 286px;
     }
 
-    #bankInventoryContainer {
+    #bankInventoryContainer, #enchantContainer {
         width: 258px;
         height: 254px;
         background-position: 0 0;
     }
 
-    #bankInventorySlots {
+    .inventorySlots {
         width: 192px;
         height: 160px;
     }
@@ -1105,6 +1116,11 @@
     #tradePlayerContainer, #tradeOPlayerContainer {
         width: 206px;
         height: 186px;
+    }
+
+    #enchantSelectedItem, #enchantShards {
+        width: 28px;
+        height: 28px;
     }
 
 }
@@ -1496,6 +1512,10 @@
         background: url('../img/1/bank.png');
     }
 
+    #enchantContainer {
+        background: url('../img/1/containers.png');
+    }
+
     #bankContainer {
         width: 171px;
         height: 167px;
@@ -1508,13 +1528,13 @@
         left: 143px;
     }
 
-    #bankInventoryContainer {
+    #bankInventoryContainer, #enchantContainer {
         width: 129px;
         height: 127px;
         background-position: 0 0;
     }
 
-    #bankInventorySlots {
+    .inventorySlots {
         width: 96px;
         height: 80px;
     }

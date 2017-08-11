@@ -129,7 +129,9 @@ module.exports = MySQL = cls.Class.extend({
             if (!exists) {
                 player.isNew = true;
                 player.load(self.creator.getPlayerData(player));
+
                 self.creator.save(player);
+
                 player.isNew = false;
                 player.intro();
             }

@@ -783,6 +783,10 @@ define(['./renderer/renderer', './utils/storage',
                     case Packets.NPCOpcode.Bank:
                         self.interface.bank.display();
                         break;
+
+                    case Packets.NPCOpcode.Enchant:
+                        self.interface.enchant.display();
+                        break;
                 }
 
             });

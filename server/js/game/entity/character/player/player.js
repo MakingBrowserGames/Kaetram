@@ -27,6 +27,8 @@ module.exports = Player = Character.extend({
     init: function(world, database, connection, clientId) {
         var self = this;
 
+        self._super(-1, 'player', connection.id, -1, -1);
+
         self.world = world;
         self.mysql = database;
         self.connection = connection;
@@ -44,8 +46,6 @@ module.exports = Player = Character.extend({
 
         self.groupPosition = null;
         self.newGroup = false;
-
-        self._super(-1, 'player', self.connection.id, -1, -1);
 
         self.handler = new Handler(self);
 
