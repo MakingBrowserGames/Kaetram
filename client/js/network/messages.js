@@ -52,6 +52,7 @@ define(function() {
             self.messages[Packets.Audio] = self.receiveAudio;
             self.messages[Packets.NPC] = self.receiveNPC;
             self.messages[Packets.Respawn] = self.receiveRespawn;
+            self.messages[Packets.Enchant] = self.receiveEnchant;
 
         },
 
@@ -368,6 +369,14 @@ define(function() {
                 self.respawnCallback(id, x, y);
         },
 
+        receiveEnchant: function(data) {
+            var self = this,
+                info = data.shift();
+
+            if (self.enchantCallback)
+                self.enchantCallback(info);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -486,6 +495,10 @@ define(function() {
 
         onRespawn: function(callback) {
             this.respawnCallback = callback;
+        },
+
+        onEnchant: function(callback) {
+            this.enchantCallback = callback;
         }
 
     });

@@ -45,7 +45,8 @@ var Packets = {
     Audio: 31,
     NPC: 32,
     Respawn: 33,
-    Trade: 34
+    Trade: 34,
+    Enchant: 35
 };
 
 Packets.IntroOpcode = {
@@ -125,6 +126,12 @@ Packets.TradeOpcode = {
     Request: 1,
     Accept: 2,
     Decline: 3
+};
+
+Packets.EnchantOpcode = {
+    Select: 0,
+    Remove: 1,
+    Enchant: 2
 };
 
 module.exports = Packets;

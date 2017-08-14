@@ -105,6 +105,23 @@ Items.isEdible = function(id) {
     return id === 190 || id === 191 || id === 192 || id === 193;
 };
 
+Items.isShard = function(id) {
+    return id === 253 || id === 254 || id === 255 || id === 256 || id === 257;
+};
+
+Items.getShardTier = function(id) {
+    if (id === 253)
+        return 1;
+    else if (id === 254)
+        return 2;
+    else if (id === 255)
+        return 3;
+    else if (id === 256)
+        return 4;
+    else if (id === 257)
+        return 5;
+};
+
 Items.isEquippable = function(string) {
     return Items.isArmour(string) || Items.isWeapon(string);
 };

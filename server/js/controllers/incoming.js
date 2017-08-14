@@ -90,6 +90,10 @@ module.exports = Incoming = cls.Class.extend({
                     self.handleTrade(message);
                     break;
 
+                case Packets.Enchant:
+                    self.handleEnchant(message);
+                    break;
+
             }
 
         });
@@ -680,8 +684,6 @@ module.exports = Incoming = cls.Class.extend({
         switch (opcode) {
             case Packets.TradeOpcode.Request:
 
-
-
                 break;
 
             case Packets.TradeOpcode.Accept:
@@ -689,6 +691,28 @@ module.exports = Incoming = cls.Class.extend({
                 break;
 
             case Packets.TradeOpcode.Decline:
+
+                break;
+        }
+    },
+
+    handleEnchant: function(message) {
+        var self = this,
+            opcode = message.shift();
+
+        switch (opcode) {
+            case Packets.EnchantOpcode.Select:
+                var index = message.shift();
+
+
+
+                break;
+
+            case Packets.EnchantOpcode.Remove:
+
+                break;
+
+            case Packets.EnchantOpcode.Enchant:
 
                 break;
         }

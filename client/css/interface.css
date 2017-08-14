@@ -303,6 +303,19 @@
     left: 12.5%;
 }
 
+#enchantSelectedItem, #enchantShards {
+    position: absolute;
+    top: 80%;
+}
+
+#enchantSelectedItem {
+    left: 11%;
+}
+
+#enchantShards {
+    left: 34%;
+}
+
 @media only screen and (min-width: 1501px) {
 
     #buttons {
@@ -675,6 +688,11 @@
         width: 48px;
         height: 45px;
         background: url(../img/3/containers.png) -900px -516px;
+    }
+
+    #enchantSelectedItem, #enchantShards {
+        width: 48px;
+        height: 45px;
     }
 
 }
@@ -1119,8 +1137,8 @@
     }
 
     #enchantSelectedItem, #enchantShards {
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 30px;
     }
 
 }
@@ -1543,6 +1561,11 @@
         width: 16px;
         height: 15px;
         background: url(../img/1/containers.png) -300px -172px;
+    }
+
+    #enchantSelectedItem, #enchantShards {
+        width: 16px;
+        height: 15px;
     }
 
 }

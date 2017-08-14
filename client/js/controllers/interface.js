@@ -85,7 +85,7 @@ define(['jquery', '../interface/inventory',
             var self = this;
 
             if (!self.enchant)
-                self.enchant = new Enchant(self, self);
+                self.enchant = new Enchant(self.game, self);
         },
 
         loadNotifications: function() {
