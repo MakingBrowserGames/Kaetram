@@ -812,6 +812,35 @@ define(['./renderer/renderer', './utils/storage',
                 self.player.dead = false;
             });
 
+            self.messages.onEnchant(function(opcode, info) {
+                var type = info.type,
+                    index = info.index;
+
+                switch (opcode) {
+                    case Packets.EnchantOpcode.Select:
+
+                        self.interface.enchant.add(type, index);
+
+                        break;
+
+                    case Packets.EnchantOpcode.Remove:
+
+                        self.interface.enchant.moveBack(type, index);
+
+                        break;
+
+                    case Packets.EnchantOpcode.Enchant:
+
+                        /**
+                         * We just send an update about the item? Probably
+                         * not even necessary considering we can just sync
+                         * up the player with the rest of the world.
+                         */
+
+                        break;
+                }
+
+            });
         },
 
         postLoad: function() {

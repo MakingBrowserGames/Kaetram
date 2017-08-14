@@ -362,3 +362,16 @@ Messages.Respawn = Message.extend({
     }
 
 });
+
+Messages.Enchant = Message.extend({
+
+    init: function(opcode, info) {
+        this.opcode = opcode;
+        this.info = info;
+    },
+
+    serialize: function() {
+        return [Packets.Enchant, this.opcode, this.info];
+    }
+
+});

@@ -109,6 +109,10 @@ Items.isShard = function(id) {
     return id === 253 || id === 254 || id === 255 || id === 256 || id === 257;
 };
 
+Items.isEnchantable = function(id) {
+    return Items.getType(id) !== 'object' && Items.getType(id) !== 'craft';
+};
+
 Items.getShardTier = function(id) {
     if (id === 253)
         return 1;

@@ -702,17 +702,26 @@ module.exports = Incoming = cls.Class.extend({
 
         switch (opcode) {
             case Packets.EnchantOpcode.Select:
-                var index = message.shift();
+                var index = message.shift(),
+                    item = self.player.inventory.slots[index],
+                    type = 'item';
 
+                if (Items.isShard(item.id))
+                    type = 'shards';
 
+                self.player.enchant.add(type, item);
 
                 break;
 
             case Packets.EnchantOpcode.Remove:
 
+                self.player.enchant.remove(message.shift());
+
                 break;
 
             case Packets.EnchantOpcode.Enchant:
+
+                self.player.enchant.enchant();
 
                 break;
         }

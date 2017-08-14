@@ -371,10 +371,11 @@ define(function() {
 
         receiveEnchant: function(data) {
             var self = this,
+                opcode = data.shift(),
                 info = data.shift();
 
             if (self.enchantCallback)
-                self.enchantCallback(info);
+                self.enchantCallback(opcode, info);
         },
 
         /**

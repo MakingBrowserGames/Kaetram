@@ -1,5 +1,7 @@
 var cls = require('../../../../../lib/class'),
-    Items = require('../../../../../util/items');
+    Items = require('../../../../../util/items'),
+    Messages = require('../../../../../network/messages'),
+    Packets = require('../../../../../network/packets');
 
 module.exports = Enchant = cls.Class.extend({
 
@@ -45,65 +47,56 @@ module.exports = Enchant = cls.Class.extend({
 
     },
 
-    enchant: function(item, shards) {
-        /*var self = this;
-
-        if (!item || !shard)
-            return;
-
-        var type = Items.getType(item.id);
-
-        if (type === 'object' || type === 'craft')
-            return;
-
-        var ability = Utils.randomInt(0, 100) < 5 * shard.tier;
-
-        item.count = Utils.randomInt(1, shard.tier < 5 ? 5 * shard.tier : 35);
-
-        if (shard.tier !== 1 && ability) {
-
-            if (item.ability && item.abilityLevel < 5) {
-                item.abilityLevel++;
-
-                log.info(item);
-
-                return;
-            }
-
-            switch (type) {
-                case 'weapon':
-
-                    item.ability = Utils.randomInt(0, 1);
-
-                    break;
-
-                case 'weaponarcher':
-
-                    item.ability = Utils.randomInt(3, 4);
-
-                    break;
-
-                case 'armour':
-                case 'armorarcher':
-
-                    item.ability = Modules.Enchantment.Splash;
-
-                    break;
-
-            }
-
-        }
-
-        log.info(item);*/
-    },
-
-    add: function(type, index) {
+    enchant: function() {
         var self = this;
 
+        if (!self.selectedItem || !self.selectedShards || !self.verify())
+            return;
+
+        /**
+         * Implement probabilities here based on the number of shards
+         * and reason them out.
+         */
+
+        log.info(self.selectedItem);
+        log.info(self.selectedShards);
+    },
+    
+    verify: function() {
+        return Items.isEnchantable(this.selectedItem.id) && Items.isShard(this.selectedShards.id);  
+    },
+
+    add: function(type, item) {
+        var self = this,
+            isItem = item === 'item';
+
+        if (isItem && !Items.isEnchantable(item.id))
+            return;
+
+        if (type === 'item')
+            self.selectedItem = item;
+        else if (type === 'shards')
+            self.selectedShards = item;
+
+        self.player.send(new Messages.Enchant(Packets.EnchantOpcode.Select, {
+            type: type,
+            index: item.index
+        }));
     },
 
     remove: function(type) {
-        var self = this;
+        var self = this,
+            index;
+
+        if (type === 'item' && self.selectedItem)
+            index = self.selectedItem.index;
+        else if (type === 'shards' && self.selectedShards)
+            index = self.selectedShards.index;
+
+        self.player.send(new Messages.Enchant(Packets.EnchantOpcode.Remove, {
+            type: type,
+            index: index
+        }));
 
         if (type === 'item')
             self.selectedItem = null;
