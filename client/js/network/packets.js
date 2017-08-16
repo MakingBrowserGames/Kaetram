@@ -119,5 +119,6 @@ Packets.TradeOpcode = {
 Packets.EnchantOpcode = {
     Select: 0,
     Remove: 1,
-    Enchant: 2
+    Enchant: 2,
+    Update: 3
 };

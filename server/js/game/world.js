@@ -683,6 +683,17 @@ module.exports = World = cls.Class.extend({
         return false;
     },
 
+    getPlayerByName: function(username) {
+        var self = this;
+
+        for (var id in self.players)
+            if (self.players.hasOwnProperty(id))
+                if (self.players[id].username.toLowerCase() === username.toLowerCase())
+                    return self.players[id];
+
+        return null;
+    },
+
     saveAll: function() {
         var self = this;
 

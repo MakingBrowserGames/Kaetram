@@ -41,7 +41,7 @@ module.exports = Commands = cls.Class.extend({
 
                 self.player.send(new Messages.Notification(2, 'Testing Text'));
 
-                break;
+                return;
         }
     },
 
@@ -49,6 +49,49 @@ module.exports = Commands = cls.Class.extend({
         var self = this;
 
         switch (command) {
+
+            case 'mute':
+            case 'ban':
+
+                var duration = blocks.shift(),
+                    targetName = blocks.join(' '),
+                    user = self.world.getPlayerByName(targetName);
+
+                if (!user)
+                    return;
+
+                if (!duration)
+                    duration = 24;
+
+                var timeFrame = new Date().getTime() + duration * 60 * 60;
+
+                if (command === 'mute')
+                    user.mute = timeFrame;
+                else if (command === 'ban') {
+                    user.ban = timeFrame;
+                    user.save();
+
+                    user.sendUTF8('ban');
+                    user.connection.close('banned');
+                }
+
+                user.save();
+
+                break;
+
+            case 'unmute':
+
+                var uTargetName = blocks.join(' '),
+                    uUser = self.world.getPlayerByName(uTargetName);
+
+                if (!uTargetName)
+                    return;
+
+                uUser.mute = new Date().getTime() - 3600;
+
+                uUser.save();
+
+                break;
 
         }
 
@@ -60,9 +103,26 @@ module.exports = Commands = cls.Class.extend({
         switch (command) {
             case 'spawn':
 
+                var spawnId = blocks.shift(),
+                    count = blocks.shift(),
+                    ability = blocks.shift(),
+                    abilityLevel = blocks.shift();
 
+                if (!spawnId || !count)
+                    return;
 
-                break;
+                self.player.inventory.add({
+                    id: spawnId,
+                    count: count,
+                    ability: ability ? ability : -1,
+                    abilityLevel: abilityLevel ? abilityLevel : -1
+                });
+
+                return;
+
+            case 'ipban':
+
+                return;
 
             case 'drop':
 
@@ -73,13 +133,13 @@ module.exports = Commands = cls.Class.extend({
 
                 self.world.dropItem(id, 1, self.player.x, self.player.y);
 
-                break;
+                return;
 
             case 'ghost':
 
                 self.player.equip('ghost', 1, -1, -1);
 
-                break;
+                return;
         }
 
     }

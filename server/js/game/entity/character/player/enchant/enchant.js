@@ -1,15 +1,16 @@
 var cls = require('../../../../../lib/class'),
     Items = require('../../../../../util/items'),
     Messages = require('../../../../../network/messages'),
-    Packets = require('../../../../../network/packets');
+    Packets = require('../../../../../network/packets'),
+    Utils = require('../../../../../util/utils');
 
 module.exports = Enchant = cls.Class.extend({
 
     /**
-     * Tier 1 - Damage boost (1-5%)
+     * Tier 1 - Damage/Armour boost (1-5%)
      * Tier 2 - Damage boost (1-10% & 10% for special ability or special ability level up)
      * Tier 3 - Damage boost (1-15% & 15% for special ability or special ability level up)
-     * Tier 4 - Damage boost (1-25% & 20% for special ability or special ability level up)
+     * Tier 4 - Damage boost (1-20% & 20% for special ability or special ability level up)
      * Tier 5 - Damage boost (1-40% & 25% for special ability or special ability level up)
      */
 
@@ -50,7 +51,7 @@ module.exports = Enchant = cls.Class.extend({
     enchant: function() {
         var self = this;
 
-        if (!self.selectedItem || !self.selectedShards || !self.verify())
+        if (!self.selectedItem || !self.selectedShards || !self.verify() || self.selectedShards.count < 10)
             return;
 
         /**
@@ -58,8 +59,60 @@ module.exports = Enchant = cls.Class.extend({
          * and reason them out.
          */
 
-        log.info(self.selectedItem);
-        log.info(self.selectedShards);
+        var tier = self.selectedItem.tier;
+
+        self.selectedItem.count = Utils.randomInt(1, tier === 5 ? 40 : 5 * tier);
+
+        if (tier < 2)
+            return;
+
+        if (self.hasAbility(self.selectedItem))
+            if (self.selectedItem.abilityLevel < 5)
+                self.selectedItem.abilityLevel++;
+        else
+            self.generateAbility();
+
+        self.player.inventory.remove(self.selectedShards.id, 10, self.selectedShards.index);
+    },
+
+    generateAbility: function() {
+        var self = this,
+            type = Items.getType(self.selectedItem.id);
+
+        log.info('Handle ability generation for: ' + type);
+
+        switch (type) {
+            case 'armor':
+
+                break;
+
+            case 'armorarcher':
+
+                break;
+
+            case 'weapon':
+
+
+
+                break;
+
+            case 'weaponarcher':
+
+                break;
+
+            case 'pendant':
+
+                break;
+
+            case 'ring':
+
+                break;
+
+            case 'boots':
+
+                break;
+
+        }
     },
     
     verify: function() {
@@ -88,20 +141,28 @@ module.exports = Enchant = cls.Class.extend({
         var self = this,
             index;
 
-        if (type === 'item' && self.selectedItem)
+        if (type === 'item' && self.selectedItem) {
+
             index = self.selectedItem.index;
-        else if (type === 'shards' && self.selectedShards)
+
+            self.selectedItem = null;
+
+        } else if (type === 'shards' && self.selectedShards) {
+
             index = self.selectedShards.index;
+
+
+            self.selectedShards = null;
+        }
 
         self.player.send(new Messages.Enchant(Packets.EnchantOpcode.Remove, {
             type: type,
             index: index
         }));
+    },
 
-        if (type === 'item')
-            self.selectedItem = null;
-        else if (type === 'shards')
-            self.selectedShards = null;
+    hasAbility: function(item) {
+        return item.ability !== -1;
     }
 
 });

@@ -30,7 +30,7 @@
     top: 30%;
 }
 
-#ok, #done {
+.ok, #done {
     position: absolute;
     left: 85%;
     top: 70%;
@@ -314,6 +314,12 @@
 
 #enchantShards {
     left: 34%;
+}
+
+.close {
+    position: absolute;
+    left: 92%;
+    top: -3%;
 }
 
 @media only screen and (min-width: 1501px) {
@@ -695,6 +701,31 @@
         height: 45px;
     }
 
+    .close {
+        width: 48px;
+        height: 48px;
+
+        background: url('../img/3/containers.png') -96px -498px;
+    }
+
+    .close.active {
+        background-position: -144px -498px;
+    }
+
+    .close:hover {
+        background-position: -192px -498px;
+    }
+
+    .ok {
+        width: 42px;
+        height: 42px;
+        background: url('../img/3/containers.png') -1143px -183px;
+    }
+
+    .ok:hover {
+        background-position: -1143px -141px;
+    }
+
 }
 
 @media only screen and (max-width: 1500px), only screen and (max-height: 870px) {
@@ -792,13 +823,13 @@
         background: url('../img/2/containers.png') -669px -94px;
     }
 
-    #ok, #done {
+    .ok, #done {
         width: 27px;
         height: 14px;
         background: url('../img/2/containers.png') -642px -108px;
     }
 
-    #ok:hover, #done:hover {
+    .ok:hover, #done:hover {
         background: url('../img/2/containers.png') -642px -94px;
     }
 
@@ -1141,6 +1172,31 @@
         height: 30px;
     }
 
+    .close {
+        width: 32px;
+        height: 32px;
+
+        background: url('../img/2/containers.png') -64px -332px;
+    }
+
+    .close.active {
+        background-position: -96px -332px;
+    }
+    
+    .close:hover {
+        background-position: -128px -332px;
+    }
+
+    .ok {
+        width: 28px;
+        height: 28px;
+        background: url('../img/2/containers.png') -762px -122px;
+    }
+
+    .ok:hover {
+        background-position: -762px -94px;
+    }
+
 }
 
 @media only screen and (max-width: 1000px) {
@@ -1238,7 +1294,7 @@
         background: url('../img/1/containers.png') -334px -47px;
     }
 
-    #ok, #done {
+    .ok, #done {
         left: 85%;
         top: 55%;
         width: 14px;
@@ -1246,7 +1302,7 @@
         background: url('../img/1/containers.png') -387px -79px;
     }
 
-    #ok, #done:hover {
+    .ok, #done:hover {
         background: url('../img/1/containers.png') -387px -65px;
     }
 
@@ -1566,6 +1622,17 @@
     #enchantSelectedItem, #enchantShards {
         width: 16px;
         height: 15px;
+    }
+
+    .close {
+        width: 16px;
+        height: 16px;
+
+        background: url('../img/1/containers.png') -32px -166px;
+    }
+
+    .close.active {
+        background-position: -48px -166px;
     }
 
 }

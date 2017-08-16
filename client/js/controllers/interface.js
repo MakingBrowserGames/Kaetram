@@ -139,6 +139,9 @@ define(['jquery', '../interface/inventory',
 
             if (self.bank)
                 self.bank.hide();
+
+            if (self.enchant)
+                self.enchant.hide();
         },
 
         displayNotify: function(message) {

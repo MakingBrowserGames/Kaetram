@@ -15,6 +15,12 @@ define(['jquery', './container/container'], function($, Container) {
             self.bankInventorySlots = $('#bankInventorySlots');
 
             self.container = new Container(size);
+            self.close = $('#closeBank');
+
+            self.close.css('left', '97%');
+            self.close.click(function() {
+                self.hide();
+            });
         },
 
         load: function(data) {

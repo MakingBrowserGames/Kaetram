@@ -492,7 +492,7 @@ module.exports = Player = Character.extend({
         var self = this,
             time = new Date().getTime();
 
-        return self.muted - time > 0;
+        return self.mute - time > 0;
     },
 
     isRanged: function() {

@@ -561,7 +561,7 @@ module.exports = Incoming = cls.Class.extend({
             self.commands.parse(text);
         else {
             if (self.player.isMuted()) {
-                //send notification
+                log.info('hey');
                 return;
             }
 

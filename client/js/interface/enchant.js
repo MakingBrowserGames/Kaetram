@@ -14,6 +14,10 @@ define(['jquery'], function($) {
 
             self.selectedItem = $('#enchantSelectedItem');
             self.selectedShards = $('#enchantShards');
+
+            $('#closeEnchant').click(function() {
+                self.hide();
+            })
         },
 
         add: function(type, index) {
@@ -66,6 +70,8 @@ define(['jquery'], function($) {
                 list = self.getSlots(),
                 inventoryList = self.interface.bank.getInventoryList();
 
+            list.empty();
+
             for (var i = 0; i < self.getInventorySize(); i++) {
                 var item = $(inventoryList[i]).clone(),
                     slot = item.find('#bankInventorySlot' + i);
@@ -111,6 +117,8 @@ define(['jquery'], function($) {
 
             self.selectedItem.css('background-image', '');
             self.selectedShards.css('background-image', '');
+
+            self.body.fadeOut('fast');
         },
 
         getSlot: function(index) {
