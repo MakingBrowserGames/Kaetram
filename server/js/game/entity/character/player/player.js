@@ -15,7 +15,7 @@ var Character = require('../character'),
     Packets = require('../../../../network/packets'),
     Modules = require('../../../../util/modules'),
     Handler = require('./handler'),
-    Quests = require('./quests'),
+    Quests = require('../../../../controllers/quests'),
     Inventory = require('./containers/inventory/inventory'),
     Abilities = require('./ability/abilities'),
     Bank = require('./containers/bank/bank'),
@@ -58,6 +58,7 @@ module.exports = Player = Character.extend({
         self.introduced = false;
         self.currentSong = null;
         self.acceptedTrade = false;
+        self.invincible = false;
     },
 
     load: function(data) {
@@ -294,6 +295,17 @@ module.exports = Player = Character.extend({
             self.deathCallback();
 
         self.send(new Messages.Death(self.instance));
+    },
+
+    teleport: function(x, y) {
+        var self = this;
+
+        self.world.pushToAdjacentGroups(self.group, new Messages.Teleport(self.instance, x, y));
+
+        self.setPosition(x, y);
+        self.checkGroups();
+
+        self.world.cleanCombat(self);
     },
 
     updateMusic: function(song) {
@@ -552,6 +564,15 @@ module.exports = Player = Character.extend({
         self.world.pushToAdjacentGroups(self.group, new Messages.Sync(info), all ? null : self.instance);
 
         self.save();
+    },
+
+    notify: function(message) {
+        var self = this;
+
+        if (!message)
+            return;
+
+        self.send(new Messages.Notification(Packets.NotificationOpcode.Ok, message));
     },
 
     stopMovement: function(force) {

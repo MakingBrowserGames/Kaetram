@@ -11,6 +11,9 @@ module.exports = Mob = Character.extend({
 
         self._super(id, 'mob', instance, x, y);
 
+        if (!Mobs.exists(id))
+            return;
+
         self.data = Mobs.Ids[self.id];
         self.hitPoints = self.data.hitPoints;
         self.maxHitPoints = self.data.hitPoints;
@@ -78,6 +81,7 @@ module.exports = Mob = Character.extend({
 
         switch (self.id) {
             case 3:
+            case 17:
                 return 'projectile-fireball';
         }
 
@@ -156,6 +160,10 @@ module.exports = Mob = Character.extend({
 
     onMove: function(callback) {
         this.moveCallback = callback;
+    },
+
+    onDeath: function(callback) {
+        this.deathCallback = callback;
     },
 
     move: function(x, y) {

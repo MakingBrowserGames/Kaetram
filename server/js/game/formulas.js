@@ -41,7 +41,7 @@ Formulas.getDamage = function(attacker, target) {
 
     damage -= damageAbsorbed;
 
-    if (isNaN(damage) || !damage || damage < 0)
+    if (isNaN(damage) || !damage || damage < 0 || target.invincible)
         damage = 0;
 
     return damage;

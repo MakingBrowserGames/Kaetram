@@ -3,7 +3,8 @@
 var Entity = require('../entity'),
     _ = require('underscore'),
     Combat = require('./combat/combat'),
-    Modules = require('../../../util/modules');
+    Modules = require('../../../util/modules'),
+    SkeletonKing = require('./combat/impl/skeletonking');
 
 module.exports = Character = Entity.extend({
 
@@ -33,7 +34,27 @@ module.exports = Character = Entity.extend({
         self.target = null;
         self.potentialTarget = null;
 
-        self.combat = new Combat(self);
+        self.loadCombat();
+    },
+
+    loadCombat: function() {
+        var self = this;
+
+        switch (self.id) {
+            case 99:
+
+                self.combat = new SkeletonKing(self);
+
+                break;
+
+
+
+            default:
+
+                self.combat = new Combat(self);
+
+                break;
+        }
     },
 
     hit: function(attacker) {

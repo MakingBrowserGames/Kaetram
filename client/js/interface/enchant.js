@@ -14,15 +14,27 @@ define(['jquery'], function($) {
 
             self.selectedItem = $('#enchantSelectedItem');
             self.selectedShards = $('#enchantShards');
+            self.confirm = $('#confirmEnchant');
+            self.shardsCount = $('#shardsCount');
+
+            self.confirm.css({
+                'left': '70%',
+                'top': '80%'
+            });
 
             $('#closeEnchant').click(function() {
                 self.hide();
-            })
+            });
+
+            self.confirm.click(function() {
+                self.enchant();
+            });
         },
 
         add: function(type, index) {
             var self = this,
                 image = self.getSlot(index).find('#inventoryImage' + index);
+
 
             switch (type) {
                 case 'item':
@@ -35,21 +47,32 @@ define(['jquery'], function($) {
 
                     self.selectedShards.css('background-image', image.css('background-image'));
 
+                    var count = self.getItemSlot(index).count;
+
+                    if (count > 1)
+                        self.shardsCount.text(count);
 
                     break;
             }
 
             image.css('background-image', '');
+
+            self.getSlot(index).find('#inventoryItemCount' + index).text('');
         },
 
         moveBack: function(type, index) {
             var self = this,
-                image = self.getSlot(index).find('#inventoryImage'+ index);
+                image = self.getSlot(index).find('#inventoryImage'+ index),
+                itemCount = self.getSlot(index).find('#inventoryItemCount' + index),
+                count = self.getItemSlot(index).count;
 
             switch (type) {
                 case 'item':
 
                     image.css('background-image', self.selectedItem.css('background-image'));
+
+                    if (count > 1)
+                        itemCount.text(count);
 
                     self.selectedItem.css('background-image', '');
 
@@ -59,7 +82,12 @@ define(['jquery'], function($) {
 
                     image.css('background-image', self.selectedShards.css('background-image'));
 
+                    if (count > 1)
+                        itemCount.text(count);
+
                     self.selectedShards.css('background-image', '');
+
+                    self.shardsCount.text('');
 
                     break;
             }
@@ -93,6 +121,10 @@ define(['jquery'], function($) {
 
         },
 
+        enchant: function() {
+            this.game.socket.send(Packets.Enchant, [Packets.EnchantOpcode.Enchant]);
+        },
+
         select: function(event) {
             this.game.socket.send(Packets.Enchant, [Packets.EnchantOpcode.Select, event.currentTarget.id.substring(17)]);
         },
@@ -103,6 +135,10 @@ define(['jquery'], function($) {
 
         getInventorySize: function() {
             return this.interface.inventory.getSize();
+        },
+
+        getItemSlot: function(index) {
+            return this.interface.inventory.container.slots[index];
         },
 
         display: function() {
@@ -119,6 +155,10 @@ define(['jquery'], function($) {
             self.selectedShards.css('background-image', '');
 
             self.body.fadeOut('fast');
+        },
+
+        hasImage: function(image) {
+            return image.css('background-image') !== 'none';
         },
 
         getSlot: function(index) {

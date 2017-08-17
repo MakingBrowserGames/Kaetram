@@ -13,6 +13,9 @@ define(['jquery', '../interface/inventory',
 
             self.notify = $('#notify');
             self.confirm = $('#confirm');
+            self.message = $('#message');
+            self.fade = $('#notifFade');
+            self.done = $('#notifyDone');
 
             self.inventory = null;
             self.profile = null;
@@ -21,6 +24,10 @@ define(['jquery', '../interface/inventory',
 
             self.loadNotifications();
             self.loadActions();
+
+            self.done.click(function() {
+                self.hideNotify();
+            });
         },
 
         resize: function() {
@@ -151,7 +158,10 @@ define(['jquery', '../interface/inventory',
                 return;
 
             self.notify.css('display', 'block');
-            self.notify.text(message);
+            self.fade.css('display', 'block');
+            self.message.css('display', 'block');
+
+            self.message.text(message);
         },
 
         displayConfirm: function(message) {
@@ -165,7 +175,11 @@ define(['jquery', '../interface/inventory',
         },
 
         hideNotify: function() {
-            this.notify.css('display', 'none');
+            var self = this;
+
+            self.fade.css('display', 'none');
+            self.notify.css('display', 'none');
+            self.message.css('display', 'none');
         },
 
         hideConfirm: function() {

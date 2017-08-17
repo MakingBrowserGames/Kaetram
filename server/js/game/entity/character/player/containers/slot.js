@@ -27,6 +27,8 @@ module.exports = Slot = cls.Class.extend({
         self.string = Items.idToString(self.id);
         self.edible = Items.isEdible(self.id);
         self.equippable = Items.isEquippable(self.string);
+
+        self.verify();
     },
 
     empty: function() {
@@ -41,11 +43,26 @@ module.exports = Slot = cls.Class.extend({
     },
 
     increment: function(amount) {
-        this.count += amount;
+        var self = this;
+
+        self.count += parseInt(amount);
+
+        self.verify();
     },
 
     decrement: function(amount) {
-        this.count -= amount;
+        var self = this;
+
+        self.count -= parseInt(amount);
+
+        self.verify();
+    },
+
+    verify: function() {
+        var self = this;
+
+        if (isNaN(self.count))
+            self.count = 1;
     },
 
     getData: function() {

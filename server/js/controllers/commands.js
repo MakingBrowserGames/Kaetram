@@ -2,7 +2,9 @@
 
 var cls = require('../lib/class'),
     Messages = require('../network/messages'),
-    Packets = require('../network/packets');
+    Packets = require('../network/packets'),
+    Utils = require('../util/utils'),
+    Mob = require('../game/entity/character/mob/mob');
 
 module.exports = Commands = cls.Class.extend({
 
@@ -35,13 +37,7 @@ module.exports = Commands = cls.Class.extend({
         var self = this;
 
         switch(command) {
-            case 'notify':
 
-                var type = parseInt(blocks.shift());
-
-                self.player.send(new Messages.Notification(2, 'Testing Text'));
-
-                return;
         }
     },
 
@@ -103,10 +99,10 @@ module.exports = Commands = cls.Class.extend({
         switch (command) {
             case 'spawn':
 
-                var spawnId = blocks.shift(),
-                    count = blocks.shift(),
-                    ability = blocks.shift(),
-                    abilityLevel = blocks.shift();
+                var spawnId = parseInt(blocks.shift()),
+                    count = parseInt(blocks.shift()),
+                    ability = parseInt(blocks.shift()),
+                    abilityLevel = parseInt(blocks.shift());
 
                 if (!spawnId || !count)
                     return;
@@ -126,12 +122,16 @@ module.exports = Commands = cls.Class.extend({
 
             case 'drop':
 
-                var id = blocks.shift();
+                var id = parseInt(blocks.shift()),
+                    dCount = parseInt(blocks.shift());
 
                 if (!id)
                     return;
 
-                self.world.dropItem(id, 1, self.player.x, self.player.y);
+                if (!dCount)
+                    dCount = 1;
+
+                self.world.dropItem(id, dCount, self.player.x, self.player.y);
 
                 return;
 
@@ -140,6 +140,36 @@ module.exports = Commands = cls.Class.extend({
                 self.player.equip('ghost', 1, -1, -1);
 
                 return;
+
+            case 'notify':
+
+                self.player.notify('Hello!!!');
+
+                break;
+
+            case 'teleport':
+
+                var x = parseInt(blocks.shift()),
+                    y = parseInt(blocks.shift());
+
+                if (x && y)
+                    self.player.teleport(x, y);
+
+                break;
+
+            case 'nohit':
+
+                self.player.invincible = !self.player.invincible;
+
+                break;
+
+            case 'npc':
+
+                var npcId = parseInt(blocks.shift());
+
+                self.world.spawnMob(npcId, self.player.x, self.player.y);
+
+                break;
         }
 
     }

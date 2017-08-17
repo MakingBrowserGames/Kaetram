@@ -51,8 +51,25 @@ module.exports = Enchant = cls.Class.extend({
     enchant: function() {
         var self = this;
 
-        if (!self.selectedItem || !self.selectedShards || !self.verify() || self.selectedShards.count < 10)
+        if (!self.selectedItem) {
+            self.player.notify('You have not selected an item to enchant.');
             return;
+        }
+
+        if (!self.selectedShards) {
+            self.player.notify('You have to select shards to infuse.');
+            return;
+        }
+
+        if (!self.verify()) {
+            self.player.notify('This item cannot be enchanted.');
+            return;
+        }
+
+        if (self.selectedShards.count < 10) {
+            self.player.notify('You must have a minimum of 10 shards to enchant.');
+            return;
+        }
 
         /**
          * Implement probabilities here based on the number of shards
@@ -77,26 +94,30 @@ module.exports = Enchant = cls.Class.extend({
 
     generateAbility: function() {
         var self = this,
-            type = Items.getType(self.selectedItem.id);
+            type = Items.getType(self.selectedItem.id),
+            probability = Utils.randomInt(0, 100);
 
-        log.info('Handle ability generation for: ' + type);
+        if (probability > 5 + (5 * self.selectedShards.tier))
+            return;
 
         switch (type) {
             case 'armor':
-
-                break;
-
             case 'armorarcher':
+
+                self.selectedItem.ability = Utils.randomInt(2, 3);
+
 
                 break;
 
             case 'weapon':
 
-
+                self.selectedItem.ability = Utils.randomInt(0, 1);
 
                 break;
 
             case 'weaponarcher':
+
+                self.selectedItem.ability = Utils.randomInt(4, 5);
 
                 break;
 
@@ -126,10 +147,19 @@ module.exports = Enchant = cls.Class.extend({
         if (isItem && !Items.isEnchantable(item.id))
             return;
 
-        if (type === 'item')
+        if (type === 'item') {
+            if (self.selectedItem)
+                self.remove('item');
+
             self.selectedItem = item;
-        else if (type === 'shards')
+
+        } else if (type === 'shards') {
+
+            if (self.selectedShards)
+                self.remove('shards');
+
             self.selectedShards = item;
+        }
 
         self.player.send(new Messages.Enchant(Packets.EnchantOpcode.Select, {
             type: type,

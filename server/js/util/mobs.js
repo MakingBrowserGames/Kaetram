@@ -27,4 +27,10 @@ Mobs.getXp = function(id) {
     return -1;
 };
 
+Mobs.exists = function(id) {
+
+    return id in Mobs.Ids;
+
+};
+
 module.exports = Mobs;

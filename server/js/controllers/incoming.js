@@ -383,12 +383,7 @@ module.exports = Incoming = cls.Class.extend({
                 if (self.world.map.isDoor(posX, posY)) {
                     var destination = self.world.map.getDoorDestination(posX, posY);
 
-                    self.world.pushToAdjacentGroups(self.player.group, new Messages.Teleport(self.player.instance, destination.x, destination.y));
-
-                    self.player.setPosition(destination.x, destination.y);
-                    self.player.checkGroups();
-
-                    self.world.cleanCombat(self.player);
+                    self.player.teleport(destination.x, destination.y);
 
                 } else
                     self.player.setPosition(posX, posY);

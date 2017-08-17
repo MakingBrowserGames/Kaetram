@@ -44,7 +44,8 @@ module.exports = Inventory = Container.extend({
 
         self.owner.save();
 
-        self.owner.world.removeItem(item);
+        if (item.instance)
+            self.owner.world.removeItem(item);
     },
 
     remove: function(id, count, index) {

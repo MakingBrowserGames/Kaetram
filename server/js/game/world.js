@@ -225,6 +225,9 @@ module.exports = World = cls.Class.extend({
             var deathX = character.x,
                 deathY = character.y;
 
+            if (character.deathCallback)
+                character.deathCallback();
+
             self.removeEntity(character);
 
             character.destroy();
@@ -505,6 +508,19 @@ module.exports = World = cls.Class.extend({
         log.info('Spawned ' + Object.keys(self.entities).length + ' entities!');
     },
 
+    spawnMob: function(id, x, y) {
+        var self = this,
+            instance = Utils.generateInstance(2, id, x + id, y),
+            mob = new Mob(id, instance, x, y);
+
+        if (!Mobs.exists(id))
+            return;
+
+        self.addMob(mob);
+
+        return mob;
+    },
+
     dropItem: function(id, count, x, y) {
         var self = this,
             instance = Utils.generateInstance(4, id + (Object.keys(self.entities)).length, x, y),
@@ -583,6 +599,11 @@ module.exports = World = cls.Class.extend({
 
     addMob: function(mob) {
         var self = this;
+
+        if (!Mobs.exists(mob.id)) {
+            log.error('Cannot spawn mob. ' + mob.id + ' does not exist.');
+            return;
+        }
 
         self.addEntity(mob);
         self.mobs[mob.instance] = mob;

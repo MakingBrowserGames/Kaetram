@@ -30,7 +30,7 @@
     top: 30%;
 }
 
-.ok, #done {
+.done {
     position: absolute;
     left: 85%;
     top: 70%;
@@ -320,6 +320,35 @@
     position: absolute;
     left: 92%;
     top: -3%;
+}
+
+.ok {
+    position: absolute;
+}
+
+#message {
+    position: absolute;
+    font-family: 'AdvoCut', sans-serif;
+    left: 42%;
+    top: 48%;
+    pointer-events: none;
+}
+
+.fade {
+    display: none;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 98%;
+    top: 0;
+    left: 0;
+}
+
+#shardsCount {
+    position: absolute;
+    font-family: 'AdvoCut', sans-serif;
+    top: 120%;
+    text-align: center;
 }
 
 @media only screen and (min-width: 1501px) {
@@ -701,6 +730,10 @@
         height: 45px;
     }
 
+    #shardsCount {
+        width: 48px;
+    }
+
     .close {
         width: 48px;
         height: 48px;
@@ -724,6 +757,11 @@
 
     .ok:hover {
         background-position: -1143px -141px;
+    }
+
+    #message {
+        width: 360px;
+        height: 69px;
     }
 
 }
@@ -823,13 +861,13 @@
         background: url('../img/2/containers.png') -669px -94px;
     }
 
-    .ok, #done {
+    .ok, .done {
         width: 27px;
         height: 14px;
         background: url('../img/2/containers.png') -642px -108px;
     }
 
-    .ok:hover, #done:hover {
+    .ok:hover, .done:hover {
         background: url('../img/2/containers.png') -642px -94px;
     }
 
@@ -1172,6 +1210,10 @@
         height: 30px;
     }
 
+    #shardsCount {
+        width: 32px;
+    }
+
     .close {
         width: 32px;
         height: 32px;
@@ -1195,6 +1237,11 @@
 
     .ok:hover {
         background-position: -762px -94px;
+    }
+
+    #message {
+        width: 240px;
+        height: 46px;
     }
 
 }
@@ -1294,7 +1341,7 @@
         background: url('../img/1/containers.png') -334px -47px;
     }
 
-    .ok, #done {
+    .ok, .done {
         left: 85%;
         top: 55%;
         width: 14px;
@@ -1302,7 +1349,7 @@
         background: url('../img/1/containers.png') -387px -79px;
     }
 
-    .ok, #done:hover {
+    .ok, .done:hover {
         background: url('../img/1/containers.png') -387px -65px;
     }
 
@@ -1624,6 +1671,10 @@
         height: 15px;
     }
 
+    #shardsCount {
+        width: 16px;
+    }
+
     .close {
         width: 16px;
         height: 16px;
@@ -1633,6 +1684,11 @@
 
     .close.active {
         background-position: -48px -166px;
+    }
+
+    #message {
+        width: 120px;
+        height: 23px;
     }
 
 }

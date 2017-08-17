@@ -97,7 +97,7 @@ module.exports = Combat = cls.Class.extend({
         self.started = false;
 
         self.cleanTimeout = setTimeout(function() {
-            if (new Date().getTime() - self.lastHit > 7000 && self.character.type === 'mob') {
+            if (self.getTime() - self.lastHit > 7000 && self.character.type === 'mob') {
                 self.forget();
                 self.character.removeTarget();
                 self.sendToSpawn();
@@ -322,7 +322,7 @@ module.exports = Combat = cls.Class.extend({
 
     hit: function(character, target, hitInfo) {
         var self = this,
-            time = new Date().getTime();
+            time = self.getTime();
 
         if (time - self.lastHit < self.character.attackRate)
             return;
@@ -340,7 +340,7 @@ module.exports = Combat = cls.Class.extend({
 
         }
 
-        self.lastHit = new Date().getTime();
+        self.lastHit = self.getTime();
     },
 
     follow: function(character, target) {
@@ -368,6 +368,14 @@ module.exports = Combat = cls.Class.extend({
         _.each(this.attackers, function(attacker) {
             callback(attacker);
         });
+    },
+    
+    getTime: function() {
+        return new Date().getTime();
+    },
+
+    colliding: function(x, y) {
+        return this.world.map.isColliding(x, y);
     }
 
 });

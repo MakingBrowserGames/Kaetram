@@ -47,9 +47,10 @@ var Modules = {
     Enchantment: {
         Bloodsucking: 0,
         Critical: 1,
-        Splash: 2,
-        Explosive: 3,
-        Stun: 4
+        Evasion: 2,
+        Spike: 3,
+        Explosive: 4,
+        Stun: 5
     },
 
     Trade: {

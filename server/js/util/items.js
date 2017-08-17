@@ -98,7 +98,7 @@ Items.getType = function(id) {
 };
 
 Items.isStackable = function(id) {
-    return id === 190 || id === 191 || id === 192 || id === 193 || id === 195 || id === 199 || id === 202;
+    return id === 190 || id === 191 || id === 192 || id === 193 || id === 195 || id === 199 || id === 202 || id === 253 || id === 254 || id === 255 || id === 256 || id === 257;
 };
 
 Items.isEdible = function(id) {
