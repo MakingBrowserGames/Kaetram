@@ -126,6 +126,20 @@ module.exports = Player = Character.extend({
         });
     },
 
+    loadQuests: function() {
+        var self = this;
+
+        if (config.offlineMode)
+            return;
+
+        self.mysql.loader.getQuests(self, function(ids, stages) {
+            if (self.quests.getSize() !== ids.length)
+                self.save();
+
+            self.quests.update(ids, stages);
+        });
+    },
+
     intro: function() {
         var self = this;
 

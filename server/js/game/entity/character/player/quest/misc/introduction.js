@@ -9,8 +9,12 @@ module.exports = Introduction = Quest.extend({
         self.data = data;
 
         self._super(data.id, data.name, data.description);
+    },
 
-        log.info('Initialized introduction quest.');
+    update: function(stage) {
+        var self = this;
+
+        self.stage = stage;
     }
 
 });

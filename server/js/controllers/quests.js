@@ -18,17 +18,46 @@ module.exports = Quests = cls.Class.extend({
         var self = this;
 
         _.each(Data, function(quest) {
-            self.quests[quest.name] = new Introduction(quest, self.player);
+            self.quests[quest.id] = new Introduction(quest, self.player);
         });
     },
 
-    getQuest: function(name) {
+    update: function(ids, stages) {
         var self = this;
 
-        if (name in self.quests)
-            return self.quests[name];
+        for (var id = 0; id < ids.length; id++)
+            if (!isNaN(parseInt(ids[id])) && self.quests[id])
+                self.quests[id].update(stages[id]);
+    },
+
+    getArray: function() {
+        var self = this,
+            ids = '',
+            stages = '';
+
+        for (var id = 0; id < self.getSize(); id++) {
+            ids += id + ' ';
+            stages += self.quests[id].stage + ' ';
+        }
+
+        return {
+            username: self.player.username,
+            ids: ids,
+            stages: stages
+        }
+    },
+
+    getQuest: function(id) {
+        var self = this;
+
+        if (id in self.quests)
+            return self.quests[id];
 
         return null;
+    },
+
+    getSize: function() {
+        return Object.keys(this.quests).length;
     }
 
 });

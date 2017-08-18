@@ -43,10 +43,10 @@ module.exports = Creator = cls.Class.extend({
             'boots varchar(64),' +
             'PRIMARY KEY(username))');
 
-        self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_quest (' +
+        self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_quests (' +
             'username varchar(64),' +
-            'id tinyint,' +
-            'progress smallint,' +
+            'ids text COLLATE utf8_unicode_ci NOT NULL,' +
+            'stages text COLLATE utf8_unicode_ci NOT NULL,' +
             'PRIMARY KEY(username))');
 
         self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_bank (' +
@@ -94,6 +94,7 @@ module.exports = Creator = cls.Class.extend({
         self.mysql.connection.query(queryKey + ' `player_inventory` SET ?', player.inventory.getArray());
         self.mysql.connection.query(queryKey + ' `player_abilities` SET ?', player.abilities.getArray());
         self.mysql.connection.query(queryKey + ' `player_bank` SET ?', player.bank.getArray());
+        self.mysql.connection.query(queryKey + ' `player_quests` SET ?', player.quests.getArray());
     },
 
     formatData: function(data, type) {

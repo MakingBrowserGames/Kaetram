@@ -35,6 +35,19 @@ module.exports = Loader = cls.Class.extend({
 
             callback(info.ids.split(' '), info.counts.split(' '), info.abilities.split(' '), info.abilityLevels.split(' '));
         });
+    },
+
+    getQuests: function(player, callback) {
+        var self = this;
+
+        self.mysql.connection.query('SELECT * FROM `player_quests` WHERE `player_quests`.`username`=' + "'" + player.username + "'", function(error, rows, fields) {
+            var info = rows.shift();
+
+            if (info.username !== player.username)
+                log.info('Mismatch whilst retrieving quest data for: ' + player.username);
+
+            callback(info.ids.split(' '), info.stages.split(' '));
+        });
     }
 
 });
