@@ -375,3 +375,16 @@ Messages.Enchant = Message.extend({
     }
 
 });
+
+Messages.Guild = Message.extend({
+
+    init: function(opcode, info) {
+        this.opcode = opcode;
+        this.info = info;
+    },
+
+    serialize: function() {
+        return [Packets.Enchant, this.opcode, this.info];
+    }
+
+});

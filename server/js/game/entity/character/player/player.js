@@ -20,7 +20,8 @@ var Character = require('../character'),
     Abilities = require('./ability/abilities'),
     Bank = require('./containers/bank/bank'),
     config = require('../../../../../config.json'),
-    Enchant = require('./enchant/enchant');
+    Enchant = require('./enchant/enchant'),
+    Guild = require('./guild');
 
 module.exports = Player = Character.extend({
 
@@ -90,6 +91,8 @@ module.exports = Player = Character.extend({
         self.setPendant(pendant[0], pendant[1], pendant[2], pendant[3]);
         self.setRing(ring[0], ring[1], ring[2], ring[3]);
         self.setBoots(boots[0], boots[1], boots[2], boots[3]);
+
+        self.guild = new Guild(data.guild, self);
     },
 
     loadInventory: function() {
@@ -501,17 +504,20 @@ module.exports = Player = Character.extend({
     },
 
     getSpawn: function() {
-        var self = this;
+        var self = this,
+            position;
 
         /**
          * Here we will implement functions from quests and
          * other special events and determine a spawn point.
          */
 
-        return {
-            x: 27,
-            y: 90
-        }
+        if (self.quests.getQuest(Modules.Quests.Introduction).isFinished())
+            position = { x: 27, y: 90 };
+        else
+            position = { x: 17, y: 555 };
+
+        return position;
     },
 
     isMuted: function() {

@@ -57,6 +57,10 @@ var Modules = {
         Started: 0,
         Accepted: 1,
         Finished: 2
+    },
+
+    Quests: {
+        Introduction: 0
     }
 
 };

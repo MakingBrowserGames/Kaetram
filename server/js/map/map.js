@@ -35,6 +35,7 @@ module.exports = Map = cls.Class.extend({
         self.chestAreas = map.chestAreas;
         self.staticChests = map.staticChests;
         self.staticEntities = map.staticEntities;
+        self.checkpoints = map.checkpoints;
 
         self.zoneWidth = 30;
         self.zoneHeight = 15;

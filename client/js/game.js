@@ -658,6 +658,14 @@ define(['./renderer/renderer', './utils/storage',
                 }
             });
 
+            self.messages.onAbility(function(opcode, info) {
+
+            });
+
+            self.messages.onQuest(function(opcode, info) {
+
+            });
+
             self.messages.onNotification(function(opcode, message) {
 
                 switch (opcode) {
@@ -836,6 +844,21 @@ define(['./renderer/renderer', './utils/storage',
                          * not even necessary considering we can just sync
                          * up the player with the rest of the world.
                          */
+
+                        break;
+                }
+
+            });
+
+            self.messages.onGuild(function(opcode, info) {
+
+                switch (opcode) {
+
+                    case Packets.GuildOpcode.Create:
+
+                        break;
+
+                    case Packets.GuildOpcode.Join:
 
                         break;
                 }

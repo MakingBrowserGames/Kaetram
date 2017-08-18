@@ -53,6 +53,7 @@ define(function() {
             self.messages[Packets.NPC] = self.receiveNPC;
             self.messages[Packets.Respawn] = self.receiveRespawn;
             self.messages[Packets.Enchant] = self.receiveEnchant;
+            self.messages[Packets.Guild] = self.receiveGuild;
 
         },
 
@@ -378,6 +379,15 @@ define(function() {
                 self.enchantCallback(opcode, info);
         },
 
+        receiveGuild: function(data) {
+            var self = this,
+                opcode = data.shift(),
+                info = data.shift();
+
+            if (self.guildCallback)
+                self.guildCallback(opcode, info);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -500,6 +510,10 @@ define(function() {
 
         onEnchant: function(callback) {
             this.enchantCallback = callback;
+        },
+
+        onGuild: function(callback) {
+            this.guildCallback = callback;
         }
 
     });

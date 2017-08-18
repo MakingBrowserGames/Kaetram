@@ -32,6 +32,7 @@ module.exports = Creator = cls.Class.extend({
             'mute int(64),' +
             'membership int(64),' +
             'lastLogin int(64),' +
+            'guild varchar(64),' +
             'PRIMARY KEY(username))');
 
         self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_equipment (' +
@@ -119,7 +120,8 @@ module.exports = Creator = cls.Class.extend({
                     ban: data.ban,
                     mute: data.mute,
                     membership: data.membership,
-                    lastLogin: data.lastLogin
+                    lastLogin: data.lastLogin,
+                    guild: data.guild
                 };
                 break;
 
@@ -157,6 +159,7 @@ module.exports = Creator = cls.Class.extend({
             rank: player.rank ? player.rank : 0,
             membership: player.membership ? player.membership : 0,
             lastLogin: player.lastLogin ? player.lastLogin : 0,
+            guild: player.guild ? player.guild : '',
             pvpKills: player.pvpKills ? player.pvpKills : 0,
             pvpDeaths: player.pvpDeaths ? player.pvpDeaths : 0,
             armour: [player.armour ? player.armour.getId() : 114, player.armour ? player.armour.getCount() : 0, player.armour ? player.armour.getAbility() : 0, player.armour ? player.armour.getAbilityLevel() : 0],

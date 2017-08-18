@@ -2,52 +2,68 @@ var fs = require("fs"),
     Log = require('log'),
     _ = require('underscore');
 
-var map, mode;
-var collidingTiles = {};
-var staticEntities = {};
-var mobsFirstGid = -1;
+//TODO: Refactor this.
 
-var log = new Log(Log.DEBUG, fs.createWriteStream('processmap.log'));
+/**
+ * Global Values
+ */
 
-var isNumber = function(o) {
-    return ! isNaN (o-0) && o !== null && o !== "" && o !== false;
+var log = new Log(Log.DEBUG, fs.createWriteStream('debug.log')),
+    collidingTiles = {},
+    staticEntities = {},
+    mobsFirstGid = -1,
+    map, mode;
+
+var isNumber = function(number) {
+    return number && !isNaN(number - 0) && number !== null && number !== '';
 };
 
 module.exports = function processMap(json, options) {
-    var self = this, TiledJSON = json;
-    var layerIndex = 0, tileIndex = 0;
+    var self = this,
+        TiledJSON = json,
+        layerIndex = 0,
+        tileIndex = 0;
 
     map = {
         width: 0,
         height: 0,
         collisions: []
-	
     };
+
     mode = options.mode;
-    
-    if(mode === "client") {
-        map.data = [];
-        map.high = [];
-        map.animated = {};
-        map.blocking = [];
+
+    switch (mode) {
+        case 'client':
+
+            map.data = [];
+            map.high = [];
+            map.animated = {};
+            map.blocking = [];
+
+            break;
+
+        case 'server':
+
+            map.bossAreas = [];
+            map.roamingAreas = [];
+            map.chestAreas = [];
+            map.pvpAreas = [];
+            map.pvpGameAreas = [];
+            map.staticChests = [];
+            map.doors = [];
+            map.musicAreas = [];
+            map.staticEntities = {};
+
+            break;
     }
-    if(mode === "server") {
-        map.bossAreas = [];
-        map.roamingAreas = [];
-        map.chestAreas = [];
-        map.pvpAreas = [];
-        map.pvpGameAreas = [];
-        map.staticChests = [];
-        map.doors = [];
-        map.musicAreas = [];
-        map.staticEntities = {};
-    }
-    
-    log.info("Processing map info...");
+
     map.width = TiledJSON.width;
     map.height = TiledJSON.height;
+
     map.tilesize = TiledJSON.tilewidth;
-    log.debug("Map is [" + map.width + "x" + map.height + "] Tile Size: " + map.tilesize);
+
+    log.info('Generating a map ' + map.width + ' by ' + map.height);
+
 
     // Tile properties (collision, z-index, animation length...)
     var handleTileProp = function(propName, propValue, tileId) {
@@ -55,7 +71,7 @@ module.exports = function processMap(json, options) {
             log.debug("Tile ID [" + tileId + "] is a collision tile");
             collidingTiles[tileId] = true;
         }
-        
+
         if(mode === "client") {
             if(propName === "v") {
                 map.high.push(tileId);
@@ -103,7 +119,7 @@ module.exports = function processMap(json, options) {
 
                 // iterate through tileset tile properties
                 _.each(tileset.tileproperties, function(value, name) {
-                   var tileId = parseInt(name, 10) + 1;
+                    var tileId = parseInt(name, 10) + 1;
                     log.info("*** Processing Entity ID " + tileId + " type " + value.type);
                     staticEntities[tileId] = value.type;
                 });
@@ -250,7 +266,7 @@ module.exports = function processMap(json, options) {
             });
         }
 
-	    else if (layer.name === "pvpAreas" && mode === "server") {
+        else if (layer.name === "pvpAreas" && mode === "server") {
             log.info("Processing pvp areas...");
             var areas = layer.objects;
             for(var i = 0; i < areas.length; i++){
