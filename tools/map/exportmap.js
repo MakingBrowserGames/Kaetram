@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-var util = require('util'),
-    Log = require('log'),
-    path = require("path"),
+var Log = require('log'),
     fs = require("fs"),
     file = require('../file'),
     processMap = require('./processmap'),
@@ -9,7 +7,6 @@ var util = require('util'),
     source = process.argv[2];
 
 function getMap() {
-    var self = this;
 
     file.exists(source, function(exists) {
         if (!exists) {
@@ -40,8 +37,6 @@ function parseClient(data, destination) {
             log.info('[Client] Map saved at: ' + destination + '.json');
     });
 
-
-    //Transform into a .js for Web Worker (will be removed when region parsing is ready)
     map = 'var mapData = ' + map;
 
     fs.writeFile(destination + '.js', map, function(err, file) {

@@ -112,10 +112,9 @@ define(['./renderer/renderer', './utils/storage',
                 foreground = document.getElementById('foreground'),
                 textCanvas = document.getElementById('textCanvas'),
                 entities = document.getElementById('entities'),
-                chatInput = document.getElementById('chatInput'),
                 cursor = document.getElementById('cursor');
 
-            self.app.sendStatus('Loading the renderer');
+            self.app.sendStatus('Initializing render engine');
 
             self.setRenderer(new Renderer(background, entities, foreground, textCanvas, cursor, self));
         },

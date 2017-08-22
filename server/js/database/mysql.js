@@ -71,6 +71,12 @@ module.exports = MySQL = cls.Class.extend({
             self.loader = new Loader(self);
         });
 
+        self.connection.on('error', function(error) {
+            log.error('MySQL database disconnected.');
+
+            self.connect(true, true);
+        });
+
         self.onSelected(function() {
             self.creator.createTables();
         });
