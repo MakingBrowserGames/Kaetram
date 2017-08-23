@@ -1,6 +1,6 @@
 /* global log, _ */
 
-define(['jquery', './pages/state', './pages/skill', './pages/settings'], function($, State, Skill, Settings) {
+define(['jquery', './pages/state', './pages/ability', './pages/settings', './pages/quest'], function($, State, Ability, Settings, Quest) {
 
     return Class.extend({
 
@@ -54,10 +54,11 @@ define(['jquery', './pages/state', './pages/skill', './pages/settings'], functio
             });
 
             self.state = new State(self.game);
-            self.skill = new Skill(self.game);
+            self.ability = new Ability(self.game);
             self.settings = new Settings(self.game);
+            self.quests = new Quest(self.game);
 
-            self.pages.push(self.state, self.skill, self.settings);
+            self.pages.push(self.state, self.quests, self.ability, self.settings);
 
             self.activePage = self.state;
 

@@ -351,6 +351,37 @@
     text-align: center;
 }
 
+.skillSlot {
+    position: relative;
+    float: left;
+}
+
+#questList {
+    position: absolute;
+    top: 6%;
+    left: 8%;
+}
+
+#achievementList {
+    position: absolute;
+    top: 50%;
+    left: 8%;
+}
+
+#abilityShortcut ul {
+    overflow: hidden;
+    padding: 0;
+    list-style-type: none;
+    width: 128%;
+    margin-left: 7%;
+}
+
+#abilityShortcut ul li {
+    float: left;
+    margin-top: 1%;
+    margin-right: 4%;
+}
+
 @media only screen and (min-width: 1501px) {
 
     #buttons {
@@ -490,6 +521,11 @@
 
     #settingsPage {
         background: url('../img/3/characterdialogsheet.png') -744px 0;
+        display: none;
+    }
+
+    #questPage {
+        background: url('../img/3/characterdialogsheet.png') -1116px 0;
         display: none;
     }
 
@@ -764,6 +800,11 @@
         height: 69px;
     }
 
+    .skillSlot {
+        width: 48px;
+        height: 48px;
+    }
+
 }
 
 @media only screen and (max-width: 1500px), only screen and (max-height: 870px) {
@@ -954,6 +995,10 @@
         display: none;
     }
 
+    #questPage {
+        background: url('../img/2/characterdialogsheet.png') -744px 0;
+        display: none;
+    }
 
     .profileSlot {
         background-position: 0 0;
@@ -1244,6 +1289,18 @@
         height: 46px;
     }
 
+    #questList, #achievementList {
+        width: 212px;
+        height: 164px;
+    }
+
+    .skillSlot {
+        width: 32px;
+        height: 32px;
+
+        background-image: url('../img/2/skillicons.png');
+    }
+
 }
 
 @media only screen and (max-width: 1000px) {
@@ -1430,6 +1487,11 @@
 
     #settingsPage {
         background: url('../img/1/characterdialogsheet.png') -248px 0;
+        display: none;
+    }
+
+    #questPage {
+        background: url('../img/1/characterdialogsheet.png') -372px 0;
         display: none;
     }
 
@@ -1689,6 +1751,11 @@
     #message {
         width: 120px;
         height: 23px;
+    }
+
+    .skillSlot {
+        width: 16px;
+        height: 16px;
     }
 
 }

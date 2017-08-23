@@ -10,6 +10,7 @@ module.exports = Quests = cls.Class.extend({
 
         self.player = player;
         self.quests = {};
+        self.achievements = {};
 
         self.load();
     },
@@ -22,7 +23,7 @@ module.exports = Quests = cls.Class.extend({
         });
     },
 
-    update: function(ids, stages) {
+    updateQuests: function(ids, stages) {
         var self = this;
 
         for (var id = 0; id < ids.length; id++)
@@ -30,21 +31,12 @@ module.exports = Quests = cls.Class.extend({
                 self.quests[id].update(stages[id]);
     },
 
-    getArray: function() {
-        var self = this,
-            ids = '',
-            stages = '';
+    updateAchievements: function(ids, progress) {
+        var self = this;
 
-        for (var id = 0; id < self.getSize(); id++) {
-            ids += id + ' ';
-            stages += self.quests[id].stage + ' ';
-        }
-
-        return {
-            username: self.player.username,
-            ids: ids,
-            stages: stages
-        }
+        for (var id = 0; id < ids.length; id++)
+            if (!isNaN(parseInt(ids[id])) && self.quests[id])
+                self.achievements[id].setProgress(progress[id]);
     },
 
     getQuest: function(id) {
@@ -56,8 +48,46 @@ module.exports = Quests = cls.Class.extend({
         return null;
     },
 
-    getSize: function() {
+    getQuests: function() {
+        var self = this,
+            ids = '',
+            stages = '';
+
+        for (var id = 0; id < self.getQuestSize(); id++) {
+            ids += id + ' ';
+            stages += self.quests[id].stage + ' ';
+        }
+
+        return {
+            username: self.player.username,
+            ids: ids,
+            stages: stages
+        }
+    },
+
+    getAchievements: function() {
+        var self = this,
+            ids = '',
+            progress = '';
+
+        for (var id = 0; id < self.getAchievementSize(); id++) {
+            ids += id + ' ';
+            progress += self.achievements[id].progress + ' '
+        }
+
+        return {
+            username: self.player.username,
+            ids: ids,
+            progress: progress
+        }
+    },
+
+    getQuestSize: function() {
         return Object.keys(this.quests).length;
+    },
+
+    getAchievementSize: function() {
+        return Object.keys(this.achievements).length;
     }
 
 });

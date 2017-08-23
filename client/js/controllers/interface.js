@@ -186,6 +186,10 @@ define(['jquery', '../interface/inventory',
             this.confirm.css('display', 'none');
         },
 
+        getQuestPage: function() {
+            return this.profile.quests;
+        },
+
         isNotifyVisible: function() {
             return this.notify.css('display') === 'block';
         },

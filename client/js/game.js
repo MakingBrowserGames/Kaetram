@@ -663,6 +663,16 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onQuest(function(opcode, info) {
 
+                switch (opcode) {
+                    case Packets.QuestOpcode.Batch:
+                        var quests = info.quests,
+                            achievements = info.achievements;
+
+                        self.interface.getQuests().load(quests, achievements);
+
+                        break;
+                }
+
             });
 
             self.messages.onNotification(function(opcode, message) {

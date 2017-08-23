@@ -136,10 +136,14 @@ module.exports = Player = Character.extend({
             return;
 
         self.mysql.loader.getQuests(self, function(ids, stages) {
-            if (self.quests.getSize() !== ids.length)
+            if (self.quests.getQuestSize() !== ids.length)
                 self.save();
 
-            self.quests.update(ids, stages);
+            self.quests.updateQuests(ids, stages);
+        });
+
+        self.mysql.loader.getAchievements(self, function(ids, progress) {
+
         });
     },
 

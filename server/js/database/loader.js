@@ -48,6 +48,17 @@ module.exports = Loader = cls.Class.extend({
 
             callback(info.ids.split(' '), info.stages.split(' '));
         });
+    },
+
+    getAchievements: function(player, callback) {
+        var self = this;
+
+        self.mysql.connection.query('SELECT * FROM `player_achievements` WHERE `player_achievements`.`username`=' + "'" + player.username + "'", function(error, rows, fields) {
+            /*var info = rows.shift();
+
+            if (info.username !== player.username)
+                log.info('Mismatch whilst retrieving achievement data for: ' + player.username);*/
+        });
     }
 
 });

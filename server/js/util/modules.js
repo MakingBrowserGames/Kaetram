@@ -61,6 +61,10 @@ var Modules = {
 
     Quests: {
         Introduction: 0
+    },
+
+    Checkpoints: {
+        Home: 0
     }
 
 };

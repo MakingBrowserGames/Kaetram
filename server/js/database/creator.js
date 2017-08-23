@@ -50,6 +50,12 @@ module.exports = Creator = cls.Class.extend({
             'stages text COLLATE utf8_unicode_ci NOT NULL,' +
             'PRIMARY KEY(username))');
 
+        self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_achievements (' +
+            'username varchar(64),' +
+            'ids text COLLATE utf8_unicode_ci NOT NULL,' +
+            'progress text COLLATE utf8_unicode_ci NOT NULL,' +
+            'PRIMARY KEY(username))');
+
         self.mysql.connection.query('CREATE TABLE IF NOT EXISTS player_bank (' +
             'username varchar(64),' +
             'ids text COLLATE utf8_unicode_ci NOT NULL,' +
@@ -95,7 +101,8 @@ module.exports = Creator = cls.Class.extend({
         self.mysql.connection.query(queryKey + ' `player_inventory` SET ?', player.inventory.getArray());
         self.mysql.connection.query(queryKey + ' `player_abilities` SET ?', player.abilities.getArray());
         self.mysql.connection.query(queryKey + ' `player_bank` SET ?', player.bank.getArray());
-        self.mysql.connection.query(queryKey + ' `player_quests` SET ?', player.quests.getArray());
+        self.mysql.connection.query(queryKey + ' `player_quests` SET ?', player.quests.getQuests());
+        self.mysql.connection.query(queryKey + ' `player_achievements` SET ?', player.quests.getAchievements());
     },
 
     formatData: function(data, type) {
