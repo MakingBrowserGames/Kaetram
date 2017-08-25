@@ -110,6 +110,12 @@ Packets.BankOpcode = {
     Select: 3
 };
 
+Packets.QuestOpcode = {
+    Batch: 0,
+    Progress: 1,
+    Finish: 2
+};
+
 Packets.NotificationOpcode = {
     Ok: 0,
     YesNo: 1,

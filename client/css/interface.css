@@ -358,13 +358,13 @@
 
 #questList {
     position: absolute;
-    top: 6%;
+    top: 50%;
     left: 8%;
 }
 
 #achievementList {
     position: absolute;
-    top: 50%;
+    top: 6%;
     left: 8%;
 }
 

@@ -136,14 +136,34 @@ module.exports = Player = Character.extend({
             return;
 
         self.mysql.loader.getQuests(self, function(ids, stages) {
-            if (self.quests.getQuestSize() !== ids.length)
+            ids.pop();
+            stages.pop();
+
+
+            if (self.quests.getQuestSize() !== ids.length) {
+                log.info('Mismatch in quest data.');
+
                 self.save();
+            }
 
             self.quests.updateQuests(ids, stages);
         });
 
         self.mysql.loader.getAchievements(self, function(ids, progress) {
+            ids.pop();
+            progress.pop();
 
+            if (self.quests.getAchievementSize() !== ids.length) {
+                log.info('Mismatch in achievements data.');
+
+                self.save();
+            }
+
+            self.quests.updateAchievements(ids, progress);
+        });
+
+        self.quests.onReady(function() {
+            self.send(new Messages.Quest(Packets.QuestOpcode.Batch, self.quests.getData()));
         });
     },
 

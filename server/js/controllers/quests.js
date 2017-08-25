@@ -1,6 +1,8 @@
 var cls = require('../lib/class'),
     Introduction = require('../game/entity/character/player/quest/misc/introduction'),
-    Data = require('../../data/quests.json'),
+    QuestData = require('../../data/quests.json'),
+    AchievementData = require('../../data/achievements.json'),
+    Achievement = require('../game/entity/character/player/achievement'),
     _ = require('underscore');
 
 module.exports = Quests = cls.Class.extend({
@@ -18,9 +20,14 @@ module.exports = Quests = cls.Class.extend({
     load: function() {
         var self = this;
 
-        _.each(Data, function(quest) {
-            self.quests[quest.id] = new Introduction(quest, self.player);
+        _.each(QuestData, function(quest) {
+            self.quests[quest.id] = new Introduction(self.player, quest);
         });
+
+        _.each(AchievementData, function(achievement) {
+            self.achievements[achievement.id] = new Achievement(achievement.id, self.player);
+        });
+
     },
 
     updateQuests: function(ids, stages) {
@@ -37,6 +44,9 @@ module.exports = Quests = cls.Class.extend({
         for (var id = 0; id < ids.length; id++)
             if (!isNaN(parseInt(ids[id])) && self.quests[id])
                 self.achievements[id].setProgress(progress[id]);
+
+        if (self.readyCallback)
+            self.readyCallback();
     },
 
     getQuest: function(id) {
@@ -82,12 +92,47 @@ module.exports = Quests = cls.Class.extend({
         }
     },
 
+    getData: function() {
+        var self = this,
+            quests = [],
+            achievements = [];
+
+        self.forEachQuest(function(quest) {
+            quests.push(quest.getInfo());
+        });
+
+        self.forEachAchievement(function(achievement) {
+            achievements.push(achievement.getInfo());
+        });
+
+        return {
+            quests: quests,
+            achievements: achievements
+        };
+    },
+
+    forEachQuest: function(callback) {
+        _.each(this.quests, function(quest) {
+            callback(quest);
+        });
+    },
+
+    forEachAchievement: function(callback) {
+        _.each(this.achievements, function(achievement) {
+            callback(achievement);
+        });
+    },
+
     getQuestSize: function() {
         return Object.keys(this.quests).length;
     },
 
     getAchievementSize: function() {
         return Object.keys(this.achievements).length;
+    },
+
+    onReady: function(callback) {
+        this.readyCallback = callback;
     }
 
 });

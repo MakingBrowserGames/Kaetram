@@ -28,6 +28,15 @@ module.exports = Quest = cls.Class.extend({
         return this.stage;
     },
 
+    getInfo: function() {
+        return {
+            id: this.getId(),
+            name: this.getName(),
+            description: this.getDescription(),
+            stage: this.getStage()
+        };
+    },
+
     finish: function() {
         this.stage = 9999;
     },

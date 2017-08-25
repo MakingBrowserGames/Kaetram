@@ -8,6 +8,7 @@ module.exports = Introduction = Quest.extend({
         self.player = player;
         self.data = data;
 
+
         self._super(data.id, data.name, data.description);
     },
 

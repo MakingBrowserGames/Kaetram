@@ -668,7 +668,7 @@ define(['./renderer/renderer', './utils/storage',
                         var quests = info.quests,
                             achievements = info.achievements;
 
-                        self.interface.getQuests().load(quests, achievements);
+                       self.interface.getQuestPage().load(quests, achievements);
 
                         break;
                 }

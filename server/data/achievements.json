@@ -1,5 +1,9 @@
 {
-  "1": {
-
+  "0": {
+    "id": 0,
+    "name": "Rat Infestation",
+    "description": "Slay 25 rats.",
+    "type": 1,
+    "reward": 20
   }
 }

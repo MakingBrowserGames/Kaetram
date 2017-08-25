@@ -54,10 +54,12 @@ module.exports = Loader = cls.Class.extend({
         var self = this;
 
         self.mysql.connection.query('SELECT * FROM `player_achievements` WHERE `player_achievements`.`username`=' + "'" + player.username + "'", function(error, rows, fields) {
-            /*var info = rows.shift();
+            var info = rows.shift();
 
             if (info.username !== player.username)
-                log.info('Mismatch whilst retrieving achievement data for: ' + player.username);*/
+                log.info('Mismatch whilst retreiving achievement data for: ' + player.username);
+
+            callback(info.ids.split(' '), info.progress.split(' '));
         });
     }
 
