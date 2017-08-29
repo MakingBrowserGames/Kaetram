@@ -60,6 +60,8 @@ module.exports = Player = Character.extend({
         self.currentSong = null;
         self.acceptedTrade = false;
         self.invincible = false;
+
+        self.canTalk = true;
     },
 
     load: function(data) {
@@ -386,6 +388,10 @@ module.exports = Player = Character.extend({
         return this.hitPoints.getMaxHitPoints();
     },
 
+    getTutorial: function() {
+        return this.quests.getQuest(Modules.Quests.Introduction);
+    },
+
     /**
      * Setters
      */
@@ -536,8 +542,8 @@ module.exports = Player = Character.extend({
          * other special events and determine a spawn point.
          */
 
-        if (self.quests.getQuest(Modules.Quests.Introduction).isFinished())
-            position = { x: 27, y: 90 };
+        if (self.getTutorial().isFinished())
+            position = { x: 325, y: 86 };
         else
             position = { x: 17, y: 555 };
 
@@ -576,10 +582,11 @@ module.exports = Player = Character.extend({
     },
 
     sendToSpawn: function() {
-        var self = this;
+        var self = this,
+            position = self.getSpawn();
 
-        self.x = 46;
-        self.y = 88;
+        self.x = position.x;
+        self.y = position.y;
     },
 
     sync: function(all) {
@@ -635,9 +642,9 @@ module.exports = Player = Character.extend({
         var self = this;
 
         if (!self.quests)
-            return false;
+            return true;
 
-        return self.quests.getQuest('Introduction').isFinished();
+        return self.getTutorial().isFinished();
     },
 
     checkGroups: function() {
@@ -694,6 +701,10 @@ module.exports = Player = Character.extend({
 
     onDeath: function(callback) {
         this.deathCallback = callback;
+    },
+
+    onTalkToNPC: function(callback) {
+        this.npcTalkCallback = callback;
     }
 
 });

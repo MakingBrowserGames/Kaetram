@@ -45,6 +45,25 @@ module.exports = Quest = cls.Class.extend({
         return this.stage >= 9999;
     },
 
+    setStage: function(stage) {
+        this.stage = stage;
+    },
+
+    hasNPC: function(id) {
+        return false;
+    },
+
+    triggerTalk: function(npc) {
+        var self = this;
+
+        if (self.npcTalkCallback)
+            self.npcTalkCallback(npc);
+    },
+
+    onNPCTalk: function(callback) {
+        this.npcTalkCallback = callback;
+    },
+
     update: function() {
         log.warning('Update function not initialized for: ' + this.name);
     }

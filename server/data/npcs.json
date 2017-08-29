@@ -1,6 +1,7 @@
 {
   "King": {
-    "id": 45
+    "id": 45,
+    "name": "King"
   },
 
   "VillageGirl": {
@@ -72,11 +73,13 @@
   },
 
   "Sorcerer": {
-    "id": 16
+    "id": 16,
+    "name": "Sorcerer"
   },
 
   "Coder": {
-    "id": 17
+    "id": 17,
+    "name": "Programmer"
   },
 
   "ForestNpc": {

@@ -35,7 +35,7 @@ module.exports = Quests = cls.Class.extend({
 
         for (var id = 0; id < ids.length; id++)
             if (!isNaN(parseInt(ids[id])) && self.quests[id])
-                self.quests[id].update(stages[id]);
+                self.quests[id].load(stages[id]);
     },
 
     updateAchievements: function(ids, progress) {
@@ -129,6 +129,40 @@ module.exports = Quests = cls.Class.extend({
 
     getAchievementSize: function() {
         return Object.keys(this.achievements).length;
+    },
+
+    getQuestByNPC: function(npc) {
+        var self = this;
+
+        /**
+         * Iterate through the quest list in the order it has been
+         * added so that NPC's that are required by multiple quests
+         * follow the proper order.
+         */
+
+        for (var id in self.quests) {
+            if (self.quests.hasOwnProperty(id)) {
+                var quest = self.quests[id];
+
+                if (quest.hasNPC(npc.id))
+                    return quest;
+            }
+        }
+
+        return null;
+    },
+
+    isQuestNPC: function(npc) {
+        var self = this;
+
+        for (var id in self.quests) {
+            if (self.quests.hasOwnProperty(id)) {
+                var quest = self.quests[id];
+
+                if (!quest.isFinished() && quest.hasNPC(npc.id))
+                    return true;
+            }
+        }
     },
 
     onReady: function(callback) {

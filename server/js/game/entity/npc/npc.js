@@ -6,6 +6,21 @@ module.exports = NPC = Entity.extend({
         var self = this;
 
         self._super(id, 'npc', instance, x, y);
+
+        self.talkIndex = 0;
+
+    },
+
+    talk: function(messages) {
+        var self = this,
+            count = messages.length,
+            message;
+
+        if (self.talkIndex > count)
+            self.talkIndex = 0;
+
+        self.talkIndex++;
+
     }
 
 });

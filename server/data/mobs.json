@@ -119,7 +119,7 @@
   },
 
   "Skeleton2": {
-    "name": "armored Skeleton",
+    "name": "Scary Skeleton",
     "id": 7,
     "drops": {"axe": 500, "morningstar": 200, "platearmor": 150, "platearcherarmor": 150},
     "hitPoints": 120,

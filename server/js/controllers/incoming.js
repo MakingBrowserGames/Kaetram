@@ -444,26 +444,8 @@ module.exports = Incoming = cls.Class.extend({
                 if (!npc || npc.dead)
                     return;
 
-                switch(npc.id) {
-                    case 43:
-                        self.player.send(new Messages.NPC(Packets.NPCOpcode.Bank, {}));
-                        return;
-
-                    case 42:
-                        self.player.send(new Messages.NPC(Packets.NPCOpcode.Enchant, {}));
-                        break;
-                }
-
-
-                var text = Npcs.getText(npc.id);
-
-                if (!text)
-                    return;
-
-                self.player.send(new Messages.NPC(Packets.NPCOpcode.Talk, {
-                    id: instance,
-                    text: text
-                }));
+                if (self.player.npcTalkCallback)
+                    self.player.npcTalkCallback(npc);
 
                 break;
 
@@ -556,8 +538,14 @@ module.exports = Incoming = cls.Class.extend({
         if (text.charAt(0) === '/' || text.charAt(0) === ';')
             self.commands.parse(text);
         else {
+
             if (self.player.isMuted()) {
-                log.info('hey');
+                self.player.send(new Messages.Notification(Packets.NotificationOpcode.Text, 'You are currently muted.'));
+                return;
+            }
+
+            if (!self.player.canTalk) {
+                self.player.send(new Messages.Notification(Packets.NotificationOpcode.Text, 'You are not allowed to talk for the duration of this event.'));
                 return;
             }
 
@@ -637,7 +625,6 @@ module.exports = Incoming = cls.Class.extend({
                     var bankSlot = self.player.bank.slots[index];
 
                     self.player.inventory.add(bankSlot);
-                    //self.player.inventory.addItem(bankSlot.id, bankSlot.count, bankSlot.ability, bankSlot.abilityLevel);
                     self.player.bank.remove(bankSlot.id, bankSlot.count, index);
 
                 } else {

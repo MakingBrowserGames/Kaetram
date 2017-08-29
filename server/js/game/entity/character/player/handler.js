@@ -1,7 +1,10 @@
 /* global log */
 
 var cls = require('../../../../lib/class'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    Messages = require('../../../../network/messages'),
+    Packets = require('../../../../network/packets'),
+    Npcs = require('../../../../util/npcs');
 
 module.exports = Handler = cls.Class.extend({
 
@@ -35,6 +38,38 @@ module.exports = Handler = cls.Class.extend({
 
         self.player.connection.onClose(function() {
             self.world.removePlayer(self.player);
+        });
+
+        self.player.onTalkToNPC(function(npc) {
+
+            if (self.player.quests.isQuestNPC(npc)) {
+                self.player.quests.getQuestByNPC(npc).triggerTalk(npc);
+
+                return;
+            }
+
+            switch(npc.id) {
+                case 43:
+                    self.player.send(new Messages.NPC(Packets.NPCOpcode.Bank, {}));
+                    return;
+
+                case 42:
+                    self.player.send(new Messages.NPC(Packets.NPCOpcode.Enchant, {}));
+                    break;
+            }
+
+            var text = Npcs.getText(npc.id);
+
+            if (!text)
+                return;
+
+            npc.talk(text);
+
+            self.player.send(new Messages.NPC(Packets.NPCOpcode.Talk, {
+                id: npc.instance,
+                text: text
+            }));
+
         });
     },
 

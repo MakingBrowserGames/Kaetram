@@ -38,6 +38,12 @@ module.exports = Commands = cls.Class.extend({
 
         switch(command) {
 
+            case 'test':
+
+                self.player.getTutorial().setStage(5);
+
+                break;
+
         }
     },
 
@@ -163,13 +169,14 @@ module.exports = Commands = cls.Class.extend({
 
                 break;
 
-            case 'npc':
+            case 'mob':
 
                 var npcId = parseInt(blocks.shift());
 
                 self.world.spawnMob(npcId, self.player.x, self.player.y);
 
                 break;
+
         }
 
     }
