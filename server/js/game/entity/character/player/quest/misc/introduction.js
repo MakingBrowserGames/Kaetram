@@ -72,7 +72,15 @@ module.exports = Introduction = Quest.extend({
     },
 
     updatePointers: function() {
-        var self = this;
+        var self = this,
+            pointer = self.data.pointers[self.stage];
+
+        if (!pointer)
+            return;
+
+        self.player.send(new Messages.Pointer(pointer[0], {
+            id: Utils.generateRandomId()
+        }));
     },
 
     toggleChat: function() {

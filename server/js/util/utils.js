@@ -28,3 +28,7 @@ Utils.generateClientId = function() {
 Utils.generateInstance = function(randomizer, id, modulo, posY) {
     return '' + randomizer + Utils.randomInt(0, id) + randomizer + Utils.randomInt(0, modulo) + (posY ? posY : 0);
 };
+
+Utils.generateRandomId = function() {
+    return '' + 1 + Utils.random(0, 200) + Utils.random(0, 20) + 2
+};

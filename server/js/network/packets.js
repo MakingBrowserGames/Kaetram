@@ -47,7 +47,8 @@ var Packets = {
     Respawn: 33,
     Trade: 34,
     Enchant: 35,
-    Guild: 36
+    Guild: 36,
+    Pointer: 37
 };
 
 Packets.IntroOpcode = {
@@ -148,6 +149,13 @@ Packets.GuildOpcode = {
     Leave: 2,
     Rank: 3,
     Loot: 4
+};
+
+Packets.PointerOpcode = {
+    Location: 0,
+    NPC: 1,
+    Relative: 2,
+    Remove: 3
 };
 
 module.exports = Packets;

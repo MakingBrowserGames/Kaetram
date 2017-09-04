@@ -195,6 +195,9 @@ define(['jquery', './container/container'], function($, Container) {
                 var item = $(list[i]).find('#slot' + i),
                     slot = self.container.slots[i];
 
+                if (!slot)
+                    continue;
+
                 if (self.game.app.isMobile())
                     item.css('background-size', '600%');
                 else

@@ -47,6 +47,7 @@ define(['jquery', '../renderer/pointers/pointer'], function($, Pointer) {
             var self = this;
 
             _.each(self.pointers, function(pointer) { pointer.destroy(); });
+
             self.pointers = {};
         },
 
@@ -68,7 +69,7 @@ define(['jquery', '../renderer/pointers/pointer'], function($, Pointer) {
                 width = parseInt(pointer.element.css('width') + 24),
                 offset = (width / 2) - (tileSize / 2), y;
 
-            y = ((posY - self.camera.y) * self.scale) - (tileSize * 2);
+            y = ((posY - self.camera.y) * self.scale) - tileSize;
 
             pointer.element.css('left', (x - offset) + 'px');
             pointer.element.css('top' , y + 'px');
@@ -81,8 +82,6 @@ define(['jquery', '../renderer/pointers/pointer'], function($, Pointer) {
             if (!pointer)
                 return;
 
-            self.updateScale();
-
             self.set(pointer, entity.x, entity.y);
         },
 
@@ -93,6 +92,8 @@ define(['jquery', '../renderer/pointers/pointer'], function($, Pointer) {
             if (!pointer)
                 return;
 
+            pointer.setPosition(x, y);
+
             self.set(pointer, x, y);
         },
 
@@ -102,6 +103,8 @@ define(['jquery', '../renderer/pointers/pointer'], function($, Pointer) {
 
             if (!pointer)
                 return;
+
+            pointer.setPosition(x * self.scale, y * self.scale);
 
             pointer.element.css('left', (x * self.scale) + 'px');
             pointer.element.css('top', (y * self.scale) + 'px');

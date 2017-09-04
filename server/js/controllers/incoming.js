@@ -436,6 +436,8 @@ module.exports = Incoming = cls.Class.extend({
             opcode = message.shift(),
             instance = message.shift();
 
+        log.debug('Targeted: ' + instance);
+
         switch (opcode) {
 
             case Packets.TargetOpcode.Talk:

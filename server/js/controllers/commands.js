@@ -103,6 +103,13 @@ module.exports = Commands = cls.Class.extend({
         var self = this;
 
         switch (command) {
+
+            case 'coords':
+
+                self.player.send(new Messages.Notification(Packets.NotificationOpcode.Text, 'x: ' + self.player.x + ' y: ' + self.player.y));
+
+                break;
+
             case 'spawn':
 
                 var spawnId = parseInt(blocks.shift()),
@@ -174,6 +181,22 @@ module.exports = Commands = cls.Class.extend({
                 var npcId = parseInt(blocks.shift());
 
                 self.world.spawnMob(npcId, self.player.x, self.player.y);
+
+                break;
+
+            case 'pointer':
+
+                var posX = parseInt(blocks.shift()),
+                    posY = parseInt(blocks.shift());
+
+                if (!posX || !posY)
+                    return;
+
+                self.player.send(new Messages.Pointer(Packets.PointerOpcode.Location, {
+                    id: self.player.instance,
+                    x: posX * 16,
+                    y: posY * 16
+                }));
 
                 break;
 

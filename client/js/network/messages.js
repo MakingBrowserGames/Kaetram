@@ -54,6 +54,7 @@ define(function() {
             self.messages[Packets.Respawn] = self.receiveRespawn;
             self.messages[Packets.Enchant] = self.receiveEnchant;
             self.messages[Packets.Guild] = self.receiveGuild;
+            self.messages[Packets.Pointer] = self.receivePointer;
 
         },
 
@@ -123,7 +124,7 @@ define(function() {
                 case 'malform':
                     self.app.game.handleDisconnection(true);
 
-                    self.app.sendError(null, 'Client has experienced a malfunction (stop trying to bypass stuff).');
+                    self.app.sendError(null, 'Client has experienced a malfunction.');
                     break;
 
                 default:
@@ -388,6 +389,15 @@ define(function() {
                 self.guildCallback(opcode, info);
         },
 
+        receivePointer: function(data) {
+            var self = this,
+                opcode = data.shift(),
+                info = data.shift();
+
+            if (self.pointerCallback)
+                self.pointerCallback(opcode, info);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -514,6 +524,10 @@ define(function() {
 
         onGuild: function(callback) {
             this.guildCallback = callback;
+        },
+
+        onPointer: function(callback) {
+            this.pointerCallback = callback;
         }
 
     });

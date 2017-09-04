@@ -388,3 +388,16 @@ Messages.Guild = Message.extend({
     }
 
 });
+
+Messages.Pointer = Message.extend({
+
+    init: function(opcode, info) {
+        this.opcode = opcode;
+        this.info = info;
+    },
+
+    serialize: function() {
+        return [Packets.Pointer, this.opcode, this.info];
+    }
+
+});

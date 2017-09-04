@@ -38,6 +38,13 @@ define(function() {
             self.element.remove();
         },
 
+        setPosition: function(x, y) {
+            var self = this;
+
+            self.x = x;
+            self.y = y;
+        },
+
         show: function() {
             this.element.css('display', 'block');
         },

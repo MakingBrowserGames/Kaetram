@@ -269,6 +269,10 @@ footer div {
 
 @media only screen and (min-width: 1501px) {
 
+    .intro footer {
+        font-size: 28px;
+    }
+
     #credits, #about, #death, #git {
         width: 1266px;
         height: 546px;
@@ -385,6 +389,11 @@ footer div {
 
     #respawn:active {
         background-position: -375px -1428px;
+    }
+
+    .loader {
+        margin-top: 27%;
+        font-size: 26px;
     }
 }
 

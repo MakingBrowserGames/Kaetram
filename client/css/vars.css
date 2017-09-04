@@ -301,8 +301,14 @@ html [type="button"],
 
 @media only screen and (min-width: 1501px) {
 
-    #parchment h1, #loadCharacter h1, #createCharacter h1, #about h1 {
-        margin-top: 60px;
+    #parchment h1, #loadCharacter h1, #about h1 {
+        margin-top: 30px;
+        font-size: 30px;
+    }
+
+    #createCharacter h1 {
+        margin-top: 10px;
+        font-size: 30px;
     }
 
     #parchment h2, #loadCharacter h1, #createCharacter h1, #about h1 {
@@ -523,7 +529,7 @@ html [type="button"],
     }
 
     .validation-summary {
-        width: 384px;
+        width: 366px;
     }
 
     input[type="range"] {

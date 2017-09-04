@@ -873,6 +873,44 @@ define(['./renderer/renderer', './utils/storage',
                 }
 
             });
+
+            self.messages.onPointer(function(opcode, info) {
+
+                log.info(info);
+
+                switch (opcode) {
+                    case Packets.PointerOpcode.NPC:
+                        var entity = self.entities.get(info.id);
+
+                        if (!entity)
+                            return;
+
+                        self.pointer.create(entity.id, Modules.Pointers.Entity);
+                        self.pointer.setToEntity(entity);
+
+                        break;
+
+                    case Packets.PointerOpcode.Location:
+
+                        self.pointer.create(info.id, Modules.Pointers.Position);
+                        self.pointer.setToPosition(info.id, info.x, info.y);
+
+                        break;
+
+                    case Packets.PointerOpcode.Relative:
+
+                        break;
+
+                    case Packets.PointerOpcode.Remove:
+
+                        self.pointer.clean();
+
+                        break;
+                }
+
+
+            });
+
         },
 
         postLoad: function() {

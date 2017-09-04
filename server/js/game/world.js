@@ -48,6 +48,8 @@ module.exports = World = cls.Class.extend({
 
         self.ready = false;
 
+        self.malformTimeout = null;
+
         self.onPlayerConnection(function(connection) {
             var remoteAddress = connection.socket.conn.remoteAddress;
 
@@ -55,9 +57,13 @@ module.exports = World = cls.Class.extend({
                 connection.sendUTF8('malform');
                 connection.close();
 
-                setTimeout(function() {
-                    self.removeLogging(remoteAddress);
-                }, 20000);
+                if (!self.malformTimeout)
+                    self.malformTimeout = setTimeout(function() {
+                        self.removeLogging(remoteAddress);
+
+                        clearTimeout(self.malformTimeout);
+                        self.malformTimeout = null;
+                    }, 20000);
 
                 return;
             }
