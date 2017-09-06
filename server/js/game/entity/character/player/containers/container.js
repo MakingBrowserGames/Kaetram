@@ -28,7 +28,7 @@ module.exports = Container = cls.Class.extend({
         var self = this;
 
         /**
-         * Fill each slot with data from the database
+         * Fill each slot with manual data or the database
          */
 
         if (ids.length !== self.slots.length)
@@ -41,19 +41,16 @@ module.exports = Container = cls.Class.extend({
 
     loadEmpty: function() {
         var self = this,
-            ids = [],
-            counts = [],
-            abilities = [],
-            abilityLevels = [];
+            data = [];
 
-        for (var i = 0; i < self.size; i++) {
-            ids.push(-1);
-            counts.push(-1);
-            abilities.push(-1);
-            abilityLevels.push(-1);
-        }
+        /**
+         * Better to have it condensed into one.
+         */
 
-        self.load(ids, counts, abilities, abilityLevels);
+        for (var i = 0; i < self.size; i++)
+            data.push(-1)
+
+        self.load(data, data, data, data);
     },
 
     add: function(id, count, ability, abilityLevel) {

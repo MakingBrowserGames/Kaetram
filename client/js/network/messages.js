@@ -55,6 +55,7 @@ define(function() {
             self.messages[Packets.Enchant] = self.receiveEnchant;
             self.messages[Packets.Guild] = self.receiveGuild;
             self.messages[Packets.Pointer] = self.receivePointer;
+            self.messages[Packets.PVP] = self.receivePVP;
 
         },
 
@@ -398,6 +399,15 @@ define(function() {
                 self.pointerCallback(opcode, info);
         },
 
+        receivePVP: function(data) {
+            var self = this,
+                id = data.shift(),
+                pvp = data.shift();
+
+            if (self.pvpCallback)
+                self.pvpCallback(id, pvp);
+        },
+
         /**
          * Universal Callbacks
          */
@@ -528,6 +538,10 @@ define(function() {
 
         onPointer: function(callback) {
             this.pointerCallback = callback;
+        },
+
+        onPVP: function(callback) {
+            this.pvpCallback = callback;
         }
 
     });

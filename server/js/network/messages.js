@@ -401,3 +401,16 @@ Messages.Pointer = Message.extend({
     }
 
 });
+
+Messages.PVP = Message.extend({
+
+    init: function(id, pvp) {
+        this.id = id;
+        this.pvp = pvp;
+    },
+
+    serialize: function() {
+        return [Packets.PVP, this.id, this.pvp];
+    }
+
+});

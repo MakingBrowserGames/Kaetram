@@ -18,6 +18,17 @@ define(['jquery'], function($) {
 
             self.fadingDuration = 5000;
             self.fadingTimeout = null;
+
+            self.button.click(function() {
+
+                self.button.blur();
+
+                if (self.input.is(':visible'))
+                    self.hideInput();
+                else
+                    self.toggle();
+
+            });
         },
 
         add: function(source, text) {

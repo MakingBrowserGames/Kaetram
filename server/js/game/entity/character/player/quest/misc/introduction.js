@@ -1,6 +1,7 @@
 var Quest = require('../quest'),
     Messages = require('../../../../../../network/messages'),
-    Packets = require('../../../../../../network/packets');
+    Packets = require('../../../../../../network/packets'),
+    Utils = require('../../../../../../util/utils');
 
 module.exports = Introduction = Quest.extend({
 
@@ -9,6 +10,8 @@ module.exports = Introduction = Quest.extend({
 
         self.player = player;
         self.data = data;
+
+        self.lastNPC = null;
 
         self._super(data.id, data.name, data.description);
 
@@ -38,12 +41,20 @@ module.exports = Introduction = Quest.extend({
                 self.toggleChat();
         });
 
+        self.player.onReady(function() {
+
+            self.updatePointers();
+
+        });
+
         self.onNPCTalk(function(npc) {
 
             var conversation = self.getConversation(npc.id);
 
             if (!conversation)
                 return;
+
+            self.lastNPC = npc;
 
             npc.talk(conversation);
 
@@ -57,18 +68,37 @@ module.exports = Introduction = Quest.extend({
         });
     },
 
-    update: function() {
-        this.player.save();
-    },
-
     progress: function(type) {
-        var self = this;
+        var self = this,
+            task = self.data.task[self.stage];
+
+        if (!task || task !== type)
+            return;
 
         switch (type) {
             case 'talk':
 
                 break;
+
+            case 'click':
+
+                if (self.stage === 1)
+                    self.forceTalk(self.lastNPC, ['Great job! This is your character menu.']);
+
+
+                break;
         }
+
+
+        self.stage++;
+        self.clearPointers();
+
+        self.update();
+        self.updatePointers();
+    },
+
+    update: function() {
+        this.player.save();
     },
 
     updatePointers: function() {
@@ -78,13 +108,23 @@ module.exports = Introduction = Quest.extend({
         if (!pointer)
             return;
 
-        self.player.send(new Messages.Pointer(pointer[0], {
-            id: Utils.generateRandomId()
+        var opcode = pointer[0],
+            x = pointer[1],
+            y = pointer[2];
+
+        self.player.send(new Messages.Pointer(opcode, {
+            id: Utils.generateRandomId(),
+            x: x,
+            y: y
         }));
     },
 
-    toggleChat: function() {
+    clearPointers: function() {
+        this.player.send(new Messages.Pointer(Packets.PointerOpcode.Remove, {}));
+    },
 
+    toggleChat: function() {
+        this.player.canTalk = !this.player.canTalk;
     },
 
     getConversation: function(id) {
@@ -94,14 +134,12 @@ module.exports = Introduction = Quest.extend({
         if (!conversation || !conversation[self.stage])
             return [''];
 
-        return conversation[self.stage];
-    },
+        var message = conversation[self.stage];
 
-    nextStage: function() {
-        var self = this;
+        if (self.stage === 3)
+            message[0] += self.player.username;
 
-        self.stage++;
-        self.update();
+        return message;
     },
 
     setStage: function(stage) {
@@ -110,15 +148,29 @@ module.exports = Introduction = Quest.extend({
         self._super(stage);
 
         self.update();
+        self.clearPointers();
 
-        log.info('Set stage...');
     },
 
     finish: function() {
         var self = this;
 
-
         self.setStage(9999);
+    },
+
+    forceTalk: function(npc, message) {
+        var self = this;
+
+        /**
+         * The message must be in an array format.
+         */
+
+        npc.talkIndex = 0;
+
+        self.player.send(new Messages.NPC(Packets.NPCOpcode.Talk, {
+            id: npc.instance,
+            text: message
+        }));
     },
 
     hasNPC: function(id) {

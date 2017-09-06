@@ -729,6 +729,10 @@ module.exports = World = cls.Class.extend({
         })
     },
 
+    getPVPAreas: function() {
+        return this.map.areas['PVP'].pvpAreas;
+    },
+
     getMusicAreas: function() {
         return this.map.areas['Music'].musicAreas;
     },

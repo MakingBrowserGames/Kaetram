@@ -33,6 +33,7 @@ define(['../character', './equipment/armour', './equipment/weapon',
             self.prevY = 0;
 
             self.direction = null;
+            self.pvp = false;
 
             self.loadEquipment();
         },

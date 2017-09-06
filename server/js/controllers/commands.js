@@ -44,6 +44,12 @@ module.exports = Commands = cls.Class.extend({
 
                 break;
 
+            case 'coords':
+
+                self.player.send(new Messages.Notification(Packets.NotificationOpcode.Text, 'x: ' + self.player.x + ' y: ' + self.player.y));
+
+                break;
+
         }
     },
 
@@ -103,12 +109,6 @@ module.exports = Commands = cls.Class.extend({
         var self = this;
 
         switch (command) {
-
-            case 'coords':
-
-                self.player.send(new Messages.Notification(Packets.NotificationOpcode.Text, 'x: ' + self.player.x + ' y: ' + self.player.y));
-
-                break;
 
             case 'spawn':
 
@@ -194,8 +194,8 @@ module.exports = Commands = cls.Class.extend({
 
                 self.player.send(new Messages.Pointer(Packets.PointerOpcode.Location, {
                     id: self.player.instance,
-                    x: posX * 16,
-                    y: posY * 16
+                    x: posX,
+                    y: posY
                 }));
 
                 break;

@@ -204,17 +204,17 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
             if (entity) {
                 self.setAttackTarget();
 
-                if (entity.type === 'player') {
-                    self.getActions().showPlayerActions(entity, self.mouse.x, self.mouse.y);
-                    return;
-                }
-
                 if (entity.type !== 'item')
                     player.setTarget(entity);
 
-                if (player.getDistance(entity) < 7 && player.isRanged() && self.isCharacter(entity)) {
+                if (player.getDistance(entity) < 7 && player.isRanged() && self.isAttackable(entity)) {
                     self.game.socket.send(Packets.Target, [Packets.TargetOpcode.Attack, entity.id]);
                     player.lookAt(entity);
+                    return;
+                }
+
+                if (entity.type === 'player') {
+                    self.getActions().showPlayerActions(entity, self.mouse.x, self.mouse.y);
                     return;
                 }
 
@@ -272,12 +272,12 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
                         break;
 
                     case 'mob':
-                        self.setCursor(self.cursors[self.getPlayer().isRanged() ? 'bow' : 'sword']);
+                        self.setCursor(self.cursors[self.getAttackCursor()]);
                         self.hovering = Modules.Hovering.Mob;
                         break;
 
                     case 'player':
-                        self.setCursor(self.cursors['talk']);
+                        self.setCursor((self.game.pvp && entity.pvp) ? self.cursors[self.getAttackCursor()] : self.cursors['talk']);
                         self.hovering = Modules.Hovering.Player;
                         break;
 
@@ -339,6 +339,10 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
             self.mobileTargetColour = 'rgb(51, 255, 0)';
         },
 
+        getAttackCursor: function() {
+            return this.cursors[this.getPlayer().isRanged() ? 'bow' : 'sword']
+        },
+
         getCoords: function() {
             var self = this;
 
@@ -379,8 +383,8 @@ define(['jquery', '../entity/animation', './chat', './overlay'], function($, Ani
             }
         },
 
-        isCharacter: function(entity) {
-            return entity.type === 'mob' || entity.type === 'player';
+        isAttackable: function(entity) {
+            return entity.type === 'mob' || (entity.type === 'player' && entity.pvp && this.game.pvp);
         },
 
         getPlayer: function() {

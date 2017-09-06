@@ -876,8 +876,6 @@ define(['./renderer/renderer', './utils/storage',
 
             self.messages.onPointer(function(opcode, info) {
 
-                log.info(info);
-
                 switch (opcode) {
                     case Packets.PointerOpcode.NPC:
                         var entity = self.entities.get(info.id);
@@ -893,11 +891,14 @@ define(['./renderer/renderer', './utils/storage',
                     case Packets.PointerOpcode.Location:
 
                         self.pointer.create(info.id, Modules.Pointers.Position);
-                        self.pointer.setToPosition(info.id, info.x, info.y);
+                        self.pointer.setToPosition(info.id, info.x * 16, info.y * 16);
 
                         break;
 
                     case Packets.PointerOpcode.Relative:
+
+                        self.pointer.create(info.id, Modules.Pointers.Relative);
+                        self.pointer.setRelative(info.id, info.x, info.y);
 
                         break;
 
@@ -908,6 +909,18 @@ define(['./renderer/renderer', './utils/storage',
                         break;
                 }
 
+            });
+
+            self.messages.onPVP(function(id, pvp) {
+
+                if (self.player.id === id)
+                    self.pvp = pvp;
+                else {
+                    var entity = self.entities.get(id);
+
+                    if (entity)
+                        entity.pvp = pvp;
+                }
 
             });
 

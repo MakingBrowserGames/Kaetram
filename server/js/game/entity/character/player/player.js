@@ -61,6 +61,8 @@ module.exports = Player = Character.extend({
         self.acceptedTrade = false;
         self.invincible = false;
 
+        self.pvp = false;
+
         self.canTalk = true;
     },
 
@@ -118,7 +120,7 @@ module.exports = Player = Character.extend({
         var self = this;
 
         if (config.offlineMode) {
-            self.inventory.loadEmpty();
+            self.bank.loadEmpty();
             return;
         }
 
@@ -351,6 +353,21 @@ module.exports = Player = Character.extend({
         self.world.cleanCombat(self);
     },
 
+    updatePVP: function(pvp) {
+        var self = this;
+
+        /**
+         * No need to update if the state is the same
+         */
+
+        if (self.pvp === pvp)
+            return;
+
+        self.pvp = pvp;
+
+        self.send(new Messages.PVP(self.instance, pvp));
+    },
+
     updateMusic: function(song) {
         var self = this;
 
@@ -518,6 +535,7 @@ module.exports = Player = Character.extend({
             self.y,
             self.rights,
             self.level,
+            self.pvp,
             self.hitPoints.getData(),
             self.pvpKills,
             self.pvpDeaths,
@@ -705,6 +723,10 @@ module.exports = Player = Character.extend({
 
     onTalkToNPC: function(callback) {
         this.npcTalkCallback = callback;
+    },
+
+    onReady: function(callback) {
+        this.readyCallback = callback;
     }
 
 });

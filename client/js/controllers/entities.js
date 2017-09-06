@@ -161,6 +161,7 @@ define(['../renderer/grids', '../entity/objects/chest',
 
                     var rights = info.shift(),
                         level = info.shift(),
+                        pvp = info.shift(),
                         hitPointsData = info.shift(),
                         pvpKills = info.shift(),
                         pvpDeaths = info.shift(),
@@ -176,6 +177,7 @@ define(['../renderer/grids', '../entity/objects/chest',
                     player.setGridPosition(x, y);
                     player.rights = rights;
                     player.level = level;
+                    player.pvp = pvp;
 
                     player.setHitPoints(hitPointsData[0]);
                     player.setMaxHitPoints(hitPointsData[1]);

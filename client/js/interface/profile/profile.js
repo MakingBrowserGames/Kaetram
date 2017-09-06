@@ -29,10 +29,14 @@ define(['jquery', './pages/state', './pages/ability', './pages/settings', './pag
 
                 self.game.interface.hideAll();
 
-                if (self.isVisible())
+                if (self.isVisible()) {
                     self.hide();
-                else
+                    self.button.removeClass('active');
+
+                } else {
                     self.show();
+                    self.button.addClass('active');
+                }
 
                 if (!self.activePage.loaded)
                     self.activePage.load();

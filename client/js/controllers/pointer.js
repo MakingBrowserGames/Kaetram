@@ -104,6 +104,10 @@ define(['jquery', '../renderer/pointers/pointer'], function($, Pointer) {
             if (!pointer)
                 return;
 
+            /**
+             * Must be set in accordance to the lowest scale.
+             */
+
             pointer.setPosition(x * self.scale, y * self.scale);
 
             pointer.element.css('left', (x * self.scale) + 'px');

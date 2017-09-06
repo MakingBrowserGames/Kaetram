@@ -126,7 +126,7 @@ define(function() {
             if (!self.player.target)
                 return;
 
-            return self.player.target.type === 'mob' || (self.game.pvp && self.player.target.type === 'player');
+            return self.player.target.type === 'mob' || (self.game.pvp && self.player.target.pvp && self.player.target.type === 'player');
         },
 
         checkBounds: function() {

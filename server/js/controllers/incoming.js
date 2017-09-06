@@ -244,6 +244,9 @@ module.exports = Incoming = cls.Class.extend({
         self.cleanSocket();
 
         self.player.handler.detectMusic();
+
+        if (self.player.readyCallback)
+            self.player.readyCallback();
     },
 
     handleWho: function(message) {
@@ -455,7 +458,7 @@ module.exports = Incoming = cls.Class.extend({
 
                 var target = self.world.getEntityByInstance(instance);
 
-                if (!target || target.dead)
+                if (!target || target.dead || !self.inPVP(self.player, target))
                     return;
 
                 self.world.pushToAdjacentGroups(target.group, new Messages.Combat(Packets.CombatOpcode.Initiate, self.player.instance, target.instance));
@@ -480,7 +483,7 @@ module.exports = Incoming = cls.Class.extend({
                 var attacker = self.world.getEntityByInstance(message.shift()),
                     target = self.world.getEntityByInstance(message.shift());
 
-                if (!target || target.dead || !attacker || attacker.dead)
+                if (!target || target.dead || !attacker || attacker.dead || !self.inPVP(attacker, target))
                     return;
 
                 attacker.combat.start();
@@ -714,6 +717,16 @@ module.exports = Incoming = cls.Class.extend({
 
     cleanSocket: function() {
         this.world.removeLogging(this.connection.socket.conn.remoteAddress);
+    },
+
+    inPVP: function(attacker, target) {
+
+        /**
+         * Used to prevent client-sided manipulation. The client will send the packet to start combat
+         * but if it was modified by a presumed hacker, it will simply cease when it arrives to this condition
+         */
+
+        return attacker.type === 'player' && target.type === 'player' && attacker.pvp && target.pvp;
     }
 
 });

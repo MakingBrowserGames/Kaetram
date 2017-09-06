@@ -24,6 +24,7 @@ module.exports = Handler = cls.Class.extend({
             self.player.checkGroups();
 
             self.detectAggro();
+            self.detectPVP();
             self.detectMusic();
         });
 
@@ -96,6 +97,13 @@ module.exports = Handler = cls.Class.extend({
 
         if (musicArea && self.player.currentSong !== musicArea.id)
             self.player.updateMusic(musicArea.id);
+    },
+
+    detectPVP: function() {
+        var self = this,
+            pvpArea = _.detect(self.world.getPVPAreas(), function(area) { return area.contains(self.player.x, self.player.y); });
+
+        self.player.updatePVP(pvpArea);
     }
 
 });
