@@ -1,6 +1,6 @@
 # Kaetram
 
-![#f03c15](This version is now deprecated and has been moved to the official [Tap Tap Adventure](https://taptapadventure.com) (TTA) repository.) `#f03c15`
+- ![#f03c15](This version is now deprecated and has been moved to the official [Tap Tap Adventure](https://taptapadventure.com) (TTA) repository.) `#f03c15`
 
 
 The following repository is a codename for the original game - [Tap Tap Adventure](https://taptapadventure.com) (TTA). It is an expansion, rather, a complete rehaul of the original game through the usage of proper up-to-date framework and rendering techniques. All of the features currently in TTA will be redone, and re-added to this game. The main purpose of this rewrite is to ensure maximum compatibility on as many devices as possible, while also providing a cleaner environment for new developers joining the project!
